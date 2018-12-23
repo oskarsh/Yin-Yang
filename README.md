@@ -28,8 +28,7 @@ $ yin_yang
 ```bash
 $ git clone repository
 $ cd yin_yang
-$ sh install.sh
-$ yin_yang
+$ python main.py
 ```
 
 
@@ -40,9 +39,6 @@ $ yin_yang
 
 ## Why I created Yin & Yang KDE
 
-Running KDE for years I always used Dark themes at Night and Light themes at Day. Both has it's pro's and con's 
-
-
 
 
 
@@ -51,13 +47,3 @@ Running KDE for years I always used Dark themes at Night and Light themes at Day
 If you do not have Snaps installed see here: [Installing SnapD](https://docs.snapcraft.io/installing-snapd/6735)
 
 If your system does not support Snaps you can Download the source files and run the ./sh install.sh
-
-
-
-
-
-
-
-
-
-ying and yang logo by <div>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
