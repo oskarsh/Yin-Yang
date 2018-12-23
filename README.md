@@ -1,4 +1,4 @@
-# Yin & Yang KDE![yin-yang-symbol-variant (2)](/home/daeh/Downloads/yin-yang-symbol-variant (2).png)
+# Yin & Yang KDE![yin-yang-symbol-variant (2)](yin_yang/assets/icon.png)
 
 Yin & Yang is a KDE tool which easily toggles between Light & Dark themes. You can configure a Hotkey to toggle between Light & Dark or set a fixed Time for automatic theme change. Yin & Yang styles all KDE and QT5 tools. On Top of that it also themes VSCode or VSCodium.
 
