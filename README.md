@@ -1,6 +1,8 @@
-# Yin & Yang KDE  ![yin-yang-symbol](yin_yang/ui/assets/icon.png)
+# Yin & Yang KDE  ![yin-yang-symbol](bin/ui/assets/icon.png)
 
-Yin & Yang is a KDE tool which easily toggles between Light & Dark themes. You can configure a Hotkey to toggle between Light & Dark or set a fixed Time for automatic theme change. Yin & Yang styles all KDE and QT5 tools. On Top of that it also themes VSCode or VSCodium.
+
+
+Yin & Yang is a KDE tool which brings Auto Night-mode for KDE and VSCode. Yin & Yang styles all KDE and QT5 tools, on Top of that it also themes VSCode or VSCodium. You can activate a Theme toggle with shortcuts or let Yin-Yang toggle themes at scheduled Times.
 
 ![yin_yang_demo](screenshots/yin_yang_demo.png)
 
@@ -8,32 +10,41 @@ Yin & Yang is a KDE tool which easily toggles between Light & Dark themes. You c
 
 ## Installation
 
+#### Global (recommended) 
+
+```bash
+$ git clone git@github.com:daehruoydeef/Yin-Yang.git
+$ cd Yin-Yang
+$ sudo sh install.sh
+```
+
+
+
+#### Local 
+
+coming soon
+
 Note: on the first run **yin_yang** will backup all necessary settings and create config files for your environment. If no arguments where given on the first run it sets itself to a light theme. Once you run yin_yang again without arguments you are able to toggle between themes. 
 
 
 
+## Hotkeys
 
-
-#### Method: Snap
-
-If you are using snap to install yin_yang you will receive automatic updates on the fly.
-
-```bash
-$ snap install yin_yang
-$ yin_yang
-```
-
-#### Method: Manual
-
-```bash
-$ git clone repository
-$ cd yin_yang
-$ python main.py
-```
+Yin-Yang is about flexibility and stability, it does not provide basic shortcuts for **Dark/Light theme** toggle. It is recommended to add **Hotkeys with the KDE Hotkeys Module** found inside the **System preferences** under the **Hotkeys** section
 
 
 
+**toggle theme**
 
+![settings.png](screenshots/settings.png)
+
+
+
+## Auto updates
+
+ Yin-Yang features updates which will be fetched from this Repository as soon as a new Version is flagged with the release tag. If a update is available Yin-Yang will notify you and the next time you open Yin-Yang GUI you will be prompted to install a new Version.
+
+![yin-yang-update](screenshots/update.png)
 
 
 
@@ -41,9 +52,12 @@ $ python main.py
 
 
 
+## Requirements
 
-## Troubleshooting
+If you do not got **qtpy** or **pyqt5** installed, Yin-Yang got your back by installing the necessary requirements on the go with pip3. 
 
-If you do not have Snaps installed see here: [Installing SnapD](https://docs.snapcraft.io/installing-snapd/6735)
+* pip3 *
+* python3 *
+* qtpy
+* pyqt5
 
-If your system does not support Snaps you can Download the source files and run the ./sh install.sh

@@ -6,8 +6,8 @@ import signal
 from datetime import datetime
 from qtpy import QtWidgets
 from PyQt5.QtCore import QTime
-from yin_yang.ui.mainwindow import Ui_MainWindow
-from yin_yang.yin_yang import *
+from bin.ui.mainwindow import Ui_MainWindow
+from bin.yin_yang import *
 
 app = QtWidgets.QApplication(sys.argv)
 window = QtWidgets.QMainWindow()
