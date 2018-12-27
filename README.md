@@ -22,15 +22,11 @@ Note: on the first run **yin_yang** will backup all necessary settings and creat
 
 ## Hotkeys
 
-Yin-Yang is about flexibility and stability, it does not provide basic shortcuts for **Dark/Light theme** toggle. It is recommended to add **Hotkeys with the KDE Hotkeys Module** found inside the **System preferences** under the **Hotkeys** section
+Yin-Yang is about flexibility and stability, it does not provide basic shortcuts for **Dark/Light theme** toggle. It is recommended to add **Hotkeys with the KDE Hotkeys Module** found inside the **System preferences** under the **Hotkeys** section. Set any Hotkey you want to run the command:
 
-
-
-**toggle theme**
-
-![settings.png](screenshots/settings.png)
-
-
+``` bash
+$ yin-yang
+```
 
 ## Auto updates
 
