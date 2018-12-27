@@ -45,7 +45,7 @@ Comment=Auto Nightmode for KDE and VSCode
 # The path to the folder in which the executable is run
 Path=/opt/yin-yang
 # The executable of the application, possibly with arguments.
-Exec=sh yin-yang
+Exec=sh yin-yang "-gui"
 # The name of the icon that will be used to display this entry
 Icon=/opt/yin-yang/bin/ui/assets/icon.png
 # Describes whether this application needs to be run in a terminal or not

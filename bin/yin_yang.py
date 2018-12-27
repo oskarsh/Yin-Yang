@@ -64,7 +64,7 @@ def create_yin_yang(editor):
 
 def switchToLight():
     config = loadConfig()
-    editor = getEditor(config)
+    editor = get_editor()
     # updating path for better access
     user_path = path + editor + "/User/"
     settings = user_path + "settings.json"
@@ -76,9 +76,10 @@ def switchToLight():
 
 def switchToDark():
     config = loadConfig()
-    editor = getEditor(config)
+    editor = get_editor()
     # updating path for better access
     user_path = path + editor + "/User/"
+    print(user_path)
     settings = user_path + "settings.json"
     yang_path = user_path+"yang.json"
 
@@ -121,15 +122,24 @@ def updateConfig(type, item):
 def getActiveTheme(config):
     return config["theme"]
 
+def create_settings_json(path):
+    settings = {}
+    settings["workbench.colorTheme"] = ""
+    with open(path, "w") as setting:
+        json.dump(settings, setting)
 
-def getEditor(config):
-    # check if user is using vscode or vscodium and adapt by setting the editor to it
-    if (os.path.isfile(path+"Code - OSS/User/settings.json")):
-        editor = "Code - OSS"
+def get_editor():
+    if (os.path.isdir(path+"VSCodium/User/")):
+        if (not os.path.isfile(path+"VSCodium/User/settings.json")):
+            create_settings_json(path+"VSCodium/User/settings.json")
+        editor = "VSCodium"
         return editor
 
-    if (os.path.isfile(path+"VSCodium/User/settings.json")):
-        editor = "VSCodium"
+    # check if user is using vscode or vscodium and adapt by setting the editor to it
+    if (os.path.isdir(path+"Code - OSS/User/")):
+        if (not os.path.isfile(path+"Code - OSS/User/settings.json")):
+            create_settings_json(path+"Code - OSS/User/settings.json")
+        editor = "Code - OSS"
         return editor
 
     return ""

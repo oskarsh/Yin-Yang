@@ -193,47 +193,74 @@ def center():
     frameGm.moveCenter(centerPoint)
     window.move(frameGm.topLeft())
 
+def swapTheme(theme):
+    if (theme == "dark"):
+        toggleLight()
+    else:
+        toggleDark()
 
 def main():
 
-    # centerin application
-    center()
+    parser = ArgumentParser()
+    parser.add_argument("-gui", "--gui",
+                        help="opens Yin-Yang as a GUI application",
+                        action="store_true")
+    parser.add_argument("-s", "--schedule",
+                    help="starts automatic theme change on time specified inside gui",
+                    action="store_true")                   
+
+    args = parser.parse_args()
+
+    # getting user editor
+    editor = get_editor()
+    if (editor == "VSCodium" or editor == "Code - OSS"):
+        updateConfig("editor", editor)
+        # creating light and dark version of settings
+        create_yin_yang(editor)
+
     # if no config exists create one with default values
     # else read the current config
     if (not configExists()):
         config = createDefaultConfig()
     else:
         config = loadConfig()
+
     theme = getActiveTheme(config)
-    # enabling the correct buttons
-    enableCorrectButton(theme)
-    # getting user editor
-    editor = getEditor(config)
-    if (editor == "VSCodium" or editor == "vscode-oss"):
-        updateConfig("editor", editor)
-        # creating light and dark version of settings
-        create_yin_yang(editor)
-    # connecting button handlers
-    ui_window.light_push.clicked.connect(clickLight)
-    ui_window.dark_push.clicked.connect(clickDark)
-    setCorrectTime()
-    # setting the radio button and updating it
-    ui_window.schedule_radio.setChecked(isScheduled(config))
-    ui_window.schedule_radio.toggled.connect(toggleScheduleClicked)
-    if(ui_window.schedule_radio.isChecked()):
-        ui_window.dark_time.setEnabled(True)
-        ui_window.light_time.setEnabled(True)
+    if (len(sys.argv) == 1 and not args.gui):
+        swapTheme(theme)
+   
+    if (args.schedule):
         updateConfig("running", False)
         startListener()
 
-    # writing config on time change
-    ui_window.light_time.timeChanged.connect(timeChanged)
-    ui_window.dark_time.timeChanged.connect(timeChanged)
+    if (args.gui):
+        # centerin application
+        center()
 
-    signal.signal(signal.SIGINT, signal_handling)
+        # enabling the correct buttons
+        enableCorrectButton(theme)
 
-    window.show()
-    sys.exit(app.exec_())
+        # connecting button handlers
+        ui_window.light_push.clicked.connect(clickLight)
+        ui_window.dark_push.clicked.connect(clickDark)
+        setCorrectTime()
+        # setting the radio button and updating it
+        ui_window.schedule_radio.setChecked(isScheduled(config))
+        ui_window.schedule_radio.toggled.connect(toggleScheduleClicked)
+        if(ui_window.schedule_radio.isChecked()):
+            ui_window.dark_time.setEnabled(True)
+            ui_window.light_time.setEnabled(True)
+            updateConfig("running", False)
+            startListener()
+
+        # writing config on time change
+        ui_window.light_time.timeChanged.connect(timeChanged)
+        ui_window.dark_time.timeChanged.connect(timeChanged)
+
+        signal.signal(signal.SIGINT, signal_handling)
+
+        window.show()
+        sys.exit(app.exec_())
 
 
 if __name__ == "__main__":
