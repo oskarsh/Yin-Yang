@@ -4,6 +4,8 @@ Yin & Yang is a KDE tool which brings Auto Night-mode for KDE, VSCode and all GT
 
 ![yin_yang_demo](screenshots/yin_yang_demo.png)
 
+
+
 ## Installation
 
 ```bash
@@ -14,6 +16,8 @@ $ sudo sh install.sh
 
 Note: on the first run **yin_yang** will backup all necessary settings and create config files for your environment. If no arguments where given on the first run it sets itself to a light theme. Once you run yin_yang again without arguments you are able to toggle between themes.
 
+
+
 ## Hotkeys
 
 Yin-Yang is about flexibility and stability, it does not provide basic shortcuts for **Dark/Light theme** toggle. It is recommended to add **Hotkeys with the KDE Hotkeys Module** found inside the **System preferences** under the **Hotkeys** section. Set any Hotkey you want to run the command:
@@ -22,13 +26,19 @@ Yin-Yang is about flexibility and stability, it does not provide basic shortcuts
 $ yin-yang
 ```
 
+
+
 ## Auto updates
 
-Yin-Yang features updates which will be fetched from this Repository as soon as a new Version is flagged with the release tag. If a update is available Yin-Yang will notify you and the next time you open Yin-Yang GUI you will be prompted to install a new Version.
+You can update Yin-Yang by simply clone this repository and run the install again, it will update everything and you should be good to go.
 
-![yin-yang-update](screenshots/update.png)
+
 
 ## Why I created Yin & Yang KDE
+
+I found myself constantly switching between themes to match my surrounding lights. I prefer a Dark theme in the Night while I want good readability at Day time. I want to easily switch my whole enviroment to a dark / light theme based on a pre defined time. This is why I created Yin-Yang.
+
+
 
 ## Requirements
 
