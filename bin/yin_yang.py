@@ -25,6 +25,7 @@ from shutil import copyfile, move
 user = pwd.getpwuid(os.getuid())[0]
 path = "/home/"+user+"/.config/"
 
+
 def create_yin(yin_path):
     with open(yin_path, "r") as yin:
         data = json.load(yin)
@@ -34,6 +35,7 @@ def create_yin(yin_path):
         json.dump(data, yin)
 
     return data
+
 
 def create_yang(yang_path):
 
@@ -45,6 +47,7 @@ def create_yang(yang_path):
         json.dump(data, yang)
 
     return data
+
 
 def create_yin_yang(editor):
     user = pwd.getpwuid(os.getuid())[0]
@@ -62,6 +65,7 @@ def create_yin_yang(editor):
     create_yin(yin_path)
     create_yang(yang_path)
 
+
 def switchToLight():
     config = loadConfig()
     editor = get_editor()
@@ -73,6 +77,7 @@ def switchToLight():
     if (config["theme"] == "light"):
         copyfile(settings, user_path+"tmp_settings")
         copyfile(yin_path, settings)
+
 
 def switchToDark():
     config = loadConfig()
@@ -87,8 +92,32 @@ def switchToDark():
         copyfile(settings, user_path+"tmp_settings")
         copyfile(yang_path, settings)
 
+
+def switchGTKThemeToDark():
+    gtk_theme = "Breeze-Dark"
+    gtk_path = path + "gtk-3.0/"
+    with open(gtk_path+"settings.ini", "r") as file:
+        # search for the theme section and change it
+        current_theme = re.findall(
+            "gtk-theme-name=[A-z -]*", str(file.readlines()))[0][:-2]
+        inplace_change(gtk_path+"settings.ini",
+                       current_theme, "gtk-theme-name=Breeze-Dark")
+
+
+def switchGTKThemeToLight():
+    gtk_theme = "Breeze"
+    gtk_path = path + "gtk-3.0/"
+    with open(gtk_path+"settings.ini", "r") as file:
+        # search for the theme section and change it
+        current_theme = re.findall(
+            "gtk-theme-name=[A-z -]*", str(file.readlines()))[0][:-2]
+        inplace_change(gtk_path+"settings.ini",
+                       current_theme, "gtk-theme-name=Breeze")
+
+
 def switchKDESettingsToLight():
     subprocess.run(["lookandfeeltool", "-a", "org.kde.breeze.desktop"])
+
 
 def switchKDEThemeToDark():
     subprocess.run(["lookandfeeltool", "-a", "org.kde.breezedark.desktop"])
@@ -99,6 +128,21 @@ def switchKDEThemeToDark():
 #          path - the path where the config is will be written into
 #           defaults to the default path
 #
+
+def inplace_change(filename, old_string, new_string):
+    # Safely read the input filename using 'with'
+    with open(filename) as f:
+        s = f.read()
+        if old_string not in s:
+            print('"{old_string}" not found in {filename}.'.format(**locals()))
+            return
+
+    # Safely write the changed content, if found in the file
+    with open(filename, 'w') as f:
+        print(
+            'Changing "{old_string}" to "{new_string}" in {filename}'.format(**locals()))
+        s = s.replace(old_string, new_string)
+        f.write(s)
 
 
 def writeConfig(config):
@@ -118,15 +162,18 @@ def updateConfig(type, item):
 
 # @params: config - the config where the theme will be extracted from
 # @returns : the theme which is currently in use
-#
+
+
 def getActiveTheme(config):
     return config["theme"]
+
 
 def create_settings_json(path):
     settings = {}
     settings["workbench.colorTheme"] = ""
     with open(path, "w") as setting:
         json.dump(settings, setting)
+
 
 def get_editor():
     if (os.path.isdir(path+"VSCodium/User/")):
@@ -166,7 +213,6 @@ def configExists():
 
 
 def createDefaultConfig():
-
     # aliases for path to use later on
     user = pwd.getpwuid(os.getuid())[0]
     path = "/home/"+user+"/.config/yin_yang"

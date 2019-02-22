@@ -66,6 +66,7 @@ class Yin(threading.Thread):
         if(config["editor"] != ""):
             switchToDark()
         switchKDEThemeToDark()
+        switchGTKThemeToDark()
 
 
 class Yang(threading.Thread):
@@ -80,6 +81,7 @@ class Yang(threading.Thread):
         if(config["editor"] != ""):
             switchToLight()
         switchKDESettingsToLight()
+        switchGTKThemeToLight()
 
 
 def enableCorrectButton(theme):
@@ -193,11 +195,13 @@ def center():
     frameGm.moveCenter(centerPoint)
     window.move(frameGm.topLeft())
 
+
 def swapTheme(theme):
     if (theme == "dark"):
         toggleLight()
     else:
         toggleDark()
+
 
 def main():
 
@@ -206,8 +210,8 @@ def main():
                         help="opens Yin-Yang as a GUI application",
                         action="store_true")
     parser.add_argument("-s", "--schedule",
-                    help="starts automatic theme change on time specified inside gui",
-                    action="store_true")                   
+                        help="starts automatic theme change on time specified inside gui",
+                        action="store_true")
 
     args = parser.parse_args()
 
@@ -228,7 +232,7 @@ def main():
     theme = getActiveTheme(config)
     if (len(sys.argv) == 1 and not args.gui):
         swapTheme(theme)
-   
+
     if (args.schedule):
         updateConfig("running", False)
         startListener()
