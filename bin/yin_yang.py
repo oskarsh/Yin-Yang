@@ -34,6 +34,7 @@ def create_yin(yin_path):
         data["workbench.colorTheme"] = "Default Light+"
         json.dump(data, yin)
 
+
     return data
 
 
@@ -47,6 +48,7 @@ def create_yang(yang_path):
         json.dump(data, yang)
 
     return data
+
 
 
 def create_yin_yang(editor):
@@ -174,6 +176,16 @@ def create_settings_json(path):
     with open(path, "w") as setting:
         json.dump(settings, setting)
 
+def GTKExists():
+    if (os.path.isfile(path+"gtk-3.0/settings.ini")):
+        return True
+    else:
+        print()
+        print("It seems like you never edited your GTK Settings.")
+        print("If you want Yin-Yang to also toggle GTK themes you will need to create a settings.ini file")
+        print("You can do this by visiting your systemsettings and change yout GTK settings")
+        print()
+        return False
 
 def get_editor():
     if (os.path.isdir(path+"VSCodium/User/")):

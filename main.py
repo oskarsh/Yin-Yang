@@ -66,8 +66,8 @@ class Yin(threading.Thread):
         if(config["editor"] != ""):
             switchToDark()
         switchKDEThemeToDark()
-        switchGTKThemeToDark()
-
+        if(GTKExists()):
+            switchGTKThemeToDark()
 
 class Yang(threading.Thread):
     def __init__(self, threadID, name):
@@ -81,8 +81,8 @@ class Yang(threading.Thread):
         if(config["editor"] != ""):
             switchToLight()
         switchKDESettingsToLight()
-        switchGTKThemeToLight()
-
+        if(GTKExists()):
+            switchGTKThemeToLight()
 
 def enableCorrectButton(theme):
     if (theme == "dark"):
