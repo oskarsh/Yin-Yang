@@ -3,7 +3,9 @@
 
 #
 # title: yin_yang
-# description: yin_yang provides a easy way to toggle between light and dark mode for your kde desktop. It also themes your vscode and all other qt application with it.
+# description: yin_yang provides a easy way to toggle between light and dark
+# mode for your kde desktop. It also themes your vscode and
+# all other qt application with it.
 # author: daehruoydeef
 # date: 21.12.2018
 # license: MIT
@@ -11,239 +13,110 @@
 
 import os
 import sys
-import json
-import pathlib
-import pwd
+import threading
 import time
+import pwd
 import datetime
 import subprocess
-from argparse import ArgumentParser
-import re
-from shutil import copyfile, move
+from bin.plugins import kde, gtk, wallpaper
+from bin import config
+
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
 path = "/home/"+user+"/.config/"
 
-
-def create_yin(yin_path):
-    with open(yin_path, "r") as yin:
-        data = json.load(yin)
-
-    with open(yin_path, "w") as yin:
-        data["workbench.colorTheme"] = "Default Light+"
-        json.dump(data, yin)
+terminate = False
 
 
-    return data
+class Yang(threading.Thread):
+    def __init__(self, threadID):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+
+    def run(self):
+        kde.switchToLight()
+        wallpaper.switchToLight()
+        # gtk.switchToLight()
 
 
-def create_yang(yang_path):
+class Yin(threading.Thread):
+    def __init__(self, threadID):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
 
-    with open(yang_path, "r") as yang:
-        data = json.load(yang)
-
-    with open(yang_path, "w") as yang:
-        data["workbench.colorTheme"] = "Default Dark+"
-        json.dump(data, yang)
-
-    return data
+    def run(self):
+        kde.switchToDark()
+        wallpaper.switchToDark()
+        # gtk.switchToDark()
+        playSound()
 
 
+class Daemon(threading.Thread):
+    def __init__(self, threadID):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
 
-def create_yin_yang(editor):
-    user = pwd.getpwuid(os.getuid())[0]
-    path = "/home/"+user+"/.config/"+editor+"/User/"
-    settings = path + "settings.json"
-    yin_path = path + "yin.json"
-    yang_path = path + "yang.json"
+    def run(self):
+        print("background listener started")
+        while(True):
 
-    # creating copies of the settings
-    copyfile(settings, yin_path)
-    copyfile(settings, yang_path)
+            if terminate:
+                config.update("running", False)
+                break
 
-    # adjust theme inside those settings to
-    # match the dark or light theme
-    create_yin(yin_path)
-    create_yang(yang_path)
+            if(not config.isScheduled()):
+                config.update("running", False)
+                break
+
+            editable = config.getConfig()
+
+            d_hour = editable["switchToDark"].split(":")[0]
+            d_minute = editable["switchToDark"].split(":")[1]
+            l_hour = editable["switchToLight"].split(":")[0]
+            l_minute = editable["switchToLight"].split(":")[1]
+            hour = datetime.datetime.now().time().hour
+            minute = datetime.datetime.now().time().minute
+
+            if (hour == int(d_hour) and minute == int(d_minute)):
+                switchToDark()
+                time.sleep(61)
+            if (hour == int(l_hour) and minute == int(l_minute)):
+                switchToLight()
+                time.sleep(61)
+            time.sleep(1)
 
 
 def switchToLight():
-    config = loadConfig()
-    editor = get_editor()
-    # updating path for better access
-    user_path = path + editor + "/User/"
-    settings = user_path + "settings.json"
-    yin_path = user_path+"yin.json"
-
-    if (config["theme"] == "light"):
-        copyfile(settings, user_path+"tmp_settings")
-        copyfile(yin_path, settings)
+    yang = Yang(1)
+    yang.start()
+    config.update("theme", "light")
 
 
 def switchToDark():
-    config = loadConfig()
-    editor = get_editor()
-    # updating path for better access
-    user_path = path + editor + "/User/"
-    print(user_path)
-    settings = user_path + "settings.json"
-    yang_path = user_path+"yang.json"
-
-    if (config["theme"] == "dark"):
-        copyfile(settings, user_path+"tmp_settings")
-        copyfile(yang_path, settings)
+    yin = Yin(2)
+    yin.start()
+    config.update("theme", "dark")
 
 
-def switchGTKThemeToDark():
-    gtk_theme = "Breeze-Dark"
-    gtk_path = path + "gtk-3.0/"
-    with open(gtk_path+"settings.ini", "r") as file:
-        # search for the theme section and change it
-        current_theme = re.findall(
-            "gtk-theme-name=[A-z -]*", str(file.readlines()))[0][:-2]
-        inplace_change(gtk_path+"settings.ini",
-                       current_theme, "gtk-theme-name=Breeze-Dark")
+def startDaemon():
+    daemon = Daemon(3)
+    daemon.start()
 
 
-def switchGTKThemeToLight():
-    gtk_theme = "Breeze"
-    gtk_path = path + "gtk-3.0/"
-    with open(gtk_path+"settings.ini", "r") as file:
-        # search for the theme section and change it
-        current_theme = re.findall(
-            "gtk-theme-name=[A-z -]*", str(file.readlines()))[0][:-2]
-        inplace_change(gtk_path+"settings.ini",
-                       current_theme, "gtk-theme-name=Breeze")
+def restart():
+    """Restarts the current program.
+    Note: this function does not return. Any cleanup action (like
+    saving data) must be done before calling this function."""
+    python = sys.executable
+    os.execl(python, python, * sys.argv)
 
 
-def switchKDESettingsToLight():
-    subprocess.run(["lookandfeeltool", "-a", "org.kde.breeze.desktop"])
-
-
-def switchKDEThemeToDark():
-    subprocess.run(["lookandfeeltool", "-a", "org.kde.breezedark.desktop"])
-
-
-#
-# @params: config - config to be written into file
-#          path - the path where the config is will be written into
-#           defaults to the default path
-#
-
-def inplace_change(filename, old_string, new_string):
-    # Safely read the input filename using 'with'
-    with open(filename) as f:
-        s = f.read()
-        if old_string not in s:
-            print('"{old_string}" not found in {filename}.'.format(**locals()))
-            return
-
-    # Safely write the changed content, if found in the file
-    with open(filename, 'w') as f:
-        print(
-            'Changing "{old_string}" to "{new_string}" in {filename}'.format(**locals()))
-        s = s.replace(old_string, new_string)
-        f.write(s)
-
-
-def writeConfig(config):
-
-    # aliases for path to use later on
-    user = pwd.getpwuid(os.getuid())[0]
-    path = "/home/"+user+"/.config/yin_yang"
-
-    with open(path+"/yin_yang.json", 'w') as conf:
-        json.dump(config, conf, indent=4)
-
-
-def updateConfig(type, item):
-    config = loadConfig()
-    config[type] = item
-    writeConfig(config)
-
-# @params: config - the config where the theme will be extracted from
-# @returns : the theme which is currently in use
-
-
-def getActiveTheme(config):
-    return config["theme"]
-
-
-def create_settings_json(path):
-    settings = {}
-    settings["workbench.colorTheme"] = ""
-    with open(path, "w") as setting:
-        json.dump(settings, setting)
-
-def GTKExists():
-    if (os.path.isfile(path+"gtk-3.0/settings.ini")):
-        return True
-    else:
-        print()
-        print("It seems like you never edited your GTK Settings.")
-        print("If you want Yin-Yang to also toggle GTK themes you will need to create a settings.ini file")
-        print("You can do this by visiting your systemsettings and change yout GTK settings")
-        print()
-        return False
-
-def get_editor():
-    if (os.path.isdir(path+"VSCodium/User/")):
-        if (not os.path.isfile(path+"VSCodium/User/settings.json")):
-            create_settings_json(path+"VSCodium/User/settings.json")
-        editor = "VSCodium"
-        return editor
-
-    # check if user is using vscode or vscodium and adapt by setting the editor to it
-    if (os.path.isdir(path+"Code - OSS/User/")):
-        if (not os.path.isfile(path+"Code - OSS/User/settings.json")):
-            create_settings_json(path+"Code - OSS/User/settings.json")
-        editor = "Code - OSS"
-        return editor
-
-    return ""
-
-
-def loadConfig():
-
-    # aliases for path to use later on
-    user = pwd.getpwuid(os.getuid())[0]
-    path = "/home/"+user+"/.config/yin_yang"
-
-    with open(path+"/yin_yang.json", "r") as conf:
-        config = json.load(conf)
-    return config
-
-
-def configExists():
-
-    # aliases for path to use later on
-    user = pwd.getpwuid(os.getuid())[0]
-    path = "/home/"+user+"/.config/yin_yang"
-
-    return os.path.isfile(path+"/yin_yang.json")
-
-
-def createDefaultConfig():
-    # aliases for path to use later on
-    user = pwd.getpwuid(os.getuid())[0]
-    path = "/home/"+user+"/.config/yin_yang"
-
-    # creating the yin yang folder inside config
-    pathlib.Path(path).mkdir(parents=True, exist_ok=True)
-
-    # create empty config as json object
-    config = {}
-
-    # fill with default values
-    config["version"] = "0.1"
-    config["theme"] = ""
-    config["codeTheme"] = ""
-    config["editor"] = ""
-    config["kdeTheme"] = ""
-    config["schedule"] = False
-    config["switchToDark"] = "20:00"
-    config["switchToLight"] = "07:00"
-    config["running"] = False
-    writeConfig(config)
-    return config
+def playSound():
+    """ Description - only works with pulseaudio.
+    :type sound: String (Path)
+    :param sound: Sound path to be played audiofile from
+    :rtype: I hope you will hear your Sound ;)
+    """
+    sound = "./assets/sound.mp3"
+    subprocess.run(["paplay", sound])

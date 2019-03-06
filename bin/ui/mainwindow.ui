@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>260</width>
-    <height>270</height>
+    <width>300</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -21,20 +21,20 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>260</width>
-    <height>270</height>
+    <width>300</width>
+    <height>450</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>260</width>
-    <height>270</height>
+    <width>500</width>
+    <height>450</height>
    </size>
   </property>
   <property name="baseSize">
    <size>
-    <width>260</width>
-    <height>270</height>
+    <width>300</width>
+    <height>450</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -48,15 +48,30 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>19</x>
-      <y>20</y>
-      <width>221</width>
-      <height>231</height>
+      <x>30</x>
+      <y>40</y>
+      <width>231</width>
+      <height>381</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QLabel" name="yinyangimg">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+      <widget class="QLabel" name="yinyang_img">
+       <property name="maximumSize">
+        <size>
+         <width>64</width>
+         <height>64</height>
+        </size>
+       </property>
+       <property name="sizeIncrement">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -64,10 +79,13 @@
         <enum>Qt::RichText</enum>
        </property>
        <property name="pixmap">
-        <pixmap>assets/icon.png</pixmap>
+        <pixmap>../../../../yin-yang-logo.svg</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>true</bool>
        </property>
        <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
        </property>
       </widget>
      </item>
@@ -158,6 +176,19 @@
       </layout>
      </item>
     </layout>
+   </widget>
+   <widget class="QPushButton" name="settings_push">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>10</y>
+      <width>83</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Settings</string>
+    </property>
    </widget>
   </widget>
  </widget>
