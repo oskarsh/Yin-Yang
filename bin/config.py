@@ -27,7 +27,7 @@ def exists():
 
 
 # generate path for yin-yang if there is none this will be skipped
-pathlib.Path(path).mkdir(parents=True, exist_ok=True)
+pathlib.Path(path+"/yin_yang").mkdir(parents=True, exist_ok=True)
 
 
 # if there is no config generate a generic one
@@ -38,18 +38,18 @@ config["switchToDark"] = "20:00"
 config["switchToLight"] = "07:00"
 config["running"] = False
 config["theme"] = ""
-config["codeLightTheme"] = ""
-config["codeDarkTheme"] = ""
-config["codeEnabled"] = ""
-config["kdeLightTheme"] = ""
-config["kdeDarkTheme"] = ""
-config["kdeEnabled"] = ""
-config["codeLightTheme"] = ""
+config["codeLightTheme"] = "Default Light+"
+config["codeDarkTheme"] = "Default Dark+"
+config["codeEnabled"] = True
+config["kdeLightTheme"] = "org.kde.breeze.desktop"
+config["kdeDarkTheme"] = "org.kde.breezedark.desktop"
+config["kdeEnabled"] = True
+config["gtkLightTheme"] = ""
 config["gtkDarkTheme"] = ""
-config["gtkEnabled"] = ""
+config["gtkEnabled"] = False
 config["wallpaperLightTheme"] = ""
 config["wallpaperDarkTheme"] = ""
-config["wallpaperEnabled"] = ""
+config["wallpaperEnabled"] = False
 
 
 if (exists()):

@@ -33,7 +33,13 @@ def main():
     if (args.schedule):
         config.update("running", False)
         print("START thread listener")
-        yin_yang.startDaemon()
+        if config.get("schedule"):
+            yin_yang.startDaemon()
+        else:
+            print("looks like you did not specified a time")
+            print("You can use the gui with yin-yang -gui")
+            print("Or edit the config found in ~/.config/yin_yang/yin_yang.json")
+            print("You need to set schedule to True and edit the time to toggles")
 
     # gui is set as parameter
     if (args.gui):

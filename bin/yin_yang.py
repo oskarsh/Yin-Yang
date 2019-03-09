@@ -13,12 +13,13 @@
 
 import os
 import sys
+from bin import gui
 import threading
 import time
 import pwd
 import datetime
 import subprocess
-from bin.plugins import kde, gtk, wallpaper
+from bin.plugins import kde, gtk, wallpaper, vscode
 from bin import config
 
 
@@ -35,9 +36,15 @@ class Yang(threading.Thread):
         self.threadID = threadID
 
     def run(self):
-        kde.switchToLight()
-        wallpaper.switchToLight()
-        # gtk.switchToLight()
+        if config.get("kdeEnabled"):
+            kde.switchToLight()
+        if config.get("wallpaperEnabled"):
+            wallpaper.switchToLight()
+        if config.get("codeEnabled"):
+            vscode.switchToLight()
+        if config.get("gtkEnabled"):
+            gtk.switchToLight()
+        playSound("./assets/light.wav")
 
 
 class Yin(threading.Thread):
@@ -46,10 +53,15 @@ class Yin(threading.Thread):
         self.threadID = threadID
 
     def run(self):
-        kde.switchToDark()
-        wallpaper.switchToDark()
-        # gtk.switchToDark()
-        playSound()
+        if config.get("kdeEnabled"):
+            kde.switchToDark()
+        if config.get("wallpaperEnabled"):
+            wallpaper.switchToDark()
+        if config.get("codeEnabled"):
+            vscode.switchToDark()
+        if config.get("gtkEnabled"):
+            gtk.switchToDark()
+        playSound("./assets/dark.wav")
 
 
 class Daemon(threading.Thread):
@@ -58,7 +70,6 @@ class Daemon(threading.Thread):
         self.threadID = threadID
 
     def run(self):
-        print("background listener started")
         while(True):
 
             if terminate:
@@ -91,12 +102,14 @@ def switchToLight():
     yang = Yang(1)
     yang.start()
     config.update("theme", "light")
+    yang.join()
 
 
 def switchToDark():
     yin = Yin(2)
     yin.start()
     config.update("theme", "dark")
+    yin.join()
 
 
 def startDaemon():
@@ -104,19 +117,10 @@ def startDaemon():
     daemon.start()
 
 
-def restart():
-    """Restarts the current program.
-    Note: this function does not return. Any cleanup action (like
-    saving data) must be done before calling this function."""
-    python = sys.executable
-    os.execl(python, python, * sys.argv)
-
-
-def playSound():
+def playSound(sound):
     """ Description - only works with pulseaudio.
     :type sound: String (Path)
     :param sound: Sound path to be played audiofile from
     :rtype: I hope you will hear your Sound ;)
     """
-    sound = "./assets/sound.mp3"
     subprocess.run(["paplay", sound])

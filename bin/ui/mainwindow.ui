@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>450</height>
+    <height>360</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,19 +22,19 @@
   <property name="minimumSize">
    <size>
     <width>300</width>
-    <height>450</height>
+    <height>360</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>500</width>
-    <height>450</height>
+    <width>300</width>
+    <height>360</height>
    </size>
   </property>
   <property name="baseSize">
    <size>
     <width>300</width>
-    <height>450</height>
+    <height>360</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -48,10 +48,10 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>40</y>
-      <width>231</width>
-      <height>381</height>
+      <x>20</x>
+      <y>50</y>
+      <width>251</width>
+      <height>281</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -96,6 +96,15 @@
          <property name="text">
           <string>Light</string>
          </property>
+         <property name="autoDefault">
+          <bool>false</bool>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
         </widget>
        </item>
        <item>
@@ -119,6 +128,9 @@
      </item>
      <item>
       <layout class="QFormLayout" name="formLayout">
+       <property name="labelAlignment">
+        <set>Qt::AlignCenter</set>
+       </property>
        <property name="horizontalSpacing">
         <number>40</number>
        </property>
@@ -129,13 +141,6 @@
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Dark:</string>
          </property>
         </widget>
        </item>
@@ -153,6 +158,13 @@
            <minute>0</minute>
            <second>0</second>
           </time>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Dark:</string>
          </property>
         </widget>
        </item>

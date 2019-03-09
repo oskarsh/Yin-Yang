@@ -3,15 +3,15 @@ from bin import config
 
 
 def switchToLight():
-    kde_theme = config.getKdeLightTheme()
+    kde_theme = config.get("kdeLightTheme")
     # uses a kde api to switch to a light theme
-    print(kde_theme)
+    print("LIGHT:", kde_theme)
     subprocess.run(["lookandfeeltool", "-a", kde_theme])
 
 
 def switchToDark():
 
-    kde_theme = config.getKdeDarkTheme()
+    kde_theme = config.get("kdeDarkTheme")
     # uses a kde api to switch to a dark theme
-    print(kde_theme)
+    print("Dark:", kde_theme)
     subprocess.run(["lookandfeeltool", "-a", kde_theme])

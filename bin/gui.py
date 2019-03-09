@@ -27,6 +27,9 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def closeEvent(self, event):
         # overwrites the function that gets called when window is closed
+        self.saveAndExit()
+
+    def saveAndExit(self):
         print("saving options")
 
         config.update("kdeLightTheme", self.ui.kde_combo_light.currentText())
@@ -42,6 +45,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         config.update("gtkEnabled", self.ui.gtk_checkbox.isChecked())
 
         # showing the main window and hiding the current one
+        self.hide()
         self.window = MainWindow()
         self.window.show()
 
@@ -52,6 +56,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.wallpaper_button_light.clicked.connect(self.openWallpaperLight)
         self.ui.wallpaper_button_dark.clicked.connect(self.openWallpaperDark)
         self.ui.wallpaper_checkbox.toggled.connect(self.toggleWallpaperButtons)
+        self.ui.back_button.clicked.connect(self.saveAndExit)
 
     def syncWithConfig(self):
         # sync config label with get the correct version
@@ -86,12 +91,12 @@ class SettingsWindow(QtWidgets.QMainWindow):
         # -------------
 
     def openWallpaperLight(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "","Image Files (*.jpg, *.png);;")
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Wallpaper Light", "")
         subprocess.run(["notify-send", "Light Wallpaper set"])
         config.update("wallpaperLightTheme", fileName)
 
     def openWallpaperDark(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "QFileDialog.getOpenFileName()", "","Image Files (*.jpg, *.png);;")
+        fileName, _ = QFileDialog.getOpenFileName(self, "Open Wallpaper Dark", "")
         subprocess.run(["notify-send", "Dark Wallpaper set"])
         config.update("wallpaperDarkTheme", fileName)
 
@@ -184,13 +189,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.secwindow.show()
         self.hide()
 
-    def restart(self):
-        """Restarts the current program.
-        Note: this function does not return. Any cleanup action (like
-        saving data) must be done before calling this function."""
-        python = sys.executable
-        os.execl(python, python, * sys.argv)
-
     def toggleLight(self):
         yin_yang.switchToLight()
         self.syncWithConfig()
@@ -201,7 +199,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.syncWithConfig()
         self.restart()
 
-
+    def restart(self):
+        """Restarts the current program.
+        Note: this function does not return. Any cleanup action (like
+        saving data) must be done before calling this function."""
+        python = sys.executable
+        os.execl(python, python, * sys.argv)
 
     def setCorrectTime(self):
         new_config = config.getConfig()
