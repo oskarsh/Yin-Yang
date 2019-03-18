@@ -6,7 +6,7 @@ Yin & Yang is a KDE tool which brings Auto Night-mode for KDE, VSCode and all GT
 
 
 
-## TODO INSERT GIFy
+## TODO INSERT GIF
 
 
 
@@ -49,6 +49,12 @@ $ yin-yang -s
 Yin-Yang was designed to be updated by the install.sh script which will simply replace the existing Yin-Yang installation. If you plan on updating there is currently no "auto update" and it is recommended to **star** or **watch** this repository and reclone it if a new version is released.
 
 You can update Yin-Yang by simply clone this repository and run the install again, it will update everything and you should be good to go.
+
+
+
+## Autostart
+
+You can use the System settings and add Yin-Yang to autostart via the KDE autostart manager.
 
 
 
