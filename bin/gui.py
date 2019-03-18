@@ -103,7 +103,8 @@ class SettingsWindow(QtWidgets.QMainWindow):
     def getKdeThemes(self):
         # asks the system what themes are available
         ugly_themes = subprocess.check_output(["lookandfeeltool", "-l"])
-        pretty_themes = re.findall("n?([A-z]*.[A-z]*.[A-z]*-?.[A-z]*.[A-z]*)\\\\", str(ugly_themes))
+        print(ugly_themes)
+        pretty_themes = re.findall("[b]?[']?n?([A-z]*.[A-z]*.[A-z]*-?.[A-z]*.[A-z]*)\\\\", str(ugly_themes))
         for theme in pretty_themes:
             self.ui.kde_combo_light.addItem(theme)
             self.ui.kde_combo_dark.addItem(theme)

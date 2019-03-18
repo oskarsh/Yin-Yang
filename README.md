@@ -1,12 +1,12 @@
-# Yin-Yang KDE ![icon](/home/daeh/Git/Yin-Yang/bin/ui/assets/icon.png)
+# Yin-Yang KDE ![icon](./bin/ui/assets/icon.png)
 
 Yin & Yang is a KDE tool which brings Auto Night-mode for KDE, VSCode and all GTK Apps like Firefox, Libreoffice and Chromium. On Top of that it let´s you specify Wallpaper swhich will be toggled alongisde. Yin & Yang styles all KDE and QT5 tools, furthermore it also themes VSCode or VSCodium. You can activate a Theme-toggle with shortcuts or let Yin-Yang toggle themes at scheduled Times.
 
-# ![yin_yang_demo](/home/daeh/Git/Yin-Yang/assets/yin_yang_demo.png)
+# ![yin_yang_demo](./assets/yin_yang_demo.png)
 
 
 
-## TODO INSERT GIF
+## TODO INSERT GIFy
 
 
 
@@ -68,22 +68,17 @@ If you do not got **qtpy** or **pyqt5** installed, Yin-Yang got your back by ins
 - python3 \*
 - qtpy
 - pyqt5
-
-## FAQ
+- kde ...
 
 ## Contributions
 
-If you are interested in making this project better or just want to support me (the developer), I compiled a list of various methods on how you can Contribute even without Coding skills.
-
-### Code contributing
-
-
-
 ### Bug hunting
+
+Try finding bugs and report them, eventually I will fix them and everyone benefits. You should use the GitHub Issues site to report them
 
 ### Create Yin-Yang wallpapers
 
-
+If you are not into coding but into Design I much appreciate Wallpapers featuring a Light theme and a Dark theme. The Wallpapers must be under a free open source License.
 
 ## Troubleshooting
 
@@ -99,35 +94,31 @@ Please try to answer the following Questions, if you still not solved the Proble
 
 ### First run, does not start
 
-> Do you have all the requirements installed mainly
->
-> * python3
-> * pyqt5
-> * qtpy
+Do you have all the requirements installed mainl
 
-> Did you try to run the first time in console without Gui?
+* python3
+* pyqt
+* qtpy5
 
-> Is the config and path created correctly?
->
-> check ~/.config/yin_yang/yin_yang.json
+Did you try to run the first time in console without Gui?
+
+Is the config and path created correctly? check ~/.config/yin_yang/yin_yang.json
 
 ### KDE is not working
 
+Did you removed any packages, usually KDE should work in all cases
+
 ### VSCode is not working
 
-### GTK is not working
+There is a Bug in VSCode that on the first start without ever touching any settings there will none be created! Yin-Yang can not help. You can fix this by simply going into VSCode and set a theme manually. Afterwards yin-yang should work
 
-> Did you ever changed the GTK Settings
+### GTK3 is not working
 
-> Is the theme name correctly written
+Basically the same as with VSCode, you need to manually set a GTK Theme first in order for the settings to be created. Yin-Yang will do the rest.
+
+Did you wrote the Theme name correctly, you can check available themes under **Systemsettings › Application-Style › GNOME Application-Style(GTK) › Choose a GTK3-Design**. Inside the Dropdown menu you can see which themes are available. Only GTK3 themes are supported
 
 ### Wallpaper is not working
 
-> Did you specified the correct images with .jpg or .png extension
-
-> is the 
->
-> $ dbus-send 
->
-> command working?
+Did you specified the correct images with .jpg or .png extension
 
