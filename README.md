@@ -1,4 +1,4 @@
-# Yin-Yang KDE ![icon](./bin/ui/assets/icon.png)
+# Yin-Yang KDE ![icon](./src/ui/assets/icon.png)
 
 Yin & Yang is a KDE tool which brings Auto Night-mode for KDE, VSCode and all GTK Apps like Firefox, Libreoffice and Chromium. On Top of that it let´s you specify Wallpaper swhich will be toggled alongisde. Yin & Yang styles all KDE and QT5 tools, furthermore it also themes VSCode or VSCodium. You can activate a Theme-toggle with shortcuts or let Yin-Yang toggle themes at scheduled Times.
 

@@ -28,8 +28,8 @@ echo "Installin yin-yang for Commandline usage"
 # copy files
 cp -r ./* /opt/yin-yang/
 #copy terminal executive
-cp ./bin/yin-yang /usr/bin/
-sudo chmod +x /usr/bin/yin-yang
+cp ./src/yin-yang /usr/src/
+sudo chmod +x /usr/src/yin-yang
 echo "Creating .desktop file for native enviroment execution"
 #create .desktop file
 cat <<EOF >/home/$SUDO_USER/.local/share/applications/Yin-Yang.desktop
@@ -47,7 +47,7 @@ Path=/opt/yin-yang
 # The executable of the application, possibly with arguments.
 Exec=sh yin-yang "-gui"
 # The name of the icon that will be used to display this entry
-Icon=/opt/yin-yang/bin/ui/assets/icon.png
+Icon=/opt/yin-yang/src/ui/assets/icon.png
 # Describes whether this application needs to be run in a terminal or not
 Terminal=false
 # Describes the categories in which this entry should be shown

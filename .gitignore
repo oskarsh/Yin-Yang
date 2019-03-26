@@ -3,6 +3,6 @@ __pycache__
 build-test*
 build-ui-*
 .vscode
-bin/build.py
+src/build.py
 setup.py
 

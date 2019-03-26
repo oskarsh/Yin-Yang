@@ -1,8 +1,8 @@
 import sys
 from argparse import ArgumentParser
-from bin import yin_yang
-from bin import config
-from bin import gui
+from src import yin_yang
+from src import config
+from src import gui
 from qtpy import QtWidgets
 
 
