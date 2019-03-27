@@ -19,7 +19,7 @@ import time
 import pwd
 import datetime
 import subprocess
-from src.plugins import kde, gtkkde, wallpaper, vscode, gtk
+from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk
 from src import config
 
 
@@ -38,6 +38,8 @@ class Yang(threading.Thread):
     def run(self):
         if config.get("codeEnabled"):
             vscode.switchToLight()
+        if config.get("atomEnabled"):
+            atom.switchToLight()
         if config.get("kdeEnabled"):
             kde.switchToLight()
         if config.get("wallpaperEnabled"):
@@ -57,6 +59,9 @@ class Yin(threading.Thread):
     def run(self):
         if config.get("codeEnabled"):
             vscode.switchToDark()
+        
+        if config.get("atomEnabled"):
+            atom.switchToDark()
             
         if config.get("kdeEnabled"):
             kde.switchToDark()
@@ -71,6 +76,8 @@ class Yin(threading.Thread):
         # gnome and budgie support
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
             gtk.switchToDark()
+          
+        
         playSound("./assets/dark.wav")
 
 

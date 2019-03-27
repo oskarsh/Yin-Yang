@@ -2,10 +2,11 @@ from src import config
 import os
 import pwd
 import json
+import re
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
-path = "/home/"+user+"/.config"
+path = "/home/"+user+"/.atom/"
 
 
 def inplace_change(filename, old_string, new_string):
@@ -37,10 +38,38 @@ def writeNewSettings(settings, path):
     with open(path, 'w') as conf:
         json.dump(settings, conf, indent=4)
 
-
+def getOldTheme(settings):
+  # returns the theme which is currently used
+  # uses regex to find the currently used theme
+  # i excpect that themes follow this pattern
+  # XXXX-XXXX-ui     XXXX-XXXX-syntax
+  with open (settings, "r") as file:
+    string = file.read()
+    # themes = re.findall(r'themes: \[[\s]*"([A-Za-z0-9\-]*)"[\s]*"([A-Za-z0-9\-]*)"', string)
+    themes = re.findall(r'themes: \[[\s]*"([A-Za-z0-9\-]*)"[\s]*"([A-Za-z0-9\-]*)"', string)
+    if len(themes) >= 1:
+      uiTheme, syntaxTheme = themes[0]
+      usedTheme = re.findall("([A-z\-A-z]*)\-", uiTheme)[0]
+      print(usedTheme)
+      return usedTheme
+    
 def switchToLight():
-    pass
+    # get theme out of config
+    atomTheme = config.get("atomLightTheme")
+
+    # getting the old theme first
+    currentTheme = getOldTheme(path+"config.cson")
+
+    # updating the old theme with theme specfied in config
+    inplace_change(path+"config.cson", currentTheme, atomTheme)
 
 
 def switchToDark():
-    pass
+    # get theme out of config
+    atomTheme = config.get("atomDarkTheme")
+
+    # getting the old theme first
+    currentTheme = getOldTheme(path+"config.cson")
+
+    # updating the old theme with theme specfied in config
+    inplace_change(path+"config.cson", currentTheme, atomTheme)

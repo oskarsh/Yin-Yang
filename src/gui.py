@@ -44,6 +44,10 @@ class SettingsWindow(QtWidgets.QMainWindow):
         config.update("gtkDarkTheme", self.ui.gtk_line_dark.text())
         config.update("gtkEnabled", self.ui.gtk_checkbox.isChecked())
 
+        config.update("atomLightTheme", self.ui.atom_line_light.text())
+        config.update("atomDarkTheme", self.ui.atom_line_dark.text())
+        config.update("atomEnabled", self.ui.atom_checkbox.isChecked())
+
         # showing the main window and hiding the current one
         self.hide()
         self.window = MainWindow()
@@ -53,6 +57,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.kde_checkbox.toggled.connect(self.toggleKdeFields)
         self.ui.code_checkbox.toggled.connect(self.toggleCodeFields)
         self.ui.gtk_checkbox.toggled.connect(self.toggleGtkFields)
+        self.ui.atom_checkbox.toggled.connect(self.toggleAtomFields)
         self.ui.wallpaper_button_light.clicked.connect(self.openWallpaperLight)
         self.ui.wallpaper_button_dark.clicked.connect(self.openWallpaperDark)
         self.ui.wallpaper_checkbox.toggled.connect(self.toggleWallpaperButtons)
@@ -89,7 +94,12 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.wallpaper_button_light.setEnabled(config.get("wallpaperEnabled"))
         self.ui.wallpaper_button_dark.setEnabled(config.get("wallpaperEnabled"))
         self.ui.wallpaper_checkbox.setChecked(config.get("wallpaperEnabled"))
-        # -------------
+        #----- Atom --------
+        self.ui.atom_line_light.setText(config.get("atomLightTheme"))
+        self.ui.atom_line_dark.setText(config.get("atomDarkTheme"))
+        self.ui.atom_checkbox.setChecked(config.get("atomEnabled"))
+        self.ui.atom_line_light.setEnabled(config.get("atomEnabled"))
+        self.ui.atom_line_dark.setEnabled(config.get("atomEnabled"))
 
     def openWallpaperLight(self):
         fileName, _ = QFileDialog.getOpenFileName(self, "Open Wallpaper Light", "")
@@ -127,6 +137,12 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.kde_combo_light.setEnabled(checked)
         self.ui.kde_combo_dark.setEnabled(checked)
         config.update("codeEnabled", checked)
+
+    def toggleAtomFields(self):
+        checked = self.ui.atom_checkbox.isChecked()
+        self.ui.atom_line_light.setEnabled(checked)
+        self.ui.atom_line_dark.setEnabled(checked)
+        config.update("atomEnabled", checked)
 
     def toggleWallpaperButtons(self):
         checked = self.ui.wallpaper_checkbox.isChecked()
