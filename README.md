@@ -30,7 +30,7 @@ $ yin-yang
 
 ```bash
 # opens the QT5 Gui and allows for further customization
-$ yin-yang -Gui
+$ yin-yang -gui
 ```
 
 ```bash
