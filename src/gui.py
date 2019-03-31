@@ -70,7 +70,11 @@ class SettingsWindow(QtWidgets.QMainWindow):
         # ---- KDE -----
         # reads out all kde themes and displays them inside a combobox
         if (config.get("kdeEnabled")):
+            # if (self.ui.kde_combo_light.count())
+            print(self.ui.kde_combo_dark.count())
+            # fixed bug where themes get appended multiple times
             self.getKdeThemes()
+
             self.ui.kde_checkbox.setChecked(config.get("kdeEnabled"))
             self.ui.kde_combo_dark.setEnabled(config.get("kdeEnabled"))
             self.ui.kde_combo_light.setEnabled(config.get("kdeEnabled"))
@@ -113,15 +117,15 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def getKdeThemes(self):
 
-
         if (config.get("desktop") == "kde"):
-            # asks the system what themes are available
-            ugly_themes = subprocess.check_output(["lookandfeeltool", "-l"])
-            print(ugly_themes)
-            pretty_themes = re.findall("[b]?[']?n?([A-z]*.[A-z]*.[A-z]*-?.[A-z]*.[A-z]*)\\\\", str(ugly_themes))
-            for theme in pretty_themes:
-                self.ui.kde_combo_light.addItem(theme)
-                self.ui.kde_combo_dark.addItem(theme)
+            if (self.ui.kde_combo_light.count() == 0 and self.ui.kde_combo_dark.count() == 0 ):
+                # asks the system what themes are available
+                ugly_themes = subprocess.check_output(["lookandfeeltool", "-l"])
+                print(ugly_themes)
+                pretty_themes = re.findall("[b]?[']?n?([A-z]*.[A-z]*.[A-z]*-?.[A-z]*.[A-z]*)\\\\", str(ugly_themes))
+                for theme in pretty_themes:
+                    self.ui.kde_combo_light.addItem(theme)
+                    self.ui.kde_combo_dark.addItem(theme)
         else:
             subprocess.run(["notify-send","It looks like you are not running KDE"])
 

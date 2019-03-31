@@ -84,19 +84,6 @@ def GTKExists():
         return False
 
 
-def getEditor():
-    # checks which editor is currently in use
-    if (os.path.isdir(path+"VSCodium/User/")):
-        editor = "VSCodium"
-        return editor
-
-    if (os.path.isdir(path+"Code - OSS/User/")):
-        editor = "Code - OSS"
-        return editor
-    # if no editor is used
-    return ""
-
-
 def getEnabledPlugins():
     # returns a list of plugins which are activated
     pass

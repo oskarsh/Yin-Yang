@@ -43,7 +43,8 @@ def switchToLight():
     possibleEditors = [
         path+"/VSCodium/User/settings.json",
         path+"/Code - OSS/User/settings.json",
-        path+"/Code/User/settings.json"
+        path+"/Code/User/settings.json",
+        path+"/Code - Insiders/User/settings.json",
     ]
 
     for editor in possibleEditors:
@@ -71,7 +72,9 @@ def switchToDark():
     possibleEditors = [
         path+"/VSCodium/User/settings.json",
         path+"/Code - OSS/User/settings.json",
-        path+"/Code/User/settings.json"
+        path+"/Code/User/settings.json",
+        path+"/Code - Insiders/User/settings.json",
+
     ]
 
     for editor in possibleEditors:
