@@ -3,7 +3,7 @@ import subprocess
 import re
 import os
 import sys
-from qtpy import QtWidgets
+from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTime
 from PyQt5.QtWidgets import QFileDialog
 from src.ui.mainwindow import Ui_MainWindow
@@ -78,9 +78,11 @@ class SettingsWindow(QtWidgets.QMainWindow):
             self.ui.kde_checkbox.setChecked(config.get("kdeEnabled"))
             self.ui.kde_combo_dark.setEnabled(config.get("kdeEnabled"))
             self.ui.kde_combo_light.setEnabled(config.get("kdeEnabled"))
-            index_light = self.ui.kde_combo_light.findText(config.get("kdeLightTheme"))
+            index_light = self.ui.kde_combo_light.findText(
+                config.get("kdeLightTheme"))
             self.ui.kde_combo_light.setCurrentIndex(index_light)
-            index_dark = self.ui.kde_combo_dark.findText(config.get("kdeDarkTheme"))
+            index_dark = self.ui.kde_combo_dark.findText(
+                config.get("kdeDarkTheme"))
             self.ui.kde_combo_dark.setCurrentIndex(index_dark)
         # ---- VSCode ----
         self.ui.code_line_light.setText(config.get("codeLightTheme"))
@@ -94,11 +96,13 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.gtk_checkbox.setChecked(config.get("gtkEnabled"))
         self.ui.gtk_line_light.setEnabled(config.get("gtkEnabled"))
         self.ui.gtk_line_dark.setEnabled(config.get("gtkEnabled"))
-        #----- wallpaper --------
-        self.ui.wallpaper_button_light.setEnabled(config.get("wallpaperEnabled"))
-        self.ui.wallpaper_button_dark.setEnabled(config.get("wallpaperEnabled"))
+        # ----- wallpaper --------
+        self.ui.wallpaper_button_light.setEnabled(
+            config.get("wallpaperEnabled"))
+        self.ui.wallpaper_button_dark.setEnabled(
+            config.get("wallpaperEnabled"))
         self.ui.wallpaper_checkbox.setChecked(config.get("wallpaperEnabled"))
-        #----- Atom --------
+        # ----- Atom --------
         self.ui.atom_line_light.setText(config.get("atomLightTheme"))
         self.ui.atom_line_dark.setText(config.get("atomDarkTheme"))
         self.ui.atom_checkbox.setChecked(config.get("atomEnabled"))
@@ -106,28 +110,32 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.atom_line_dark.setEnabled(config.get("atomEnabled"))
 
     def openWallpaperLight(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open Wallpaper Light", "")
+        fileName, _ = QFileDialog.getOpenFileName(
+            self, "Open Wallpaper Light", "")
         subprocess.run(["notify-send", "Light Wallpaper set"])
         config.update("wallpaperLightTheme", fileName)
 
     def openWallpaperDark(self):
-        fileName, _ = QFileDialog.getOpenFileName(self, "Open Wallpaper Dark", "")
+        fileName, _ = QFileDialog.getOpenFileName(
+            self, "Open Wallpaper Dark", "")
         subprocess.run(["notify-send", "Dark Wallpaper set"])
         config.update("wallpaperDarkTheme", fileName)
 
     def getKdeThemes(self):
-
         if (config.get("desktop") == "kde"):
-            if (self.ui.kde_combo_light.count() == 0 and self.ui.kde_combo_dark.count() == 0 ):
+            if (self.ui.kde_combo_light.count() == 0 and self.ui.kde_combo_dark.count() == 0):
                 # asks the system what themes are available
-                ugly_themes = subprocess.check_output(["lookandfeeltool", "-l"])
+                ugly_themes = subprocess.check_output(
+                    ["lookandfeeltool", "-l"])
                 print(ugly_themes)
-                pretty_themes = re.findall("[b]?[']?n?([A-z]*.[A-z]*.[A-z]*-?.[A-z]*.[A-z]*)\\\\", str(ugly_themes))
+                pretty_themes = re.findall(
+                    "[b]?[']?n?([A-z]*.[A-z]*.[A-z]*-?.[A-z]*.[A-z]*)\\\\", str(ugly_themes))
                 for theme in pretty_themes:
                     self.ui.kde_combo_light.addItem(theme)
                     self.ui.kde_combo_dark.addItem(theme)
         else:
-            subprocess.run(["notify-send","It looks like you are not running KDE"])
+            subprocess.run(
+                ["notify-send", "It looks like you are not running KDE"])
 
     def center(self):
         frameGm = self.frameGeometry()

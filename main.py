@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from src import yin_yang
 from src import config
 from src import gui
-from qtpy import QtWidgets
+from PyQt5 import QtWidgets
 
 
 def toggleTheme():
