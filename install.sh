@@ -28,8 +28,8 @@ echo "Installin yin-yang for Commandline usage"
 # copy files
 cp -r ./* /opt/yin-yang/
 #copy terminal executive
-cp ./src/yin-yang /usr/src/
-sudo chmod +x /usr/src/yin-yang
+cp ./src/yin-yang /usr/bin/
+sudo chmod +x /usr/bin/yin-yang
 echo "Creating .desktop file for native enviroment execution"
 #create .desktop file
 cat <<EOF >/home/$SUDO_USER/.local/share/applications/Yin-Yang.desktop
@@ -45,7 +45,7 @@ Comment=Auto Nightmode for KDE and VSCode
 # The path to the folder in which the executable is run
 Path=/opt/yin-yang
 # The executable of the application, possibly with arguments.
-Exec=sh yin-yang "-gui"
+Exec=env QT_AUTO_SCREEN_SCALE_FACTOR=1 sh /usr/bin/yin-yang -gui
 # The name of the icon that will be used to display this entry
 Icon=/opt/yin-yang/src/ui/assets/icon.png
 # Describes whether this application needs to be run in a terminal or not

@@ -11,7 +11,7 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
-rm -rf /opt/yin-yang /usr/src/yin-yang/ ~/.config/yin-yang/ /usr/src/yin-yang
+rm -rf /opt/yin-yang /usr/bin/yin-yang/ ~/.config/yin-yang/ /usr/bin/yin-yang
 
 echo Yin-Yang uninstalled succesfully
 echo have a nice day ...
