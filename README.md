@@ -11,11 +11,11 @@ Yin & Yang is a KDE tool which brings Auto Night-mode for KDE, VSCode and all GT
 ```bash
 $ git clone https://github.com/daehruoydeef/Yin-Yang.git
 $ cd Yin-Yang
-# NOTE: the install script will ask you for sudo permission
-$ sh install.sh
+# the -H flag will install a .desktop file in your home directory
+$ sudo -H sh install.sh
 ```
 
-Note: You should use yin-yang on the first run with it´s GUI and configure the Settings to your likings. This way it will configure itself correctly and can be used after this inital step as a standalone terminal applicaton or to your liking with a modern QT5 Gui.
+**Note:** You should use yin-yang on the first run with it´s GUI and configure the Settings to your likings. This way it will configure itself correctly and can be used after this inital step as a standalone terminal Applicaton or as usual with the GUI
 
 
 

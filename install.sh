@@ -4,6 +4,12 @@ if [ "$EUID" -ne 0 ]; then
     sudo sh ./$0
     exit 1
 fi
+
+echo "removing old Yin-Yang files if they exist"
+echo "your home here is" $HOME
+echo "your current user is in install" $SUDO_USER
+sudo sh ./uninstall.sh $SUDO_USER
+
 echo "Installing Yin-Yang ..."
 echo ""
 echo "Checking for QT dependencies"
