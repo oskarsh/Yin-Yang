@@ -14,16 +14,18 @@ def exists():
     # returns True or False wether Config exists or note
     return os.path.isfile(path+"/yin_yang/yin_yang.json")
 
+
 def getDesktop():
-    word = str(subprocess.check_output(["w"]))
-    regexp = re.compile(r'gnome')
-    if regexp.search(word):
+    env = str(os.getenv("GDMSESSION"))
+    if env == "gnome":
         return "gtk"
-    regexp = re.compile(r'kde')
-    if regexp.search(word):
+    if env == "budgie-desktop":
+        return "gtk"
+    if env == "plasma":
+        return "kde"
+    if env == "plasma-desktop":
         return "kde"
     return "unknown"
-    
 
 
 # generate path for yin-yang if there is none this will be skipped
