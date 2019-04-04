@@ -16,14 +16,29 @@ def exists():
 
 
 def getDesktop():
-    env = str(os.getenv("GDMSESSION"))
-    if env == "gnome":
+
+    # just to get all possible implementations of dekstop variables
+    env = str(os.getenv("GDMSESSION")).lower()
+    second_env = str(os.getenv("XDG_CURRENT_DESKTOP")).lower()
+    third_env = str(os.getenv("XDG_CURRENT_DESKTOP")).lower()
+
+    # these are the envs I will look for
+    # feel free to add your Desktop and see if it works
+    gnome_re = re.compile(r'gnome')
+    budgie_re = re.compile(r'budgie')
+    kde_re = re.compile(r'kde')
+    plasma_re = re.compile(r'plasma')
+    plasma5_re = re.compile(r'plasma5')
+
+    if gnome_re.search(env) or gnome_re.search(second_env) or gnome_re.search(third_env):
         return "gtk"
-    if env == "budgie-desktop":
+    if budgie_re.search(env) or budgie_re.search(second_env) or budgie_re.search(third_env):
         return "gtk"
-    if env == "plasma":
+    if kde_re.search(env) or kde_re.search(second_env) or kde_re.search(third_env):
         return "kde"
-    if env == "plasma-desktop":
+    if plasma_re.search(env) or plasma_re.search(second_env) or plasma_re.search(third_env):
+        return "kde"
+    if plasma5_re.search(env) or plasma5_re.search(second_env) or plasma5_re.search(third_env):
         return "kde"
     return "unknown"
 
@@ -62,6 +77,8 @@ if (exists()):
     # making config global for this module
     with open(path+"/yin_yang/yin_yang.json", "r") as conf:
         config = json.load(conf)
+
+config["desktop"] = getDesktop()
 
 
 def getConfig():
