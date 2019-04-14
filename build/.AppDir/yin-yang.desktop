@@ -1,0 +1,19 @@
+[Desktop Entry]
+# The type as listed above
+Type=Application
+# The name of the application
+Name=Yin & Yang
+# A comment which can/will be used as a tooltip
+Comment=Auto Nightmode for KDE and VSCode
+# The path to the folder in which the executable is run
+Path=/usr/bin
+# The executable of the application, possibly with arguments.
+Exec=yin-yang
+# The name of the icon that will be used to display this entry
+Icon=/usr/icons/hicolor/scalable/apps/icon
+# Describes whether this application needs to be run in a terminal or not
+Terminal=false
+Categories=KDE;GNOME;
+
+
+X-AppImage-Version=.glibc2.3.4

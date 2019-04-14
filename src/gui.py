@@ -126,16 +126,16 @@ class SettingsWindow(QtWidgets.QMainWindow):
             if (self.ui.kde_combo_light.count() == 0 and self.ui.kde_combo_dark.count() == 0):
                 # asks the system what themes are available
                 ugly_themes = subprocess.check_output(
-                    ["lookandfeeltool", "-l"])
-                print(ugly_themes)
-                pretty_themes = re.findall(
-                    "[b]?[']?n?([A-z]*.[A-z]*.[A-z]*-?.[A-z]*.[A-z]*)\\\\", str(ugly_themes))
+                    ["lookandfeeltool", "-l"], universal_newlines=True)
+                pretty_themes = ugly_themes.splitlines()
                 for theme in pretty_themes:
                     self.ui.kde_combo_light.addItem(theme)
                     self.ui.kde_combo_dark.addItem(theme)
         else:
-            subprocess.run(
-                ["notify-send", "It looks like you are not running KDE"])
+            self.ui.kde_combo_light.setEnabled(False)
+            self.ui.kde_combo_dark.setEnabled(False)
+            self.ui.kde_checkbox.setChecked(False)
+            config.update("codeEnabled", False)
 
     def center(self):
         frameGm = self.frameGeometry()
@@ -237,12 +237,12 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.restart()
 
     # no needed since QT is now used system wise instead of python wise
-    # def restart(self):
-    #     """Restarts the current program.
-    #     Note: this function does not return. Any cleanup action (like
-    #     saving data) must be done before calling this function."""
-    #     python = sys.executable
-    #     os.execl(python, python, * sys.argv)
+    def restart(self):
+        """Restarts the current program.
+        Note: this function does not return. Any cleanup action (like
+        saving data) must be done before calling this function."""
+        python = sys.executable
+        os.execl(python, python, * sys.argv)
 
     def setCorrectTime(self):
         new_config = config.getConfig()

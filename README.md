@@ -1,66 +1,31 @@
 # Yin-Yang KDE ![icon](./src/ui/assets/icon.png)
 
-Yin & Yang is a KDE tool which brings Auto Night-mode for KDE, VSCode and all GTK Apps like Firefox, Libreoffice and Chromium. On Top of that it let´s you specify Wallpaper swhich will be toggled alongisde. Yin & Yang styles all KDE and QT5 tools, furthermore it also themes VSCode or VSCodium. You can activate a Theme-toggle with shortcuts or let Yin-Yang toggle themes at scheduled Times.
+![yin_yang_demo](./assets/yin-yang.gif)
 
-# ![yin_yang_demo](./assets/yin-yang.gif)
+[![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
+![Generic badge](https://img.shields.io/badge/release-1.0-RED.svg) ![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg) ![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg) ![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
 
-
-## Installation
-
-```bash
-$ git clone https://github.com/daehruoydeef/Yin-Yang.git
-$ cd Yin-Yang
-# the -H flag will install a .desktop file in your home directory
-$ sudo sh install.sh
-```
-
-**Note:** You should use yin-yang on the first run with it´s GUI and configure the Settings to your likings. This way it will configure itself correctly and can be used after this inital step as a standalone terminal Applicaton or as usual with the GUI
+Yin & Yang brings Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes your favourite Editors like VSCode or Atom. 
 
 
 
-## Uninstall
+## Features
 
-```bash
-$ cd Yin-yang
-$ sudo sh uninstall.sh
-
-```
-
-
-
-## Updates
-
-Yin-Yang was designed to be updated by the install.sh script which will simply replace the existing Yin-Yang installation. If you plan on updating there is currently no "auto update" and it is recommended to **star** or **watch** this repository and reclone it if a new version is released.
-
-You can update Yin-Yang by simply clone this repository and run the install again, it will update everything and you should be good to go.
-
-**Note:** **When you Update Yin-Yang the config get's deleted**. This allows us to easily add programs and ensure that the config is always fresh and included all the necessary Fields for the new programs. This it is how it is right now, we would like to switch to Delta updates as soon as possible but apparently it is not doable right now.
-
-That means that you need to open Yin-Yang with it's GUI and set all the Themes again.
-
-You can use the System settings and add Yin-Yang to autostart via the KDE autostart manager.
+* workes on Gnome, Budgie and KDE - all major Desktops
+* toggles themes from light / dark
+* supports VSCode
+* support Atom
+* support Wallpaper change based on themes
+* toggle themes based on given time
 
 
 
-## Hotkeys
+## Documentation
 
-Yin-Yang is about flexibility and stability, it does not provide basic shortcuts for **Dark/Light theme** toggle. It is recommended to add **Hotkeys with the KDE Hotkeys Module** found inside the **System preferences** under the **Hotkeys** section. Set any Hotkey you want to run the command:
+Want to know more? Visit the Wiki and read about Installation, Building, Troubleshooting and more.
 
-```bash
-# Toggle between Light & Dark theme, good for settings as a shortcut
-$ yin-yang
-```
-
-```bash
-# opens the QT5 Gui and allows for further customization
-$ yin-yang -gui
-```
-
-```bash
-# lets you activate the sheduler, good if you want to autostart yin-yang on startup
-$ yin-yang -s
-```
+[![Generic badge](https://img.shields.io/badge/See Wiki--BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
 
 
 
@@ -68,9 +33,9 @@ $ yin-yang -s
 
 Yin-Yang comes with custom made Wallpaper in order to get you started with Light / Dark Wallpapers, you can check out the repository here
 
-[Wallpaper Yin-Yang](https://github.com/daehruoydeef/Wallpaper-yin-yang)
+The Wallpapers are open source and can be used however you want. I also accept contributions in form of open source Wallpapers see the [contribution Section](https://github.com/daehruoydeef/Yin-Yang/wiki/Supporting-Yin-Yang#create-yin-yang-wallpapers).
 
-The Wallpapers are open source and can be used however you want. I also accept contributions in form of open source Wallpapers see the Contribution Section.
+[![Generic badge](https://img.shields.io/badge/Get Wallpapers--BLUE.svg)](https://github.com/daehruoydeef/Wallpaper-yin-yang)
 
 
 
@@ -80,104 +45,25 @@ I found myself constantly switching between themes to match my surrounding light
 
 
 
-## Requirements
+## Contributors
 
-If you do not got **qtpy** or **pyqt5** installed, Yin-Yang got your back by installing the necessary requirements on the go with pip3.
+This list features community contributors
 
-- pip3 \*
-- python3 \*
-- qtpy
-- pyqt5
+* [eogan](https://github.com/eogan)
+* [alxlg](https://github.com/alxlg)
+* [Gesmir](https://github.com/Gesmir)
 
+if you want to join the club and want to see your name on the list see the Contributors Page in the Wiki
 
-
-## Contributions
-
-### Bug hunting
-
-Try finding bugs and report them, eventually I will fix them and everyone benefits. You should use the GitHub Issues site to report them
-
-### Create Yin-Yang wallpapers
-
-If you are not into coding but into Design I much appreciate Wallpapers featuring a Light theme and a Dark theme. The Wallpapers must be under a free open source License. You can use [Firefox Send](https://send.firefox.com/) to send the Wallpapers as a Zip. I will include them inside a extra Repository which can be found [here](https://github.com/daehruoydeef/Wallpaper-yin-yang)
-
-## Troubleshooting
-
-Please try to answer the following Questions, if you still not solved the Problem please write a GitHub Issue
-
-### I cannot install yin-yang
-
-You can check if Yin-Yang installed correctly by searching yin-yang -gui into the terminal.
-
-Yin-Yang installs itself at following locations
-
-* /usr/bin/yin-yang
-
-* /opt/bin/yin-yang
-
-* ~/.config/yin_yang/yin_yang.json
-
-~/.local/share/applications/Yin-Yang.desktop
+[![Generic badge](https://img.shields.io/badge/Join contributors--BLUE.svg)](https://github.com/daehruoydeef/Wallpaper-yin-yang)
 
 
 
-if some of these files are missing please file a bug report.
+## Supporting Yin-Yang
+
+Yin-Yang is an open source project. It's an independent project with its ongoing development made possible thanks to the support by our amazing backers. If you like this project and would like to see more time invested in this think about Donating.
+
+**LibraPay**:  [![liberapay](./assets/liberapay.png)](https://liberapay.com/daehruoydeef/)
 
 
-
-### First run, does not start
-
-Do you have all the requirements installed mainl
-
-* python3
-* pyqt
-* qtpy5
-
-Did you try to run the first time in console without Gui?
-
-Is the config and path created correctly? check ~/.config/yin_yang/yin_yang.json
-
-
-
-### My Desktop Environment is not working
-
-check the .json file under
-
-~/.config/yin_yang/yin_yang.json
-
-if "desktop"="undefined" please replace "undefined" with either "kde" or "gtk"
-
-
-
-## How do I disable the Sound?
-
-simply delete the sound files found in /opt/yin-yang/assets/*.wav
-
-
-
-### VSCode is not working
-
-There is a Bug in VSCode that on the first start without ever touching any settings there will none be created! Yin-Yang can not help. You can fix this by simply going into VSCode and set a theme manually. Afterwards yin-yang should work.
-
-
-
-## Atom is not working
-
-Try to change your theme manually then let Yin-Yang try, sometimes there must be settings created before Yin-Yang can get to work. 
-
-If this is not working please file a bug report.
-
-
-
-### GTK3 is not working (KDE only)
-
-Basically the same as with VSCode, you need to manually set a GTK Theme first in order for the settings to be created. Yin-Yang will do the rest.
-
-Did you wrote the Theme name correctly, you can check available themes under **Systemsettings › Application-Style › GNOME Application-Style(GTK) › Choose a GTK3-Design**. Inside the Dropdown menu you can see which themes are available. Only GTK3 themes are supported
-
-
-
-### Wallpaper is not working
-
-Did you specified the correct images with .jpg or .png extension
 

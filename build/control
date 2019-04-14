@@ -1,0 +1,9 @@
+Package: yin-yang
+Version: 1.0
+Section: custom
+Priority: optional
+Architecture: all
+Essential: no
+Maintainer: Oskar Schtndr
+Description: Auto Nightmode for KDE, Gnome, Budige, VSCode, Atom and more
+

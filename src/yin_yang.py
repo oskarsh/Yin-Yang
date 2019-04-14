@@ -49,7 +49,7 @@ class Yang(threading.Thread):
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
             gtk.switchToLight()
         playSound("./assets/light.wav")
- 
+
 
 class Yin(threading.Thread):
     def __init__(self, threadID):
@@ -59,10 +59,10 @@ class Yin(threading.Thread):
     def run(self):
         if config.get("codeEnabled"):
             vscode.switchToDark()
-        
+
         if config.get("atomEnabled"):
             atom.switchToDark()
-            
+
         if config.get("kdeEnabled"):
             kde.switchToDark()
 
@@ -76,9 +76,8 @@ class Yin(threading.Thread):
         # gnome and budgie support
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
             gtk.switchToDark()
-          
-        
-        playSound("./assets/dark.wav")
+
+        playSound("/assets/dark.wav")
 
 
 class Daemon(threading.Thread):
@@ -99,20 +98,22 @@ class Daemon(threading.Thread):
 
             editable = config.getConfig()
 
-            d_hour = editable["switchToDark"].split(":")[0]
-            d_minute = editable["switchToDark"].split(":")[1]
-            l_hour = editable["switchToLight"].split(":")[0]
-            l_minute = editable["switchToLight"].split(":")[1]
-            hour = datetime.datetime.now().time().hour
-            minute = datetime.datetime.now().time().minute
+            theme = config.get("theme")
 
-            if (hour == int(d_hour) and minute == int(d_minute)):
-                switchToDark()
-                time.sleep(61)
-            if (hour == int(l_hour) and minute == int(l_minute)):
-                switchToLight()
-                time.sleep(61)
-            time.sleep(1)
+            if shouldBeLight():
+                if(theme is "light"):
+                    time.sleep(30)
+                    continue
+                else:
+                    switchToLight()
+            else:
+                if(theme is "dark"):
+                    time.sleep(30)
+                    continue
+                else:
+                    switchToDark()
+
+            time.sleep(30)
 
 
 def switchToLight():
@@ -140,4 +141,28 @@ def playSound(sound):
     :param sound: Sound path to be played audiofile from
     :rtype: I hope you will hear your Sound ;)
     """
-    subprocess.run(["paplay", sound])
+    subprocess.run(["paplay", sys._MEIPASS + sound])
+
+
+def shouldBeLight():
+    # desc: return if the Theme should be light
+    # returns: True if it should be light
+    # returns: False if the theme should be dark
+
+    d_hour = int(config.get("switchToDark").split(":")[0])
+    d_minute = int(config.get("switchToDark").split(":")[1])
+    l_hour = int(config.get("switchToLight").split(":")[0])
+    l_minute = int(config.get("switchToLight").split(":")[1])
+    hour = datetime.datetime.now().time().hour
+    minute = datetime.datetime.now().time().minute
+
+    if(hour >= l_hour and hour < d_hour):
+        if(hour == l_hour and minute <= l_minute):
+            return False
+        else:
+            return True
+    else:
+        if(hour == d_hour and minute <= d_minute):
+            return True
+        else:
+            return False
