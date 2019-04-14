@@ -25,7 +25,7 @@ Yin & Yang brings Auto Night-mode for Linux, it supports popular Desktops like K
 
 Want to know more? Visit the Wiki and read about Installation, Building, Troubleshooting and more.
 
-[![Generic badge](https://img.shields.io/badge/See Wiki--BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
+[![Generic badge](https://img.shields.io/badge/Wiki-Wiki-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
 
 
 
@@ -35,7 +35,7 @@ Yin-Yang comes with custom made Wallpaper in order to get you started with Light
 
 The Wallpapers are open source and can be used however you want. I also accept contributions in form of open source Wallpapers see the [contribution Section](https://github.com/daehruoydeef/Yin-Yang/wiki/Supporting-Yin-Yang#create-yin-yang-wallpapers).
 
-[![Generic badge](https://img.shields.io/badge/Get Wallpapers--BLUE.svg)](https://github.com/daehruoydeef/Wallpaper-yin-yang)
+[![Generic badge](https://img.shields.io/badge/Get-Wallpapers-BLUE.svg)](https://github.com/daehruoydeef/Wallpaper-yin-yang)
 
 
 
