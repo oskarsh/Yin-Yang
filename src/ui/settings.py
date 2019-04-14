@@ -2,11 +2,12 @@
 
 # Form implementation generated from reading ui file 'ui/settings.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.12.1
 #
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -177,4 +178,5 @@ class Ui_MainWindow(object):
         self.wallpaper_button_dark.setText(_translate("MainWindow", "dark"))
         self.version_label.setText(_translate("MainWindow", "version: 0.1"))
         self.back_button.setText(_translate("MainWindow", "back"))
+
 
