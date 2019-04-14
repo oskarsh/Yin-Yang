@@ -19,7 +19,10 @@ Yin & Yang brings Auto Night-mode for Linux, it supports popular Desktops like K
 * support Wallpaper change based on themes
 * toggle themes based on given time
 
+## Installation
+You can install the latest Yin-Yang version under the releases site.
 
+[![Generic badge](https://img.shields.io/badge/See-releases-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/releases>)
 
 ## Documentation
 
