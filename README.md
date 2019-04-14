@@ -25,7 +25,7 @@ Yin & Yang brings Auto Night-mode for Linux, it supports popular Desktops like K
 
 Want to know more? Visit the Wiki and read about Installation, Building, Troubleshooting and more.
 
-[![Generic badge](https://img.shields.io/badge/Wiki-Wiki-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
+[![Generic badge](https://img.shields.io/badge/Visit-Wiki-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
 
 
 
@@ -55,7 +55,7 @@ This list features community contributors
 
 if you want to join the club and want to see your name on the list see the Contributors Page in the Wiki
 
-[![Generic badge](https://img.shields.io/badge/Join contributors--BLUE.svg)](https://github.com/daehruoydeef/Wallpaper-yin-yang)
+[![Generic badge](https://img.shields.io/badge/Join-contributors-BLUE.svg)](https://github.com/daehruoydeef/Wallpaper-yin-yang)
 
 
 
