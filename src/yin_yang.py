@@ -134,6 +134,16 @@ def startDaemon():
     daemon = Daemon(3)
     daemon.start()
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 
 def playSound(sound):
     """ Description - only works with pulseaudio.
@@ -141,7 +151,9 @@ def playSound(sound):
     :param sound: Sound path to be played audiofile from
     :rtype: I hope you will hear your Sound ;)
     """
-    subprocess.run(["paplay", sys._MEIPASS + sound])
+
+
+    subprocess.run(["paplay", resource_path(sound)])
 
 
 def shouldBeLight():

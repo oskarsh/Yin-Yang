@@ -67,8 +67,7 @@ class Ui_MainWindow(object):
         self.yinyang_img.setFont(font)
         self.yinyang_img.setText("")
         self.yinyang_img.setTextFormat(QtCore.Qt.RichText)
-        self.yinyang_img.setPixmap(QtGui.QPixmap(
-            sys._MEIPASS+"/assets/yin-yang.svg"))
+        self.yinyang_img.setPixmap(QtGui.QPixmap(self.resource_path("/assets/yin-yang.svg") ))
         self.yinyang_img.setScaledContents(False)
         self.yinyang_img.setAlignment(QtCore.Qt.AlignCenter)
         self.yinyang_img.setObjectName("yinyang_img")
