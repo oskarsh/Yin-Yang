@@ -1,4 +1,4 @@
-# Yin-Yang KDE ![icon](./src/ui/assets/icon.png)
+# Yin-Yang ![icon](./src/ui/assets/icon.png)
 
 ![yin_yang_demo](./assets/yin-yang.gif)
 
