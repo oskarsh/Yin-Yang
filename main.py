@@ -11,11 +11,12 @@ QtWidgets.QApplication.setAttribute(
     QtCore.Qt.AA_EnableHighDpiScaling, True)
 
 
-def toggleTheme():
+def toggle_theme():
+    """Switch themes"""
     theme = config.getTheme()
-    if (theme == "dark"):
+    if theme == "dark":
         yin_yang.switchToLight()
-    elif (theme == "light"):
+    elif theme == "light":
         yin_yang.switchToDark()
 
 
@@ -31,7 +32,7 @@ def main():
     args = parser.parse_args()
 
     # checks wether $ yin-yang is ran without args
-    if (len(sys.argv) == 1 and not args.toggle):
+    if len(sys.argv) == 1 and not args.toggle:
         # load GUI
         app = QtWidgets.QApplication(sys.argv)
         window = gui.MainWindow()
@@ -39,7 +40,7 @@ def main():
         sys.exit(app.exec_())
 
     # checks wether the script should be ran as a daemon
-    if (args.schedule):
+    if args.schedule:
         config.update("running", False)
         print("START thread listener")
         if config.get("schedule"):
@@ -51,8 +52,8 @@ def main():
             print("You need to set schedule to True and edit the time to toggles")
 
     # gui is set as parameter
-    if (args.toggle):
-        toggleTheme()
+    if args.toggle:
+        toggle_theme()
 
 
 if __name__ == "__main__":

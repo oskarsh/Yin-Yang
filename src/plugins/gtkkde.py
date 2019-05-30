@@ -9,11 +9,11 @@ path = "/home/"+user+"/.config"
 
 
 def inplace_change(filename, old_string, new_string):
-    #
-    # @params: config - config to be written into file
-    #          path - the path where the config is will be written into
-    #           defaults to the default path
+    """@params: config - config to be written into file
+               path - the path where the config is will be written into
+                defaults to the default path
 
+    """
     # Safely read the input filename using 'with'
     with open(filename) as f:
         s = f.read()
@@ -30,8 +30,8 @@ def inplace_change(filename, old_string, new_string):
         f.write(s)
 
 
-def switchToLight():
-    gtk_theme = config.getGtkLightTheme()
+def switch_to_light():
+    gtk_theme = config.get_gtk_light_theme()
     gtk_path = path + "/gtk-3.0"
     with open(gtk_path+"/settings.ini", "r") as file:
         # search for the theme section and change it
@@ -41,8 +41,8 @@ def switchToLight():
                        current_theme, "gtk-theme-name="+gtk_theme)
 
 
-def switchToDark():
-    gtk_theme = config.getGtkDarkTheme()
+def switch_to_dark():
+    gtk_theme = config.get_gtk_dark_theme()
     gtk_path = path + "/gtk-3.0"
     with open(gtk_path+"/settings.ini", "r") as file:
         # search for the theme section and change it
