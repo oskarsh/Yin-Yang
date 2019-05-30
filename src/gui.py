@@ -1,4 +1,3 @@
-
 import subprocess
 import re
 import os
@@ -21,15 +20,15 @@ class SettingsWindow(QtWidgets.QMainWindow):
         # center the settingswindow
         self.center()
         # syncing with config - fill out all fields based on Config
-        self.syncWithConfig()
+        self.sync_with_config()
         # register all the handler onClick functions ...
-        self.registerHandlers()
+        self.register_handlers()
 
-    def closeEvent(self, event):
-        # overwrites the function that gets called when window is closed
-        self.saveAndExit()
+    def close_event(self, event):
+        """Overwrite the function that gets called when window is closed"""
+        self.save_and_exit()
 
-    def saveAndExit(self):
+    def save_and_exit(self):
         print("saving options")
 
         config.update("kdeLightTheme", self.ui.kde_combo_light.currentText())
@@ -53,27 +52,27 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.window = MainWindow()
         self.window.show()
 
-    def registerHandlers(self):
-        self.ui.kde_checkbox.toggled.connect(self.toggleKdeFields)
-        self.ui.code_checkbox.toggled.connect(self.toggleCodeFields)
-        self.ui.gtk_checkbox.toggled.connect(self.toggleGtkFields)
-        self.ui.atom_checkbox.toggled.connect(self.toggleAtomFields)
-        self.ui.wallpaper_button_light.clicked.connect(self.openWallpaperLight)
-        self.ui.wallpaper_button_dark.clicked.connect(self.openWallpaperDark)
-        self.ui.wallpaper_checkbox.toggled.connect(self.toggleWallpaperButtons)
-        self.ui.back_button.clicked.connect(self.saveAndExit)
+    def register_handlers(self):
+        self.ui.kde_checkbox.toggled.connect(self.toggle_kde_fields)
+        self.ui.code_checkbox.toggled.connect(self.toggle_code_fields)
+        self.ui.gtk_checkbox.toggled.connect(self.toggle_gtk_fields)
+        self.ui.atom_checkbox.toggled.connect(self.toggle_atom_fields)
+        self.ui.wallpaper_button_light.clicked.connect(self.open_wallpaper_light)
+        self.ui.wallpaper_button_dark.clicked.connect(self.open_wallpaper_dark)
+        self.ui.wallpaper_checkbox.toggled.connect(self.toggle_wallpaper_buttons)
+        self.ui.back_button.clicked.connect(self.save_and_exit)
 
-    def syncWithConfig(self):
+    def sync_with_config(self):
         # sync config label with get the correct version
-        self.ui.version_label.setText("yin-yang: v" + config.getVersion())
+        self.ui.version_label.setText("yin-yang: v" + config.get_version())
         # syncing all fields and checkboxes with config
         # ---- KDE -----
         # reads out all kde themes and displays them inside a combobox
-        if (config.get("kdeEnabled")):
+        if config.get("kdeEnabled"):
             # if (self.ui.kde_combo_light.count())
             print(self.ui.kde_combo_dark.count())
             # fixed bug where themes get appended multiple times
-            self.getKdeThemes()
+            self.get_kde_themes()
 
             self.ui.kde_checkbox.setChecked(config.get("kdeEnabled"))
             self.ui.kde_combo_dark.setEnabled(config.get("kdeEnabled"))
@@ -109,20 +108,20 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.atom_line_light.setEnabled(config.get("atomEnabled"))
         self.ui.atom_line_dark.setEnabled(config.get("atomEnabled"))
 
-    def openWallpaperLight(self):
-        fileName, _ = QFileDialog.getOpenFileName(
+    def open_wallpaper_light(self):
+        file_name, _ = QFileDialog.getOpenFileName(
             self, "Open Wallpaper Light", "")
         subprocess.run(["notify-send", "Light Wallpaper set"])
-        config.update("wallpaperLightTheme", fileName)
+        config.update("wallpaperLightTheme", file_name)
 
-    def openWallpaperDark(self):
-        fileName, _ = QFileDialog.getOpenFileName(
+    def open_wallpaper_dark(self):
+        file_name, _ = QFileDialog.getOpenFileName(
             self, "Open Wallpaper Dark", "")
         subprocess.run(["notify-send", "Dark Wallpaper set"])
-        config.update("wallpaperDarkTheme", fileName)
+        config.update("wallpaperDarkTheme", file_name)
 
-    def getKdeThemes(self):
-        if (config.get("desktop") == "kde"):
+    def get_kde_themes(self):
+        if config.get("desktop") == "kde":
             if (self.ui.kde_combo_light.count() == 0 and self.ui.kde_combo_dark.count() == 0):
                 # asks the system what themes are available
                 ugly_themes = subprocess.check_output(
@@ -138,37 +137,37 @@ class SettingsWindow(QtWidgets.QMainWindow):
             config.update("codeEnabled", False)
 
     def center(self):
-        frameGm = self.frameGeometry()
-        centerPoint = QtWidgets.QDesktopWidget().availableGeometry().center()
-        frameGm.moveCenter(centerPoint)
-        self.move(frameGm.topLeft())
+        frame_gm = self.frameGeometry()
+        center_point = QtWidgets.QDesktopWidget().availableGeometry().center()
+        frame_gm.moveCenter(center_point)
+        self.move(frame_gm.topLeft())
 
-    def toggleKdeFields(self):
-        self.getKdeThemes()
+    def toggle_kde_fields(self):
+        self.get_kde_themes()
         checked = self.ui.kde_checkbox.isChecked()
         self.ui.kde_combo_light.setEnabled(checked)
         self.ui.kde_combo_dark.setEnabled(checked)
         config.update("codeEnabled", checked)
 
-    def toggleAtomFields(self):
+    def toggle_atom_fields(self):
         checked = self.ui.atom_checkbox.isChecked()
         self.ui.atom_line_light.setEnabled(checked)
         self.ui.atom_line_dark.setEnabled(checked)
         config.update("atomEnabled", checked)
 
-    def toggleWallpaperButtons(self):
+    def toggle_wallpaper_buttons(self):
         checked = self.ui.wallpaper_checkbox.isChecked()
         self.ui.wallpaper_button_light.setEnabled(checked)
         self.ui.wallpaper_button_dark.setEnabled(checked)
         config.update("wallpaperEnabled", checked)
 
-    def toggleCodeFields(self):
+    def toggle_code_fields(self):
         checked = self.ui.code_checkbox.isChecked()
         self.ui.code_line_light.setEnabled(checked)
         self.ui.code_line_dark.setEnabled(checked)
         config.update("codeEnabled", checked)
 
-    def toggleGtkFields(self):
+    def toggle_gtk_fields(self):
         checked = self.ui.gtk_checkbox.isChecked()
         self.ui.gtk_line_light.setEnabled(checked)
         self.ui.gtk_line_dark.setEnabled(checked)
@@ -185,55 +184,55 @@ class MainWindow(QtWidgets.QMainWindow):
         # center itself
         self.center()
         # connects all buttons to the correct routes
-        self.registerHandlers()
+        self.register_handlers()
         # syncs the UI with the config
-        self.syncWithConfig()
+        self.sync_with_config()
 
     def center(self):
-        frameGm = self.frameGeometry()
-        centerPoint = QtWidgets.QDesktopWidget().availableGeometry().center()
-        frameGm.moveCenter(centerPoint)
-        self.move(frameGm.topLeft())
+        frame_gm = self.frameGeometry()
+        center_point = QtWidgets.QDesktopWidget().availableGeometry().center()
+        frame_gm.moveCenter(center_point)
+        self.move(frame_gm.topLeft())
 
-    def registerHandlers(self):
+    def register_handlers(self):
         # connect the "light" button
-        self.ui.light_push.clicked.connect(self.toggleLight)
+        self.ui.light_push.clicked.connect(self.toggle_light)
         # connect the "dark" button
-        self.ui.dark_push.clicked.connect(self.toggleDark)
+        self.ui.dark_push.clicked.connect(self.toggle_dark)
         # connect the settingsButton
-        self.ui.settings_push.clicked.connect(self.openSettings)
+        self.ui.settings_push.clicked.connect(self.open_settings)
         # connect the time change with the correct function
-        self.ui.light_time.timeChanged.connect(self.timeChanged)
-        self.ui.dark_time.timeChanged.connect(self.timeChanged)
-        self.ui.schedule_radio.toggled.connect(self.toggleScheduleClicked)
+        self.ui.light_time.timeChanged.connect(self.time_changed)
+        self.ui.dark_time.timeChanged.connect(self.time_changed)
+        self.ui.schedule_radio.toggled.connect(self.toggle_schedule_cliked)
 
-    def syncWithConfig(self):
+    def sync_with_config(self):
         # sets the scheduled button to be enabled or disabled
-        if (config.isScheduled()):
+        if config.is_scheduled():
             self.ui.schedule_radio.setChecked(True)
             self.ui.dark_time.setEnabled(True)
             self.ui.light_time.setEnabled(True)
-            yin_yang.startDaemon()
+            yin_yang.start_daemon()
         # sets the correct time based on config
-        self.setCorrectTime()
+        self.set_correct_time()
         # setting the correct buttons based on config "dark"  "light"
-        self.setCorrectButtons()
+        self.set_correct_buttons()
 
-    def openSettings(self):
+    def open_settings(self):
         self.secwindow = SettingsWindow()
         self.secwindow.setWindowTitle("Settings")
         self.secwindow.show()
         self.hide()
 
-    def toggleLight(self):
-        yin_yang.switchToLight()
-        self.syncWithConfig()
+    def toggle_light(self):
+        yin_yang.switch_to_light()
+        self.sync_with_config()
         # experimental
         # self.restart()
 
-    def toggleDark(self):
-        yin_yang.switchToDark()
-        self.syncWithConfig()
+    def toggle_dark(self):
+        yin_yang.switch_to_dark()
+        self.sync_with_config()
         # self.restart()
 
     # no needed since QT is now used system wise instead of python wise
@@ -244,8 +243,8 @@ class MainWindow(QtWidgets.QMainWindow):
         python = sys.executable
         os.execl(python, python, * sys.argv)
 
-    def setCorrectTime(self):
-        new_config = config.getConfig()
+    def set_correct_time(self):
+        new_config = config.get_config()
         d_hour = new_config["switchToDark"].split(":")[0]
         d_minute = new_config["switchToDark"].split(":")[1]
         l_hour = new_config["switchToLight"].split(":")[0]
@@ -257,19 +256,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.dark_time.setTime(dark_time)
         self.ui.light_time.setTime(light_time)
 
-    def setCorrectButtons(self):
-        theme = config.getTheme()
-        if (theme == "dark"):
+    def set_correct_buttons(self):
+        theme = config.get_theme()
+        if theme == "dark":
             self.ui.light_push.setEnabled(True)
             self.ui.dark_push.setEnabled(False)
-        if (theme == "light"):
+        if theme == "light":
             self.ui.light_push.setEnabled(False)
             self.ui.dark_push.setEnabled(True)
-        if (theme == ""):
+        if theme == "":
             self.ui.light_push.setEnabled(True)
             self.ui.dark_push.setEnabled(True)
 
-    def timeChanged(self):
+    def time_changed(self):
         # update config if time has changed
         l_hour, l_minute = str(self.ui.light_time.time().hour()), str(
             self.ui.light_time.time().minute())
@@ -278,10 +277,10 @@ class MainWindow(QtWidgets.QMainWindow):
         config.update("switchToLight", l_hour + ":" + l_minute)
         config.update("switchToDark", d_hour + ":" + d_minute)
 
-    def toggleScheduleClicked(self):
+    def toggle_schedule_cliked(self):
         checked = self.ui.schedule_radio.isChecked()
         config.update("schedule", checked)
-        if(checked):
+        if checked:
             self.ui.dark_time.setEnabled(True)
             self.ui.light_time.setEnabled(True)
         else:

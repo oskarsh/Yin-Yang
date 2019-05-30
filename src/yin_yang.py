@@ -1,24 +1,24 @@
 #!/bin/python
 
 
-#
-# title: yin_yang
-# description: yin_yang provides a easy way to toggle between light and dark
-# mode for your kde desktop. It also themes your vscode and
-# all other qt application with it.
-# author: daehruoydeef
-# date: 21.12.2018
-# license: MIT
-#
+"""
+title: yin_yang
+description: yin_yang provides a easy way to toggle between light and dark
+mode for your kde desktop. It also themes your vscode and
+all other qt application with it.
+author: daehruoydeef
+date: 21.12.2018
+license: MIT
+"""
 
 import os
 import sys
-from src import gui
 import threading
 import time
 import pwd
 import datetime
 import subprocess
+from src import gui
 from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk
 from src import config
 
@@ -31,106 +31,106 @@ terminate = False
 
 
 class Yang(threading.Thread):
-    def __init__(self, threadID):
+    def __init__(self, thread_id):
         threading.Thread.__init__(self)
-        self.threadID = threadID
+        self.thread_id = thread_id
 
     def run(self):
         if config.get("codeEnabled"):
-            vscode.switchToLight()
+            vscode.switch_to_light()
         if config.get("atomEnabled"):
-            atom.switchToLight()
+            atom.switch_to_light()
         if config.get("kdeEnabled"):
-            kde.switchToLight()
+            kde.switch_to_light()
         if config.get("wallpaperEnabled"):
-            wallpaper.switchToLight()
+            wallpaper.switch_to_light()
         if config.get("gtkEnabled") and config.get("desktop") == "kde":
-            gtkkde.switchToLight()
+            gtkkde.switch_to_light()
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
-            gtk.switchToLight()
-        playSound("./assets/light.wav")
+            gtk.switch_to_light()
+        play_sound("./assets/light.wav")
 
 
 class Yin(threading.Thread):
-    def __init__(self, threadID):
+    def __init__(self, thread_id):
         threading.Thread.__init__(self)
-        self.threadID = threadID
+        self.thread_id = thread_id
 
     def run(self):
         if config.get("codeEnabled"):
-            vscode.switchToDark()
+            vscode.switch_to_dark()
 
         if config.get("atomEnabled"):
-            atom.switchToDark()
+            atom.switch_to_dark()
 
         if config.get("kdeEnabled"):
-            kde.switchToDark()
+            kde.switch_to_dark()
 
         if config.get("wallpaperEnabled"):
-            wallpaper.switchToDark()
+            wallpaper.switch_to_dark()
 
         # kde support
         if config.get("gtkEnabled") and config.get("desktop") == "kde":
-            gtkkde.switchToDark()
+            gtkkde.switch_to_dark()
 
         # gnome and budgie support
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
-            gtk.switchToDark()
+            gtk.switch_to_dark()
 
-        playSound("/assets/dark.wav")
+        play_sound("/assets/dark.wav")
 
 
 class Daemon(threading.Thread):
-    def __init__(self, threadID):
+    def __init__(self, thread_id):
         threading.Thread.__init__(self)
-        self.threadID = threadID
+        self.thread_id = thread_id
 
     def run(self):
-        while(True):
+        while True:
 
             if terminate:
                 config.update("running", False)
                 break
 
-            if(not config.isScheduled()):
+            if not config.is_scheduled():
                 config.update("running", False)
                 break
 
-            editable = config.getConfig()
+            editable = config.get_config()
 
             theme = config.get("theme")
 
-            if shouldBeLight():
-                if(theme is "light"):
+            if should_be_light():
+                if theme == "light":
                     time.sleep(30)
                     continue
                 else:
-                    switchToLight()
+                    switch_to_light()
             else:
-                if(theme is "dark"):
+                if theme == "dark":
                     time.sleep(30)
                     continue
                 else:
-                    switchToDark()
+                    switch_to_dark()
 
             time.sleep(30)
 
 
-def switchToLight():
+def switch_to_light():
     yang = Yang(1)
     yang.start()
     config.update("theme", "light")
     yang.join()
 
 
-def switchToDark():
+def switch_to_dark():
     yin = Yin(2)
     yin.start()
     config.update("theme", "dark")
     yin.join()
 
 
-def startDaemon():
+def start_daemon():
     daemon = Daemon(3)
     daemon.start()
 
@@ -145,7 +145,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-def playSound(sound):
+def play_sound(sound):
     """ Description - only works with pulseaudio.
     :type sound: String (Path)
     :param sound: Sound path to be played audiofile from
@@ -156,7 +156,7 @@ def playSound(sound):
     subprocess.run(["paplay", resource_path(sound)])
 
 
-def shouldBeLight():
+def should_be_light():
     # desc: return if the Theme should be light
     # returns: True if it should be light
     # returns: False if the theme should be dark
@@ -169,12 +169,6 @@ def shouldBeLight():
     minute = datetime.datetime.now().time().minute
 
     if(hour >= l_hour and hour < d_hour):
-        if(hour == l_hour and minute <= l_minute):
-            return False
-        else:
-            return True
+        return not (hour == l_hour and minute <= l_minute)
     else:
-        if(hour == d_hour and minute <= d_minute):
-            return True
-        else:
-            return False
+        return hour == d_hour and minute <= d_minute

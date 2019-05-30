@@ -11,12 +11,12 @@ path = "/home/"+user+"/.config"
 
 
 def exists():
-    # returns True or False wether Config exists or note
+    """returns True or False wether Config exists or note"""
     return os.path.isfile(path+"/yin_yang/yin_yang.json")
 
 
-def getDesktop():
-
+def get_desktop():
+    """Return the current desktop's name or 'unkown' if can't determine it"""
     # just to get all possible implementations of dekstop variables
     env = str(os.getenv("GDMSESSION")).lower()
     second_env = str(os.getenv("XDG_CURRENT_DESKTOP")).lower()
@@ -50,7 +50,7 @@ pathlib.Path(path+"/yin_yang").mkdir(parents=True, exist_ok=True)
 # if there is no config generate a generic one
 config = {}
 config["version"] = "2.0"
-config["desktop"] = getDesktop()
+config["desktop"] = get_desktop()
 config["schedule"] = False
 config["switchToDark"] = "20:00"
 config["switchToLight"] = "07:00"
@@ -73,144 +73,139 @@ config["wallpaperDarkTheme"] = ""
 config["wallpaperEnabled"] = False
 
 
-if (exists()):
+if exists():
     # making config global for this module
     with open(path+"/yin_yang/yin_yang.json", "r") as conf:
         config = json.load(conf)
 
-config["desktop"] = getDesktop()
+config["desktop"] = get_desktop()
 
 
-def getConfig():
-    # returns the config
+def get_config():
+    """returns the config"""
     return config
 
 
 def update(key, value):
+    """Update the value of a key in configuration"""
     config[key] = value
-    writeConfig()
+    write_config()
 
 
-def writeConfig(config=config):
+def write_config(config=config):
+    """Write configuration"""
     with open(path+"/yin_yang/yin_yang.json", 'w') as conf:
         json.dump(config, conf, indent=4)
 
 
-def GTKExists():
-    if (os.path.isfile(path+"/gtk-3.0/settings.ini")):
-        return True
-    else:
-        return False
+def gtk_exists():
+    return os.path.isfile(path+"/gtk-3.0/settings.ini")
 
-
-def getEnabledPlugins():
-    # returns a list of plugins which are activated
+def get_enabled_plugins():
+    """returns a list of plugins which are activated"""
     pass
 
 
-def getLightTime():
-    # returns the time which should toggle the lightMode
+def get_light_time():
+    """returns the time which should toggle the lightMode"""
     pass
 
 
-def getDarkTime():
-    # returns the time which should toggle the lightMode
+def get_dark_time():
+    """returns the time which should toggle the lightMode"""
     pass
 
 
-def getTheme():
+def get_theme():
     return config["theme"]
 
 
-def getKdeLightTheme():
+def get_kde_light_theme():
     return config["kdeLightTheme"]
 
 
-def getKdeDarkTheme():
+def get_kde_dark_theme():
     return config["kdeDarkTheme"]
 
 
-def getKdeEnabled():
+def get_kde_enabled():
     return config["kdeEnabled"]
 
 
-def getcodeLightTheme():
+def get_code_light_theme():
     return config["codeLightTheme"]
 
 
-def getcodeDarkTheme():
+def get_code_dark_theme():
     return config["codeDarkTheme"]
 
 
-def getCodeEnabled():
+def get_code_enabled():
     return config["codeEnabled"]
 
 
-def getGtkLightTheme():
+def get_gtk_light_theme():
     return config["gtkLightTheme"]
 
 
-def getGtkDarkTheme():
+def get_gtk_dark_theme():
     return config["gtkDarkTheme"]
 
 
-def getGtkEnabled():
+def get_gtk_enabled():
     return config["gtkEnabled"]
 
 
 def get(key):
-    # returns the given key from the config
+    """Return the given key from the config"""
     return config[key]
 
 
-def isScheduled():
-    if (config["schedule"]):
-        return True
-    else:
-        return False
+def is_scheduled():
+    return config["schedule"]
 
 
-def getVersion():
+def get_version():
     return config["version"]
 
 
-def kdeGetLightTheme():
-    # returns the KDE light theme specified in the yin-yang config
+def kde_get_light_theme():
+    """Return the KDE light theme specified in the yin-yang config"""
     return config["kdeLightTheme"]
 
 
-def kdeGetDarkTheme():
-    # returns the KDE dark theme specified in the yin-yang config
+def kde_get_dark_theme():
+    """Return the KDE dark theme specified in the yin-yang config"""
     return config["kdeDarkTheme"]
 
 
-def kdeGetCheckbox():
+def kde_get_checkbox():
     return config["kdeEnabled"]
 
 
-def gtkGetLightTheme():
-    # returns the  GTK Light theme specified in the yin-yang config
+def gtk_get_light_theme():
+    """Return the  GTK Light theme specified in the yin-yang config"""
     return config["gtkLightTheme"]
 
 
-def gtkGetDarkTheme():
-    # returns the  GTK dark theme specified in the yin-yang config
+def gtk_get_dark_theme():
+    """Return the  GTK dark theme specified in the yin-yang config"""
     return config["gtkDarkTheme"]
 
 
-def gtkGetCheckbox():
+def gtk_get_checkbox():
     return config["gtkEnabled"]
 
 
-def codeGetLightTheme():
-    # returns the code light theme specified in the yin-yang config
+def code_get_light_theme():
+    """Return the code light theme specified in the yin-yang config"""
     return config["codeLightTheme"]
 
 
-def codeGetDarkTheme():
-    # returns the  code dark theme specified in the yin-yang config
+def code_get_dark_theme():
+    """Return the  code dark theme specified in the yin-yang config"""
     return config["codeDarkTheme"]
 
 
-def codeGetCheckbox():
+def code_get_checkbox():
     return config["codeEnabled"]
