@@ -1,7 +1,7 @@
-from src import config
 import os
 import pwd
 import json
+from src import config
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
@@ -9,10 +9,10 @@ path = "/home/"+user+"/.config"
 
 
 def inplace_change(filename, old_string, new_string):
-    #
-    # @params: config - config to be written into file
-    #          path - the path where the config is will be written into
-    #           defaults to the default path
+    """@params: config - config to be written into file
+               path - the path where the config is will be written into
+                defaults to the default path
+    """
 
     # Safely read the input filename using 'with'
     with open(filename) as f:
@@ -30,7 +30,7 @@ def inplace_change(filename, old_string, new_string):
         f.write(s)
 
 
-def writeNewSettings(settings, path):
+def write_new_settings(settings, path):
     print("SETTINGS ", len(settings))
     # simple adds a new field to the settings
     settings["workbench.colorTheme"] = "Default"
@@ -38,17 +38,17 @@ def writeNewSettings(settings, path):
         json.dump(settings, conf, indent=4)
 
 
-def switchToLight():
-    codeTheme = config.get("codeLightTheme")
-    possibleEditors = [
+def switch_to_light():
+    code_theme = config.get("codeLightTheme")
+    possible_editors = [
         path+"/VSCodium/User/settings.json",
         path+"/Code - OSS/User/settings.json",
         path+"/Code/User/settings.json",
         path+"/Code - Insiders/User/settings.json",
     ]
 
-    for editor in possibleEditors:
-        if (os.path.isfile(editor)):
+    for editor in possible_editors:
+        if os.path.isfile(editor):
             # getting the old theme to replace it
             with open(editor, "r") as sett:
                 try:
@@ -56,20 +56,20 @@ def switchToLight():
                 except json.decoder.JSONDecodeError:
                     settings = {}
                     settings["workbench.colorTheme"] = ""
-                    writeNewSettings(settings, editor)
+                    write_new_settings(settings, editor)
                 try:
-                    oldTheme = settings["workbench.colorTheme"]
+                    old_theme = settings["workbench.colorTheme"]
                 except KeyError:
                     # happens when the default theme in vscode is
                     print("NO THEME SECTION INSIDE SETTINGS")
-                    writeNewSettings(settings, editor)
+                    write_new_settings(settings, editor)
             inplace_change(editor,
-                           oldTheme, codeTheme)
+                           old_theme, code_theme)
 
 
-def switchToDark():
-    codeTheme = config.get("codeDarkTheme")
-    possibleEditors = [
+def switch_to_dark():
+    code_theme = config.get("codeDarkTheme")
+    possible_editors = [
         path+"/VSCodium/User/settings.json",
         path+"/Code - OSS/User/settings.json",
         path+"/Code/User/settings.json",
@@ -77,8 +77,8 @@ def switchToDark():
 
     ]
 
-    for editor in possibleEditors:
-        if (os.path.isfile(editor)):
+    for editor in possible_editors:
+        if os.path.isfile(editor):
             # getting the old theme to replace it
             with open(editor, "r") as sett:
                 try:
@@ -86,11 +86,11 @@ def switchToDark():
                 except json.decoder.JSONDecodeError:
                     settings = {}
                     settings["workbench.colorTheme"] = ""
-                    writeNewSettings(settings, editor)
+                    write_new_settings(settings, editor)
                 try:
-                    oldTheme = settings["workbench.colorTheme"]
+                    old_theme = settings["workbench.colorTheme"]
                 except KeyError:
                     # happens when the default theme in vscode is used
-                    writeNewSettings(settings, editor)
+                    write_new_settings(settings, editor)
             inplace_change(editor,
-                           oldTheme, codeTheme)
+                           old_theme, code_theme)

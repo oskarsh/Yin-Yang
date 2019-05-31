@@ -1,8 +1,8 @@
-from src import config
 import os
 import pwd
 import json
 import re
+from src import config
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
@@ -10,11 +10,10 @@ path = "/home/"+user+"/.atom/"
 
 
 def inplace_change(filename, old_string, new_string):
-    #
-    # @params: config - config to be written into file
-    #          path - the path where the config is will be written into
-    #           defaults to the default path
-
+    """@params: config - config to be written into file
+                path - the path where the config is will be written into.
+                    Defaults to the default path
+    """
     # Safely read the input filename using 'with'
     with open(filename) as f:
         s = f.read()
@@ -31,45 +30,46 @@ def inplace_change(filename, old_string, new_string):
         f.write(s)
 
 
-def writeNewSettings(settings, path):
+def write_new_settings(settings, path):
     print("SETTINGS ", len(settings))
     # simple adds a new field to the settings
     settings["workbench.colorTheme"] = "Default"
     with open(path, 'w') as conf:
         json.dump(settings, conf, indent=4)
 
-def getOldTheme(settings):
-  # returns the theme which is currently used
-  # uses regex to find the currently used theme
-  # i excpect that themes follow this pattern
-  # XXXX-XXXX-ui     XXXX-XXXX-syntax
-  with open (settings, "r") as file:
-    string = file.read()
-    # themes = re.findall(r'themes: \[[\s]*"([A-Za-z0-9\-]*)"[\s]*"([A-Za-z0-9\-]*)"', string)
-    themes = re.findall(r'themes: \[[\s]*"([A-Za-z0-9\-]*)"[\s]*"([A-Za-z0-9\-]*)"', string)
-    if len(themes) >= 1:
-      uiTheme, syntaxTheme = themes[0]
-      usedTheme = re.findall("([A-z\-A-z]*)\-", uiTheme)[0]
-      print(usedTheme)
-      return usedTheme
-    
-def switchToLight():
+def get_old_theme(settings):
+    """returns the theme which is currently used
+       uses regex to find the currently used theme
+       i excpect that themes follow this pattern
+       XXXX-XXXX-ui     XXXX-XXXX-syntax
+    """
+    with open(settings, "r") as file:
+        string = file.read()
+        # themes = re.findall(r'themes: \[[\s]*"([A-Za-z0-9\-]*)"[\s]*"([A-Za-z0-9\-]*)"', string)
+        themes = re.findall(r'themes: \[[\s]*"([A-Za-z0-9\-]*)"[\s]*"([A-Za-z0-9\-]*)"', string)
+        if len(themes) >= 1:
+            ui_theme, syntax_theme = themes[0]
+            used_theme = re.findall("([A-z\-A-z]*)\-", ui_theme)[0]
+            print(used_theme)
+            return used_theme
+
+def switch_to_light():
     # get theme out of config
-    atomTheme = config.get("atomLightTheme")
+    atom_theme = config.get("atomLightTheme")
 
     # getting the old theme first
-    currentTheme = getOldTheme(path+"config.cson")
+    current_theme = get_old_theme(path+"config.cson")
 
     # updating the old theme with theme specfied in config
-    inplace_change(path+"config.cson", currentTheme, atomTheme)
+    inplace_change(path+"config.cson", current_theme, atom_theme)
 
 
-def switchToDark():
+def switch_to_dark():
     # get theme out of config
-    atomTheme = config.get("atomDarkTheme")
+    atom_theme = config.get("atomDarkTheme")
 
     # getting the old theme first
-    currentTheme = getOldTheme(path+"config.cson")
+    current_theme = get_old_theme(path+"config.cson")
 
     # updating the old theme with theme specfied in config
-    inplace_change(path+"config.cson", currentTheme, atomTheme)
+    inplace_change(path+"config.cson", current_theme, atom_theme)
