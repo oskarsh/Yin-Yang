@@ -55,6 +55,7 @@ This list features community contributors
 * [eogan](https://github.com/eogan)
 * [alxlg](https://github.com/alxlg)
 * [Gesmir](https://github.com/Gesmir)
+* [Jordi-7](https://github.com/jordi-7)
 
 if you want to join the club and want to see your name on the list see the Contributors Page in the Wiki
 
