@@ -63,11 +63,5 @@ if you want to join the club and want to see your name on the list see the Contr
 
 
 
-## Supporting Yin-Yang
-
-Yin-Yang is an open source project. It's an independent project with its ongoing development made possible thanks to the support by our amazing backers. If you like this project and would like to see more time invested in this think about Donating.
-
-**LibraPay**:  [![liberapay](./assets/liberapay.png)](https://liberapay.com/daehruoydeef/)
-
 
 
