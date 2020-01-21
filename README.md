@@ -4,7 +4,7 @@
 
 [![forthebadge made-with-python](http://ForTheBadge.com/images/badges/made-with-python.svg)](https://www.python.org/)
 
-![Generic badge](https://img.shields.io/badge/release-1.0-RED.svg) ![Maintenance](https://img.shields.io/badge/Maintained%3F-no-green.svg) ![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg) ![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
+[![Financial Contributors on Open Collective](https://opencollective.com/Yin-Yang/all/badge.svg?label=financial+contributors)](https://opencollective.com/Yin-Yang) ![Generic badge](https://img.shields.io/badge/release-1.0-RED.svg) ![Maintenance](https://img.shields.io/badge/Maintained%3F-no-green.svg) ![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg) ![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
 
 Yin & Yang brings Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes your favourite Editors like VSCode or Atom. 
 
@@ -65,3 +65,33 @@ if you want to join the club and want to see your name on the list see the Contr
 
 
 
+
+## Contributors
+
+### Code Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/daehruoydeef/Yin-Yang/graphs/contributors"><img src="https://opencollective.com/Yin-Yang/contributors.svg?width=890&button=false" /></a>
+
+### Financial Contributors
+
+Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/Yin-Yang/contribute)]
+
+#### Individuals
+
+<a href="https://opencollective.com/Yin-Yang"><img src="https://opencollective.com/Yin-Yang/individuals.svg?width=890"></a>
+
+#### Organizations
+
+Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/Yin-Yang/contribute)]
+
+<a href="https://opencollective.com/Yin-Yang/organization/0/website"><img src="https://opencollective.com/Yin-Yang/organization/0/avatar.svg"></a>
+<a href="https://opencollective.com/Yin-Yang/organization/1/website"><img src="https://opencollective.com/Yin-Yang/organization/1/avatar.svg"></a>
+<a href="https://opencollective.com/Yin-Yang/organization/2/website"><img src="https://opencollective.com/Yin-Yang/organization/2/avatar.svg"></a>
+<a href="https://opencollective.com/Yin-Yang/organization/3/website"><img src="https://opencollective.com/Yin-Yang/organization/3/avatar.svg"></a>
+<a href="https://opencollective.com/Yin-Yang/organization/4/website"><img src="https://opencollective.com/Yin-Yang/organization/4/avatar.svg"></a>
+<a href="https://opencollective.com/Yin-Yang/organization/5/website"><img src="https://opencollective.com/Yin-Yang/organization/5/avatar.svg"></a>
+<a href="https://opencollective.com/Yin-Yang/organization/6/website"><img src="https://opencollective.com/Yin-Yang/organization/6/avatar.svg"></a>
+<a href="https://opencollective.com/Yin-Yang/organization/7/website"><img src="https://opencollective.com/Yin-Yang/organization/7/avatar.svg"></a>
+<a href="https://opencollective.com/Yin-Yang/organization/8/website"><img src="https://opencollective.com/Yin-Yang/organization/8/avatar.svg"></a>
+<a href="https://opencollective.com/Yin-Yang/organization/9/website"><img src="https://opencollective.com/Yin-Yang/organization/9/avatar.svg"></a>
