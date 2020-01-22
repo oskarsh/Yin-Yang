@@ -13,11 +13,11 @@ QtWidgets.QApplication.setAttribute(
 
 def toggle_theme():
     """Switch themes"""
-    theme = config.getTheme()
+    theme = config.get_theme()
     if theme == "dark":
-        yin_yang.switchToLight()
+        yin_yang.switch_to_light()
     elif theme == "light":
-        yin_yang.switchToDark()
+        yin_yang.switch_to_dark()
 
 
 def main():
@@ -44,7 +44,7 @@ def main():
         config.update("running", False)
         print("START thread listener")
         if config.get("schedule"):
-            yin_yang.startDaemon()
+            yin_yang.start_daemon()
         else:
             print("looks like you did not specified a time")
             print("You can use the gui with yin-yang -gui")
