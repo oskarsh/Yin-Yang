@@ -19,7 +19,7 @@ import pwd
 import datetime
 import subprocess
 from src import gui
-from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk
+from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk, firefox
 from src import config
 
 
@@ -121,13 +121,14 @@ def switch_to_light():
     yang.start()
     config.update("theme", "light")
     yang.join()
-
+    firefox.switch_to_light()
 
 def switch_to_dark():
     yin = Yin(2)
     yin.start()
     config.update("theme", "dark")
     yin.join()
+    firefox.switch_to_dark()
 
 
 def start_daemon():
