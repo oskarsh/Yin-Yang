@@ -11,7 +11,7 @@ from src import config
 def encode_message(message_content: str):
     """
     Encode a message for transmission, given its content.
-    :param message_content: a message as str
+    :param message_content: a message
     """
     encoded_content = json.dumps(message_content).encode("utf-8")
     encoded_length = struct.pack('=I', len(encoded_content))
@@ -47,7 +47,14 @@ def get_message():
 
 
 while True:
-    message = get_message()
-    if message == 'GetTheme':
-        theme = config.get("firefoxActiveTheme")
-        send_message(encode_message(theme))
+    message_received = get_message()
+    if message_received == 'GetSettings':
+        message_send: dict = {}
+        message_send['schedule'] = config.get("schedule")
+        message_send['theme_dark'] = config.get("firefoxDarkTheme")
+        message_send['theme_light'] = config.get("firefoxLightTheme")
+        message_send['theme_active'] = config.get("firefoxActiveTheme")
+        message_send['time_day'] = config.get("switchToLight")
+        message_send['time_night'] = config.get("switchToDark")
+
+        send_message(encode_message(message_send))
