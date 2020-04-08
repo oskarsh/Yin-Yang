@@ -1,9 +1,6 @@
 import os
 import pwd
 import configparser
-import json
-import sys
-import struct
 from tempfile import mkstemp
 from shutil import move
 from typing import Dict
@@ -57,32 +54,29 @@ def get_property(line: str) -> str:
 def write_new_settings(theme: str, dark: bool):
     """
     Changes or creates the user.js file for every profile.
-    Since it is not possible to change specific lines,
-    the script replaces the old file with a new one,
-    which contains all lines from the old,
-    but everything ui related will be added at the bottom.
-
-    For the extension to work, we need the app manifest in a 
-    specific location.
-
-    TODO: update settings while firefox is running
-    TODO: change theme (via an extension)
 
     :param theme: Firefox theme id
     :param dev_theme: developer theme [dark|light]
     """
-    fh, target_file_path = mkstemp()
+
+    theme_old: str = config.get("firefoxActiveTheme")
+    print('Changing "{theme_old}" to "{theme}"'.format(**locals()))
     
+    fh, target_file_path = mkstemp()
 
     # change the theme for every profile
     for profile, profile_path in get_profiles().items():
+
+        # create user.js if it doesn't exist
         if not os.path.isfile(profile_path + '/user.js'):
             file = open(profile_path + '/user.js', 'w+')
             file.close()
 
+        print('Editing config for {profile}'.format(**locals()))
+
+        # rewrite the user.js
         with open(profile_path + '/user.js', 'r') as user_js, open(target_file_path, 'w') as user_cp_js:
 
-            theme_old: str = config.get("firefoxActiveTheme")
             dev_theme: str = ''
             dark_int: int = int(dark is True)
 
@@ -91,10 +85,10 @@ def write_new_settings(theme: str, dark: bool):
             else:
                 dev_theme = 'light'
 
+            # dont write the settings for the theme in new file,
+            # they will be added later
             for line in user_js:
-                if 'extensions.activeThemeID' in line:
-                    theme_old = get_property(line)
-                elif 'devtools.theme' in line:
+                if 'devtools.theme' in line:
                     pass
                 elif 'ui.systemUsesDarkTheme' in line:
                     pass
@@ -103,7 +97,6 @@ def write_new_settings(theme: str, dark: bool):
                 else:
                     user_cp_js.write(line)
 
-            print('Changing "{theme_old}" to "{theme}" for "{profile}"'.format(**locals()))
             # for devtools-sidebar
             user_cp_js.write('user_pref("devtools.theme", "{dev_theme}");'.format(**locals()) + '\n')
             # for extension and websides, like darkreader or about:config
@@ -113,14 +106,16 @@ def write_new_settings(theme: str, dark: bool):
 
         os.remove(profile_path + '/user.js')
         move(target_file_path, profile_path + '/user.js')
-    
+
+    # The actual ui theme can only be edited via the extension.
+    # This is handled with communication.py
     config.update("firefoxActiveTheme", theme)
 
 
 def switch_to_light():
     # TODO: only standard themes supported right now
-    write_new_settings(config.get("firefoxActiveTheme"), False)
+    write_new_settings(config.get("firefoxLightTheme"), False)
 
 
 def switch_to_dark():
-    write_new_settings(config.get("firefoxActiveTheme"), True)
+    write_new_settings(config.get("firefoxDarkTheme"), True)
