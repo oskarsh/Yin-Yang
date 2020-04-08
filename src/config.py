@@ -71,6 +71,10 @@ config["gtkEnabled"] = False
 config["wallpaperLightTheme"] = ""
 config["wallpaperDarkTheme"] = ""
 config["wallpaperEnabled"] = False
+config["firefoxEnabled"] = False
+config["firefoxDarkTheme"] = "firefox-compact-dark@mozilla.org"
+config["firefoxLightTheme"] = "firefox-compact-light@mozilla.org"
+config["firefoxActiveTheme"] = ""
 
 
 if exists():
