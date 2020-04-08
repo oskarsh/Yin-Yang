@@ -1,9 +1,13 @@
 import os
 import pwd
 import configparser
+import json
+import sys
+import struct
 from tempfile import mkstemp
 from shutil import move
 from typing import Dict
+from src import config
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
@@ -58,13 +62,17 @@ def write_new_settings(theme: str, dark: bool):
     which contains all lines from the old,
     but everything ui related will be added at the bottom.
 
+    For the extension to work, we need the app manifest in a 
+    specific location.
+
     TODO: update settings while firefox is running
     TODO: change theme (via an extension)
 
-    :param theme: Firefox theme
+    :param theme: Firefox theme id
     :param dev_theme: developer theme [dark|light]
     """
     fh, target_file_path = mkstemp()
+    
 
     # change the theme for every profile
     for profile, profile_path in get_profiles().items():
@@ -74,9 +82,10 @@ def write_new_settings(theme: str, dark: bool):
 
         with open(profile_path + '/user.js', 'r') as user_js, open(target_file_path, 'w') as user_cp_js:
 
-            theme_old: str = ''
+            theme_old: str = config.get("firefoxActiveTheme")
             dev_theme: str = ''
             dark_int: int = int(dark is True)
+
             if dark:
                 dev_theme = 'dark'
             else:
@@ -95,20 +104,23 @@ def write_new_settings(theme: str, dark: bool):
                     user_cp_js.write(line)
 
             print('Changing "{theme_old}" to "{theme}" for "{profile}"'.format(**locals()))
-            # This can't be done (I'm going to write an extension that takes care of it):
-            user_cp_js.write('user_pref("extensions.activeThemeID", "{theme}");'.format(**locals()) + '\n')
+            # for devtools-sidebar
             user_cp_js.write('user_pref("devtools.theme", "{dev_theme}");'.format(**locals()) + '\n')
+            # for extension and websides, like darkreader or about:config
             user_cp_js.write('user_pref("ui.systemUsesDarkTheme", {dark_int});'.format(**locals()) + '\n')
+            # additional stuff like error pages
             user_cp_js.write('user_pref("browser.in-content.dark-mode", {dark});'.format(**locals()) + '\n')
 
         os.remove(profile_path + '/user.js')
         move(target_file_path, profile_path + '/user.js')
+    
+    config.update("firefoxActiveTheme", theme)
 
 
 def switch_to_light():
     # TODO: only standard themes supported right now
-    write_new_settings('firefox-compact-light@mozilla.org', False)
+    write_new_settings(config.get("firefoxActiveTheme"), False)
 
 
 def switch_to_dark():
-    write_new_settings('firefox-compact-dark@mozilla.org', True)
+    write_new_settings(config.get("firefoxActiveTheme"), True)
