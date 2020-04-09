@@ -74,7 +74,7 @@ config["wallpaperEnabled"] = False
 config["firefoxEnabled"] = False
 config["firefoxDarkTheme"] = "firefox-compact-dark@mozilla.org"
 config["firefoxLightTheme"] = "firefox-compact-light@mozilla.org"
-config["firefoxActiveTheme"] = ""
+config["firefoxActiveTheme"] = "firefox-compact-light@mozilla.org"
 
 
 if exists():

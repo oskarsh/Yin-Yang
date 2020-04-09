@@ -48,6 +48,8 @@ class Yang(threading.Thread):
             gtkkde.switch_to_light()
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
             gtk.switch_to_light()
+        if config.get("firefoxEnabled"):
+            firefox.switch_to_light()
         play_sound("./assets/light.wav")
 
 
@@ -76,6 +78,10 @@ class Yin(threading.Thread):
         # gnome and budgie support
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
             gtk.switch_to_dark()
+        
+        # firefox support
+        if config.get("firefoxEnabled"):
+            firefox.switch_to_dark()
 
         play_sound("/assets/dark.wav")
 
@@ -121,14 +127,12 @@ def switch_to_light():
     yang.start()
     config.update("theme", "light")
     yang.join()
-    firefox.switch_to_light()
 
 def switch_to_dark():
     yin = Yin(2)
     yin.start()
     config.update("theme", "dark")
     yin.join()
-    firefox.switch_to_dark()
 
 
 def start_daemon():
