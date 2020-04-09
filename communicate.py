@@ -8,6 +8,12 @@ import struct
 from src import config
 
 
+def parse_time(time: str):
+    hour = int(time.split(":")[0])
+    minute = int(time.split(":")[1])
+    return [hour, minute]
+
+
 def encode_message(message_content: str):
     """
     Encode a message for transmission, given its content.
@@ -54,7 +60,7 @@ while True:
         message_send['theme_dark'] = config.get("firefoxDarkTheme")
         message_send['theme_light'] = config.get("firefoxLightTheme")
         message_send['theme_active'] = config.get("firefoxActiveTheme")
-        message_send['time_day'] = config.get("switchToLight")
-        message_send['time_night'] = config.get("switchToDark")
+        message_send['time_day'] = parse_time(config.get("switchToLight"))
+        message_send['time_night'] = parse_time(config.get("switchToDark"))
 
         send_message(encode_message(message_send))
