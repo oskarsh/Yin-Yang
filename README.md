@@ -48,23 +48,6 @@ I found myself constantly switching between themes to match my surrounding light
 
 
 
-## Contributors
-
-This list features community contributors
-
-* [eogan](https://github.com/eogan)
-* [alxlg](https://github.com/alxlg)
-* [Gesmir](https://github.com/Gesmir)
-* [Jordi-7](https://github.com/jordi-7)
-
-if you want to join the club and want to see your name on the list see the Contributors Page in the Wiki
-
-[![Generic badge](https://img.shields.io/badge/Join-contributors-BLUE.svg)](https://github.com/daehruoydeef/Wallpaper-yin-yang)
-
-
-
-
-
 
 ## Contributors
 
