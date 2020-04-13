@@ -19,7 +19,7 @@ import pwd
 import datetime
 import subprocess
 from src import gui
-from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk
+from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk, firefox
 from src import config
 
 
@@ -48,6 +48,8 @@ class Yang(threading.Thread):
             gtkkde.switch_to_light()
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
             gtk.switch_to_light()
+        if config.get("firefoxEnabled"):
+            firefox.switch_to_light()
         play_sound("./assets/light.wav")
 
 
@@ -76,6 +78,10 @@ class Yin(threading.Thread):
         # gnome and budgie support
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
             gtk.switch_to_dark()
+        
+        # firefox support
+        if config.get("firefoxEnabled"):
+            firefox.switch_to_dark()
 
         play_sound("/assets/dark.wav")
 
@@ -121,7 +127,6 @@ def switch_to_light():
     yang.start()
     config.update("theme", "light")
     yang.join()
-
 
 def switch_to_dark():
     yin = Yin(2)
