@@ -24,6 +24,10 @@ You can install the latest Yin-Yang version under the releases site.
 
 [![Generic badge](https://img.shields.io/badge/See-releases-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/releases>)
 
+If you want the latest Version of Yin-Yang consider building this yourself. Simple run the install.sh
+See the Wiki for more information
+[![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
+
 ## Documentation
 
 Want to know more? Visit the Wiki and read about Installation, Building, Troubleshooting and more.
