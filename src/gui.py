@@ -130,9 +130,11 @@ class SettingsWindow(QtWidgets.QMainWindow):
                 pretty_themes = []
                 # get the actual name
                 for theme in ugly_themes:
+                    # load the name from the metadata.desktop file
                     with open('/usr/share/plasma/look-and-feel/{theme}/metadata.desktop'.format(**locals()), 'r') as file:
+                        # search for the name
                         for line in file:
-                            if 'Name' in line and not '[' in line:
+                            if 'Name=' in line:
                                 name: str = ''
                                 write: bool = False
                                 for letter in line:
