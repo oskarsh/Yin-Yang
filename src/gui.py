@@ -30,9 +30,12 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def save_and_exit(self):
         print("saving options")
+        
+        kde_light_short = self.ui.kde_combo_light.currentText()
+        kde_dark_short = self.ui.kde_combo_dark.currentText()
 
-        config.update("kdeLightTheme", self.ui.kde_combo_light.currentText())
-        config.update("kdeDarkTheme", self.ui.kde_combo_dark.currentText())
+        config.update("kdeLightTheme", self.get_kde_theme_long(kde_light_short))
+        config.update("kdeDarkTheme", self.get_kde_theme_long(kde_dark_short))
         config.update("kdeEnabled", self.ui.kde_checkbox.isChecked())
 
         config.update("codeLightTheme", self.ui.code_line_light.text())
@@ -78,10 +81,10 @@ class SettingsWindow(QtWidgets.QMainWindow):
             self.ui.kde_combo_dark.setEnabled(config.get("kdeEnabled"))
             self.ui.kde_combo_light.setEnabled(config.get("kdeEnabled"))
             index_light = self.ui.kde_combo_light.findText(
-                config.get("kdeLightTheme"))
+                self.get_kde_theme_short(config.get("kdeLightTheme")))
             self.ui.kde_combo_light.setCurrentIndex(index_light)
             index_dark = self.ui.kde_combo_dark.findText(
-                config.get("kdeDarkTheme"))
+                self.get_kde_theme_short(config.get("kdeDarkTheme")))
             self.ui.kde_combo_dark.setCurrentIndex(index_dark)
         # ---- VSCode ----
         self.ui.code_line_light.setText(config.get("codeLightTheme"))
@@ -121,36 +124,14 @@ class SettingsWindow(QtWidgets.QMainWindow):
         config.update("wallpaperDarkTheme", file_name)
 
     def get_kde_themes(self):
+        """
+        Sends the kde themes to the ui.
+        """
         if config.get("desktop") == "kde":
             if (self.ui.kde_combo_light.count() == 0 and self.ui.kde_combo_dark.count() == 0):
-                # asks the system what themes are available
-                ugly_themes = subprocess.check_output(
-                    ["lookandfeeltool", "-l"], universal_newlines=True)
-                ugly_themes = ugly_themes.splitlines()
-                pretty_themes = {}
-                # get the actual name
-                for theme in ugly_themes:
-                    # load the name from the metadata.desktop file
-                    with open('/usr/share/plasma/look-and-feel/{theme}/metadata.desktop'.format(**locals()), 'r') as file:
-                        # search for the name
-                        for line in file:
-                            if 'Name=' in line:
-                                name: str = ''
-                                write: bool = False
-                                for letter in line:
-                                    if letter == '\n':
-                                        write = False
-                                    if write:
-                                        name += letter
-                                    if letter == '=':
-                                        write = True
-                                pretty_themes[theme] = name
-                                break
-                        # if no pretty name is found
-                        if not theme in pretty_themes:
-                            pretty_themes[theme] = theme
+                kde_themes = self.get_kde_theme_names()
 
-                for theme, name in pretty_themes.items():
+                for name, theme in kde_themes.items():
                     self.ui.kde_combo_light.addItem(name)
                     self.ui.kde_combo_dark.addItem(name)
         else:
@@ -158,6 +139,64 @@ class SettingsWindow(QtWidgets.QMainWindow):
             self.ui.kde_combo_dark.setEnabled(False)
             self.ui.kde_checkbox.setChecked(False)
             config.update("codeEnabled", False)
+
+    def get_kde_theme_names(self):
+        """
+        Returns a map with translations for kde theme names.
+        """
+        # asks the system what themes are available
+        long_names = subprocess.check_output(
+            ["lookandfeeltool", "-l"], universal_newlines=True)
+        long_names = long_names.splitlines()
+        
+        themes = {}
+        
+        # get the actual name
+        for long in long_names:
+            # load the name from the metadata.desktop file
+            with open('/usr/share/plasma/look-and-feel/{long}/metadata.desktop'.format(**locals()), 'r') as file:
+                # search for the name
+                for line in file:
+                    if 'Name=' in line:
+                        name: str = ''
+                        write: bool = False
+                        for letter in line:
+                            if letter == '\n':
+                                write = False
+                            if write:
+                                name += letter
+                            if letter == '=':
+                                write = True
+                        themes[name] = long
+                        break
+            # if no short name is found
+            if not long in themes:
+                themes[long] = long
+        return themes
+    
+    def get_kde_theme_long(self, short: str):
+        """
+        Translates short names to long names.
+        :param short: short name
+        :return: long name
+        """
+        if short == '' or short is None:
+            return
+        themes = self.get_kde_theme_names()
+        return themes[short]
+        
+    def get_kde_theme_short(self, long: str):
+        """
+        Translates long names to short names.
+        :param long: long name
+        :return: short name
+        """
+        if long == '' or long is None:
+            return
+        themes = self.get_kde_theme_names()
+        short_names = list(themes.keys())
+        long_names = list(themes.values())
+        return short_names[long_names.index(long)]
 
     def center(self):
         frame_gm = self.frameGeometry()
