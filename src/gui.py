@@ -127,7 +127,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
                 ugly_themes = subprocess.check_output(
                     ["lookandfeeltool", "-l"], universal_newlines=True)
                 ugly_themes = ugly_themes.splitlines()
-                pretty_themes = []
+                pretty_themes = {}
                 # get the actual name
                 for theme in ugly_themes:
                     # load the name from the metadata.desktop file
@@ -144,11 +144,15 @@ class SettingsWindow(QtWidgets.QMainWindow):
                                         name += letter
                                     if letter == '=':
                                         write = True
-                                pretty_themes.append(name)
+                                pretty_themes[theme] = name
+                                break
+                        # if no pretty name is found
+                        if not theme in pretty_themes:
+                            pretty_themes[theme] = theme
 
-                for theme in pretty_themes:
-                    self.ui.kde_combo_light.addItem(theme)
-                    self.ui.kde_combo_dark.addItem(theme)
+                for theme, name in pretty_themes.items():
+                    self.ui.kde_combo_light.addItem(name)
+                    self.ui.kde_combo_dark.addItem(name)
         else:
             self.ui.kde_combo_light.setEnabled(False)
             self.ui.kde_combo_dark.setEnabled(False)
