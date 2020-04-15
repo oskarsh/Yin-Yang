@@ -126,26 +126,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
                 # asks the system what themes are available
                 ugly_themes = subprocess.check_output(
                     ["lookandfeeltool", "-l"], universal_newlines=True)
-                ugly_themes = ugly_themes.splitlines()
-                pretty_themes = []
-                # get the actual name
-                for theme in ugly_themes:
-                    # load the name from the metadata.desktop file
-                    with open('/usr/share/plasma/look-and-feel/{theme}/metadata.desktop'.format(**locals()), 'r') as file:
-                        # search for the name
-                        for line in file:
-                            if 'Name=' in line:
-                                name: str = ''
-                                write: bool = False
-                                for letter in line:
-                                    if letter == '\n':
-                                        write = False
-                                    if write:
-                                        name += letter
-                                    if letter == '=':
-                                        write = True
-                                pretty_themes.append(name)
-
+                pretty_themes = ugly_themes.splitlines()
                 for theme in pretty_themes:
                     self.ui.kde_combo_light.addItem(theme)
                     self.ui.kde_combo_dark.addItem(theme)
