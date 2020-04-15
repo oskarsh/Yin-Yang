@@ -58,8 +58,8 @@ def set_sun_time():
             format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
 
         # Get today's sunrise and sunset in UTC
-        update("switchToLight", sun.get_sunrise_time().strftime('%H:%M'))
-        update("switchToDark", sun.get_sunset_time().strftime('%H:%M'))
+        update("switchToLight", today_sr.strftime('%H:%M'))
+        update("switchToDark", today_ss.strftime('%H:%M'))
 
     except SunTimeException as e:
         print("Error: {0}.".format(e))
