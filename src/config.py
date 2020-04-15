@@ -5,7 +5,7 @@ import pathlib
 import re
 import subprocess
 import datetime
-from suntime import Sun
+from suntime import Sun, SunTimeException
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
@@ -46,18 +46,23 @@ def get_desktop():
 
 
 def set_sun_time():
-    latitude = float(get("latitude"))
-    longitude = float(get("latitude"))
+    latitude: float = float(get("latitude"))
+    longitude: float = float(get("latitude"))
     sun = Sun(latitude, longitude)
 
-    today_sr = sun.get_sunrise_time()
-    today_ss = sun.get_sunset_time()
-    
-    print('Today the sun raised at {} and get down at {} UTC'.format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
+    try:
+        today_sr = sun.get_local_sunrise_time()
+        today_ss = sun.get_local_sunset_time()
+        
+        print('Today the sun raised at {} and get down at {}'.
+            format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
 
-    # Get today's sunrise and sunset in UTC
-    update("switchToLight", sun.get_sunrise_time().strftime('%H:%M'))
-    update("switchToDark", sun.get_sunset_time().strftime('%H:%M'))
+        # Get today's sunrise and sunset in UTC
+        update("switchToLight", sun.get_sunrise_time().strftime('%H:%M'))
+        update("switchToDark", sun.get_sunset_time().strftime('%H:%M'))
+
+    except SunTimeException as e:
+        print("Error: {0}.".format(e))
 
 
 # generate path for yin-yang if there is none this will be skipped
