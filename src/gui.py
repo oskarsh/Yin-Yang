@@ -153,24 +153,26 @@ class SettingsWindow(QtWidgets.QMainWindow):
         
         # get the actual name
         for long in long_names:
-            # load the name from the metadata.desktop file
-            with open('/usr/share/plasma/look-and-feel/{long}/metadata.desktop'.format(**locals()), 'r') as file:
-                # search for the name
-                for line in file:
-                    if 'Name=' in line:
-                        name: str = ''
-                        write: bool = False
-                        for letter in line:
-                            if letter == '\n':
-                                write = False
-                            if write:
-                                name += letter
-                            if letter == '=':
-                                write = True
-                        themes[name] = long
-                        break
-            # if no short name is found
-            if not long in themes:
+            # trying to get the Desktop file
+            try:
+                # load the name from the metadata.desktop file
+                with open('/usr/share/plasma/look-and-feel/{long}/metadata.desktop'.format(**locals()), 'r') as file:
+                    # search for the name
+                    for line in file:
+                        if 'Name=' in line:
+                            name: str = ''
+                            write: bool = False
+                            for letter in line:
+                                if letter == '\n':
+                                    write = False
+                                if write:
+                                    name += letter
+                                if letter == '=':
+                                    write = True
+                            themes[name] = long
+                            break
+            # if no file exist lets just use the long name
+            except: 
                 themes[long] = long
         return themes
     
