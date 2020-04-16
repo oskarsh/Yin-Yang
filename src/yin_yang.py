@@ -82,7 +82,6 @@ class Yin(threading.Thread):
         # firefox support
         if config.get("firefoxEnabled"):
             firefox.switch_to_dark()
-
         play_sound("/assets/dark.wav")
 
 
