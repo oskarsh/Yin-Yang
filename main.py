@@ -43,6 +43,11 @@ def main():
     if args.schedule:
         config.update("running", False)
         print("START thread listener")
+        
+        if config.get("followSun"):
+            # calculate time if needed
+            config.set_sun_time()
+
         if config.get("schedule"):
             yin_yang.start_daemon()
         else:

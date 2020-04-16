@@ -4,6 +4,8 @@ import os
 import pathlib
 import re
 import subprocess
+import datetime
+from suntime import Sun, SunTimeException
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
@@ -43,6 +45,26 @@ def get_desktop():
     return "unknown"
 
 
+def set_sun_time():
+    latitude: float = float(get("latitude"))
+    longitude: float = float(get("latitude"))
+    sun = Sun(latitude, longitude)
+
+    try:
+        today_sr = sun.get_local_sunrise_time()
+        today_ss = sun.get_local_sunset_time()
+        
+        print('Today the sun raised at {} and get down at {}'.
+            format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
+
+        # Get today's sunrise and sunset in UTC
+        update("switchToLight", today_sr.strftime('%H:%M'))
+        update("switchToDark", today_ss.strftime('%H:%M'))
+
+    except SunTimeException as e:
+        print("Error: {0}.".format(e))
+
+
 # generate path for yin-yang if there is none this will be skipped
 pathlib.Path(path+"/yin_yang").mkdir(parents=True, exist_ok=True)
 
@@ -51,6 +73,9 @@ pathlib.Path(path+"/yin_yang").mkdir(parents=True, exist_ok=True)
 config = {}
 config["version"] = "2.0"
 config["desktop"] = get_desktop()
+config["followSun"] = False
+config["latitude"] = ""
+config["longitude"] = ""
 config["schedule"] = False
 config["switchToDark"] = "20:00"
 config["switchToLight"] = "07:00"
