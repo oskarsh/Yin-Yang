@@ -12,7 +12,7 @@
     <img alt="" title="YinYang" src="https://img.shields.io/badge/License-MIT-blue">
     <img alt="" title="YinYang" src="https://badges.frapsoft.com/os/v1/open-source.svg?v=103">
     <img alt="" title="YinYang" src="https://img.shields.io/badge/Build%20with-Python-yellow">
-    <img alt="" title="YinYang" src="https://opencollective.com/Yin-Yang/all/badge.svg?label=financial+contributors)](https://opencollective.com/Yin-Yang">
+    <img alt="" title="YinYang" src="https://opencollective.com/Yin-Yang/all/badge.svg?label=financial+contributors>
   
 
 ![yin_yang_demo](./assets/yin-yang.gif)
