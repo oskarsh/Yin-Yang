@@ -29,7 +29,9 @@
 
 ## Installation
 To install Yin-Yang copy the command below:
-`git clone https://github.com/daehruoydeef/Yin-Yang && cd Yin-Yang && sh install.sh`
+
+```git clone https://github.com/daehruoydeef/Yin-Yang && cd Yin-Yang && sh install.sh```
+
 enter your Password.
 Yin & Yang is now installed
 
@@ -68,17 +70,10 @@ I found myself constantly switching between themes to match my surrounding light
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 <a href="https://github.com/daehruoydeef/Yin-Yang/graphs/contributors"><img src="https://opencollective.com/Yin-Yang/contributors.svg?width=890&button=false" /></a>
 
-### Financial Contributors
-
-Become a financial contributor and help us sustain our community. [[Contribute](https://opencollective.com/Yin-Yang/contribute)]
-
 #### Individuals
 
 <a href="https://opencollective.com/Yin-Yang"><img src="https://opencollective.com/Yin-Yang/individuals.svg?width=890"></a>
 
-#### Organizations
-
-Support this project with your organization. Your logo will show up here with a link to your website. [[Contribute](https://opencollective.com/Yin-Yang/contribute)]
 
 <a href="https://opencollective.com/Yin-Yang/organization/0/website"><img src="https://opencollective.com/Yin-Yang/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/Yin-Yang/organization/1/website"><img src="https://opencollective.com/Yin-Yang/organization/1/avatar.svg"></a>
