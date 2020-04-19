@@ -13,7 +13,7 @@ echo "your current user is in uninstall" $SUDO_USER
 
 echo "Removing config and .desktop file"
 rm -rf /home/$SUDO_USER/.local/share/applications/Yin-Yang.desktop
-rm -rf /home/$SUOD_USER/.config/yin_yang
+rm -rf /home/$SUDO_USER/.config/yin_yang
 
 echo "Removing program and terminal execution"
 rm -rf /opt/yin-yang /usr/bin/yin-yang
