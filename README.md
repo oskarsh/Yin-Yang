@@ -7,7 +7,7 @@
    Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes your favourite Editors like VSCode or Atom. 
 </p>
 
-<p align="center">
+<p align="center" >
     <img alt="" title="YinYang" src="https://img.shields.io/badge/Yin&Yang-2.0-blue">
     <img alt="" title="YinYang" src="https://img.shields.io/badge/License-MIT-blue">
     <img alt="" title="YinYang" src="https://badges.frapsoft.com/os/v1/open-source.svg?v=103">
@@ -40,8 +40,8 @@ Yin & Yang is now installed
 You will need some dependencies for the installation process to work correctly check the Wiki for what is needed:
 [![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
 
-<p align="center">
-  <img alt="Yin-Yang" title="Yin & Yang" src="assets/settings.png">
+<p align="center" >
+  <img alt="Yin-Yang" title="Yin & Yang" src="assets/settings.png" height="400">
 
 ## Documentation
 
