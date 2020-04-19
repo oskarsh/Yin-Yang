@@ -17,6 +17,7 @@ echo ""
 #checking python dependencies
 pip3 install qtpy 
 pip3 install pyqt5
+pip3 install suntime
 echo ""
 echo "Checking and creating correct folders ..."
 #check if /opt/ directory exists else create
