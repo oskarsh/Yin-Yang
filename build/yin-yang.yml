@@ -1,6 +1,0 @@
-ingredients:
-  dist: yin-yang
-  sources:
-    - deb http://us.archive.ubuntu.com/ubuntu/ xenial main universe
-  debs:
-    - /home/daeh/Application/Builder/yin-yang/yin-yang_3.0.deb
