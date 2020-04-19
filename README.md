@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Yin-Yang" title="Yin & Yang" src="./src/ui/assets/icon.png" height="150">
+  <img alt="Yin-Yang" title="Yin & Yang" src="./src/ui/assets/icon.png" height="120">
 
 
 <h1 align="center"> Yin-Yang </h1> <br>
