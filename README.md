@@ -70,9 +70,6 @@ I found myself constantly switching between themes to match my surrounding light
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 <a href="https://github.com/daehruoydeef/Yin-Yang/graphs/contributors"><img src="https://opencollective.com/Yin-Yang/contributors.svg?width=890&button=false" /></a>
 
-#### Individuals
-
-<a href="https://opencollective.com/Yin-Yang"><img src="https://opencollective.com/Yin-Yang/individuals.svg?width=890"></a>
 
 
 <a href="https://opencollective.com/Yin-Yang/organization/0/website"><img src="https://opencollective.com/Yin-Yang/organization/0/avatar.svg"></a>
