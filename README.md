@@ -40,6 +40,9 @@ Yin & Yang is now installed
 You will need some dependencies for the installation process to work correctly check the Wiki for what is needed:
 [![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
 
+<p align="center">
+  <img alt="Yin-Yang" title="Yin & Yang" src="assets/settings.png">
+
 ## Documentation
 
 Want to know more? Visit the Wiki and read about Installation, Building, Troubleshooting and more.
