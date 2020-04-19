@@ -12,15 +12,9 @@
     <img alt="" title="YinYang" src="https://img.shields.io/badge/License-MIT-blue">
     <img alt="" title="YinYang" src="https://badges.frapsoft.com/os/v1/open-source.svg?v=103">
     <img alt="" title="YinYang" src="https://img.shields.io/badge/Build%20with-Python-yellow">
-    <img alt="" title="YinYang" src="https://opencollective.com/Yin-Yang/all/badge.svg?label=financial+contributors>
   
 
 ![yin_yang_demo](./assets/yin-yang.gif)
-
-![Generic badge](https://img.shields.io/badge/release-1.0-RED.svg) ![Maintenance](https://img.shields.io/badge/Maintained%3F-no-green.svg) ![GitHub license](https://img.shields.io/github/license/Naereen/StrapDown.js.svg) ![Open Source Love svg1](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
-
-Yin & Yang brings Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes your favourite Editors like VSCode or Atom. 
-
 
 
 ## Features
