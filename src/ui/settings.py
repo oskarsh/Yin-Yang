@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
         MainWindow.setMaximumSize(QtCore.QSize(350, 450))
         MainWindow.setBaseSize(QtCore.QSize(260, 300))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("assets/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("/opt/yin-yang/src/ui/assets/yin-yang.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         self.centralWidget = QtWidgets.QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")

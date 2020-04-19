@@ -13,16 +13,6 @@ import sys
 
 class Ui_MainWindow(object):
 
-    def resource_path(self, relative_path):
-        """ Get absolute path to resource, works for dev and for PyInstaller """
-        try:
-            # PyInstaller creates a temp folder and stores path in _MEIPASS
-            base_path = sys._MEIPASS
-        except Exception:
-            base_path = os.path.abspath(".")
-
-        return os.path.join(base_path, relative_path)
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
@@ -38,7 +28,7 @@ class Ui_MainWindow(object):
         MainWindow.setMaximumSize(QtCore.QSize(300, 360))
         MainWindow.setBaseSize(QtCore.QSize(300, 360))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("assets/icon.png"),
+        icon.addPixmap(QtGui.QPixmap("/opt/yin-yang/src/ui/assets/yin-yang.svg"),
                        QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         self.centralWidget = QtWidgets.QWidget(MainWindow)
@@ -59,7 +49,7 @@ class Ui_MainWindow(object):
             self.yinyang_img.sizePolicy().hasHeightForWidth())
         self.yinyang_img.setSizePolicy(sizePolicy)
         self.yinyang_img.setMinimumSize(QtCore.QSize(100, 100))
-        self.yinyang_img.setMaximumSize(QtCore.QSize(100, 275))
+        self.yinyang_img.setMaximumSize(QtCore.QSize(100, 100))
         self.yinyang_img.setSizeIncrement(QtCore.QSize(0, 0))
         self.yinyang_img.setBaseSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
@@ -67,8 +57,8 @@ class Ui_MainWindow(object):
         self.yinyang_img.setFont(font)
         self.yinyang_img.setText("")
         self.yinyang_img.setTextFormat(QtCore.Qt.RichText)
-        self.yinyang_img.setPixmap(QtGui.QPixmap(self.resource_path("/assets/yin-yang.svg") ))
-        self.yinyang_img.setScaledContents(False)
+        self.yinyang_img.setPixmap(QtGui.QPixmap("/opt/yin-yang/src/ui/assets/icon.png"))
+        self.yinyang_img.setScaledContents(True)
         self.yinyang_img.setAlignment(QtCore.Qt.AlignCenter)
         self.yinyang_img.setObjectName("yinyang_img")
         self.verticalLayout.addWidget(
