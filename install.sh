@@ -15,10 +15,8 @@ echo ""
 echo "Checking for QT dependencies"
 echo ""
 #checking python dependencies
-pip3 install qtpy
+pip3 install qtpy 
 pip3 install pyqt5
-#checking suntime dependencies
-pip3 install suntime
 echo ""
 echo "Checking and creating correct folders ..."
 #check if /opt/ directory exists else create
@@ -45,7 +43,7 @@ cat <<EOF >/home/$SUDO_USER/.local/share/applications/Yin-Yang.desktop
 # The type as listed above
 Type=Application
 # The version of the desktop entry specification to which this file complies
-Version=0.0.1
+Version=2.0.0
 # The name of the application
 Name=Yin & Yang
 # A comment which can/will be used as a tooltip
@@ -53,13 +51,13 @@ Comment=Auto Nightmode for KDE and VSCode
 # The path to the folder in which the executable is run
 Path=/opt/yin-yang
 # The executable of the application, possibly with arguments.
-Exec=env QT_AUTO_SCREEN_SCALE_FACTOR=1 sh /usr/bin/yin-yang -gui
+Exec=env QT_AUTO_SCREEN_SCALE_FACTOR=1 sh /usr/bin/yin-yang
 # The name of the icon that will be used to display this entry
-Icon=/opt/yin-yang/src/ui/assets/icon.png
+Icon=/opt/yin-yang/src/ui/assets/yin-yang.svg
 # Describes whether this application needs to be run in a terminal or not
 Terminal=false
 # Describes the categories in which this entry should be shown
-Categories=Education;Languages;Python; Cool;
+Categories=Utility; System;
 EOF
 
 cat << "EOF"
