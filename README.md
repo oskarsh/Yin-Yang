@@ -14,7 +14,8 @@
     <img alt="" title="YinYang" src="https://img.shields.io/badge/Build%20with-Python-yellow">
   
 
-![yin_yang_demo](./assets/yin-yang.gif)
+<p align="center">
+  <img alt="Yin-Yang" title="Yin & Yang" src="assets/header.png">
 
 
 ## Features
