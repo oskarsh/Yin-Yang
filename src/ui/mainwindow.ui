@@ -42,7 +42,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>assets/icon.png</normaloff>assets/icon.png</iconset>
+    <normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="verticalLayoutWidget">

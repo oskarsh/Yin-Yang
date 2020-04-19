@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/icons">
-        <file>assets/icon.png</file>
+        <file>/opt/yin-yang/src/ui/assets/yin-yang.svg</file>
     </qresource>
 </RCC>
