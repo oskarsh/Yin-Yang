@@ -28,12 +28,12 @@
 * toggle themes based on given time
 
 ## Installation
-You can install the latest Yin-Yang version under the releases site.
+To install Yin-Yang copy the command below:
+`git clone https://github.com/daehruoydeef/Yin-Yang && cd Yin-Yang && sh install.sh`
+enter your Password.
+Yin & Yang is now installed
 
-[![Generic badge](https://img.shields.io/badge/See-releases-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/releases>)
-
-If you want the latest Version of Yin-Yang consider building this yourself. Simple run the install.sh
-See the Wiki for more information
+You will need some dependencies for the installation process to work correctly check the Wiki for what is needed:
 [![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
 
 ## Documentation
