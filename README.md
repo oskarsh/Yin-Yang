@@ -20,12 +20,14 @@
 
 ## Features
 
-* workes on Gnome, Budgie and KDE - all major Desktops
+* adjust theme based on Time or Sunset
+* workes on Gnome, Budgie and KDE
 * toggles themes from light / dark
 * supports VSCode
 * support Atom
 * support Wallpaper change based on themes
 * toggle themes based on given time
+* support theme based on suntime
 
 ## Installation
 To install Yin-Yang copy the command below:
