@@ -100,6 +100,9 @@ config["firefoxEnabled"] = False
 config["firefoxDarkTheme"] = "firefox-compact-dark@mozilla.org"
 config["firefoxLightTheme"] = "firefox-compact-light@mozilla.org"
 config["firefoxActiveTheme"] = "firefox-compact-light@mozilla.org"
+config["gnomeEnabled"] = False
+config["gnomeLightTheme"] = ""
+config["gnomeDarkTheme"] = ""
 
 
 if exists():
@@ -238,3 +241,16 @@ def code_get_dark_theme():
 
 def code_get_checkbox():
     return config["codeEnabled"]
+
+def gnome_get_light_theme():
+    """Return the  Gnome Shell Light theme specified in the yin-yang config"""
+    return config["gnomeLightTheme"]
+
+
+def gnome_get_dark_theme():
+    """Return the  Gnome Shell dark theme specified in the yin-yang config"""
+    return config["gnomeDarkTheme"]
+
+
+def gnome_get_checkbox():
+    return config["gnomeEnabled"]
