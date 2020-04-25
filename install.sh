@@ -1,7 +1,7 @@
 #!/bin/sh
 if [ "$EUID" -ne 0 ]; then
     echo enter password in order to install Yin-Yang correctly
-    sudo sh ./$0
+    sudo sh $0
     exit 1
 fi
 
@@ -28,12 +28,21 @@ fi
 if [ ! -d /opt/yin-yang/ ]; then
     mkdir /opt/yin-yang/
 fi
+# check directories for extension
+if [ ! -d /usr/lib/mozilla ]; then
+    mkdir /usr/lib/mozilla
+fi
+if [ ! -d /usr/lib/mozilla/native-messaging-hosts/ ]; then
+    mkdir /usr/lib/mozilla/native-messaging-hosts/
+fi
 echo ""
 echo "done"
 echo ""
 echo "Installin yin-yang for Commandline usage"
 # copy files
 cp -r ./* /opt/yin-yang/
+# copy manifest for firefox extension
+cp ./assets/yin_yang.json /usr/lib/mozilla/native-messaging-hosts/
 #copy terminal executive
 cp ./src/yin-yang /usr/bin/
 sudo chmod +x /usr/bin/yin-yang
@@ -44,9 +53,11 @@ cat <<EOF >/home/$SUDO_USER/.local/share/applications/Yin-Yang.desktop
 # The type as listed above
 Type=Application
 # The version of the desktop entry specification to which this file complies
-Version=2.0.0
+Version=1.4
 # The name of the application
 Name=Yin & Yang
+# Generic name of the application, for example "Web Browser"
+GenericName=Theme Switcher
 # A comment which can/will be used as a tooltip
 Comment=Auto Nightmode for KDE and VSCode
 # The path to the folder in which the executable is run
@@ -58,7 +69,9 @@ Icon=/opt/yin-yang/src/ui/assets/yin-yang.svg
 # Describes whether this application needs to be run in a terminal or not
 Terminal=false
 # Describes the categories in which this entry should be shown
-Categories=Utility; System;
+Categories=Utility; System; Settings;
+# A list of strings which may be used in addition to other metadata to describe this entry
+Keywords=night;dark;day;bright;color;theme;
 EOF
 
 cat << "EOF"
