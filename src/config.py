@@ -3,8 +3,6 @@ import pwd
 import os
 import pathlib
 import re
-import subprocess
-import datetime
 from suntime import Sun, SunTimeException
 
 # aliases for path to use later on
@@ -53,9 +51,9 @@ def set_sun_time():
     try:
         today_sr = sun.get_local_sunrise_time()
         today_ss = sun.get_local_sunset_time()
-        
+
         print('Today the sun raised at {} and get down at {}'.
-            format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
+              format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
 
         # Get today's sunrise and sunset in UTC
         update("switchToLight", today_sr.strftime('%H:%M'))
@@ -132,6 +130,7 @@ def write_config(config=config):
 
 def gtk_exists():
     return os.path.isfile(path+"/gtk-3.0/settings.ini")
+
 
 def get_enabled_plugins():
     """returns a list of plugins which are activated"""
@@ -241,6 +240,7 @@ def code_get_dark_theme():
 
 def code_get_checkbox():
     return config["codeEnabled"]
+
 
 def gnome_get_light_theme():
     """Return the  Gnome Shell Light theme specified in the yin-yang config"""
