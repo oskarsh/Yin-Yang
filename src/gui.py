@@ -1,5 +1,5 @@
 import subprocess
-import re
+import pwd
 import os
 import sys
 from PyQt5 import QtWidgets
@@ -30,11 +30,12 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def save_and_exit(self):
         print("saving options")
-        
+
         kde_light_short = self.ui.kde_combo_light.currentText()
         kde_dark_short = self.ui.kde_combo_dark.currentText()
 
-        config.update("kdeLightTheme", self.get_kde_theme_long(kde_light_short))
+        config.update("kdeLightTheme",
+                      self.get_kde_theme_long(kde_light_short))
         config.update("kdeDarkTheme", self.get_kde_theme_long(kde_dark_short))
         config.update("kdeEnabled", self.ui.kde_checkbox.isChecked())
 
@@ -60,9 +61,11 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.code_checkbox.toggled.connect(self.toggle_code_fields)
         self.ui.gtk_checkbox.toggled.connect(self.toggle_gtk_fields)
         self.ui.atom_checkbox.toggled.connect(self.toggle_atom_fields)
-        self.ui.wallpaper_button_light.clicked.connect(self.open_wallpaper_light)
+        self.ui.wallpaper_button_light.clicked.connect(
+            self.open_wallpaper_light)
         self.ui.wallpaper_button_dark.clicked.connect(self.open_wallpaper_dark)
-        self.ui.wallpaper_checkbox.toggled.connect(self.toggle_wallpaper_buttons)
+        self.ui.wallpaper_checkbox.toggled.connect(
+            self.toggle_wallpaper_buttons)
         self.ui.back_button.clicked.connect(self.save_and_exit)
 
     def sync_with_config(self):
@@ -72,8 +75,6 @@ class SettingsWindow(QtWidgets.QMainWindow):
         # ---- KDE -----
         # reads out all kde themes and displays them inside a combobox
         if config.get("kdeEnabled"):
-            # if (self.ui.kde_combo_light.count())
-            print(self.ui.kde_combo_dark.count())
             # fixed bug where themes get appended multiple times
             self.get_kde_themes()
 
@@ -144,13 +145,18 @@ class SettingsWindow(QtWidgets.QMainWindow):
         """
         Returns a map with translations for kde theme names.
         """
+
+        # aliases for path to use later on
+        user = pwd.getpwuid(os.getuid())[0]
+        path = "/home/"+user+"/.local/share/plasma/look-and-feel/"
+
         # asks the system what themes are available
         long_names = subprocess.check_output(
             ["lookandfeeltool", "-l"], universal_newlines=True)
         long_names = long_names.splitlines()
-        
+
         themes = {}
-        
+
         # get the actual name
         for long in long_names:
             # trying to get the Desktop file
@@ -171,11 +177,31 @@ class SettingsWindow(QtWidgets.QMainWindow):
                                     write = True
                             themes[name] = long
                             break
-            # if no file exist lets just use the long name
-            except: 
-                themes[long] = long
+            except:
+                # check the next path if the themes exist there
+                try:
+                    # load the name from the metadata.desktop file
+                    with open('{path}{long}/metadata.desktop'.format(**locals()), 'r') as file:
+                        # search for the name
+                        for line in file:
+                            if 'Name=' in line:
+                                name: str = ''
+                                write: bool = False
+                                for letter in line:
+                                    if letter == '\n':
+                                        write = False
+                                    if write:
+                                        name += letter
+                                    if letter == '=':
+                                        write = True
+                                themes[name] = long
+                                break
+                        # if no file exist lets just use the long name
+                except:
+                    themes[long] = long
+
         return themes
-    
+
     def get_kde_theme_long(self, short: str):
         """
         Translates short names to long names.
@@ -186,7 +212,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
             return
         themes = self.get_kde_theme_names()
         return themes[short]
-        
+
     def get_kde_theme_short(self, long: str):
         """
         Translates long names to short names.
