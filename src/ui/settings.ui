@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>450</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>350</width>
-    <height>430</height>
+    <height>650</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>350</width>
-    <height>450</height>
+    <height>650</height>
    </size>
   </property>
   <property name="baseSize">
@@ -42,7 +42,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</iconset>
+    <normaloff>../../../../../../../opt/yin-yang/src/ui/assets/yin-yang.svg</normaloff>../../../../../../../opt/yin-yang/src/ui/assets/yin-yang.svg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -51,12 +51,24 @@
       <x>20</x>
       <y>40</y>
       <width>301</width>
-      <height>391</height>
+      <height>615</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QLabel" name="label">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="sizeIncrement">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <pointsize>16</pointsize>
@@ -70,173 +82,236 @@
       </widget>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="kdesection">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>KDE</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QVBoxLayout" name="Wallpaper">
          <item>
-          <widget class="QCheckBox" name="kde_checkbox">
+          <widget class="QLabel" name="label_8">
            <property name="text">
-            <string/>
+            <string>Wallpaper</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="kde_combo_light"/>
+          <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <item>
+            <widget class="QCheckBox" name="wallpaper_checkbox">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="wallpaper_button_light">
+             <property name="text">
+              <string>light</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="wallpaper_button_dark">
+             <property name="text">
+              <string>dark</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="gtk">
+         <item>
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>GTK</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="kde_combo_dark"/>
+          <layout class="QHBoxLayout" name="horizontalLayout_7">
+           <item>
+            <widget class="QCheckBox" name="gtk_checkbox">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="gtk_line_light">
+             <property name="text">
+              <string>Breeze</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="gtk_line_dark">
+             <property name="text">
+              <string>Breeze-Dark</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="kdesection">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>KDE</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <widget class="QCheckBox" name="kde_checkbox">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="kde_combo_light"/>
+           </item>
+           <item>
+            <widget class="QComboBox" name="kde_combo_dark"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="gnome">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Gnome</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QCheckBox" name="gnome_checkBox">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="gnome_lineEdit_dark"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="gnome_lineEdit_light"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="firefox">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Firefox</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QCheckBox" name="firefox_checkBox">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="firefox_line_light"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="firefox_line_dark"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="vscode">
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>VSCode</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QCheckBox" name="code_checkbox">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="code_line_light"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="code_line_dark"/>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="atom">
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>Atom</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <item>
+            <widget class="QCheckBox" name="atom_checkbox">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="atom_line_light"/>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="atom_line_dark"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="gtk">
-       <item>
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>GTK</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_7">
-         <item>
-          <widget class="QCheckBox" name="gtk_checkbox">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="gtk_line_light">
-           <property name="text">
-            <string>Breeze</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="gtk_line_dark">
-           <property name="text">
-            <string>sdjhdjh</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="vscode">
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>VSCode</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QCheckBox" name="code_checkbox">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="code_line_light"/>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="code_line_dark"/>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="atom">
-       <item>
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Atom</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="QCheckBox" name="atom_checkbox">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="atom_line_light"/>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="atom_line_dark"/>
-         </item>
-        </layout>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="Wallpaper">
-       <item>
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>Wallpaper</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_8">
-         <item>
-          <widget class="QCheckBox" name="wallpaper_checkbox">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="wallpaper_button_light">
-           <property name="text">
-            <string>light</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="wallpaper_button_dark">
-           <property name="text">
-            <string>dark</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QLabel" name="version_label">
-         <property name="text">
-          <string>version: 0.1</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      <widget class="QLabel" name="version_label">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>20</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>version: 2.0</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -256,6 +331,30 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>wallpaper_checkbox</tabstop>
+  <tabstop>wallpaper_button_light</tabstop>
+  <tabstop>wallpaper_button_dark</tabstop>
+  <tabstop>gtk_checkbox</tabstop>
+  <tabstop>gtk_line_light</tabstop>
+  <tabstop>gtk_line_dark</tabstop>
+  <tabstop>kde_checkbox</tabstop>
+  <tabstop>kde_combo_light</tabstop>
+  <tabstop>kde_combo_dark</tabstop>
+  <tabstop>gnome_checkBox</tabstop>
+  <tabstop>gnome_lineEdit_dark</tabstop>
+  <tabstop>gnome_lineEdit_light</tabstop>
+  <tabstop>firefox_checkBox</tabstop>
+  <tabstop>firefox_line_light</tabstop>
+  <tabstop>firefox_line_dark</tabstop>
+  <tabstop>code_checkbox</tabstop>
+  <tabstop>code_line_light</tabstop>
+  <tabstop>code_line_dark</tabstop>
+  <tabstop>atom_checkbox</tabstop>
+  <tabstop>atom_line_light</tabstop>
+  <tabstop>atom_line_dark</tabstop>
+  <tabstop>back_button</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

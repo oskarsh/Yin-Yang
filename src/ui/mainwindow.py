@@ -2,54 +2,47 @@
 
 # Form implementation generated from reading ui file 'ui/mainwindow.ui'
 #
-# Created by: PyQt5 UI code generator 5.12.1
+# Created by: PyQt5 UI code generator 5.14.2
 #
 # WARNING! All changes made in this file will be lost!
 
+
 from PyQt5 import QtCore, QtGui, QtWidgets
-import os
-import sys
 
 
 class Ui_MainWindow(object):
-
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setEnabled(True)
-        MainWindow.resize(300, 360)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        MainWindow.resize(300, 460)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            MainWindow.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setMinimumSize(QtCore.QSize(300, 360))
-        MainWindow.setMaximumSize(QtCore.QSize(300, 360))
-        MainWindow.setBaseSize(QtCore.QSize(300, 360))
+        MainWindow.setMinimumSize(QtCore.QSize(300, 460))
+        MainWindow.setMaximumSize(QtCore.QSize(300, 460))
+        MainWindow.setBaseSize(QtCore.QSize(300, 460))
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("/opt/yin-yang/src/ui/assets/yin-yang.svg"),
-                       QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("../../../../../../../opt/yin-yang/src/ui/assets/yin-yang.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         self.centralWidget = QtWidgets.QWidget(MainWindow)
         self.centralWidget.setObjectName("centralWidget")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.centralWidget)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 50, 251, 281))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(20, 50, 251, 336))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setContentsMargins(11, 11, 11, 11)
         self.verticalLayout.setSpacing(6)
         self.verticalLayout.setObjectName("verticalLayout")
         self.yinyang_img = QtWidgets.QLabel(self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(128)
         sizePolicy.setVerticalStretch(128)
-        sizePolicy.setHeightForWidth(
-            self.yinyang_img.sizePolicy().hasHeightForWidth())
+        sizePolicy.setHeightForWidth(self.yinyang_img.sizePolicy().hasHeightForWidth())
         self.yinyang_img.setSizePolicy(sizePolicy)
-        self.yinyang_img.setMinimumSize(QtCore.QSize(100, 100))
-        self.yinyang_img.setMaximumSize(QtCore.QSize(100, 100))
+        self.yinyang_img.setMinimumSize(QtCore.QSize(80, 80))
+        self.yinyang_img.setMaximumSize(QtCore.QSize(80, 256))
         self.yinyang_img.setSizeIncrement(QtCore.QSize(0, 0))
         self.yinyang_img.setBaseSize(QtCore.QSize(0, 0))
         font = QtGui.QFont()
@@ -57,12 +50,11 @@ class Ui_MainWindow(object):
         self.yinyang_img.setFont(font)
         self.yinyang_img.setText("")
         self.yinyang_img.setTextFormat(QtCore.Qt.RichText)
-        self.yinyang_img.setPixmap(QtGui.QPixmap("/opt/yin-yang/src/ui/assets/icon.png"))
-        self.yinyang_img.setScaledContents(True)
+        self.yinyang_img.setPixmap(QtGui.QPixmap("../../../../yin-yang-logo.svg"))
+        self.yinyang_img.setScaledContents(False)
         self.yinyang_img.setAlignment(QtCore.Qt.AlignCenter)
         self.yinyang_img.setObjectName("yinyang_img")
-        self.verticalLayout.addWidget(
-            self.yinyang_img, 0, QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
+        self.verticalLayout.addWidget(self.yinyang_img, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setSpacing(6)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -88,25 +80,42 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
-        self.formLayout.setWidget(
-            0, QtWidgets.QFormLayout.LabelRole, self.label)
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.label)
         self.light_time = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
         self.light_time.setEnabled(False)
         self.light_time.setTime(QtCore.QTime(8, 0, 0))
         self.light_time.setObjectName("light_time")
-        self.formLayout.setWidget(
-            0, QtWidgets.QFormLayout.FieldRole, self.light_time)
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.light_time)
         self.label_2 = QtWidgets.QLabel(self.verticalLayoutWidget)
         self.label_2.setObjectName("label_2")
-        self.formLayout.setWidget(
-            1, QtWidgets.QFormLayout.LabelRole, self.label_2)
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.label_2)
         self.dark_time = QtWidgets.QTimeEdit(self.verticalLayoutWidget)
         self.dark_time.setEnabled(False)
         self.dark_time.setTime(QtCore.QTime(20, 0, 0))
         self.dark_time.setObjectName("dark_time")
-        self.formLayout.setWidget(
-            1, QtWidgets.QFormLayout.FieldRole, self.dark_time)
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.dark_time)
         self.verticalLayout.addLayout(self.formLayout)
+        self.radioButton = QtWidgets.QRadioButton(self.verticalLayoutWidget)
+        self.radioButton.setObjectName("radioButton")
+        self.verticalLayout.addWidget(self.radioButton)
+        self.formLayout_2 = QtWidgets.QFormLayout()
+        self.formLayout_2.setSpacing(6)
+        self.formLayout_2.setObjectName("formLayout_2")
+        self.latitudeLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.latitudeLabel.setObjectName("latitudeLabel")
+        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.LabelRole, self.latitudeLabel)
+        self.latitudeLineEdit = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.latitudeLineEdit.setEnabled(False)
+        self.latitudeLineEdit.setObjectName("latitudeLineEdit")
+        self.formLayout_2.setWidget(0, QtWidgets.QFormLayout.FieldRole, self.latitudeLineEdit)
+        self.longitudeLabel = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.longitudeLabel.setObjectName("longitudeLabel")
+        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.longitudeLabel)
+        self.longitudeLineEdit = QtWidgets.QLineEdit(self.verticalLayoutWidget)
+        self.longitudeLineEdit.setEnabled(False)
+        self.longitudeLineEdit.setObjectName("longitudeLineEdit")
+        self.formLayout_2.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.longitudeLineEdit)
+        self.verticalLayout.addLayout(self.formLayout_2)
         self.settings_push = QtWidgets.QPushButton(self.centralWidget)
         self.settings_push.setGeometry(QtCore.QRect(210, 10, 83, 25))
         self.settings_push.setObjectName("settings_push")
@@ -125,4 +134,7 @@ class Ui_MainWindow(object):
         self.light_time.setDisplayFormat(_translate("MainWindow", "HH:mm"))
         self.label_2.setText(_translate("MainWindow", "Dark:"))
         self.dark_time.setDisplayFormat(_translate("MainWindow", "HH:mm"))
+        self.radioButton.setText(_translate("MainWindow", "set sunset and sunrise"))
+        self.latitudeLabel.setText(_translate("MainWindow", "Latitude:"))
+        self.longitudeLabel.setText(_translate("MainWindow", "Longitude:"))
         self.settings_push.setText(_translate("MainWindow", "Settings"))

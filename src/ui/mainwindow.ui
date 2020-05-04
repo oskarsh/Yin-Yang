@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>300</width>
-    <height>360</height>
+    <height>460</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,19 +22,19 @@
   <property name="minimumSize">
    <size>
     <width>300</width>
-    <height>360</height>
+    <height>460</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>300</width>
-    <height>360</height>
+    <height>460</height>
    </size>
   </property>
   <property name="baseSize">
    <size>
     <width>300</width>
-    <height>360</height>
+    <height>460</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -42,7 +42,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</iconset>
+    <normaloff>../../../../../../../opt/yin-yang/src/ui/assets/yin-yang.svg</normaloff>../../../../../../../opt/yin-yang/src/ui/assets/yin-yang.svg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -51,7 +51,7 @@
       <x>20</x>
       <y>50</y>
       <width>251</width>
-      <height>281</height>
+      <height>336</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -210,6 +210,45 @@
        </item>
       </layout>
      </item>
+     <item>
+      <widget class="QRadioButton" name="radioButton">
+       <property name="text">
+        <string>set sunset and sunrise</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="latitudeLabel">
+         <property name="text">
+          <string>Latitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="latitudeLineEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="longitudeLabel">
+         <property name="text">
+          <string>Longitude:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="longitudeLineEdit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
     </layout>
    </widget>
    <widget class="QPushButton" name="settings_push">
@@ -228,6 +267,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="icon.qrc"/>
+ </resources>
  <connections/>
 </ui>
