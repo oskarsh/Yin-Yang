@@ -61,14 +61,7 @@ The Wallpapers are open source and can be used however you want. I also accept c
 
 
 
-## Why I created Yin & Yang KDE
-
-I found myself constantly switching between themes to match my surrounding lights. I prefer a Dark theme at Night while I want good readability at Day time. I want to easily switch my whole enviroment to a dark / light theme based on a pre defined time. I wanted to provide this as open software so everyone can benefit and I hope that I inspire other talented developers to also start a open source Project and better the Linux Desktop. This is why I created Yin-Yang.
-
-
-
-
-## Contributors
+## Thanks to all Contributors 
 
 ### Code Contributors
 
