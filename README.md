@@ -34,8 +34,8 @@ To install Yin-Yang copy the command below:
 
 ```git clone https://github.com/daehruoydeef/Yin-Yang && cd Yin-Yang && sh install.sh```
 
-enter your Password.
-Yin & Yang is now installed
+and follow the onscreen Instructions.
+
 
 You will need some dependencies for the installation process to work correctly check the Wiki for what is needed:
 [![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/daehruoydeef/Yin-Yang/wiki>)
