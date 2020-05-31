@@ -101,6 +101,9 @@ config["firefoxActiveTheme"] = "firefox-compact-light@mozilla.org"
 config["gnomeEnabled"] = False
 config["gnomeLightTheme"] = ""
 config["gnomeDarkTheme"] = ""
+config["kvantumEnabled"] = False
+config["kvantumLightTheme"] = ""
+config["kvantumDarkTheme"] = ""
 
 
 if exists():
@@ -254,3 +257,17 @@ def gnome_get_dark_theme():
 
 def gnome_get_checkbox():
     return config["gnomeEnabled"]
+
+
+def kvantum_get_light_theme():
+    """Return the Kvantum Light theme specified in the yin-yang config"""
+    return config["kvantumLightTheme"]
+
+
+def kvantum_get_dark_theme():
+    """Return the Kvantum dark theme specified in the yin-yang config"""
+    return config["kvantumDarkTheme"]
+
+
+def kvantum_get_checkbox():
+    return config["kvantumEnabled"]
