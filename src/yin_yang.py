@@ -19,7 +19,7 @@ import pwd
 import datetime
 import subprocess
 from src import gui
-from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk, firefox, gnome
+from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk, firefox, gnome, kvantum
 from src import config
 
 
@@ -52,6 +52,8 @@ class Yang(threading.Thread):
             gnome.switch_to_light()
         if config.get("firefoxEnabled"):
             firefox.switch_to_light()
+        if config.get("kvantumEnabled"):
+            kvantum.switch_to_light()
         play_sound("./assets/light.wav")
 
 
@@ -88,6 +90,9 @@ class Yin(threading.Thread):
         # firefox support
         if config.get("firefoxEnabled"):
             firefox.switch_to_dark()
+
+        if config.get("kvantumEnabled"):
+            kvantum.switch_to_dark()
         play_sound("/assets/dark.wav")
 
 
