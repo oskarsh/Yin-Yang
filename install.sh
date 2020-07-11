@@ -15,7 +15,7 @@ echo ""
 echo "Checking for QT dependencies"
 echo ""
 #checking python dependencies
-pip3 install qtpy 
+pip3 install qtpy
 pip3 install pyqt5
 pip3 install suntime
 echo ""
@@ -34,6 +34,9 @@ if [ ! -d /usr/lib/mozilla ]; then
 fi
 if [ ! -d /usr/lib/mozilla/native-messaging-hosts/ ]; then
     mkdir /usr/lib/mozilla/native-messaging-hosts/
+fi
+if [ ! -d /home/$SUDO_USER/.local/share/applications/ ]; then
+    mkdir /home/$SUDO_USER/.local/share/applications/
 fi
 echo ""
 echo "done"

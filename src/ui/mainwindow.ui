@@ -42,7 +42,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</iconset>
+    <normaloff>../../../../../../opt/yin-yang/src/ui/assets/yin-yang.svg</normaloff>../../../../../../opt/yin-yang/src/ui/assets/yin-yang.svg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -75,7 +75,7 @@
        <property name="maximumSize">
         <size>
          <width>80</width>
-         <height>256</height>
+         <height>80</height>
         </size>
        </property>
        <property name="sizeIncrement">
@@ -102,7 +102,7 @@
         <enum>Qt::RichText</enum>
        </property>
        <property name="pixmap">
-        <pixmap>../../../../yin-yang-logo.svg</pixmap>
+        <pixmap>assets/icon.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
