@@ -47,6 +47,10 @@ class SettingsWindow(QtWidgets.QMainWindow):
         config.update("gtkDarkTheme", self.ui.gtk_line_dark.text())
         config.update("gtkEnabled", self.ui.gtk_checkbox.isChecked())
 
+        config.update("kvantumLightTheme", self.ui.kvantum_line_light.text())
+        config.update("kvantumDarkTheme", self.ui.kvantum_line_dark.text())
+        config.update("kvantumEnabled", self.ui.kvantum_checkbox.isChecked())
+
         config.update("atomLightTheme", self.ui.atom_line_light.text())
         config.update("atomDarkTheme", self.ui.atom_line_dark.text())
         config.update("atomEnabled", self.ui.atom_checkbox.isChecked())
@@ -60,6 +64,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.kde_checkbox.toggled.connect(self.toggle_kde_fields)
         self.ui.code_checkbox.toggled.connect(self.toggle_code_fields)
         self.ui.gtk_checkbox.toggled.connect(self.toggle_gtk_fields)
+        self.ui.kvantum_checkbox.toggled.connect(self.toggle_kvantum_fields)
         self.ui.atom_checkbox.toggled.connect(self.toggle_atom_fields)
         self.ui.wallpaper_button_light.clicked.connect(
             self.open_wallpaper_light)
@@ -99,6 +104,12 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.gtk_checkbox.setChecked(config.get("gtkEnabled"))
         self.ui.gtk_line_light.setEnabled(config.get("gtkEnabled"))
         self.ui.gtk_line_dark.setEnabled(config.get("gtkEnabled"))
+        # ---- Kvantum -----
+        self.ui.kvantum_line_light.setText(config.get("kvantumLightTheme"))
+        self.ui.kvantum_line_dark.setText(config.get("kvantumDarkTheme"))
+        self.ui.kvantum_checkbox.setChecked(config.get("kvantumEnabled"))
+        self.ui.kvantum_line_light.setEnabled(config.get("kvantumEnabled"))
+        self.ui.kvantum_line_dark.setEnabled(config.get("kvantumEnabled"))
         # ----- wallpaper --------
         self.ui.wallpaper_button_light.setEnabled(
             config.get("wallpaperEnabled"))
@@ -263,6 +274,11 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.gtk_line_dark.setEnabled(checked)
         config.update("gtkEnabled", checked)
 
+    def toggle_kvantum_fields(self):
+        checked = self.ui.kvantum_checkbox.isChecked()
+        self.ui.kvantum_line_light.setEnabled(checked)
+        self.ui.kvantum_line_dark.setEnabled(checked)
+        config.update("kvantumEnabled", checked)
 
 class MainWindow(QtWidgets.QMainWindow):
 
