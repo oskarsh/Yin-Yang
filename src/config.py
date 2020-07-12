@@ -6,8 +6,8 @@ import re
 from suntime import Sun, SunTimeException
 
 # aliases for path to use later on
-user = pwd.getpwuid(os.getuid())[0]
-path = "/home/"+user+"/.config"
+home = os.getenv("HOME")
+path = home + "/.config"
 
 
 def exists():
