@@ -39,6 +39,9 @@ fi
 if [ ! -d /usr/lib/mozilla/native-messaging-hosts/ ]; then
     mkdir /usr/lib/mozilla/native-messaging-hosts/
 fi
+if [ ! -d /home/$SUDO_USER/.local/share/applications/ ]; then
+    mkdir /home/$SUDO_USER/.local/share/applications/
+fi
 echo ""
 echo "done"
 echo ""
