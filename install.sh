@@ -1,21 +1,25 @@
-#!/bin/sh
-if [ "$EUID" -ne 0 ]; then
+#!/bin/bash
+
+set -euo pipefail
+
+YIN_YANG_HOME=${1-${HOME}}
+
+if test ${EUID} -ne 0; then
     echo enter password in order to install Yin-Yang correctly
-    sudo sh $0
-    exit 1
+    exec sudo su -c "${0} ${HOME}"
+    exit 0
 fi
 
 echo "removing old Yin-Yang files if they exist"
-echo "your home here is" $HOME
-echo "your current user is in install" $SUDO_USER
-sudo sh ./uninstall.sh $SUDO_USER
+echo "your home here is" ${YIN_YANG_HOME}
+./uninstall.sh ${YIN_YANG_HOME}
 
 echo "Installing Yin-Yang ..."
 echo ""
 echo "Checking for QT dependencies"
 echo ""
 #checking python dependencies
-pip3 install qtpy 
+pip3 install qtpy
 pip3 install pyqt5
 pip3 install suntime
 echo ""
@@ -45,10 +49,10 @@ cp -r ./* /opt/yin-yang/
 cp ./assets/yin_yang.json /usr/lib/mozilla/native-messaging-hosts/
 #copy terminal executive
 cp ./src/yin-yang /usr/bin/
-sudo chmod +x /usr/bin/yin-yang
+chmod +x /usr/bin/yin-yang
 echo "Creating .desktop file for native enviroment execution"
 #create .desktop file
-cat <<EOF >/home/$SUDO_USER/.local/share/applications/Yin-Yang.desktop
+cat > "${YIN_YANG_HOME}/.local/share/applications/Yin-Yang.desktop" <<EOF
 [Desktop Entry]
 # The type as listed above
 Type=Application
