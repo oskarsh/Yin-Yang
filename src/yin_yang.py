@@ -44,14 +44,19 @@ class Yang(threading.Thread):
             kde.switch_to_light()
         if config.get("wallpaperEnabled"):
             wallpaper.switch_to_light()
+        # kde support
         if config.get("gtkEnabled") and config.get("desktop") == "kde":
             gtkkde.switch_to_light()
+        # gnome and budgie support
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
             gtk.switch_to_light()
+        # gnome-shell
         if config.get("gnomeEnabled"):
             gnome.switch_to_light()
+        # firefox support
         if config.get("firefoxEnabled"):
             firefox.switch_to_light()
+        # kvantum support
         if config.get("kvantumEnabled"):
             kvantum.switch_to_light()
         play_sound("./assets/light.wav")
@@ -65,32 +70,25 @@ class Yin(threading.Thread):
     def run(self):
         if config.get("codeEnabled"):
             vscode.switch_to_dark()
-
         if config.get("atomEnabled"):
             atom.switch_to_dark()
-
         if config.get("kdeEnabled"):
             kde.switch_to_dark()
-
         if config.get("wallpaperEnabled"):
             wallpaper.switch_to_dark()
-
         # kde support
         if config.get("gtkEnabled") and config.get("desktop") == "kde":
             gtkkde.switch_to_dark()
-
         # gnome and budgie support
         if config.get("gtkEnabled") and config.get("desktop") == "gtk":
             gtk.switch_to_dark()
-
         # gnome-shell
         if config.get("gnomeEnabled"):
             gnome.switch_to_dark()
-        
         # firefox support
         if config.get("firefoxEnabled"):
             firefox.switch_to_dark()
-
+        # kvantum support
         if config.get("kvantumEnabled"):
             kvantum.switch_to_dark()
         play_sound("/assets/dark.wav")

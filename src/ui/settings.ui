@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>350</width>
-    <height>450</height>
+    <height>559</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>350</width>
-    <height>430</height>
+    <height>559</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>350</width>
-    <height>450</height>
+    <height>550</height>
    </size>
   </property>
   <property name="baseSize">
@@ -42,7 +42,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</normaloff>/opt/yin-yang/src/ui/assets/yin-yang.svg</iconset>
+    <normaloff>../../../../../../opt/yin-yang/src/ui/assets/yin-yang.svg</normaloff>../../../../../../opt/yin-yang/src/ui/assets/yin-yang.svg</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QWidget" name="verticalLayoutWidget">
@@ -51,7 +51,7 @@
       <x>20</x>
       <y>40</y>
       <width>301</width>
-      <height>391</height>
+      <height>462</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -92,6 +92,41 @@
          </item>
          <item>
           <widget class="QComboBox" name="kde_combo_dark"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="kvantum">
+       <item>
+        <widget class="QLabel" name="label_12">
+         <property name="text">
+          <string>Kvantum</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <widget class="QCheckBox" name="kvantum_checkbox">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="kvantum_line_light">
+           <property name="placeholderText">
+            <string/>
+           </property>
+           <property name="clearButtonEnabled">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="kvantum_line_dark"/>
          </item>
         </layout>
        </item>
