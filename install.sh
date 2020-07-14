@@ -26,21 +26,21 @@ echo ""
 echo "Checking and creating correct folders ..."
 #check if /opt/ directory exists else create
 if [ ! -d /opt/ ]; then
-    mkdir /opt/
+    mkdir -p /opt/
 fi
 #check if /opt/ directory exists else create
 if [ ! -d /opt/yin-yang/ ]; then
-    mkdir /opt/yin-yang/
+    mkdir -p /opt/yin-yang/
 fi
 # check directories for extension
 if [ ! -d /usr/lib/mozilla ]; then
-    mkdir /usr/lib/mozilla
+    mkdir -p /usr/lib/mozilla
 fi
 if [ ! -d /usr/lib/mozilla/native-messaging-hosts/ ]; then
-    mkdir /usr/lib/mozilla/native-messaging-hosts/
+    mkdir -p /usr/lib/mozilla/native-messaging-hosts/
 fi
-if [ ! -d /home/$SUDO_USER/.local/share/applications/ ]; then
-    mkdir /home/$SUDO_USER/.local/share/applications/
+if [ ! -d "${YIN_YANG_HOME}/.local/share/applications/" ]; then
+    mkdir -p "${YIN_YANG_HOME}/.local/share/applications/"
 fi
 echo ""
 echo "done"
