@@ -6,3 +6,5 @@ build-ui-*
 src/build.py
 setup.py
 
+.idea/
+venv/
