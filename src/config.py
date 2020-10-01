@@ -104,6 +104,7 @@ config["gnomeDarkTheme"] = ""
 config["kvantumEnabled"] = False
 config["kvantumLightTheme"] = ""
 config["kvantumDarkTheme"] = ""
+config["soundEnabled"] = True
 
 
 if exists():
@@ -152,7 +153,6 @@ def get_dark_time():
 
 def get_theme():
     return config["theme"]
-
 
 def get_kde_light_theme():
     return config["kdeLightTheme"]
@@ -226,6 +226,8 @@ def gtk_get_dark_theme():
     """Return the  GTK dark theme specified in the yin-yang config"""
     return config["gtkDarkTheme"]
 
+def sound_get_checkbox():
+    return config["soundEnabled"]
 
 def gtk_get_checkbox():
     return config["gtkEnabled"]

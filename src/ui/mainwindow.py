@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/mainwindow.ui'
+# Form implementation generated from reading ui file 'mainwindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.0
 #
@@ -37,6 +37,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.setSpacing(6)
         self.verticalLayout.setObjectName("verticalLayout")
         self.yinyang_img = QtWidgets.QLabel(self.verticalLayoutWidget)
+        self.yinyang_img.setEnabled(True)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(128)
         sizePolicy.setVerticalStretch(128)
@@ -52,7 +53,7 @@ class Ui_MainWindow(object):
         self.yinyang_img.setText("")
         self.yinyang_img.setTextFormat(QtCore.Qt.RichText)
         self.yinyang_img.setPixmap(QtGui.QPixmap("assets/icon.png"))
-        self.yinyang_img.setScaledContents(False)
+        self.yinyang_img.setScaledContents(True)
         self.yinyang_img.setAlignment(QtCore.Qt.AlignCenter)
         self.yinyang_img.setObjectName("yinyang_img")
         self.verticalLayout.addWidget(self.yinyang_img, 0, QtCore.Qt.AlignHCenter|QtCore.Qt.AlignVCenter)
@@ -96,6 +97,9 @@ class Ui_MainWindow(object):
         self.dark_time.setObjectName("dark_time")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.dark_time)
         self.verticalLayout.addLayout(self.formLayout)
+        self.sound_checkBox = QtWidgets.QCheckBox(self.verticalLayoutWidget)
+        self.sound_checkBox.setObjectName("sound_checkBox")
+        self.verticalLayout.addWidget(self.sound_checkBox)
         self.settings_push = QtWidgets.QPushButton(self.centralWidget)
         self.settings_push.setGeometry(QtCore.QRect(210, 10, 83, 25))
         self.settings_push.setObjectName("settings_push")
@@ -114,4 +118,5 @@ class Ui_MainWindow(object):
         self.light_time.setDisplayFormat(_translate("MainWindow", "HH:mm"))
         self.label_2.setText(_translate("MainWindow", "Dark:"))
         self.dark_time.setDisplayFormat(_translate("MainWindow", "HH:mm"))
+        self.sound_checkBox.setText(_translate("MainWindow", "Play sound when theme changes"))
         self.settings_push.setText(_translate("MainWindow", "Settings"))
