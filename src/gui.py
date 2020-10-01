@@ -307,6 +307,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.dark_push.clicked.connect(self.toggle_dark)
         # connect the settingsButton
         self.ui.settings_push.clicked.connect(self.open_settings)
+        # connect the sound checkbox
+        self.ui.sound_checkBox.clicked.connect(self.toggle_sound)
         # connect the time change with the correct function
         self.ui.light_time.timeChanged.connect(self.time_changed)
         self.ui.dark_time.timeChanged.connect(self.time_changed)
@@ -341,6 +343,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sync_with_config()
         # self.restart()
 
+    def toggle_sound(self):
+        config.update("soundEnabled", self.ui.sound_checkBox.isChecked())
+        self.sync_with_config()
+
     # no needed since QT is now used system wise instead of python wise
     def restart(self):
         """Restarts the current program.
@@ -373,6 +379,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if theme == "":
             self.ui.light_push.setEnabled(True)
             self.ui.dark_push.setEnabled(True)
+        self.ui.sound_checkBox.setChecked(config.sound_get_checkbox())
 
     def time_changed(self):
         # update config if time has changed
