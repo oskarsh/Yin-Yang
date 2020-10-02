@@ -3,6 +3,7 @@ import os
 import pathlib
 import re
 
+from main import assembly_version
 from suntime import Sun, SunTimeException
 
 # aliases for path to use later on
@@ -68,7 +69,7 @@ pathlib.Path(path + "/yin_yang").mkdir(parents=True, exist_ok=True)
 
 # if there is no config generate a generic one
 config = {}
-config["version"] = "2.0"
+config["version"] = assembly_version
 config["desktop"] = get_desktop()
 config["followSun"] = False
 config["latitude"] = ""
