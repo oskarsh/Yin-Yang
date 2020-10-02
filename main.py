@@ -29,7 +29,7 @@ def main():
                         help="toggles Yin-Yang",
                         action="store_true")
     parser.add_argument("-s", "--schedule",
-                        help="schedule theme toggl, starts daemon in bg",
+                        help="schedule theme toggle, starts daemon in bg",
                         action="store_true")
     args = parser.parse_args()
 
@@ -38,7 +38,7 @@ def main():
     if should_update_config:
         update_config()
 
-    # checks wether $ yin-yang is ran without args
+    # checks whether $ yin-yang is ran without args
     if len(sys.argv) == 1 and not args.toggle:
         # load GUI
         app = QtWidgets.QApplication(sys.argv)
@@ -46,11 +46,11 @@ def main():
         window.show()
         sys.exit(app.exec_())
 
-    # checks wether the script should be ran as a daemon
+    # checks whether the script should be ran as a daemon
     if args.schedule:
         config.update("running", False)
         print("START thread listener")
-        
+
         if config.get("followSun"):
             # calculate time if needed
             config.set_sun_time()
@@ -66,6 +66,7 @@ def main():
     # gui is set as parameter
     if args.toggle:
         toggle_theme()
+
 
 # This method is called to add keys to the config
 # which have been added since version 1.0

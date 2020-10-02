@@ -11,21 +11,20 @@ date: 21.12.2018
 license: MIT
 """
 
+import datetime
 import os
+import pwd
+import subprocess
 import sys
 import threading
 import time
-import pwd
-import datetime
-import subprocess
-from src import gui
-from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk, firefox, gnome, kvantum
-from src import config
 
+from src import config
+from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk, firefox, gnome, kvantum
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
-path = "/home/"+user+"/.config/"
+path = "/home/" + user + "/.config/"
 
 terminate = False
 
@@ -91,7 +90,7 @@ class Yin(threading.Thread):
         # kvantum support
         if config.get("kvantumEnabled"):
             kvantum.switch_to_dark()
-        play_sound("/assets/dark.wav")
+        play_sound("./assets/dark.wav")
 
 
 class Daemon(threading.Thread):
@@ -136,6 +135,7 @@ def switch_to_light():
     config.update("theme", "light")
     yang.join()
 
+
 def switch_to_dark():
     yin = Yin(2)
     yin.start()
@@ -146,6 +146,7 @@ def switch_to_dark():
 def start_daemon():
     daemon = Daemon(3)
     daemon.start()
+
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -161,7 +162,7 @@ def resource_path(relative_path):
 def play_sound(sound):
     """ Description - only works with pulseaudio.
     :type sound: String (Path)
-    :param sound: Sound path to be played audiofile from
+    :param sound: Sound path to be played audio file from
     :rtype: I hope you will hear your Sound ;)
     """
 
@@ -181,7 +182,7 @@ def should_be_light():
     hour = datetime.datetime.now().time().hour
     minute = datetime.datetime.now().time().minute
 
-    if(hour >= l_hour and hour < d_hour):
+    if hour >= l_hour and hour < d_hour:
         return not (hour == l_hour and minute <= l_minute)
     else:
         return hour == d_hour and minute <= d_minute
