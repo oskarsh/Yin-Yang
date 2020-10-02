@@ -6,7 +6,7 @@ from src import gui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
-assembly_version = 2.0
+assembly_version = 2.1
 
 # fix HiDpi scaling
 QtWidgets.QApplication.setAttribute(
@@ -73,6 +73,8 @@ def main():
 def update_config():
     if not "soundEnabled" in config.config:
         config.config["soundEnabled"] = True
+
+    config.update("version", assembly_version)
 
 
 if __name__ == "__main__":

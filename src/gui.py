@@ -75,7 +75,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def sync_with_config(self):
         # sync config label with get the correct version
-        self.ui.version_label.setText("yin-yang: v" + config.get_version())
+        self.ui.version_label.setText("yin-yang: v" + str(config.get_version()))
         # syncing all fields and checkboxes with config
         # ---- KDE -----
         # reads out all kde themes and displays them inside a combobox
