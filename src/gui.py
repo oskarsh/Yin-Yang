@@ -294,6 +294,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # syncs the UI with the config
         self.sync_with_config()
 
+
     def center(self):
         frame_gm = self.frameGeometry()
         center_point = QtWidgets.QDesktopWidget().availableGeometry().center()

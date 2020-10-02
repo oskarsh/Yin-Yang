@@ -6,6 +6,8 @@ from src import gui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
+assembly_version = 2.0
+
 # fix HiDpi scaling
 QtWidgets.QApplication.setAttribute(
     QtCore.Qt.AA_EnableHighDpiScaling, True)
@@ -30,6 +32,11 @@ def main():
                         help="schedule theme toggl, starts daemon in bg",
                         action="store_true")
     args = parser.parse_args()
+
+    # Check and see if there are new keys we need to add to the config.
+    should_update_config = assembly_version != config.get_version()
+    if should_update_config:
+        update_config()
 
     # checks wether $ yin-yang is ran without args
     if len(sys.argv) == 1 and not args.toggle:
@@ -59,6 +66,12 @@ def main():
     # gui is set as parameter
     if args.toggle:
         toggle_theme()
+
+# This method is called to add keys to the config
+# which have been added since version 1.0
+def update_config():
+    if not "soundEnabled" in config.config:
+        config.config["soundEnabled"] = True
 
 
 if __name__ == "__main__":
