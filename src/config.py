@@ -1,8 +1,8 @@
 import json
-import pwd
 import os
 import pathlib
 import re
+
 from suntime import Sun, SunTimeException
 
 # aliases for path to use later on
@@ -11,13 +11,13 @@ path = home + "/.config"
 
 
 def exists():
-    """returns True or False wether Config exists or note"""
+    """returns True or False whether Config exists"""
     return os.path.isfile(path + "/yin_yang/yin_yang.json")
 
 
 def get_desktop():
-    """Return the current desktop's name or 'unkown' if can't determine it"""
-    # just to get all possible implementations of dekstop variables
+    """Return the current desktops name or 'unknown' if can't determine it"""
+    # just to get all possible implementations of desktop variables
     env = str(os.getenv("GDMSESSION")).lower()
     second_env = str(os.getenv("XDG_CURRENT_DESKTOP")).lower()
     third_env = str(os.getenv("XDG_CURRENT_DESKTOP")).lower()

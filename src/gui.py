@@ -17,7 +17,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Settings")
         self.ui = Ui_SettingsWindow()
         self.ui.setupUi(self)
-        # center the settingswindow
+        # center the settings window
         self.center()
         # syncing with config - fill out all fields based on Config
         self.sync_with_config()
@@ -159,7 +159,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
         # aliases for path to use later on
         user = pwd.getpwuid(os.getuid())[0]
-        path = "/home/"+user+"/.local/share/plasma/look-and-feel/"
+        path = "/home/" + user + "/.local/share/plasma/look-and-feel/"
 
         # asks the system what themes are available
         long_names = subprocess.check_output(
@@ -280,6 +280,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.kvantum_line_dark.setEnabled(checked)
         config.update("kvantumEnabled", checked)
 
+
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, parent=None):
@@ -293,7 +294,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.register_handlers()
         # syncs the UI with the config
         self.sync_with_config()
-
 
     def center(self):
         frame_gm = self.frameGeometry()
@@ -354,7 +354,7 @@ class MainWindow(QtWidgets.QMainWindow):
         Note: this function does not return. Any cleanup action (like
         saving data) must be done before calling this function."""
         python = sys.executable
-        os.execl(python, python, * sys.argv)
+        os.execl(python, python, *sys.argv)
 
     def set_correct_time(self):
         new_config = config.get_config()
