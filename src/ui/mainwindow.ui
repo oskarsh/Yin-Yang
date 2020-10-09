@@ -60,6 +60,9 @@
      </property>
      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
       <widget class="QLabel" name="yinyang_img">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>128</horstretch>
@@ -105,7 +108,7 @@
         <pixmap>assets/icon.png</pixmap>
        </property>
        <property name="scaledContents">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
