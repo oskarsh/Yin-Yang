@@ -213,6 +213,13 @@
        </item>
       </layout>
      </item>
+     <item>
+      <widget class="QCheckBox" name="sound_checkBox">
+       <property name="text">
+        <string>Play sound when theme changes</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </widget>
    <widget class="QPushButton" name="settings_push">
