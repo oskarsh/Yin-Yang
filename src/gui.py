@@ -17,7 +17,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Settings")
         self.ui = Ui_SettingsWindow()
         self.ui.setupUi(self)
-        # center the settingswindow
+        # center the settings window
         self.center()
         # syncing with config - fill out all fields based on Config
         self.sync_with_config()
@@ -75,7 +75,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def sync_with_config(self):
         # sync config label with get the correct version
-        self.ui.version_label.setText("yin-yang: v" + config.get_version())
+        self.ui.version_label.setText("yin-yang: v" + str(config.get_version()))
         # syncing all fields and checkboxes with config
         # ---- KDE -----
         # reads out all kde themes and displays them inside a combobox
@@ -159,7 +159,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
         # aliases for path to use later on
         user = pwd.getpwuid(os.getuid())[0]
-        path = "/home/"+user+"/.local/share/plasma/look-and-feel/"
+        path = "/home/" + user + "/.local/share/plasma/look-and-feel/"
 
         # asks the system what themes are available
         long_names = subprocess.check_output(
@@ -280,6 +280,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.kvantum_line_dark.setEnabled(checked)
         config.update("kvantumEnabled", checked)
 
+
 class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, parent=None):
@@ -307,6 +308,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.dark_push.clicked.connect(self.toggle_dark)
         # connect the settingsButton
         self.ui.settings_push.clicked.connect(self.open_settings)
+        # connect the sound checkbox
+        self.ui.sound_checkBox.clicked.connect(self.toggle_sound)
         # connect the time change with the correct function
         self.ui.light_time.timeChanged.connect(self.time_changed)
         self.ui.dark_time.timeChanged.connect(self.time_changed)
@@ -341,13 +344,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sync_with_config()
         # self.restart()
 
+    def toggle_sound(self):
+        config.update("soundEnabled", self.ui.sound_checkBox.isChecked())
+        self.sync_with_config()
+
     # no needed since QT is now used system wise instead of python wise
     def restart(self):
         """Restarts the current program.
         Note: this function does not return. Any cleanup action (like
         saving data) must be done before calling this function."""
         python = sys.executable
-        os.execl(python, python, * sys.argv)
+        os.execl(python, python, *sys.argv)
 
     def set_correct_time(self):
         new_config = config.get_config()
@@ -373,6 +380,7 @@ class MainWindow(QtWidgets.QMainWindow):
         if theme == "":
             self.ui.light_push.setEnabled(True)
             self.ui.dark_push.setEnabled(True)
+        self.ui.sound_checkBox.setChecked(config.sound_get_checkbox())
 
     def time_changed(self):
         # update config if time has changed

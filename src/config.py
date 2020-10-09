@@ -1,8 +1,9 @@
 import json
-import pwd
 import os
 import pathlib
 import re
+
+from main import assembly_version
 from suntime import Sun, SunTimeException
 
 # aliases for path to use later on
@@ -11,13 +12,13 @@ path = home + "/.config"
 
 
 def exists():
-    """returns True or False wether Config exists or note"""
-    return os.path.isfile(path+"/yin_yang/yin_yang.json")
+    """returns True or False whether Config exists"""
+    return os.path.isfile(path + "/yin_yang/yin_yang.json")
 
 
 def get_desktop():
-    """Return the current desktop's name or 'unkown' if can't determine it"""
-    # just to get all possible implementations of dekstop variables
+    """Return the current desktops name or 'unknown' if can't determine it"""
+    # just to get all possible implementations of desktop variables
     env = str(os.getenv("GDMSESSION")).lower()
     second_env = str(os.getenv("XDG_CURRENT_DESKTOP")).lower()
     third_env = str(os.getenv("XDG_CURRENT_DESKTOP")).lower()
@@ -64,12 +65,11 @@ def set_sun_time():
 
 
 # generate path for yin-yang if there is none this will be skipped
-pathlib.Path(path+"/yin_yang").mkdir(parents=True, exist_ok=True)
-
+pathlib.Path(path + "/yin_yang").mkdir(parents=True, exist_ok=True)
 
 # if there is no config generate a generic one
 config = {}
-config["version"] = "2.0"
+config["version"] = assembly_version
 config["desktop"] = get_desktop()
 config["followSun"] = False
 config["latitude"] = ""
@@ -104,11 +104,11 @@ config["gnomeDarkTheme"] = ""
 config["kvantumEnabled"] = False
 config["kvantumLightTheme"] = ""
 config["kvantumDarkTheme"] = ""
-
+config["soundEnabled"] = True
 
 if exists():
     # making config global for this module
-    with open(path+"/yin_yang/yin_yang.json", "r") as conf:
+    with open(path + "/yin_yang/yin_yang.json", "r") as conf:
         config = json.load(conf)
 
 config["desktop"] = get_desktop()
@@ -127,12 +127,12 @@ def update(key, value):
 
 def write_config(config=config):
     """Write configuration"""
-    with open(path+"/yin_yang/yin_yang.json", 'w') as conf:
+    with open(path + "/yin_yang/yin_yang.json", 'w') as conf:
         json.dump(config, conf, indent=4)
 
 
 def gtk_exists():
-    return os.path.isfile(path+"/gtk-3.0/settings.ini")
+    return os.path.isfile(path + "/gtk-3.0/settings.ini")
 
 
 def get_enabled_plugins():
@@ -225,6 +225,10 @@ def gtk_get_light_theme():
 def gtk_get_dark_theme():
     """Return the  GTK dark theme specified in the yin-yang config"""
     return config["gtkDarkTheme"]
+
+
+def sound_get_checkbox():
+    return config["soundEnabled"]
 
 
 def gtk_get_checkbox():
