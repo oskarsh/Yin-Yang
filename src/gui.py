@@ -17,7 +17,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Settings")
         self.ui = Ui_SettingsWindow()
         self.ui.setupUi(self)
-        # center the settingswindow
+        # center the settings window
         self.center()
         # syncing with config - fill out all fields based on Config
         self.sync_with_config()
@@ -53,6 +53,10 @@ class SettingsWindow(QtWidgets.QMainWindow):
         config.update("codeLightTheme", self.ui.code_line_light.text())
         config.update("codeDarkTheme", self.ui.code_line_dark.text())
         config.update("codeEnabled", self.ui.groupVscode.isChecked())
+
+        config.update("kvantumLightTheme", self.ui.kvantum_line_light.text())
+        config.update("kvantumDarkTheme", self.ui.kvantum_line_dark.text())
+        config.update("kvantumEnabled", self.ui.kvantum_checkbox.isChecked())
 
         config.update("atomLightTheme", self.ui.atom_line_light.text())
         config.update("atomDarkTheme", self.ui.atom_line_dark.text())
@@ -136,7 +140,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
         # aliases for path to use later on
         user = pwd.getpwuid(os.getuid())[0]
-        path = "/home/"+user+"/.local/share/plasma/look-and-feel/"
+        path = "/home/" + user + "/.local/share/plasma/look-and-feel/"
 
         # asks the system what themes are available
         long_names = subprocess.check_output(
@@ -299,7 +303,7 @@ class MainWindow(QtWidgets.QMainWindow):
         Note: this function does not return. Any cleanup action (like
         saving data) must be done before calling this function."""
         python = sys.executable
-        os.execl(python, python, * sys.argv)
+        os.execl(python, python, *sys.argv)
 
     def set_correct_time(self):
         new_config = config.get_config()
