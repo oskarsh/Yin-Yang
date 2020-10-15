@@ -5,32 +5,6 @@
   <property name="enabled">
    <bool>true</bool>
   </property>
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>340</width>
-    <height>537</height>
-   </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>0</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>1000</width>
-    <height>1000</height>
-   </size>
-  </property>
   <property name="baseSize">
    <size>
     <width>260</width>
@@ -74,7 +48,7 @@
         </property>
        </widget>
       </item>
-      <item alignment="Qt::AlignRight|Qt::AlignTop">
+      <item alignment="Qt::AlignRight|Qt::AlignVCenter">
        <widget class="QPushButton" name="buttonBack">
         <property name="text">
          <string>back</string>
@@ -92,7 +66,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabSystem">
        <attribute name="title">
