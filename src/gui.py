@@ -31,6 +31,8 @@ class SettingsWindow(QtWidgets.QMainWindow):
     def save_and_exit(self):
         print("saving options")
 
+        # system wide
+
         kde_light_short = self.ui.kde_combo_light.currentText()
         kde_dark_short = self.ui.kde_combo_dark.currentText()
         config.update("kdeLightTheme",
@@ -46,9 +48,11 @@ class SettingsWindow(QtWidgets.QMainWindow):
         config.update("gtkDarkTheme", self.ui.gtk_line_dark.text())
         config.update("gtkEnabled", self.ui.groupGtk.isChecked())
 
+        # single applications
+
         config.update("firefoxEnabled", self.ui.groupFirefox.isChecked())
-        config.update("firefoxDarkTheme", self.ui.groupFirefox.line_dark.text())
-        config.update("firefoxLightTheme", self.ui.groupFirefox.line_light.text())
+        config.update("firefoxDarkTheme", self.ui.firefox_line_dark.text())
+        config.update("firefoxLightTheme", self.ui.firefox_line_light.text())
 
         config.update("codeLightTheme", self.ui.code_line_light.text())
         config.update("codeDarkTheme", self.ui.code_line_dark.text())
@@ -56,7 +60,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
         config.update("kvantumLightTheme", self.ui.kvantum_line_light.text())
         config.update("kvantumDarkTheme", self.ui.kvantum_line_dark.text())
-        config.update("kvantumEnabled", self.ui.kvantum_checkbox.isChecked())
+        config.update("kvantumEnabled", self.ui.groupKvantum.isChecked())
 
         config.update("atomLightTheme", self.ui.atom_line_light.text())
         config.update("atomDarkTheme", self.ui.atom_line_dark.text())
@@ -71,40 +75,56 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.wallpaper_button_light.clicked.connect(
             self.open_wallpaper_light)
         self.ui.wallpaper_button_dark.clicked.connect(self.open_wallpaper_dark)
-        self.ui.back_button.clicked.connect(self.save_and_exit)
-        self.ui.checkSound.clicked.connect(self.toggle_sound())
+        self.ui.buttonBack.clicked.connect(self.save_and_exit)
 
     def sync_with_config(self):
         # sync config label with get the correct version
-        self.ui.statusBar.currentMessage("yin-yang: v" + config.get_version())
+        self.ui.statusBar.showMessage("yin-yang: v" + str(config.get_version()))
+        
         # syncing all fields and checkboxes with config
+
+        # system wide
         # ---- KDE -----
         # reads out all kde themes and displays them inside a combobox
+        self.ui.groupKde.setChecked(config.get("kdeEnabled"))
         if config.get("kdeEnabled"):
             # fixed bug where themes get appended multiple times
             self.get_kde_themes()
-
-            self.ui.groupKde.setChecked(config.get("kdeEnabled"))
             index_light = self.ui.kde_combo_light.findText(
                 self.get_kde_theme_short(config.get("kdeLightTheme")))
             self.ui.kde_combo_light.setCurrentIndex(index_light)
             index_dark = self.ui.kde_combo_dark.findText(
                 self.get_kde_theme_short(config.get("kdeDarkTheme")))
             self.ui.kde_combo_dark.setCurrentIndex(index_dark)
-        # ---- VSCode ----
-        self.ui.code_line_light.setText(config.get("codeLightTheme"))
-        self.ui.code_line_dark.setText(config.get("codeDarkTheme"))
-        self.ui.groupCode.setChecked(config.get("codeEnabled"))
+        # Gnome
+        self.ui.gnome_lineEdit_dark.setText(config.get("gnomeDarkTheme"))
+        self.ui.gnome_lineEdit_light.setText(config.get("gnomeLightTheme"))
+        self.ui.groupGnome.setChecked(config.get("gnomeEnabled"))
         # ---- GTK -----
         self.ui.gtk_line_light.setText(config.get("gtkLightTheme"))
         self.ui.gtk_line_dark.setText(config.get("gtkDarkTheme"))
-        self.ui.grouGtk.setChecked(config.get("gtkEnabled"))
+        self.ui.groupGtk.setChecked(config.get("gtkEnabled"))
+        # Kvantum
+        self.ui.kvantum_line_light.setText(config.get("kvantumLightTheme"))
+        self.ui.kvantum_line_dark.setText(config.get("kvantumDarkTheme"))
+        self.ui.groupKvantum.setChecked(config.get("kvantumEnabled"))
         # ----- wallpaper --------
         self.ui.groupWallpaper.setChecked(config.get("wallpaperEnabled"))
+        
+        # applications
+        # ---- VSCode ----
+        self.ui.code_line_light.setText(config.get("codeLightTheme"))
+        self.ui.code_line_dark.setText(config.get("codeDarkTheme"))
+        self.ui.groupVscode.setChecked(config.get("codeEnabled"))
         # ----- Atom --------
         self.ui.atom_line_light.setText(config.get("atomLightTheme"))
         self.ui.atom_line_dark.setText(config.get("atomDarkTheme"))
         self.ui.groupAtom.setChecked(config.get("atomEnabled"))
+        # firefox
+        self.ui.firefox_line_light.setText(config.get("firefoxLightTheme"))
+        self.ui.firefox_line_dark.setText(config.get("firefoxDarkTheme"))
+        self.ui.groupFirefox.setChecked(config.get("firefoxEnabled"))
+        
 
     def open_wallpaper_light(self):
         file_name, _ = QFileDialog.getOpenFileName(
@@ -234,10 +254,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         # center itself
         self.center()
-        # connects all buttons to the correct routes
-        self.register_handlers()
         # syncs the UI with the config
         self.sync_with_config()
+        # connects all buttons to the correct routes
+        self.register_handlers()
 
     def center(self):
         frame_gm = self.frameGeometry()
@@ -256,25 +276,27 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.inTimeLight.timeChanged.connect(self.time_changed)
         self.ui.inTimeDark.timeChanged.connect(self.time_changed)
         self.ui.buttonSchedule.toggled.connect(self.toggle_schedule_cliked)
+        self.ui.checkSound.clicked.connect(self.toggle_sound)
 
     def sync_with_config(self):
-        # sets the scheduled button to be enabled or disabled
+        # set the correct mode
         if config.get("schedule"):
-            if config.get("followSun"):
-                self.ui.buttonSun.setChecked(True)
-            else:
-                self.ui.buttonSchedule.setChecked(True)
+            self.ui.buttonSchedule.setChecked(True)
             yin_yang.start_daemon()
+        elif config.get("followSun"):
+            self.ui.buttonSun.setChecked(True)
         else:
             self.ui.automatic.setChecked(False)
 
         # sets the correct time based on config
         self.set_correct_time()
+        # set correct coordinates
+        self.ui.inLatitude.setValue(float(config.get("latitude")))
+        self.ui.inLongitude.setValue(float(config.get("longitude")))
         # enable the correct button based on config
         self.set_correct_buttons()
         # connect checkbox for sound with config
-        if config.get("soundEnabled"):
-            self.ui.checkSound.setChecked()
+        self.ui.checkSound.setChecked(config.get("soundEnabled"))
 
     def open_settings(self):
         self.secwindow = SettingsWindow()
