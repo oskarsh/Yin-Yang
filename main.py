@@ -61,6 +61,8 @@ def main():
                 print("You need to set schedule to True and edit the time to toggles")
         elif args.toggle:
             # toggle theme manually
+            config.update("followSun", False)
+            config.update("schedule", False)
             toggle_theme()
 
 
