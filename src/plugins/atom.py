@@ -17,11 +17,7 @@ def inplace_change(filename, old_string, new_string):
     # Safely read the input filename using 'with'
     with open(filename) as f:
         s = f.read()
-        if old_string not in s:
-            print('"{old_string}" not found in {filename}.'.format(**locals()))
-            return
-
-    # Safely write the changed content, if found in the file
+    # write the changed content, if found in the file
     with open(filename, 'w') as f:
         print(
             'Changing "{old_string}" to "{new_string}" in {filename}'
@@ -45,8 +41,11 @@ def get_old_theme(settings):
     """
     with open(settings, "r") as file:
         string = file.read()
-        # themes = re.findall(r'themes: \[[\s]*"([A-Za-z0-9\-]*)"[\s]*"([A-Za-z0-9\-]*)"', string)
+        # themes = findall(themes: [ anyword anword])
         themes = re.findall(r'themes: \[[\s]*"([A-Za-z0-9\-]*)"[\s]*"([A-Za-z0-9\-]*)"', string)
+        if len(themes) == 0:
+            # setting defaut value for themes
+            themes = [["one-dark-ui", "one-dark-syntax"]]
         if len(themes) >= 1:
             ui_theme, syntax_theme = themes[0]
             used_theme = re.findall("([A-z\-A-z]*)\-", ui_theme)[0]
@@ -60,8 +59,10 @@ def switch_to_light():
     # getting the old theme first
     current_theme = get_old_theme(path+"config.cson")
 
-    # updating the old theme with theme specfied in config
-    inplace_change(path+"config.cson", current_theme, atom_theme)
+    # check if already used
+    if atom_theme != current_theme:
+        # updating the old theme with theme specfied in config
+        inplace_change(path+"config.cson", current_theme, atom_theme)
 
 
 def switch_to_dark():
@@ -71,5 +72,7 @@ def switch_to_dark():
     # getting the old theme first
     current_theme = get_old_theme(path+"config.cson")
 
-    # updating the old theme with theme specfied in config
-    inplace_change(path+"config.cson", current_theme, atom_theme)
+    # check if already used
+    if atom_theme != current_theme:
+        # updating the old theme with theme specfied in config
+        inplace_change(path+"config.cson", current_theme, atom_theme)
