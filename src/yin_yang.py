@@ -162,8 +162,8 @@ def play_sound(sound):
     :rtype: I hope you will hear your Sound ;)
     """
 
-
-    subprocess.run(["paplay", resource_path(sound)])
+    if config.get("soundEnabled"):
+        subprocess.run(["paplay", resource_path(sound)])
 
 
 def should_be_light():

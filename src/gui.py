@@ -5,8 +5,8 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTime
 from PyQt5.QtWidgets import QFileDialog
-from src.ui.ui_mainwindow import Ui_MainWindow
-from src.ui.ui_settings import Ui_PluginWindow as Ui_SettingsWindow
+from src.ui.mainwindow import Ui_MainWindow
+from src.ui.settings import Ui_PluginWindow as Ui_SettingsWindow
 from src import yin_yang
 from src import config
 
@@ -68,6 +68,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
             self.open_wallpaper_light)
         self.ui.wallpaper_button_dark.clicked.connect(self.open_wallpaper_dark)
         self.ui.back_button.clicked.connect(self.save_and_exit)
+        self.ui.checkSound.clicked.connect(self.toggle_sound())
 
     def sync_with_config(self):
         # sync config label with get the correct version
@@ -254,7 +255,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def sync_with_config(self):
         # sets the scheduled button to be enabled or disabled
-        if config.get("scheduled"):
+        if config.get("schedule"):
             if config.get("followSun"):
                 self.ui.buttonSun.setChecked(True)
             else:
@@ -288,6 +289,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sync_with_config()
         # self.restart()
 
+    def toggle_sound(self):
+        config.update("soundEnabled", self.ui.checkSound.isChecked())
+        self.sync_with_config()
+
     # no needed since QT is now used system wise instead of python wise
     def restart(self):
         """Restarts the current program.
@@ -318,9 +323,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def time_changed(self):
         # update config if time has changed
-        l_hour, l_minute = str(self.ui.light_time.time().hour()), str(
+        l_hour, l_minute = str(self.ui.inTimeLight.time().hour()), str(
             self.ui.inTimeLight.time().minute())
-        d_hour, d_minute = str(self.ui.dark_time.time().hour()), str(
+        d_hour, d_minute = str(self.ui.inTimeDark.time().hour()), str(
             self.ui.inTimeDark.time().minute())
         config.update("switchToLight", l_hour + ":" + l_minute)
         config.update("switchToDark", d_hour + ":" + d_minute)
