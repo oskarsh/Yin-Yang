@@ -40,32 +40,28 @@ def main():
 
     # checks whether $ yin-yang is ran without args
     if len(sys.argv) == 1 and not args.toggle:
-        # load GUI
+        # load GUI to apply settings or set theme manually
         app = QtWidgets.QApplication(sys.argv)
         window = gui.MainWindow()
         window.show()
-        sys.exit(app.exec_())
-
-    # checks whether the script should be ran as a daemon
-    if args.schedule:
-        config.update("running", False)
-        print("START thread listener")
-
-        if config.get("followSun"):
-            # calculate time if needed
-            config.set_sun_time()
-
-        if config.get("schedule"):
-            yin_yang.start_daemon()
-        else:
-            print("looks like you did not specified a time")
-            print("You can use the gui with yin-yang -gui")
-            print("Or edit the config found in ~/.config/yin_yang/yin_yang.json")
-            print("You need to set schedule to True and edit the time to toggles")
-
-    # gui is set as parameter
-    if args.toggle:
-        toggle_theme()
+        app.exec_()
+    else:
+        # set settings via terminal
+        if args.schedule:
+            if config.get("followSun"):
+                # calculate time if needed
+                config.set_sun_time()
+                print("Using mode followSun")
+            if config.get("schedule"):
+                print("Using mode schedule")
+            else:
+                print("looks like you did not specified a time")
+                print("You can use the gui with yin-yang -gui")
+                print("Or edit the config found in ~/.config/yin_yang/yin_yang.json")
+                print("You need to set schedule to True and edit the time to toggles")
+        elif args.toggle:
+            # toggle theme manually
+            toggle_theme()
 
 
 # This method is called to add keys to the config
@@ -79,3 +75,7 @@ def update_config():
 
 if __name__ == "__main__":
     main()
+    if config.get("followSun") or config.get("schedule"):
+        config.update("running", False)
+        print("START thread listener")
+        yin_yang.start_daemon()
