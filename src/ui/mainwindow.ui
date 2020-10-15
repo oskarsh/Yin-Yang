@@ -2,9 +2,6 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <property name="windowModality">
-   <enum>Qt::NonModal</enum>
-  </property>
   <property name="enabled">
    <bool>true</bool>
   </property>
@@ -12,14 +9,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
-    <height>515</height>
+    <width>271</width>
+    <height>523</height>
    </rect>
   </property>
-  <property name="baseSize">
+  <property name="minimumSize">
    <size>
-    <width>300</width>
-    <height>460</height>
+    <width>271</width>
+    <height>0</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -33,62 +30,8 @@
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <layout class="QHBoxLayout" name="logo">
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
+      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
        <widget class="QLabel" name="imgLogo">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>1000</width>
-          <height>1000</height>
-         </size>
-        </property>
-        <property name="sizeIncrement">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="baseSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <pointsize>20</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-        <property name="textFormat">
-         <enum>Qt::RichText</enum>
-        </property>
         <property name="pixmap">
          <pixmap resource="../../resources.qrc">:/icons/assets/yin-yang.svg</pixmap>
         </property>
@@ -99,19 +42,6 @@
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
       </item>
      </layout>
     </item>
@@ -172,6 +102,9 @@
         <widget class="QRadioButton" name="buttonSchedule">
          <property name="text">
           <string>scheduled</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
          </property>
         </widget>
        </item>
@@ -266,10 +199,30 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QDoubleSpinBox" name="inLatitude"/>
+           <widget class="QDoubleSpinBox" name="inLatitude">
+            <property name="suffix">
+             <string>°</string>
+            </property>
+            <property name="minimum">
+             <double>-90.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>90.000000000000000</double>
+            </property>
+           </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QDoubleSpinBox" name="inLongitude"/>
+           <widget class="QDoubleSpinBox" name="inLongitude">
+            <property name="suffix">
+             <string>°</string>
+            </property>
+            <property name="minimum">
+             <double>-180.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>180.000000000000000</double>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

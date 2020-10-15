@@ -15,6 +15,7 @@ class Ui_PluginWindow(object):
     def setupUi(self, PluginWindow):
         PluginWindow.setObjectName("PluginWindow")
         PluginWindow.setEnabled(True)
+        PluginWindow.resize(340, 577)
         PluginWindow.setBaseSize(QtCore.QSize(260, 300))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/assets/yin-yang.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -195,13 +196,13 @@ class Ui_PluginWindow(object):
         PluginWindow.setStatusBar(self.statusBar)
 
         self.retranslateUi(PluginWindow)
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(PluginWindow)
 
     def retranslateUi(self, PluginWindow):
         _translate = QtCore.QCoreApplication.translate
         PluginWindow.setWindowTitle(_translate("PluginWindow", "Yin & Yang"))
-        self.labelHeader.setText(_translate("PluginWindow", "Settings"))
+        self.labelHeader.setText(_translate("PluginWindow", "Plugins"))
         self.buttonBack.setText(_translate("PluginWindow", "back"))
         self.groupKde.setTitle(_translate("PluginWindow", "KDE"))
         self.groupGnome.setTitle(_translate("PluginWindow", "Gnome"))

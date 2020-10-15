@@ -14,7 +14,7 @@ from src import config
 class SettingsWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Settings")
+        self.setWindowTitle("Plugins")
         self.ui = Ui_SettingsWindow()
         self.ui.setupUi(self)
         # center the settings window
@@ -79,8 +79,9 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def sync_with_config(self):
         # sync config label with get the correct version
-        self.ui.statusBar.showMessage("yin-yang: v" + str(config.get_version()))
-        
+        self.ui.statusBar.showMessage("yin-yang: v" +
+                                      str(config.get_version()))
+
         # syncing all fields and checkboxes with config
 
         # system wide
@@ -110,7 +111,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.groupKvantum.setChecked(config.get("kvantumEnabled"))
         # ----- wallpaper --------
         self.ui.groupWallpaper.setChecked(config.get("wallpaperEnabled"))
-        
+
         # applications
         # ---- VSCode ----
         self.ui.code_line_light.setText(config.get("codeLightTheme"))
@@ -124,7 +125,6 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.firefox_line_light.setText(config.get("firefoxLightTheme"))
         self.ui.firefox_line_dark.setText(config.get("firefoxDarkTheme"))
         self.ui.groupFirefox.setChecked(config.get("firefoxEnabled"))
-        
 
     def open_wallpaper_light(self):
         file_name, _ = QFileDialog.getOpenFileName(
@@ -143,7 +143,8 @@ class SettingsWindow(QtWidgets.QMainWindow):
         Sends the kde themes to the ui.
         """
         if config.get("desktop") == "kde":
-            if (self.ui.kde_combo_light.count() == 0 and self.ui.kde_combo_dark.count() == 0):
+            if (self.ui.kde_combo_light.count() == 0 and
+                self.ui.kde_combo_dark.count() == 0):
                 kde_themes = self.get_kde_theme_names()
 
                 for name, theme in kde_themes.items():
@@ -249,7 +250,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Yin-Yang")
+        self.setWindowTitle("Yin & Yang")
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         # center itself
@@ -270,13 +271,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.buttonLight.clicked.connect(self.toggle_light)
         # connect the "dark" button
         self.ui.buttonDark.clicked.connect(self.toggle_dark)
-        # connect the settingsButton
-        self.ui.buttonApplication.clicked.connect(self.open_settings)
         # connect the time change with the correct function
         self.ui.inTimeLight.timeChanged.connect(self.time_changed)
         self.ui.inTimeDark.timeChanged.connect(self.time_changed)
-        self.ui.buttonSchedule.toggled.connect(self.toggle_schedule_cliked)
+        # connect schedule and sunposition
+        self.ui.buttonSchedule.toggled.connect(self.toggle_schedule_clicked)
+        self.ui.buttonSun.toggled.connect(self.toggle_sun)
+        self.ui.automatic.toggled.connect(self.toggle_automatic)
         self.ui.checkSound.clicked.connect(self.toggle_sound)
+        # connect the settingsButton
+        self.ui.buttonApplication.clicked.connect(self.open_settings)
 
     def sync_with_config(self):
         # set the correct mode
@@ -305,12 +309,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.hide()
 
     def toggle_light(self):
+        config.update("followSun", False)
+        config.update("scheduled", False)
         yin_yang.switch_to_light()
         self.sync_with_config()
         # experimental
         # self.restart()
 
     def toggle_dark(self):
+        config.update("followSun", False)
+        config.update("scheduled", False)
         yin_yang.switch_to_dark()
         self.sync_with_config()
         # self.restart()
@@ -343,9 +351,11 @@ class MainWindow(QtWidgets.QMainWindow):
     def set_correct_buttons(self):
         theme = config.get_theme()
         if theme == "dark":
-            self.ui.buttonLight.setEnabled(False)
-        if theme == "light":
+            self.ui.buttonLight.setEnabled(True)
             self.ui.buttonDark.setEnabled(False)
+        if theme == "light":
+            self.ui.buttonLight.setEnabled(False)
+            self.ui.buttonDark.setEnabled(True)
 
     def time_changed(self):
         # update config if time has changed
@@ -356,6 +366,20 @@ class MainWindow(QtWidgets.QMainWindow):
         config.update("switchToLight", l_hour + ":" + l_minute)
         config.update("switchToDark", d_hour + ":" + d_minute)
 
-    def toggle_schedule_cliked(self):
-        checked = self.ui.buttonSchedule.isChecked()
-        config.update("schedule", checked)
+    def toggle_schedule_clicked(self):
+        config.update("schedule", True)
+        config.update("followSun", False)
+
+    def toggle_sun(self):
+        config.update("followSun", True)
+        config.update("schedule", False)
+
+    def toggle_automatic(self):
+        # todo
+        automatic = self.ui.automatic.isChecked()
+        if automatic:
+            config.update("followSun", self.ui.buttonSun.isChecked())
+            config.update("scheduled", self.ui.buttonSchedule.isChecked())
+        else:
+            config.update("followSun", False)
+            config.update("schedule", False)

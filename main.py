@@ -71,7 +71,7 @@ def main():
 # This method is called to add keys to the config
 # which have been added since version 1.0
 def update_config():
-    if not "soundEnabled" in config.config:
+    if "soundEnabled" not in config.config:
         config.config["soundEnabled"] = True
 
     config.update("version", assembly_version)
