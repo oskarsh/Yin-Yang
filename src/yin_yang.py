@@ -182,7 +182,20 @@ def should_be_light():
     hour = datetime.datetime.now().time().hour
     minute = datetime.datetime.now().time().minute
 
-    if hour >= l_hour and hour < d_hour:
-        return not (hour == l_hour and minute <= l_minute)
+    # if light comes before dark (True if 00:00 -> light -> dark -> 23:59)
+    if l_hour < d_hour or (l_hour == d_hour and l_minute < d_minute):
+        # check for hour or, if equal, for minute
+        if hour < d_hour:
+            return hour >= l_hour
+        elif hour == d_hour:
+            return minute < d_minute
+        else:
+            return False
     else:
-        return hour == d_hour and minute <= d_minute
+        # same as above, but checks for dark and inverts the result
+        if hour < l_hour:
+            return not hour >= d_hour
+        elif hour == l_hour:
+            return not minute < l_minute
+        else:
+            return True
