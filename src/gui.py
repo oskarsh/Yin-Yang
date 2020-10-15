@@ -100,7 +100,9 @@ class SettingsWindow(QtWidgets.QMainWindow):
                 self.get_kde_theme_short(config.get("kdeDarkTheme")))
             self.ui.kde_combo_dark.setCurrentIndex(index_dark)
         else:
-            self.ui.groupKde.setVisible(False)
+            self.ui.groupKde.setChecked(False)
+            self.ui.groupKde.setEnabled(False)
+            config.update("kdeEnabled", False)
 
         # Gnome
         if config.get("desktop") == "gnome":
@@ -108,7 +110,9 @@ class SettingsWindow(QtWidgets.QMainWindow):
             self.ui.gnome_lineEdit_light.setText(config.get("gnomeLightTheme"))
             self.ui.groupGnome.setChecked(config.get("gnomeEnabled"))
         else:
-            self.ui.groupGnome.setVisible(False)
+            self.ui.groupGnome.setChecked(False)
+            self.ui.groupGnome.setEnabled(False)
+            config.update("gnomeEnabled", False)
         # ---- GTK -----
         self.ui.gtk_line_light.setText(config.get("gtkLightTheme"))
         self.ui.gtk_line_dark.setText(config.get("gtkDarkTheme"))
@@ -121,6 +125,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.ui.groupWallpaper.setChecked(config.get("wallpaperEnabled"))
 
         # applications
+
         # ---- VSCode ----
         self.ui.code_line_light.setText(config.get("codeLightTheme"))
         self.ui.code_line_dark.setText(config.get("codeDarkTheme"))
@@ -300,7 +305,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # set the correct mode
         if config.get("schedule"):
             self.ui.buttonSchedule.setChecked(True)
-            yin_yang.start_daemon()
         elif config.get("followSun"):
             self.ui.buttonSun.setChecked(True)
         else:
