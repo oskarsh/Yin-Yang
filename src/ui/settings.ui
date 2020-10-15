@@ -109,14 +109,14 @@
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QLineEdit" name="gnome_lineEdit_dark">
+            <widget class="QLineEdit" name="gnome_lineEdit_light">
              <property name="placeholderText">
               <string>Light Theme</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="gnome_lineEdit_light">
+            <widget class="QLineEdit" name="gnome_lineEdit_dark">
              <property name="placeholderText">
               <string>Dark Theme</string>
              </property>

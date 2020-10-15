@@ -48,6 +48,8 @@ class SettingsWindow(QtWidgets.QMainWindow):
         config.update("gtkDarkTheme", self.ui.gtk_line_dark.text())
         config.update("gtkEnabled", self.ui.groupGtk.isChecked())
 
+        config.update("wallpaperEnabled", self.ui.groupWallpaper.isChecked())
+
         # single applications
 
         config.update("firefoxEnabled", self.ui.groupFirefox.isChecked())
@@ -87,8 +89,8 @@ class SettingsWindow(QtWidgets.QMainWindow):
         # system wide
         # ---- KDE -----
         # reads out all kde themes and displays them inside a combobox
-        self.ui.groupKde.setChecked(config.get("kdeEnabled"))
-        if config.get("kdeEnabled"):
+        if config.get("desktop") == "kde":
+            self.ui.groupKde.setChecked(config.get("kdeEnabled"))
             # fixed bug where themes get appended multiple times
             self.get_kde_themes()
             index_light = self.ui.kde_combo_light.findText(
@@ -97,10 +99,16 @@ class SettingsWindow(QtWidgets.QMainWindow):
             index_dark = self.ui.kde_combo_dark.findText(
                 self.get_kde_theme_short(config.get("kdeDarkTheme")))
             self.ui.kde_combo_dark.setCurrentIndex(index_dark)
+        else:
+            self.ui.groupKde.setVisible(False)
+
         # Gnome
-        self.ui.gnome_lineEdit_dark.setText(config.get("gnomeDarkTheme"))
-        self.ui.gnome_lineEdit_light.setText(config.get("gnomeLightTheme"))
-        self.ui.groupGnome.setChecked(config.get("gnomeEnabled"))
+        if config.get("desktop") == "gnome":
+            self.ui.gnome_lineEdit_dark.setText(config.get("gnomeDarkTheme"))
+            self.ui.gnome_lineEdit_light.setText(config.get("gnomeLightTheme"))
+            self.ui.groupGnome.setChecked(config.get("gnomeEnabled"))
+        else:
+            self.ui.groupGnome.setVisible(False)
         # ---- GTK -----
         self.ui.gtk_line_light.setText(config.get("gtkLightTheme"))
         self.ui.gtk_line_dark.setText(config.get("gtkDarkTheme"))
@@ -274,6 +282,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # connect the time change with the correct function
         self.ui.inTimeLight.timeChanged.connect(self.time_changed)
         self.ui.inTimeDark.timeChanged.connect(self.time_changed)
+        # connect position
+        self.ui.inLatitude.valueChanged.connect(self.latitude_changed)
+        self.ui.inLongitude.valueChanged.connect(self.longitude_changed)
         # connect schedule and sunposition
         self.ui.buttonSchedule.toggled.connect(self.toggle_schedule_clicked)
         self.ui.buttonSun.toggled.connect(self.toggle_sun)
@@ -283,6 +294,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.buttonApplication.clicked.connect(self.open_settings)
 
     def sync_with_config(self):
+        # set current version in statusbar
+        self.ui.statusBar.showMessage("yin-yang: v" +
+                                      str(config.get_version()))
         # set the correct mode
         if config.get("schedule"):
             self.ui.buttonSchedule.setChecked(True)
@@ -325,7 +339,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def toggle_sound(self):
         config.update("soundEnabled", self.ui.checkSound.isChecked())
-        self.sync_with_config()
 
     # no needed since QT is now used system wise instead of python wise
     def restart(self):
@@ -374,12 +387,16 @@ class MainWindow(QtWidgets.QMainWindow):
         config.update("followSun", True)
         config.update("schedule", False)
 
-    def toggle_automatic(self):
-        # todo
-        automatic = self.ui.automatic.isChecked()
-        if automatic:
+    def toggle_automatic(self, checked):
+        if checked:
             config.update("followSun", self.ui.buttonSun.isChecked())
-            config.update("scheduled", self.ui.buttonSchedule.isChecked())
+            config.update("schedule", self.ui.buttonSchedule.isChecked())
         else:
             config.update("followSun", False)
             config.update("schedule", False)
+
+    def latitude_changed(self, latitude):
+        config.update("latitude", latitude)
+
+    def longitude_changed(self, longitude):
+        config.update("longitude", longitude)
