@@ -17,6 +17,7 @@ class Ui_MainWindow(object):
         MainWindow.setEnabled(True)
         MainWindow.resize(271, 523)
         MainWindow.setMinimumSize(QtCore.QSize(271, 0))
+        MainWindow.setMaximumSize(QtCore.QSize(271, 523))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/assets/yin-yang.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)

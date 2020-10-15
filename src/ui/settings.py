@@ -15,7 +15,8 @@ class Ui_PluginWindow(object):
     def setupUi(self, PluginWindow):
         PluginWindow.setObjectName("PluginWindow")
         PluginWindow.setEnabled(True)
-        PluginWindow.resize(340, 577)
+        PluginWindow.resize(340, 537)
+        PluginWindow.setMaximumSize(QtCore.QSize(340, 537))
         PluginWindow.setBaseSize(QtCore.QSize(260, 300))
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icons/assets/yin-yang.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -196,7 +197,6 @@ class Ui_PluginWindow(object):
         PluginWindow.setStatusBar(self.statusBar)
 
         self.retranslateUi(PluginWindow)
-        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(PluginWindow)
 
     def retranslateUi(self, PluginWindow):

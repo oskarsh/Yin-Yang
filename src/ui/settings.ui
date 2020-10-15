@@ -10,8 +10,14 @@
     <x>0</x>
     <y>0</y>
     <width>340</width>
-    <height>577</height>
+    <height>537</height>
    </rect>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>340</width>
+    <height>537</height>
+   </size>
   </property>
   <property name="baseSize">
    <size>
@@ -72,9 +78,6 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
-      </property>
-      <property name="currentIndex">
-       <number>0</number>
       </property>
       <widget class="QWidget" name="tabSystem">
        <attribute name="title">

@@ -19,6 +19,12 @@
     <height>0</height>
    </size>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>271</width>
+    <height>523</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Yin &amp; Yang</string>
   </property>
