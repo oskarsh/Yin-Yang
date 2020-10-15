@@ -70,6 +70,7 @@ pathlib.Path(path+"/yin_yang").mkdir(parents=True, exist_ok=True)
 # if there is no config generate a generic one
 config = {}
 config["version"] = "2.0"
+config["soundEnabled"] = False
 config["desktop"] = get_desktop()
 config["followSun"] = False
 config["latitude"] = ""

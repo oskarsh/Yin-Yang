@@ -5,8 +5,8 @@ import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTime
 from PyQt5.QtWidgets import QFileDialog
-from src.ui.mainwindow import Ui_MainWindow
-from src.ui.settings import Ui_MainWindow as Ui_SettingsWindow
+from src.ui.ui_mainwindow import Ui_MainWindow
+from src.ui.ui_settings import Ui_PluginWindow as Ui_SettingsWindow
 from src import yin_yang
 from src import config
 
@@ -33,23 +33,30 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
         kde_light_short = self.ui.kde_combo_light.currentText()
         kde_dark_short = self.ui.kde_combo_dark.currentText()
-
         config.update("kdeLightTheme",
                       self.get_kde_theme_long(kde_light_short))
         config.update("kdeDarkTheme", self.get_kde_theme_long(kde_dark_short))
-        config.update("kdeEnabled", self.ui.kde_checkbox.isChecked())
+        config.update("kdeEnabled", self.ui.groupKde.isChecked())
 
-        config.update("codeLightTheme", self.ui.code_line_light.text())
-        config.update("codeDarkTheme", self.ui.code_line_dark.text())
-        config.update("codeEnabled", self.ui.code_checkbox.isChecked())
+        config.update("gnomeEnabled", self.ui.groupGnome.isChecked())
+        config.update("gnomeLightTheme", self.ui.gnome_lineEdit_light.text())
+        config.update("gnomeDarkTheme", self.ui.gnome_lineEdit_dark.text())
 
         config.update("gtkLightTheme", self.ui.gtk_line_light.text())
         config.update("gtkDarkTheme", self.ui.gtk_line_dark.text())
-        config.update("gtkEnabled", self.ui.gtk_checkbox.isChecked())
+        config.update("gtkEnabled", self.ui.groupGtk.isChecked())
+
+        config.update("firefoxEnabled", self.ui.groupFirefox.isChecked())
+        config.update("firefoxDarkTheme", self.ui.groupFirefox.line_dark.text())
+        config.update("firefoxLightTheme", self.ui.groupFirefox.line_light.text())
+
+        config.update("codeLightTheme", self.ui.code_line_light.text())
+        config.update("codeDarkTheme", self.ui.code_line_dark.text())
+        config.update("codeEnabled", self.ui.groupVscode.isChecked())
 
         config.update("atomLightTheme", self.ui.atom_line_light.text())
         config.update("atomDarkTheme", self.ui.atom_line_dark.text())
-        config.update("atomEnabled", self.ui.atom_checkbox.isChecked())
+        config.update("atomEnabled", self.ui.groupAtom.isChecked())
 
         # showing the main window and hiding the current one
         self.hide()
@@ -57,20 +64,14 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.window.show()
 
     def register_handlers(self):
-        self.ui.kde_checkbox.toggled.connect(self.toggle_kde_fields)
-        self.ui.code_checkbox.toggled.connect(self.toggle_code_fields)
-        self.ui.gtk_checkbox.toggled.connect(self.toggle_gtk_fields)
-        self.ui.atom_checkbox.toggled.connect(self.toggle_atom_fields)
         self.ui.wallpaper_button_light.clicked.connect(
             self.open_wallpaper_light)
         self.ui.wallpaper_button_dark.clicked.connect(self.open_wallpaper_dark)
-        self.ui.wallpaper_checkbox.toggled.connect(
-            self.toggle_wallpaper_buttons)
         self.ui.back_button.clicked.connect(self.save_and_exit)
 
     def sync_with_config(self):
         # sync config label with get the correct version
-        self.ui.version_label.setText("yin-yang: v" + config.get_version())
+        self.ui.statusBar.currentMessage("yin-yang: v" + config.get_version())
         # syncing all fields and checkboxes with config
         # ---- KDE -----
         # reads out all kde themes and displays them inside a combobox
@@ -78,9 +79,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
             # fixed bug where themes get appended multiple times
             self.get_kde_themes()
 
-            self.ui.kde_checkbox.setChecked(config.get("kdeEnabled"))
-            self.ui.kde_combo_dark.setEnabled(config.get("kdeEnabled"))
-            self.ui.kde_combo_light.setEnabled(config.get("kdeEnabled"))
+            self.ui.groupKde.setChecked(config.get("kdeEnabled"))
             index_light = self.ui.kde_combo_light.findText(
                 self.get_kde_theme_short(config.get("kdeLightTheme")))
             self.ui.kde_combo_light.setCurrentIndex(index_light)
@@ -89,28 +88,18 @@ class SettingsWindow(QtWidgets.QMainWindow):
             self.ui.kde_combo_dark.setCurrentIndex(index_dark)
         # ---- VSCode ----
         self.ui.code_line_light.setText(config.get("codeLightTheme"))
-        self.ui.code_line_light.setEnabled(config.get("codeEnabled"))
         self.ui.code_line_dark.setText(config.get("codeDarkTheme"))
-        self.ui.code_line_dark.setEnabled(config.get("codeEnabled"))
-        self.ui.code_checkbox.setChecked(config.get("codeEnabled"))
+        self.ui.groupCode.setChecked(config.get("codeEnabled"))
         # ---- GTK -----
         self.ui.gtk_line_light.setText(config.get("gtkLightTheme"))
         self.ui.gtk_line_dark.setText(config.get("gtkDarkTheme"))
-        self.ui.gtk_checkbox.setChecked(config.get("gtkEnabled"))
-        self.ui.gtk_line_light.setEnabled(config.get("gtkEnabled"))
-        self.ui.gtk_line_dark.setEnabled(config.get("gtkEnabled"))
+        self.ui.grouGtk.setChecked(config.get("gtkEnabled"))
         # ----- wallpaper --------
-        self.ui.wallpaper_button_light.setEnabled(
-            config.get("wallpaperEnabled"))
-        self.ui.wallpaper_button_dark.setEnabled(
-            config.get("wallpaperEnabled"))
-        self.ui.wallpaper_checkbox.setChecked(config.get("wallpaperEnabled"))
+        self.ui.groupWallpaper.setChecked(config.get("wallpaperEnabled"))
         # ----- Atom --------
         self.ui.atom_line_light.setText(config.get("atomLightTheme"))
         self.ui.atom_line_dark.setText(config.get("atomDarkTheme"))
-        self.ui.atom_checkbox.setChecked(config.get("atomEnabled"))
-        self.ui.atom_line_light.setEnabled(config.get("atomEnabled"))
-        self.ui.atom_line_dark.setEnabled(config.get("atomEnabled"))
+        self.ui.groupAtom.setChecked(config.get("atomEnabled"))
 
     def open_wallpaper_light(self):
         file_name, _ = QFileDialog.getOpenFileName(
@@ -136,10 +125,8 @@ class SettingsWindow(QtWidgets.QMainWindow):
                     self.ui.kde_combo_light.addItem(name)
                     self.ui.kde_combo_dark.addItem(name)
         else:
-            self.ui.kde_combo_light.setEnabled(False)
-            self.ui.kde_combo_dark.setEnabled(False)
-            self.ui.kde_checkbox.setChecked(False)
-            config.update("codeEnabled", False)
+            self.ui.groupKde.setChecked(False)
+            config.update("kdeEnabled", False)
 
     def get_kde_theme_names(self):
         """
@@ -232,37 +219,6 @@ class SettingsWindow(QtWidgets.QMainWindow):
         frame_gm.moveCenter(center_point)
         self.move(frame_gm.topLeft())
 
-    def toggle_kde_fields(self):
-        self.get_kde_themes()
-        checked = self.ui.kde_checkbox.isChecked()
-        self.ui.kde_combo_light.setEnabled(checked)
-        self.ui.kde_combo_dark.setEnabled(checked)
-        config.update("codeEnabled", checked)
-
-    def toggle_atom_fields(self):
-        checked = self.ui.atom_checkbox.isChecked()
-        self.ui.atom_line_light.setEnabled(checked)
-        self.ui.atom_line_dark.setEnabled(checked)
-        config.update("atomEnabled", checked)
-
-    def toggle_wallpaper_buttons(self):
-        checked = self.ui.wallpaper_checkbox.isChecked()
-        self.ui.wallpaper_button_light.setEnabled(checked)
-        self.ui.wallpaper_button_dark.setEnabled(checked)
-        config.update("wallpaperEnabled", checked)
-
-    def toggle_code_fields(self):
-        checked = self.ui.code_checkbox.isChecked()
-        self.ui.code_line_light.setEnabled(checked)
-        self.ui.code_line_dark.setEnabled(checked)
-        config.update("codeEnabled", checked)
-
-    def toggle_gtk_fields(self):
-        checked = self.ui.gtk_checkbox.isChecked()
-        self.ui.gtk_line_light.setEnabled(checked)
-        self.ui.gtk_line_dark.setEnabled(checked)
-        config.update("gtkEnabled", checked)
-
 
 class MainWindow(QtWidgets.QMainWindow):
 
@@ -286,27 +242,34 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def register_handlers(self):
         # connect the "light" button
-        self.ui.light_push.clicked.connect(self.toggle_light)
+        self.ui.buttonLight.clicked.connect(self.toggle_light)
         # connect the "dark" button
-        self.ui.dark_push.clicked.connect(self.toggle_dark)
+        self.ui.buttonDark.clicked.connect(self.toggle_dark)
         # connect the settingsButton
-        self.ui.settings_push.clicked.connect(self.open_settings)
+        self.ui.buttonApplication.clicked.connect(self.open_settings)
         # connect the time change with the correct function
-        self.ui.light_time.timeChanged.connect(self.time_changed)
-        self.ui.dark_time.timeChanged.connect(self.time_changed)
-        self.ui.schedule_radio.toggled.connect(self.toggle_schedule_cliked)
+        self.ui.inTimeLight.timeChanged.connect(self.time_changed)
+        self.ui.inTimeDark.timeChanged.connect(self.time_changed)
+        self.ui.buttonSchedule.toggled.connect(self.toggle_schedule_cliked)
 
     def sync_with_config(self):
         # sets the scheduled button to be enabled or disabled
-        if config.is_scheduled():
-            self.ui.schedule_radio.setChecked(True)
-            self.ui.dark_time.setEnabled(True)
-            self.ui.light_time.setEnabled(True)
+        if config.get("scheduled"):
+            if config.get("followSun"):
+                self.ui.buttonSun.setChecked(True)
+            else:
+                self.ui.buttonSchedule.setChecked(True)
             yin_yang.start_daemon()
+        else:
+            self.ui.automatic.setChecked(False)
+
         # sets the correct time based on config
         self.set_correct_time()
-        # setting the correct buttons based on config "dark"  "light"
+        # enable the correct button based on config
         self.set_correct_buttons()
+        # connect checkbox for sound with config
+        if config.get("soundEnabled"):
+            self.ui.checkSound.setChecked()
 
     def open_settings(self):
         self.secwindow = SettingsWindow()
@@ -343,36 +306,25 @@ class MainWindow(QtWidgets.QMainWindow):
         # giving the time widget the values of the config
         dark_time = QTime(int(d_hour), int(d_minute))
         light_time = QTime(int(l_hour), int(l_minute))
-        self.ui.dark_time.setTime(dark_time)
-        self.ui.light_time.setTime(light_time)
+        self.ui.inTimeDark.setTime(dark_time)
+        self.ui.inTimeLight.setTime(light_time)
 
     def set_correct_buttons(self):
         theme = config.get_theme()
         if theme == "dark":
-            self.ui.light_push.setEnabled(True)
-            self.ui.dark_push.setEnabled(False)
+            self.ui.buttonLight.setEnabled(False)
         if theme == "light":
-            self.ui.light_push.setEnabled(False)
-            self.ui.dark_push.setEnabled(True)
-        if theme == "":
-            self.ui.light_push.setEnabled(True)
-            self.ui.dark_push.setEnabled(True)
+            self.ui.buttonDark.setEnabled(False)
 
     def time_changed(self):
         # update config if time has changed
         l_hour, l_minute = str(self.ui.light_time.time().hour()), str(
-            self.ui.light_time.time().minute())
+            self.ui.inTimeLight.time().minute())
         d_hour, d_minute = str(self.ui.dark_time.time().hour()), str(
-            self.ui.dark_time.time().minute())
+            self.ui.inTimeDark.time().minute())
         config.update("switchToLight", l_hour + ":" + l_minute)
         config.update("switchToDark", d_hour + ":" + d_minute)
 
     def toggle_schedule_cliked(self):
-        checked = self.ui.schedule_radio.isChecked()
+        checked = self.ui.buttonSchedule.isChecked()
         config.update("schedule", checked)
-        if checked:
-            self.ui.dark_time.setEnabled(True)
-            self.ui.light_time.setEnabled(True)
-        else:
-            self.ui.dark_time.setEnabled(False)
-            self.ui.light_time.setEnabled(False)
