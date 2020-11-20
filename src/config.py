@@ -46,7 +46,7 @@ def get_desktop():
 
 def set_sun_time():
     latitude: float = float(get("latitude"))
-    longitude: float = float(get("latitude"))
+    longitude: float = float(get("longitude"))
     sun = Sun(latitude, longitude)
 
     try:
