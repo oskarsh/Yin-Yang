@@ -8,6 +8,7 @@
 </p>
 
 <p align="center" >
+    <img alt="" title="YinYang" src="https://img.shields.io/badge/Plasma-5.21-blue">
     <img alt="" title="YinYang" src="https://img.shields.io/badge/Yin&Yang-2.0-blue">
     <img alt="" title="YinYang" src="https://img.shields.io/badge/License-MIT-blue">
     <img alt="" title="YinYang" src="https://badges.frapsoft.com/os/v1/open-source.svg?v=103">
