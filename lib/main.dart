@@ -6,9 +6,9 @@ import 'package:yin_yang/pages/home.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
-    setWindowTitle('uhrwald - focus timer');
-    setWindowMinSize(const Size(600, 800));
-    setWindowMaxSize(const Size(600, 800));
+    setWindowTitle('Yin-Yang Auto Nightmode');
+    setWindowMinSize(const Size(400, 550));
+    setWindowMaxSize(const Size(400, 550));
   }
   runApp(MyApp());
 }
@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Yin-Yasng',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
