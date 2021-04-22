@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
 import 'package:yin_yang/pages/home.dart';
+import 'package:yin_yang/theme/ThemeNotifier.dart';
+import 'package:provider/provider.dart';
+import 'package:yin_yang/theme/theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,18 +13,23 @@ void main() {
     setWindowMinSize(const Size(400, 550));
     setWindowMaxSize(const Size(400, 550));
   }
-  runApp(MyApp());
+
+  runApp(
+    ChangeNotifierProvider<ThemeNotifier>(
+      create: (_) => ThemeNotifier(darkTheme),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeNotifier>(context);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Yin-Yasng',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      title: 'Yin-Yang',
+      theme: themeNotifier.getTheme(),
       home: Home(),
     );
   }

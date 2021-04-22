@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Settings extends StatefulWidget {
   Settings({Key key}) : super(key: key);
@@ -18,16 +19,19 @@ class _SettingsState extends State<Settings> {
             Container(
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.all(20),
-                height: MediaQuery.of(context).size.height * 0.1,
                 child: TextButton.icon(
-                  label: Text('back'),
+                  label: Text(
+                    'back',
+                    style: TextStyle(fontSize: 15),
+                  ),
                   style: TextButton.styleFrom(
-                      primary: Colors.black, padding: EdgeInsets.all(5)),
+                      padding: EdgeInsets.fromLTRB(0, 20, 20, 0),
+                      alignment: Alignment.centerRight),
                   onPressed: () => {Navigator.pop(context)},
-                  icon: Icon(Icons.arrow_back),
+                  icon: Icon(Icons.arrow_back)6,
                 )),
             Container(
-                padding: EdgeInsets.all(20),
+                padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: Column(
                   children: [
