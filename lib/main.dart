@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:window_size/window_size.dart';
-import 'package:yin_yang/pages/home.dart';
+import 'package:yin_yang/pages/splash.dart';
 import 'package:yin_yang/theme/ThemeNotifier.dart';
 import 'package:provider/provider.dart';
 import 'package:yin_yang/theme/theme.dart';
@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Yin-Yang',
       theme: themeNotifier.getTheme(),
-      home: Home(),
+      home: RouteSplash(),
     );
   }
 }

@@ -158,7 +158,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                                   thumbColor: _themeIsDark
                                       ? Colors.white
                                       : Colors.black,
-                                  activeTrackColor: Colors.white70,
+                                  activeTrackColor: Colors.grey[300],
                                   inactiveTrackColor: Colors.black),
                               child: RangeSlider(
                                   min: 1,

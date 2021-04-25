@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yin_yang/widgets/kdeSettings.dart';
 
 class Settings extends StatefulWidget {
   Settings({Key key}) : super(key: key);
@@ -9,6 +10,28 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  String desktop = '';
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        desktop = prefs.get('desktop');
+      });
+    });
+  }
+
+  Widget buildDesktopSettings() {
+    switch (desktop) {
+      case 'KDE':
+        return KDESettings();
+      case 'gnome':
+        return KDESettings();
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +51,7 @@ class _SettingsState extends State<Settings> {
                       padding: EdgeInsets.fromLTRB(0, 20, 20, 0),
                       alignment: Alignment.centerRight),
                   onPressed: () => {Navigator.pop(context)},
-                  icon: Icon(Icons.arrow_back)6,
+                  icon: Icon(Icons.arrow_back),
                 )),
             Container(
                 padding: EdgeInsets.fromLTRB(20, 5, 20, 0),
@@ -38,11 +61,12 @@ class _SettingsState extends State<Settings> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Settings',
+                        "Settings",
                         style: TextStyle(
                             fontSize: 25, fontWeight: FontWeight.bold),
                       ),
-                    )
+                    ),
+                    buildDesktopSettings()
                   ],
                 ))
           ],
