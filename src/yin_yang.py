@@ -20,7 +20,7 @@ import threading
 import time
 
 from src import config
-from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk, firefox, gnome, kvantum
+from src.plugins import kde, gtkkde, wallpaper, vscode, atom, gtk, gnome, kvantum
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
