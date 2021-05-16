@@ -8,13 +8,13 @@ from ._plugin import PluginDesktopDependent, Plugin
 
 class Wallpaper(PluginDesktopDependent):
     def __init__(self, desktop: str):
-        super().__init__(desktop)
         if desktop == 'kde':
             self.strategy_instance = Kde()
         elif desktop == 'gtk':
             self.strategy_instance = Gnome()
         else:
             raise ValueError('Unsupported desktop environment!')
+        super().__init__(desktop)
 
     @property
     def strategy(self):

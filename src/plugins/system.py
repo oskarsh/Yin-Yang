@@ -2,18 +2,18 @@ import subprocess
 import pwd
 import os
 
-from ._plugin import Plugin, PluginDesktopDependent
+from src.plugins._plugin import Plugin, PluginDesktopDependent
 
 
 class System(PluginDesktopDependent):
     def __init__(self, desktop: str):
-        super().__init__(desktop)
         if desktop == 'kde':
             self._strategy_instance = Kde()
         elif desktop == 'gtk':
             self._strategy_instance = Gnome()
         else:
             raise ValueError('Unsupported desktop environment!')
+        super().__init__(desktop)
 
     @property
     def strategy(self) -> Plugin:

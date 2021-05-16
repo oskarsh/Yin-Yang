@@ -9,11 +9,11 @@ class Gtk(PluginDesktopDependent):
     name = 'GTK'
 
     def __init__(self, desktop: str):
-        super().__init__(desktop)
         if desktop == 'kde':
             self.strategy_instance = Kde()
         else:
             self.strategy_instance = Gnome()
+        super().__init__(desktop)
 
     @property
     def available(self) -> bool:
