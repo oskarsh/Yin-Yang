@@ -23,6 +23,8 @@ class Plugin(ABC):
         if theme_bright.isprintable() and theme_bright != self.theme_bright:
             self.theme_bright = theme_bright
 
+        self.enabled: bool = False
+
     @property
     def name(self) -> str:
         """Returns a readable name of the plugin"""
@@ -45,6 +47,9 @@ class Plugin(ABC):
 
     def set_mode(self, dark: bool):
         """Set the dark or light theme"""
+
+        if not self.enabled:
+            return
 
         theme = self.theme_dark if dark else self.theme_bright
         self.set_theme(theme)
@@ -98,9 +103,6 @@ class Plugin(ABC):
     def __str__(self):
         return self.name.lower()
 
-    def __str__(self):
-        return self.name
-
 
 class PluginDesktopDependent(Plugin):
     """Plugins that behave differently on different desktops"""
@@ -108,6 +110,7 @@ class PluginDesktopDependent(Plugin):
     @abstractmethod
     def __init__(self, desktop: str):
         super().__init__()
+        self.enabled_value = False
 
     @property
     @abstractmethod
@@ -148,6 +151,15 @@ class PluginDesktopDependent(Plugin):
     @property
     def available_themes(self) -> dict[str, str]:
         return self.strategy.available_themes
+
+    @property
+    def enabled(self):
+        return self.enabled_value
+
+    @enabled.setter
+    def enabled(self, value: bool):
+        self.enabled_value = value
+        self.strategy.enabled = value
 
 
 def inplace_change(filename, old_string, new_string):
