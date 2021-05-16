@@ -19,7 +19,7 @@ logging.basicConfig(filename=str(Path.home()) + '/.local/share/yin_yang.log', le
 logger = logging.getLogger(__name__)
 
 
-def move_times(time_now: datetime, time_light: datetimetime, time_dark: datetimetime) -> list[int, int]:
+def _move_times(time_now: datetime, time_light: datetimetime, time_dark: datetimetime) -> list[int, int]:
     """
     Converts a time string to seconds since the epoch
     :param time_now: the current time
@@ -86,12 +86,12 @@ def send_config(plugin: str) -> dict:
             time_dark = datetimetime.fromisoformat(config.get('switchToLight'))
             time_now = datetime.now()
 
-            message['times'] = move_times(time_now, time_light, time_dark)
+            message['times'] = _move_times(time_now, time_light, time_dark)
 
     return message
 
 
-def encode_message(message_content: dict) -> dict[str, bytes]:
+def _encode_message(message_content: dict) -> dict[str, bytes]:
     """
     Encode a message for transmission, given its content.
     :param message_content: a message
@@ -110,7 +110,7 @@ def encode_message(message_content: dict) -> dict[str, bytes]:
 
 
 # Send an encoded message to stdout.
-def send_message(encoded_message: dict[str, bytes]):
+def _send_message(encoded_message: dict[str, bytes]):
     """
     Send a message.
     :param encoded_message: message as json
@@ -122,7 +122,7 @@ def send_message(encoded_message: dict[str, bytes]):
 
 
 # Read a message from stdin and decode it.
-def decode_message():
+def _decode_message():
     """
     Decodes a message in stdout and returns it.
     """
@@ -139,11 +139,11 @@ def decode_message():
 if __name__ == '__main__':
     while True:
         try:
-            message_received: str = decode_message()
+            message_received: str = _decode_message()
             if message_received is not None:
                 logger.debug('Message received from ' + message_received)
 
             if message_received == 'firefox':
-                send_message(encode_message(send_config('firefox')))
+                _send_message(_encode_message(send_config('firefox')))
         except Exception as e:
             logger.error(e)
