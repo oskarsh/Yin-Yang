@@ -32,10 +32,6 @@ class Wallpaper(PluginDesktopDependent):
             grp = QtWidgets.QWidget(widget)
             horizontal_layout = QVBoxLayout(grp)
 
-            inp = QtWidgets.QLineEdit(grp)
-            inp.setPlaceholderText(f'{theme} theme')
-            horizontal_layout.addWidget(inp)
-
             btn = QtWidgets.QDialogButtonBox(grp)
             btn.setStandardButtons(QDialogButtonBox.Open)
             horizontal_layout.addWidget(btn)

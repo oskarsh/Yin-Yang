@@ -1,10 +1,9 @@
 import subprocess
-import pwd
 import os
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTime
-from PyQt5.QtWidgets import QFileDialog
+from PyQt5.QtWidgets import QFileDialog, QCheckBox, QSizePolicy
 from src.ui.mainwindow import Ui_MainWindow
 from src.ui.settings import Ui_MainWindow as Ui_SettingsWindow
 from src import yin_yang
@@ -31,29 +30,24 @@ class SettingsWindow(QtWidgets.QMainWindow):
     def save_and_exit(self):
         print("saving options")
 
-        kde_light_short = self.ui.kde_combo_light.currentText()
-        kde_dark_short = self.ui.kde_combo_dark.currentText()
+        for plugin in config.plugins:
 
-        config.update("kdeLightTheme",
-                      self.get_kde_theme_long(kde_light_short))
-        config.update("kdeDarkTheme", self.get_kde_theme_long(kde_dark_short))
-        config.update("kdeEnabled", self.ui.kde_checkbox.isChecked())
+            widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
 
-        config.update("codeLightTheme", self.ui.code_line_light.text())
-        config.update("codeDarkTheme", self.ui.code_line_dark.text())
-        config.update("codeEnabled", self.ui.code_checkbox.isChecked())
-
-        config.update("gtkLightTheme", self.ui.gtk_line_light.text())
-        config.update("gtkDarkTheme", self.ui.gtk_line_dark.text())
-        config.update("gtkEnabled", self.ui.gtk_checkbox.isChecked())
-
-        config.update("kvantumLightTheme", self.ui.kvantum_line_light.text())
-        config.update("kvantumDarkTheme", self.ui.kvantum_line_dark.text())
-        config.update("kvantumEnabled", self.ui.kvantum_checkbox.isChecked())
-
-        config.update("atomLightTheme", self.ui.atom_line_light.text())
-        config.update("atomDarkTheme", self.ui.atom_line_dark.text())
-        config.update("atomEnabled", self.ui.atom_checkbox.isChecked())
+            config.update(plugin.name.lower() + 'Enabled', widget.findChild(QCheckBox).isChecked())
+            if plugin.available_themes:
+                # extra behaviour for combobox
+                children = widget.findChildren(QtWidgets.QComboBox)
+                for child in children:
+                    theme = 'Light' if children.index(child) == 0 else 'Dark'
+                    theme_name: str = list(plugin.available_themes.keys())[child.currentIndex()]
+                    config.update(plugin.name.lower() + f'{theme}Theme', theme_name)
+            else:
+                if plugin.name == 'Wallpaper':
+                    continue
+                children = widget.findChildren(QtWidgets.QLineEdit)
+                config.update(plugin.name.lower() + 'LightTheme', children[0].text())
+                config.update(plugin.name.lower() + 'DarkTheme', children[1].text())
 
         # showing the main window and hiding the current one
         self.hide()
@@ -61,67 +55,49 @@ class SettingsWindow(QtWidgets.QMainWindow):
         self.window.show()
 
     def register_handlers(self):
-        self.ui.kde_checkbox.toggled.connect(self.toggle_kde_fields)
-        self.ui.code_checkbox.toggled.connect(self.toggle_code_fields)
-        self.ui.gtk_checkbox.toggled.connect(self.toggle_gtk_fields)
-        self.ui.kvantum_checkbox.toggled.connect(self.toggle_kvantum_fields)
-        self.ui.atom_checkbox.toggled.connect(self.toggle_atom_fields)
-        self.ui.wallpaper_button_light.clicked.connect(
-            self.open_wallpaper_light)
-        self.ui.wallpaper_button_dark.clicked.connect(self.open_wallpaper_dark)
-        self.ui.wallpaper_checkbox.toggled.connect(
-            self.toggle_wallpaper_buttons)
         self.ui.back_button.clicked.connect(self.save_and_exit)
 
     def sync_with_config(self):
-        # sync config label with get the correct version
-        self.ui.version_label.setText("yin-yang: v" + str(config.get_version()))
-        # syncing all fields and checkboxes with config
-        # ---- KDE -----
-        # reads out all kde themes and displays them inside a combobox
-        if config.get("kdeEnabled"):
-            # fixed bug where themes get appended multiple times
-            self.get_kde_themes()
+        """Adds the plugin widgets to the ui"""
+        widget: QtWidgets.QWidget
+        for plugin in config.plugins:
 
-            self.ui.kde_checkbox.setChecked(config.get("kdeEnabled"))
-            self.ui.kde_combo_dark.setEnabled(config.get("kdeEnabled"))
-            self.ui.kde_combo_light.setEnabled(config.get("kdeEnabled"))
-            index_light = self.ui.kde_combo_light.findText(
-                self.get_kde_theme_short(config.get("kdeLightTheme")))
-            self.ui.kde_combo_light.setCurrentIndex(index_light)
-            index_dark = self.ui.kde_combo_dark.findText(
-                self.get_kde_theme_short(config.get("kdeDarkTheme")))
-            self.ui.kde_combo_dark.setCurrentIndex(index_dark)
-        # ---- VSCode ----
-        self.ui.code_line_light.setText(config.get("codeLightTheme"))
-        self.ui.code_line_light.setEnabled(config.get("codeEnabled"))
-        self.ui.code_line_dark.setText(config.get("codeDarkTheme"))
-        self.ui.code_line_dark.setEnabled(config.get("codeEnabled"))
-        self.ui.code_checkbox.setChecked(config.get("codeEnabled"))
-        # ---- GTK -----
-        self.ui.gtk_line_light.setText(config.get("gtkLightTheme"))
-        self.ui.gtk_line_dark.setText(config.get("gtkDarkTheme"))
-        self.ui.gtk_checkbox.setChecked(config.get("gtkEnabled"))
-        self.ui.gtk_line_light.setEnabled(config.get("gtkEnabled"))
-        self.ui.gtk_line_dark.setEnabled(config.get("gtkEnabled"))
-        # ---- Kvantum -----
-        self.ui.kvantum_line_light.setText(config.get("kvantumLightTheme"))
-        self.ui.kvantum_line_dark.setText(config.get("kvantumDarkTheme"))
-        self.ui.kvantum_checkbox.setChecked(config.get("kvantumEnabled"))
-        self.ui.kvantum_line_light.setEnabled(config.get("kvantumEnabled"))
-        self.ui.kvantum_line_dark.setEnabled(config.get("kvantumEnabled"))
-        # ----- wallpaper --------
-        self.ui.wallpaper_button_light.setEnabled(
-            config.get("wallpaperEnabled"))
-        self.ui.wallpaper_button_dark.setEnabled(
-            config.get("wallpaperEnabled"))
-        self.ui.wallpaper_checkbox.setChecked(config.get("wallpaperEnabled"))
-        # ----- Atom --------
-        self.ui.atom_line_light.setText(config.get("atomLightTheme"))
-        self.ui.atom_line_dark.setText(config.get("atomDarkTheme"))
-        self.ui.atom_checkbox.setChecked(config.get("atomEnabled"))
-        self.ui.atom_line_light.setEnabled(config.get("atomEnabled"))
-        self.ui.atom_line_dark.setEnabled(config.get("atomEnabled"))
+            widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'group' + plugin.name)
+            if widget is None:
+                widget = plugin.get_widget(self.ui.plugins_scroll_content)
+                self.ui.plugins_scroll_content_layout.addWidget(widget)
+
+            assert widget is not None, f'No widget for plugin {plugin.name} found'
+
+            widget.findChild(QCheckBox).setChecked(config.get(str(plugin) + 'Enabled'))
+
+            if plugin.name == 'Wallpaper':
+                children = widget.findChildren(QtWidgets.QPushButton)
+                children[0].clicked.connect(self.open_wallpaper_light)
+                children[1].clicked.connect(self.open_wallpaper_dark)
+
+            if plugin.available_themes:
+                # uses combobox instead of line edit
+                # set the index
+                for child in widget.findChildren(QtWidgets.QComboBox):
+                    theme = 'Light' if widget.findChildren(QtWidgets.QComboBox).index(child) == 0 else 'Dark'
+                    used_theme: str = config.get(plugin.name.lower() + f'{theme}Theme')
+                    index: int
+                    if used_theme == '':
+                        index = 0
+                    else:
+                        index = child.findText(
+                            plugin.available_themes[
+                                config.get(plugin.name.lower() + f'{theme}Theme')
+                            ]
+                        )
+                    child.setCurrentIndex(index)
+            else:
+                if plugin.name == 'Wallpaper':
+                    continue
+                children = widget.findChildren(QtWidgets.QLineEdit)
+                children[0].setText(config.get(str(plugin) + 'LightTheme'))
+                children[1].setText(config.get(str(plugin) + 'DarkTheme'))
 
     def open_wallpaper_light(self):
         file_name, _ = QFileDialog.getOpenFileName(
@@ -135,150 +111,11 @@ class SettingsWindow(QtWidgets.QMainWindow):
         subprocess.run(["notify-send", "Dark Wallpaper set"])
         config.update("wallpaperDarkTheme", file_name)
 
-    def get_kde_themes(self):
-        """
-        Sends the kde themes to the ui.
-        """
-        if config.get("desktop") == "kde":
-            if (self.ui.kde_combo_light.count() == 0 and self.ui.kde_combo_dark.count() == 0):
-                kde_themes = self.get_kde_theme_names()
-
-                for name, theme in kde_themes.items():
-                    self.ui.kde_combo_light.addItem(name)
-                    self.ui.kde_combo_dark.addItem(name)
-        else:
-            self.ui.kde_combo_light.setEnabled(False)
-            self.ui.kde_combo_dark.setEnabled(False)
-            self.ui.kde_checkbox.setChecked(False)
-            config.update("codeEnabled", False)
-
-    def get_kde_theme_names(self):
-        """
-        Returns a map with translations for kde theme names.
-        """
-
-        # aliases for path to use later on
-        user = pwd.getpwuid(os.getuid())[0]
-        path = "/home/" + user + "/.local/share/plasma/look-and-feel/"
-
-        # asks the system what themes are available
-        long_names = subprocess.check_output(
-            ["lookandfeeltool", "-l"], universal_newlines=True)
-        long_names = long_names.splitlines()
-
-        themes = {}
-
-        # get the actual name
-        for long in long_names:
-            # trying to get the Desktop file
-            try:
-                # load the name from the metadata.desktop file
-                with open('/usr/share/plasma/look-and-feel/{long}/metadata.desktop'.format(**locals()), 'r') as file:
-                    # search for the name
-                    for line in file:
-                        if 'Name=' in line:
-                            name: str = ''
-                            write: bool = False
-                            for letter in line:
-                                if letter == '\n':
-                                    write = False
-                                if write:
-                                    name += letter
-                                if letter == '=':
-                                    write = True
-                            themes[name] = long
-                            break
-            except:
-                # check the next path if the themes exist there
-                try:
-                    # load the name from the metadata.desktop file
-                    with open('{path}{long}/metadata.desktop'.format(**locals()), 'r') as file:
-                        # search for the name
-                        for line in file:
-                            if 'Name=' in line:
-                                name: str = ''
-                                write: bool = False
-                                for letter in line:
-                                    if letter == '\n':
-                                        write = False
-                                    if write:
-                                        name += letter
-                                    if letter == '=':
-                                        write = True
-                                themes[name] = long
-                                break
-                        # if no file exist lets just use the long name
-                except:
-                    themes[long] = long
-
-        return themes
-
-    def get_kde_theme_long(self, short: str):
-        """
-        Translates short names to long names.
-        :param short: short name
-        :return: long name
-        """
-        if short == '' or short is None:
-            return
-        themes = self.get_kde_theme_names()
-        return themes[short]
-
-    def get_kde_theme_short(self, long: str):
-        """
-        Translates long names to short names.
-        :param long: long name
-        :return: short name
-        """
-        if long == '' or long is None:
-            return
-        themes = self.get_kde_theme_names()
-        short_names = list(themes.keys())
-        long_names = list(themes.values())
-        return short_names[long_names.index(long)]
-
     def center(self):
         frame_gm = self.frameGeometry()
         center_point = QtWidgets.QDesktopWidget().availableGeometry().center()
         frame_gm.moveCenter(center_point)
         self.move(frame_gm.topLeft())
-
-    def toggle_kde_fields(self):
-        self.get_kde_themes()
-        checked = self.ui.kde_checkbox.isChecked()
-        self.ui.kde_combo_light.setEnabled(checked)
-        self.ui.kde_combo_dark.setEnabled(checked)
-        config.update("codeEnabled", checked)
-
-    def toggle_atom_fields(self):
-        checked = self.ui.atom_checkbox.isChecked()
-        self.ui.atom_line_light.setEnabled(checked)
-        self.ui.atom_line_dark.setEnabled(checked)
-        config.update("atomEnabled", checked)
-
-    def toggle_wallpaper_buttons(self):
-        checked = self.ui.wallpaper_checkbox.isChecked()
-        self.ui.wallpaper_button_light.setEnabled(checked)
-        self.ui.wallpaper_button_dark.setEnabled(checked)
-        config.update("wallpaperEnabled", checked)
-
-    def toggle_code_fields(self):
-        checked = self.ui.code_checkbox.isChecked()
-        self.ui.code_line_light.setEnabled(checked)
-        self.ui.code_line_dark.setEnabled(checked)
-        config.update("codeEnabled", checked)
-
-    def toggle_gtk_fields(self):
-        checked = self.ui.gtk_checkbox.isChecked()
-        self.ui.gtk_line_light.setEnabled(checked)
-        self.ui.gtk_line_dark.setEnabled(checked)
-        config.update("gtkEnabled", checked)
-
-    def toggle_kvantum_fields(self):
-        checked = self.ui.kvantum_checkbox.isChecked()
-        self.ui.kvantum_line_light.setEnabled(checked)
-        self.ui.kvantum_line_dark.setEnabled(checked)
-        config.update("kvantumEnabled", checked)
 
 
 class MainWindow(QtWidgets.QMainWindow):

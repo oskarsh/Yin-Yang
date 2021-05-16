@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from os import listdir
 from os.path import isdir, join, isfile
 
-from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
+from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QCheckBox
 
 
 class Plugin(ABC):
@@ -65,12 +65,12 @@ class Plugin(ABC):
         """
 
         widget = QGroupBox(area)
-        widget.setCheckable(True)
         widget.setTitle(self.name)
         widget.setObjectName('group' + self.name)
 
         horizontal_layout = QHBoxLayout(widget)
 
+        horizontal_layout.addWidget(QCheckBox(widget))
         for inp in self.get_input(widget):
             horizontal_layout.addWidget(inp)
 
