@@ -71,12 +71,12 @@ class Plugin(ABC):
 
         horizontal_layout = QHBoxLayout(widget)
 
-        for inp in self.__get_input(widget):
+        for inp in self.get_input(widget):
             horizontal_layout.addWidget(inp)
 
         return widget
 
-    def __get_input(self, widget):
+    def get_input(self, widget):
         """Returns two inputs for dark and light theme for the config gui"""
         inputs = []
 
