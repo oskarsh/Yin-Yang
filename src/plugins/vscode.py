@@ -95,6 +95,10 @@ class Vscode(Plugin):
         assert themes_dict != {}, 'No themes found'
         return themes_dict
 
+    def __str__(self):
+        # for backwards compatibility
+        return 'code'
+
     @property
     def available(self) -> bool:
         return isdir('/usr/lib/code/extensions')
