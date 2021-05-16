@@ -2,7 +2,7 @@ import re
 from os.path import isfile
 from pathlib import Path
 
-from src.plugins._plugin import Plugin, inplace_change
+from ._plugin import Plugin, inplace_change
 
 
 def get_old_theme(settings):

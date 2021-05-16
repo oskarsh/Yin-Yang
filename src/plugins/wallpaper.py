@@ -3,7 +3,7 @@ import subprocess
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout
 
-from src.plugins._plugin import PluginDesktopDependent, Plugin
+from ._plugin import PluginDesktopDependent, Plugin
 
 
 class Wallpaper(PluginDesktopDependent):

@@ -2,7 +2,7 @@ import subprocess
 from configparser import ConfigParser
 from pathlib import Path
 
-from src.plugins._plugin import PluginDesktopDependent, Plugin
+from ._plugin import PluginDesktopDependent, Plugin
 
 
 class Gtk(PluginDesktopDependent):

@@ -1,7 +1,8 @@
-from src.plugins._plugin import Plugin, PluginDesktopDependent
 import subprocess
 import pwd
 import os
+
+from ._plugin import Plugin, PluginDesktopDependent
 
 
 class System(PluginDesktopDependent):

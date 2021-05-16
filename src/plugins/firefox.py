@@ -3,7 +3,7 @@ from configparser import ConfigParser
 from os.path import isdir
 from pathlib import Path
 
-from src.plugins._plugin import Plugin
+from ._plugin import Plugin
 
 
 def get_default_profile_path() -> str:

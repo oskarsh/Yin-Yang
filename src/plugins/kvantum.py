@@ -1,6 +1,6 @@
 import subprocess
 
-from src.plugins._plugin import Plugin, get_stuff_in_dir
+from ._plugin import Plugin, get_stuff_in_dir
 
 
 class Kvantum(Plugin):
