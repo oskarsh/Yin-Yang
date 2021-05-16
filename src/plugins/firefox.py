@@ -23,7 +23,8 @@ class Firefox(Plugin):
     def set_theme(self, theme: str):
         pass
 
-    def get_themes_available(self) -> dict[str, str]:
+    @property
+    def available_themes(self) -> dict[str, str]:
         if not self.available:
             return {}
 

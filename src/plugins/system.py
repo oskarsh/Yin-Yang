@@ -43,7 +43,8 @@ class Kde(Plugin):
     theme_dark = 'org.kde.breezedark.desktop'
     translations = {}
 
-    def get_themes_available(self) -> dict[str, str]:
+    @property
+    def available_themes(self) -> dict[str, str]:
         if self.translations != {}:
             return self.translations
 
