@@ -95,6 +95,12 @@ class Plugin(ABC):
 
         return inputs
 
+    def __repr__(self):
+        return self.name.lower()
+
+    def __str__(self):
+        return self.name
+
 
 class PluginDesktopDependent(Plugin):
     """Plugins that behave differently on different desktops"""
