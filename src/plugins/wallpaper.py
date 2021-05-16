@@ -1,6 +1,6 @@
 import subprocess
 
-from PyQt5 import QtWidgets, QtCore
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout
 
 from ._plugin import PluginDesktopDependent, Plugin
@@ -25,7 +25,7 @@ class Wallpaper(PluginDesktopDependent):
         return self.strategy is not None
 
     def get_input(self, widget):
-        _translate = QtCore.QCoreApplication.translate
+        print('called')
         widgets = []
 
         for theme in ['Light', 'Dark']:
@@ -33,7 +33,7 @@ class Wallpaper(PluginDesktopDependent):
             horizontal_layout = QVBoxLayout(grp)
 
             inp = QtWidgets.QLineEdit(grp)
-            inp.setPlaceholderText(_translate('MainWindow', f'{theme} theme'))
+            inp.setPlaceholderText(f'{theme} theme')
             horizontal_layout.addWidget(inp)
 
             btn = QtWidgets.QDialogButtonBox(grp)
