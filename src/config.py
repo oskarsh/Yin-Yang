@@ -2,9 +2,13 @@ import json
 import os
 import pathlib
 import re
+from suntime import Sun, SunTimeException
 
 from main import assembly_version
-from suntime import Sun, SunTimeException
+# Add your plugin here if you are developing a new one
+# this list is sorted alphabetically, please make sure to keep it that way
+# NOTE that you also have to initialize your plugin below
+from .plugins import atom, firefox, gtk, kvantum, system, vscode, wallpaper
 
 # aliases for path to use later on
 home = os.getenv("HOME")
@@ -44,6 +48,17 @@ def get_desktop():
     return "unknown"
 
 
+# NOTE initialize your plugin over here:
+plugins = [atom.Atom(),
+           firefox.Firefox(),
+           gtk.Gtk(get_desktop()),
+           kvantum.Kvantum(),
+           system.System(get_desktop()),
+           vscode.Vscode(),
+           wallpaper.Wallpaper(get_desktop())
+           ]
+
+
 def set_sun_time():
     latitude: float = float(get("latitude"))
     longitude: float = float(get("longitude"))
@@ -79,39 +94,28 @@ config["switchToDark"] = "20:00"
 config["switchToLight"] = "07:00"
 config["running"] = False
 config["theme"] = ""
-config["codeLightTheme"] = "Default Light+"
-config["codeDarkTheme"] = "Default Dark+"
-config["codeEnabled"] = False
-config["kdeLightTheme"] = "org.kde.breeze.desktop"
-config["kdeDarkTheme"] = "org.kde.breezedark.desktop"
-config["kdeEnabled"] = False
-config["gtkLightTheme"] = ""
-config["gtkDarkTheme"] = ""
-config["atomLightTheme"] = ""
-config["atomDarkTheme"] = ""
-config["atomEnabled"] = False
-config["gtkEnabled"] = False
-config["wallpaperLightTheme"] = ""
-config["wallpaperDarkTheme"] = ""
-config["wallpaperEnabled"] = False
-config["firefoxEnabled"] = False
-config["firefoxDarkTheme"] = "firefox-compact-dark@mozilla.org"
-config["firefoxLightTheme"] = "firefox-compact-light@mozilla.org"
-config["firefoxActiveTheme"] = "firefox-compact-light@mozilla.org"
-config["gnomeEnabled"] = False
-config["gnomeLightTheme"] = ""
-config["gnomeDarkTheme"] = ""
-config["kvantumEnabled"] = False
-config["kvantumLightTheme"] = ""
-config["kvantumDarkTheme"] = ""
 config["soundEnabled"] = True
+config["desktop"] = get_desktop()
+
+
+for pl in plugins:
+    config[f'{pl}Enabled'] = pl.enabled  # should always be false
+    config[f'{pl}DarkTheme'] = pl.theme_dark
+    config[f'{pl}LightTheme'] = pl.theme_bright
 
 if exists():
     # making config global for this module
     with open(path + "/yin_yang/yin_yang.json", "r") as conf:
         config = json.load(conf)
 
-config["desktop"] = get_desktop()
+    for pl in plugins:
+        try:
+            pl.enabled = config[f'{pl}Enabled']
+            pl.theme_bright = config[f'{pl}LightTheme']
+            pl.theme_dark = config[f'{pl}DarkTheme']
+        except KeyError:
+            if pl.name == "System":
+                pass
 
 
 def get_config():

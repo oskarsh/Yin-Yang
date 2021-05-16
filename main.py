@@ -6,7 +6,7 @@ from src import gui
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
-assembly_version = 2.1
+assembly_version = 2.2
 
 # fix HiDpi scaling
 QtWidgets.QApplication.setAttribute(
