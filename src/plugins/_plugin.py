@@ -18,9 +18,9 @@ class Plugin(ABC):
             'Light and / or dark theme have no default value!'
 
         # set the themes
-        if theme_dark.isprintable() and theme_dark != self.theme_dark:
+        if theme_dark and theme_dark != self.theme_dark:
             self.theme_dark = theme_dark
-        if theme_bright.isprintable() and theme_bright != self.theme_bright:
+        if theme_bright and theme_bright != self.theme_bright:
             self.theme_bright = theme_bright
 
         self.enabled: bool = False
