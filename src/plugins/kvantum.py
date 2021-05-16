@@ -1,16 +1,37 @@
 import subprocess
-from src import config
+
+from src.plugins._plugin import Plugin, get_stuff_in_dir
 
 
-def switch_to_light():
-    kvantum_theme = config.get("kvantumLightTheme")
-    # uses a kvantummanager cli to switch to a light theme
-    print("Kvantum Light theme:", kvantum_theme)
-    subprocess.run(["kvantummanager", "--set", kvantum_theme])
+class Kvantum(Plugin):
+    theme_bright = 'KvFlatLight'
+    theme_dark = 'KvFlat'
 
+    def set_theme(self, theme: str):
+        # uses a Kvantum manager cli to switch to a light theme
+        # noinspection SpellCheckingInspection
+        subprocess.run(["kvantummanager", "--set", theme])
 
-def switch_to_dark():
-    kvantum_theme = config.get("kvantumDarkTheme")
-    # uses a kvantummanager cli to switch to a dark theme
-    print("Kvantum Dark theme:", kvantum_theme)
-    subprocess.run(["kvantummanager", "--set", kvantum_theme])
+    def get_themes_available(self) -> dict[str, str]:
+        if not self.available:
+            return {}
+
+        path = '/usr/share/Kvantum'
+
+        themes = get_stuff_in_dir(path, type='dir')
+        themes_dict: dict = {}
+        assert len(themes) > 0, 'No themes were found'
+
+        themes.sort()
+        for theme in themes:
+            themes_dict[theme] = theme
+
+        assert themes_dict != {}, 'No themes found!'
+        return themes_dict
+
+    @property
+    def available(self) -> bool:
+        try:
+            return subprocess.run(['kvantummanager', '--help']).returncode == 0
+        except FileNotFoundError:
+            return False
