@@ -26,7 +26,7 @@ class Plugin(ABC):
     @property
     def name(self) -> str:
         """Returns a readable name of the plugin"""
-        return self.__name__
+        return type(self).__name__
 
     @property
     def available(self) -> bool:
