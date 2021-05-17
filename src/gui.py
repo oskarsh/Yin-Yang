@@ -34,14 +34,14 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
             widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
 
-            config.update(plugin.name.lower() + 'Enabled', widget.findChild(QCheckBox).isChecked())
+            config.update(str(plugin) + 'Enabled', widget.findChild(QCheckBox).isChecked())
             if plugin.available_themes:
                 # extra behaviour for combobox
                 children = widget.findChildren(QtWidgets.QComboBox)
                 for child in children:
                     theme = 'Light' if children.index(child) == 0 else 'Dark'
                     theme_name: str = list(plugin.available_themes.keys())[child.currentIndex()]
-                    config.update(plugin.name.lower() + f'{theme}Theme', theme_name)
+                    config.update(str(plugin) + f'{theme}Theme', theme_name)
             else:
                 if plugin.name == 'Wallpaper':
                     continue
