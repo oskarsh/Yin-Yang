@@ -81,7 +81,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
                 # set the index
                 for child in widget.findChildren(QtWidgets.QComboBox):
                     theme = 'Light' if widget.findChildren(QtWidgets.QComboBox).index(child) == 0 else 'Dark'
-                    used_theme: str = config.get(plugin.name.lower() + f'{theme}Theme')
+                    used_theme: str = config.get(str(plugin) + f'{theme}Theme')
                     index: int
                     if used_theme == '':
                         index = 0
