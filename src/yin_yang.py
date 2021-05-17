@@ -46,7 +46,7 @@ class Yin(threading.Thread):
 
     def run(self):
         for pl in config.plugins:
-            pl.set_mode(False)
+            pl.set_mode(True)
         play_sound("./assets/dark.wav")
 
 
