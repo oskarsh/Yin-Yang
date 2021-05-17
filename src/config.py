@@ -115,7 +115,27 @@ if exists():
             pl.theme_dark = config[f'{pl}DarkTheme']
         except KeyError:
             if pl.name == "System":
-                pass
+                # decide which old plugin should be used
+                if config['kdeEnabled']:
+                    name = 'kde'
+                elif config['gnomeEnabled']:
+                    name = 'gnome'
+                else:
+                    continue
+
+                # apply old values
+                pl.enabled = config[f'{name}Enabled']
+                pl.theme_bright = config[f'{name}LightTheme']
+                pl.theme_dark = config[f'{name}DarkTheme']
+
+                config[f'{pl}Enabled'] = pl.enabled
+                config[f'{pl}LightTheme'] = pl.theme_bright
+                config[f'{pl}DarkTheme'] = pl.theme_dark
+
+                # delete old keys
+                for pl_old in ['kde', 'gnome']:
+                    for key in ['Enabled', 'LightTheme', 'DarkTheme']:
+                        config.pop(pl_old + key)
 
 
 def get_config():
