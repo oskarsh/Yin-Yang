@@ -97,6 +97,9 @@ class SettingsWindow(QtWidgets.QMainWindow):
                 children[0].setText(config.get(str(plugin) + 'LightTheme'))
                 children[1].setText(config.get(str(plugin) + 'DarkTheme'))
 
+            if not plugin.available:
+                widget.setEnabled(False)
+
     def open_wallpaper_light(self):
         file_name, _ = QFileDialog.getOpenFileName(
             self, "Open Wallpaper Light", "")
