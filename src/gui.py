@@ -88,7 +88,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
                     else:
                         index = child.findText(
                             plugin.available_themes[
-                                config.get(plugin.name.lower() + f'{theme}Theme')
+                                config.get(str(plugin) + f'{theme}Theme')
                             ]
                         )
                     child.setCurrentIndex(index)
