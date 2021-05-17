@@ -24,7 +24,7 @@ class Firefox(Plugin):
         pass
 
     @property
-    def available_themes(self) -> dict[str, str]:
+    def available_themes(self) -> dict:
         if not self.available:
             return {}
 

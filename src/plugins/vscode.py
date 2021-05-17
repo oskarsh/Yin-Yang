@@ -46,7 +46,7 @@ class Vscode(Plugin):
                     json.dump(settings, sett)
 
     @property
-    def available_themes(self) -> dict[str, str]:
+    def available_themes(self) -> dict:
         paths = ['/usr/lib/code/extensions',
                  str(Path.home()) + '/.vscode-oss/extensions']
         themes_dict = {}

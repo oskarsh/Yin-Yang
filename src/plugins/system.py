@@ -44,7 +44,7 @@ class Kde(Plugin):
     translations = {}
 
     @property
-    def available_themes(self) -> dict[str, str]:
+    def available_themes(self) -> dict:
         if self.translations != {}:
             return self.translations
 
