@@ -127,10 +127,8 @@ if exists():
                 # decide which old plugin should be used
                 if config['kdeEnabled']:
                     name = 'kde'
-                elif config['gnomeEnabled']:
-                    name = 'gnome'
                 else:
-                    continue
+                    name = 'gnome'
 
                 # apply old values
                 pl.enabled = config[f'{name}Enabled']
