@@ -25,7 +25,6 @@ class Wallpaper(PluginDesktopDependent):
         return self.strategy is not None
 
     def get_input(self, widget):
-        print('called')
         widgets = []
 
         for theme in ['Light', 'Dark']:
