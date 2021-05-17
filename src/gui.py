@@ -46,8 +46,8 @@ class SettingsWindow(QtWidgets.QMainWindow):
                 if plugin.name == 'Wallpaper':
                     continue
                 children = widget.findChildren(QtWidgets.QLineEdit)
-                config.update(plugin.name.lower() + 'LightTheme', children[0].text())
-                config.update(plugin.name.lower() + 'DarkTheme', children[1].text())
+                config.update(str(plugin) + 'LightTheme', children[0].text())
+                config.update(str(plugin) + 'DarkTheme', children[1].text())
 
         # showing the main window and hiding the current one
         self.hide()
@@ -88,7 +88,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
                     else:
                         index = child.findText(
                             plugin.available_themes[
-                                config.get(plugin.name.lower() + f'{theme}Theme')
+                                config.get(str(plugin) + f'{theme}Theme')
                             ]
                         )
                     child.setCurrentIndex(index)
