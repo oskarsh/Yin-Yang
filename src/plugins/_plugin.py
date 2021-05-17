@@ -39,7 +39,7 @@ class Plugin(ABC):
         return True
 
     @property
-    def available_themes(self) -> dict[str, str]:
+    def available_themes(self) -> dict:
         """Return a list of available themes
         :return: Dict[intern_name, readable_name]
         """
@@ -149,7 +149,7 @@ class PluginDesktopDependent(Plugin):
         self.strategy.set_theme(theme)
 
     @property
-    def available_themes(self) -> dict[str, str]:
+    def available_themes(self) -> dict:
         return self.strategy.available_themes
 
     @property
