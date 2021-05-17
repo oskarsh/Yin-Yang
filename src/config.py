@@ -49,14 +49,23 @@ def get_desktop():
 
 
 # NOTE initialize your plugin over here:
-plugins = [atom.Atom(),
-           firefox.Firefox(),
-           gtk.Gtk(get_desktop()),
-           kvantum.Kvantum(),
-           system.System(get_desktop()),
-           vscode.Vscode(),
-           wallpaper.Wallpaper(get_desktop())
-           ]
+# The order in the list specifies the order in the config gui
+plugins = [
+    system.System(get_desktop()),
+    gtk.Gtk(get_desktop()),
+    kvantum.Kvantum(),
+    wallpaper.Wallpaper(get_desktop()),
+    firefox.Firefox(),
+    vscode.Vscode(),
+    atom.Atom()
+]
+
+# put unavailable plugins to the bottom
+plugins_old = plugins.copy()
+for pl in plugins_old:
+    if not pl.available:
+        # get the index of pl, remove it and then append to the end
+        plugins.append(plugins.pop(plugins.index(pl)))
 
 
 def set_sun_time():
