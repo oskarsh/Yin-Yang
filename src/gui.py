@@ -92,9 +92,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
                             ]
                         )
                     child.setCurrentIndex(index)
-            else:
-                if plugin.name == 'Wallpaper':
-                    continue
+            elif plugin.name != 'Wallpaper':
                 children = widget.findChildren(QtWidgets.QLineEdit)
                 children[0].setText(config.get(str(plugin) + 'LightTheme'))
                 children[1].setText(config.get(str(plugin) + 'DarkTheme'))
