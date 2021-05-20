@@ -35,7 +35,11 @@ class Yang(threading.Thread):
 
     def run(self):
         for pl in config.plugins:
-            pl.set_mode(False)
+            try:
+                pl.set_mode(False)
+            except Exception as e:
+                print('Error while changing the theme in plugin ' + pl.name)
+                print(e)
         play_sound("./assets/light.wav")
 
 
@@ -46,7 +50,11 @@ class Yin(threading.Thread):
 
     def run(self):
         for pl in config.plugins:
-            pl.set_mode(True)
+            try:
+                pl.set_mode(True)
+            except Exception as e:
+                print('Error while changing the theme in plugin ' + pl.name)
+                print(e)
         play_sound("./assets/dark.wav")
 
 
