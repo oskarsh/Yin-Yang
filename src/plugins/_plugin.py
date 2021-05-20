@@ -2,6 +2,7 @@ import subprocess
 from abc import ABC, abstractmethod
 from os import listdir
 from os.path import isdir, join, isfile
+from warnings import warn
 
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QCheckBox
 
@@ -15,8 +16,8 @@ class Plugin(ABC):
 
     def __init__(self, theme_dark: str = '', theme_bright: str = ''):
         # check default values
-        assert self.theme_dark is not None or self.theme_bright is not None,\
-            'Light and / or dark theme have no default value!'
+        if self.theme_dark is None or self.theme_bright is None:
+            warn('Light and / or dark theme have no default value!')
 
         # set the themes
         if theme_dark and theme_dark != self.theme_dark:
@@ -46,18 +47,21 @@ class Plugin(ABC):
         """
         return {}
 
-    def set_mode(self, dark: bool):
+    def set_mode(self, dark: bool) -> str:
         """Set the dark or light theme"""
 
         if not self.enabled:
             return
 
         theme = self.theme_dark if dark else self.theme_bright
-        self.set_theme(theme)
+        return self.set_theme(theme)
 
     @abstractmethod
-    def set_theme(self, theme: str):
-        """Sets a specific theme"""
+    def set_theme(self, theme: str) -> str:
+        """Sets a specific theme
+        :param theme: the theme that should be used
+        :return: the theme that has been set (should be the same as the parameter
+        """
         raise NotImplementedError
 
     def get_widget(self, area) -> QGroupBox:
@@ -112,19 +116,34 @@ class PluginCommandline(Plugin):
 
     def set_theme(self, theme: str):
         # insert theme in command and run it
-        command = self.command.copy()
-        i = command.index('%t')
-        command.insert(i, theme)
-        command.pop(i)
+        command = self.insert_theme(theme)
 
         if subprocess.run(command).returncode != 0:
             raise ValueError('Command execution was not successful!')
+
+    def insert_theme(self, theme: str) -> list:
+        command = self.command.copy()
+        placeholder = '%t'
+
+        if placeholder not in command:
+            for argument in command:
+                if placeholder in argument:
+                    # replace placeholder with argument, so the theme gets inserted into the argument
+                    placeholder = argument
+                    break
+            assert placeholder != '%t'
+
+        i = command.index(placeholder)
+        command.pop(i)
+        command.insert(i, placeholder.replace('%t', theme))
+
+        return command
 
     @property
     def available(self) -> bool:
         # Runs the first entry in the command list with --help
         try:
-            return subprocess.run([self.command[0], '--help']).returncode == 0
+            return subprocess.run([self.command[0], '--help'], stdout=subprocess.DEVNULL).returncode == 0
         except FileNotFoundError:
             # if no such command is available, the plugin is not available
             return False
