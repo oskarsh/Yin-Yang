@@ -55,7 +55,7 @@ class Vscode(Plugin):
 
         for path in paths:
             extension_dirs = get_stuff_in_dir(path, type='dir')
-            # filter for a dir that doesnt seem to be an extion
+            # filter for a dir that doesnt seem to be an extension
             # since it has no manifest
             if 'node_modules' in extension_dirs:
                 extension_dirs.pop(extension_dirs.index('node_modules'))
