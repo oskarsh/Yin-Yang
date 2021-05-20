@@ -3,10 +3,12 @@ import subprocess
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout
 
-from ._plugin import PluginDesktopDependent, Plugin
+from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
 
 
 class Wallpaper(PluginDesktopDependent):
+    # themes are image file paths
+
     def __init__(self, desktop: str):
         if desktop == 'kde':
             self.strategy_instance = Kde()
@@ -40,21 +42,17 @@ class Wallpaper(PluginDesktopDependent):
         return widgets
 
 
-class Gnome(Plugin):
-    # themes are actually image file paths
-    theme_dark = ''
-    theme_bright = ''
-
-    def set_theme(self, theme: str):
-        # noinspection SpellCheckingInspection
-        subprocess.run(["gsettings", "set", "org.gnome.desktop.background",
-                        "picture-uri", "file://" + theme])
+class Gnome(PluginCommandline):
+    def __init__(self):
+        super().__init__(["gsettings", "set", "org.gnome.desktop.background",
+                        "picture-uri", "file://%t"])
 
 
-class Kde(Plugin):
-    # themes are actually image file paths
-    theme_dark = ''
-    theme_bright = ''
+class Kde(PluginCommandline):
+    def __init__(self):
+        super().__init__(["./scripts/change_wallpaper.sh", "%t"])
 
-    def set_theme(self, theme: str):
-        subprocess.run(["./scripts/change_wallpaper.sh", theme])
+    @property
+    def available(self) -> bool:
+        # the script change_wallpaper comes with this tool, so we can except that it is available
+        return True

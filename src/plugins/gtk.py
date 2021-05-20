@@ -2,7 +2,7 @@ import subprocess
 from configparser import ConfigParser
 from pathlib import Path
 
-from ._plugin import PluginDesktopDependent, Plugin
+from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
 
 
 class Gtk(PluginDesktopDependent):
@@ -24,15 +24,11 @@ class Gtk(PluginDesktopDependent):
         return self.strategy_instance
 
 
-class Gnome(Plugin):
-    # TODO set default theme names
-    theme_dark = ''
-    theme_bright = ''
+class Gnome(PluginCommandline):
+    # TODO set the default themes
 
-    def set_theme(self, theme: str):
-        # noinspection SpellCheckingInspection
-        subprocess.run(
-            ["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", theme])  # Applications theme
+    def __init__(self):
+        super().__init__(["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", '%t'])
 
 
 class Kde(Plugin):

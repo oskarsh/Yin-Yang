@@ -1,3 +1,4 @@
+import subprocess
 from abc import ABC, abstractmethod
 from os import listdir
 from os.path import isdir, join, isfile
@@ -102,6 +103,31 @@ class Plugin(ABC):
 
     def __str__(self):
         return self.name.lower()
+
+
+class PluginCommandline(Plugin):
+    def __init__(self, command: list):
+        super().__init__()
+        self.command = command
+
+    def set_theme(self, theme: str):
+        # insert theme in command and run it
+        command = self.command.copy()
+        i = command.index('%t')
+        command.insert(i, theme)
+        command.pop(i)
+
+        if subprocess.run(command).returncode != 0:
+            raise ValueError('Command execution was not successful!')
+
+    @property
+    def available(self) -> bool:
+        # Runs the first entry in the command list with --help
+        try:
+            return subprocess.run([self.command[0], '--help']).returncode == 0
+        except FileNotFoundError:
+            # if no such command is available, the plugin is not available
+            return False
 
 
 class PluginDesktopDependent(Plugin):

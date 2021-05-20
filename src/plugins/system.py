@@ -2,7 +2,7 @@ import subprocess
 import pwd
 import os
 
-from src.plugins._plugin import Plugin, PluginDesktopDependent
+from src.plugins._plugin import Plugin, PluginDesktopDependent, PluginCommandline
 
 
 class System(PluginDesktopDependent):
@@ -20,19 +20,28 @@ class System(PluginDesktopDependent):
         return self._strategy_instance
 
 
-# WIP: Potential Check for https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0
-# to reduce common issues, or write it in the FAQ
-class Gnome(Plugin):
-    name = 'Gnome'
+class Gnome(PluginCommandline):
+    # TODO allow using the default themes, not only user themes
     # TODO set the default theme for gnome
-    theme_dark = ''
-    theme_bright = ''
 
-    def set_theme(self, theme: str):
-        # Shell theme
-        # noinspection SpellCheckingInspection
-        subprocess.run(["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name",
-                        '"{}"'.format(theme)])
+    def __init__(self):
+        super().__init__(["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name", "%t"])
+
+    @property
+    def available(self) -> bool:
+        # Runs the first entry in the command list with --help
+        try:
+            out = subprocess.run(
+                [self.command[0], 'get', self.command[2], self.command[3]],
+                stdout=subprocess.DEVNULL
+            ).stdout
+            if out == f'No such schema \"{self.command[2]}\"':
+                # in this case, you might want to run https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0
+                # or you have to install that extension
+                return False
+        except FileNotFoundError:
+            # if no such command is available, the plugin is not available
+            return False
 
 
 class Kde(Plugin):

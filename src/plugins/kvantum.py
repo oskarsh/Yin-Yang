@@ -1,16 +1,14 @@
 import subprocess
 
-from ._plugin import Plugin, get_stuff_in_dir
+from ._plugin import PluginCommandline, get_stuff_in_dir
 
 
-class Kvantum(Plugin):
+class Kvantum(PluginCommandline):
     theme_bright = 'KvFlatLight'
     theme_dark = 'KvFlat'
 
-    def set_theme(self, theme: str):
-        # uses a Kvantum manager cli to switch to a light theme
-        # noinspection SpellCheckingInspection
-        subprocess.run(["kvantummanager", "--set", theme])
+    def __init__(self):
+        super().__init__(["kvantummanager", "--set", '%t'])
 
     @property
     def available_themes(self) -> dict:
@@ -29,10 +27,3 @@ class Kvantum(Plugin):
 
         assert themes_dict != {}, 'No themes found!'
         return themes_dict
-
-    @property
-    def available(self) -> bool:
-        try:
-            return subprocess.run(['kvantummanager', '--help']).returncode == 0
-        except FileNotFoundError:
-            return False
