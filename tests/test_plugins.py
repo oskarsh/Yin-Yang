@@ -13,10 +13,7 @@ class PluginsTest(unittest.TestCase):
                                       'Every plugin should extend the Plugin class')
                 self.assertTrue(pl.name != '',
                                 'Every plugin needs a name for the config and the gui.')
-                self.assertTrue(pl.theme_dark is not None and pl.theme_bright is not None,
-                                'No default theme is specified. ' +
-                                'If your plugin does not support any default themes, use empty strings.')
-                if config.get(pl.name, 'enabled'):
+                if pl.available:
                     self.assertIsInstance(pl.available_themes, dict,
                                           'Available themes always should be a dict.')
 
@@ -25,7 +22,7 @@ class PluginsTest(unittest.TestCase):
     def test_set_theme_works(self):
         for pl in plugins:
             with self.subTest(plugin=pl.name):
-                if config.get(pl.name, 'enabled'):
+                if pl.enabled:
                     pl.set_mode(config.dark_mode)
 
 

@@ -1,5 +1,3 @@
-import subprocess
-
 from ._plugin import PluginCommandline, get_stuff_in_dir
 
 

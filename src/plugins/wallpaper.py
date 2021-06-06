@@ -27,7 +27,7 @@ class Wallpaper(PluginDesktopDependent):
     def get_input(self, widget):
         widgets = []
 
-        for theme in ['Light', 'Dark']:
+        for _ in ['Light', 'Dark']:
             grp = QtWidgets.QWidget(widget)
             horizontal_layout = QVBoxLayout(grp)
 

@@ -22,6 +22,8 @@ import time
 from src import config
 
 # aliases for path to use later on
+from src.plugins import plugins
+
 user = pwd.getpwuid(os.getuid())[0]
 path = "/home/" + user + "/.config/"
 
@@ -34,7 +36,7 @@ class Yang(threading.Thread):
         self.thread_id = thread_id
 
     def run(self):
-        for pl in config.plugins:
+        for pl in plugins:
             try:
                 pl.set_mode(False)
             except Exception as e:
@@ -49,7 +51,7 @@ class Yin(threading.Thread):
         self.thread_id = thread_id
 
     def run(self):
-        for pl in config.plugins:
+        for pl in plugins:
             try:
                 pl.set_mode(True)
             except Exception as e:

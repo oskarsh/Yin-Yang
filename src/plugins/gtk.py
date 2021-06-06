@@ -1,4 +1,3 @@
-import subprocess
 from configparser import ConfigParser
 from pathlib import Path
 
@@ -15,10 +14,6 @@ class Gtk(PluginDesktopDependent):
             self.strategy_instance = Gnome(theme_light, theme_dark)
         super().__init__(theme_light, theme_dark,
                          desktop)
-
-    @property
-    def available(self) -> bool:
-        return self.strategy is not None
 
     @property
     def strategy(self):

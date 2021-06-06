@@ -3,11 +3,13 @@ import os
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTime
-from PyQt5.QtWidgets import QFileDialog, QCheckBox, QSizePolicy
+from PyQt5.QtWidgets import QFileDialog, QCheckBox
+
+from src import config
+from src.plugins import plugins
 from src.ui.mainwindow import Ui_MainWindow
 from src.ui.settings import Ui_MainWindow as Ui_SettingsWindow
 from src import yin_yang
-from src import config
 
 
 class SettingsWindow(QtWidgets.QMainWindow):
@@ -30,7 +32,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
     def save_and_exit(self):
         print("saving options")
 
-        for plugin in config.plugins:
+        for plugin in plugins:
 
             widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
 
@@ -60,7 +62,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
     def sync_with_config(self):
         """Adds the plugin widgets to the ui"""
         widget: QtWidgets.QWidget
-        for plugin in config.plugins:
+        for plugin in plugins:
 
             widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'group' + plugin.name)
             if widget is None:

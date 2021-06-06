@@ -25,7 +25,7 @@ class Gnome(PluginCommandline):
 
     def __init__(self, theme_light: str, theme_dark: str):
         super().__init__(theme_light, theme_dark,
-            ["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name", "%t"])
+                         ["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name", "%t"])
 
     @property
     def available(self) -> bool:
@@ -42,6 +42,23 @@ class Gnome(PluginCommandline):
         except FileNotFoundError:
             # if no such command is available, the plugin is not available
             return False
+
+
+def get_readable_kde_theme_name(file) -> str:
+    """Searches for the long_name in the file and maps it to the found short name"""
+
+    for line in file:
+        if 'Name=' in line:
+            name: str = ''
+            write: bool = False
+            for letter in line:
+                if letter == '\n':
+                    write = False
+                if write:
+                    name += letter
+                if letter == '=':
+                    write = True
+            return name
 
 
 class Kde(Plugin):
@@ -69,14 +86,14 @@ class Kde(Plugin):
             try:
                 # load the name from the metadata.desktop file
                 with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.desktop', 'r') as file:
-                    self.translations[long_name] = self.get_short_name(file)
+                    self.translations[long_name] = get_readable_kde_theme_name(file)
             except OSError:
                 # check the next path if the themes exist there
                 try:
                     # load the name from the metadata.desktop file
                     with open('{path}{long_name}/metadata.desktop'.format(**locals()), 'r') as file:
                         # search for the name
-                        self.translations[long_name] = self.get_short_name(file)
+                        self.translations[long_name] = get_readable_kde_theme_name(file)
                 except OSError:
                     # if no file exist lets just use the long name
                     self.translations[long_name] = long_name
@@ -87,19 +104,3 @@ class Kde(Plugin):
         # uses a kde api to switch to a light theme
         # noinspection SpellCheckingInspection
         subprocess.run(["lookandfeeltool", "-a", theme])
-
-    def get_short_name(self, file) -> str:
-        """Searches for the long_name in the file and maps it to the found short name"""
-
-        for line in file:
-            if 'Name=' in line:
-                name: str = ''
-                write: bool = False
-                for letter in line:
-                    if letter == '\n':
-                        write = False
-                    if write:
-                        name += letter
-                    if letter == '=':
-                        write = True
-                return name

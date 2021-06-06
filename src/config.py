@@ -4,7 +4,7 @@ import pathlib
 import re
 from suntime import Sun, SunTimeException
 
-from main import assembly_version
+assembly_version = 2.2
 
 # aliases for path to use later on
 home = os.getenv("HOME")
@@ -132,6 +132,10 @@ def load_config():
         config = json.load(conf)
 
     if config["version"] < assembly_version:
+        # Add or update keys to be compatible with the current version
+        if "soundEnabled" not in config:
+            config["soundEnabled"] = True
+
         name = "kde" if config["desktop"] == "kde" else "gnome"
 
         config['systemEnabled'] = config[f'{name}Enabled']
@@ -142,6 +146,8 @@ def load_config():
         for pl_old in ['kde', 'gnome']:
             for key in ['Enabled', 'LightTheme', 'DarkTheme']:
                 config.pop(pl_old + key)
+
+        config["version"] = assembly_version
 
 
 if exists():
