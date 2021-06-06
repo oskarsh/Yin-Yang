@@ -1,5 +1,3 @@
-import traceback
-
 from src.config import config
 from src.plugins import system, gtk, kvantum, wallpaper, firefox, vscode, atom
 
@@ -42,17 +40,3 @@ for plugin in plugins:
         plugins.pop(plugins.index(plugin))
         continue
     plugin.enabled = config[f'{str(plugin)}Enabled']
-
-
-def set_mode(dark_mode: bool):
-    for pl in plugins:
-        if not pl.enabled:
-            continue
-
-        print(f'Changing theme in plugin ' + pl.name)
-        try:
-            pl.set_mode(dark_mode)
-        except Exception as e:
-            print('Error while changing the theme in plugin ' + pl.name)
-            traceback.print_exception(type(e), e, e.__traceback__)
-        print()
