@@ -1,6 +1,7 @@
 import unittest
 
-from src.config import plugins, config
+from src.config import config
+from src.plugins import plugins
 from src.plugins._plugin import Plugin
 
 
@@ -8,8 +9,10 @@ class PluginsTest(unittest.TestCase):
     def test_setup(self):
         for pl in plugins:
             with self.subTest(plugin=pl.name):
-                self.assertIsInstance(pl, Plugin, 'Every plugin should extend the Plugin class')
-                self.assertTrue(pl.name != '', 'Every plugin needs a name for the config and the gui.')
+                self.assertIsInstance(pl, Plugin,
+                                      'Every plugin should extend the Plugin class')
+                self.assertTrue(pl.name != '',
+                                'Every plugin needs a name for the config and the gui.')
                 self.assertTrue(pl.theme_dark is not None and pl.theme_bright is not None,
                                 'No default theme is specified. ' +
                                 'If your plugin does not support any default themes, use empty strings.')
