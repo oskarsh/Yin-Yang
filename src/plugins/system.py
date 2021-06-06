@@ -6,14 +6,14 @@ from src.plugins._plugin import Plugin, PluginDesktopDependent, PluginCommandlin
 
 
 class System(PluginDesktopDependent):
-    def __init__(self, desktop: str):
+    def __init__(self, theme_light: str, theme_dark: str, desktop: str):
         if desktop == 'kde':
-            self._strategy_instance = Kde()
+            self._strategy_instance = Kde(theme_light, theme_dark)
         elif desktop == 'gtk':
-            self._strategy_instance = Gnome()
+            self._strategy_instance = Gnome(theme_light, theme_dark)
         else:
             raise ValueError('Unsupported desktop environment!')
-        super().__init__(desktop)
+        super().__init__(theme_light, theme_dark, desktop)
 
     @property
     def strategy(self) -> Plugin:
@@ -22,10 +22,10 @@ class System(PluginDesktopDependent):
 
 class Gnome(PluginCommandline):
     # TODO allow using the default themes, not only user themes
-    # TODO set the default theme for gnome
 
-    def __init__(self):
-        super().__init__(["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name", "%t"])
+    def __init__(self, theme_light: str, theme_dark: str):
+        super().__init__(theme_light, theme_dark,
+            ["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name", "%t"])
 
     @property
     def available(self) -> bool:
@@ -46,10 +46,6 @@ class Gnome(PluginCommandline):
 
 class Kde(Plugin):
     name = 'KDE'
-    # noinspection SpellCheckingInspection
-    theme_bright = 'org.kde.breeze.desktop'
-    # noinspection SpellCheckingInspection
-    theme_dark = 'org.kde.breezedark.desktop'
     translations = {}
 
     @property

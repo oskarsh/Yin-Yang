@@ -21,12 +21,13 @@ def get_old_theme(settings):
 
 
 class Atom(Plugin):
-    theme_dark = "one-dark"
-    theme_bright = "one-light"
     # noinspection SpellCheckingInspection
     config_path = str(Path.home()) + "/.atom/config.cson"
 
     def set_theme(self, theme: str):
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
         # getting the old theme first
         current_theme = get_old_theme(self.config_path)
 

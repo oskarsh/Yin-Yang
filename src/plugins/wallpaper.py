@@ -1,22 +1,20 @@
-import subprocess
-
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout
 
-from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
+from ._plugin import PluginDesktopDependent, PluginCommandline
 
 
 class Wallpaper(PluginDesktopDependent):
     # themes are image file paths
 
-    def __init__(self, desktop: str):
+    def __init__(self, theme_light: str, theme_dark: str, desktop: str):
         if desktop == 'kde':
-            self.strategy_instance = Kde()
+            self.strategy_instance = Kde(theme_light, theme_dark)
         elif desktop == 'gtk':
-            self.strategy_instance = Gnome()
+            self.strategy_instance = Gnome(theme_light, theme_dark)
         else:
             raise ValueError('Unsupported desktop environment!')
-        super().__init__(desktop)
+        super().__init__(theme_light, theme_dark, desktop)
 
     @property
     def strategy(self):
@@ -43,14 +41,15 @@ class Wallpaper(PluginDesktopDependent):
 
 
 class Gnome(PluginCommandline):
-    def __init__(self):
-        super().__init__(["gsettings", "set", "org.gnome.desktop.background",
-                        "picture-uri", "file://%t"])
+    def __init__(self, theme_light: str, theme_dark: str):
+        super().__init__(theme_light, theme_dark,
+                         ["gsettings", "set", "org.gnome.desktop.background", "picture-uri", "file://%t"])
 
 
 class Kde(PluginCommandline):
-    def __init__(self):
-        super().__init__(["./scripts/change_wallpaper.sh", "%t"])
+    def __init__(self, theme_light: str, theme_dark: str):
+        super().__init__(theme_light, theme_dark,
+                         ["./scripts/change_wallpaper.sh", "%t"])
 
     @property
     def available(self) -> bool:

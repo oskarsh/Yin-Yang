@@ -8,12 +8,13 @@ from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
 class Gtk(PluginDesktopDependent):
     name = 'GTK'
 
-    def __init__(self, desktop: str):
+    def __init__(self, theme_light: str, theme_dark: str, desktop: str):
         if desktop == 'kde':
-            self.strategy_instance = Kde()
+            self.strategy_instance = Kde(theme_light, theme_dark)
         else:
-            self.strategy_instance = Gnome()
-        super().__init__(desktop)
+            self.strategy_instance = Gnome(theme_light, theme_dark)
+        super().__init__(theme_light, theme_dark,
+                         desktop)
 
     @property
     def available(self) -> bool:
@@ -25,17 +26,12 @@ class Gtk(PluginDesktopDependent):
 
 
 class Gnome(PluginCommandline):
-    # TODO set the default themes
-
-    def __init__(self):
-        super().__init__(["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", '%t'])
+    def __init__(self, theme_light: str, theme_dark: str):
+        super().__init__(theme_light, theme_dark,
+                         ["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", '%t'])
 
 
 class Kde(Plugin):
-    # Breeze theme uses qt color scheme
-    theme_bright = 'Breeze'
-    theme_dark = 'Breeze'
-
     def set_theme(self, theme: str):
         config = ConfigParser()
         config_file = str(Path.home()) + "/.config/gtk-3.0/settings.ini"

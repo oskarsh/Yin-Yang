@@ -19,10 +19,11 @@ def write_new_settings(settings, path):
 
 class Vscode(Plugin):
     name = 'VS Code'
-    theme_bright = 'Default Light+'
-    theme_dark = 'Default Dark+'
 
     def set_theme(self, theme: str):
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
         assert self.available, 'VS Code is not installed!'
         path = str(Path.home()) + "/.config"
 

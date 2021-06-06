@@ -17,8 +17,6 @@ def get_default_profile_path() -> str:
 
 class Firefox(Plugin):
     """This class has no functionality except providing a section in the config"""
-    theme_bright = 'firefox-compact-light@mozilla.org'
-    theme_dark = 'firefox-compact-dark@mozilla.org'
 
     def set_theme(self, theme: str):
         pass

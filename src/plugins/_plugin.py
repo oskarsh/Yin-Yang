@@ -2,7 +2,7 @@ import subprocess
 from abc import ABC, abstractmethod
 from os import listdir
 from os.path import isdir, join, isfile
-from warnings import warn
+from typing import Optional
 
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QCheckBox
 
@@ -10,20 +10,10 @@ from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QCheck
 class Plugin(ABC):
     """An abstract base class for plugins"""
 
-    # default themes
-    theme_dark = None
-    theme_bright = None
-
-    def __init__(self, theme_dark: str = '', theme_bright: str = ''):
-        # check default values
-        if self.theme_dark is None or self.theme_bright is None:
-            warn('Light and / or dark theme have no default value!')
-
+    def __init__(self, theme_bright: str, theme_dark: str):
         # set the themes
-        if theme_dark and theme_dark != self.theme_dark:
-            self.theme_dark = theme_dark
-        if theme_bright and theme_bright != self.theme_bright:
-            self.theme_bright = theme_bright
+        self.theme_dark = theme_dark
+        self.theme_bright = theme_bright
 
         self.enabled: bool = False
 
@@ -47,7 +37,7 @@ class Plugin(ABC):
         """
         return {}
 
-    def set_mode(self, dark: bool) -> str:
+    def set_mode(self, dark: bool) -> Optional[str]:
         """Set the dark or light theme"""
 
         if not self.enabled:
@@ -110,11 +100,14 @@ class Plugin(ABC):
 
 
 class PluginCommandline(Plugin):
-    def __init__(self, command: list):
-        super().__init__()
+    def __init__(self, theme_light: str, theme_dark: str, command: list):
+        super().__init__(theme_light, theme_dark)
         self.command = command
 
     def set_theme(self, theme: str):
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
         # insert theme in command and run it
         command = self.insert_theme(theme)
 
@@ -153,8 +146,8 @@ class PluginDesktopDependent(Plugin):
     """Plugins that behave differently on different desktops"""
 
     @abstractmethod
-    def __init__(self, desktop: str):
-        super().__init__()
+    def __init__(self, theme_light: str, theme_dark: str, desktop: str):
+        super().__init__(theme_light, theme_dark)
         self.enabled_value = False
 
     @property
@@ -191,6 +184,9 @@ class PluginDesktopDependent(Plugin):
         self.strategy.theme_bright = theme
 
     def set_theme(self, theme: str):
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
         self.strategy.set_theme(theme)
 
     @property
