@@ -5,10 +5,6 @@ import re
 from suntime import Sun, SunTimeException
 
 from main import assembly_version
-# Add your plugin here if you are developing a new one
-# this list is sorted alphabetically, please make sure to keep it that way
-# NOTE that you also have to initialize your plugin below
-from .plugins import atom, firefox, gtk, kvantum, system, vscode, wallpaper
 
 # aliases for path to use later on
 home = os.getenv("HOME")
@@ -48,26 +44,6 @@ def get_desktop():
     return "unknown"
 
 
-# NOTE initialize your plugin over here:
-# The order in the list specifies the order in the config gui
-plugins = [
-    system.System(get_desktop()),
-    gtk.Gtk(get_desktop()),
-    kvantum.Kvantum(),
-    wallpaper.Wallpaper(get_desktop()),
-    firefox.Firefox(),
-    vscode.Vscode(),
-    atom.Atom()
-]
-
-# put unavailable plugins to the bottom
-plugins_old = plugins.copy()
-for pl in plugins_old:
-    if not pl.available:
-        # get the index of pl, remove it and then append to the end
-        plugins.append(plugins.pop(plugins.index(pl)))
-
-
 def set_sun_time():
     latitude: float = float(get("latitude"))
     longitude: float = float(get("longitude"))
@@ -104,45 +80,66 @@ config["switchToLight"] = "07:00"
 config["running"] = False
 config["theme"] = ""
 config["soundEnabled"] = True
-config["desktop"] = get_desktop()
 
+config["codeEnabled"] = False
+config["codeLightTheme"] = "Default Light+"
+config["codeDarkTheme"] = "Default Dark+"
 
-for pl in plugins:
-    config[f'{pl}Enabled'] = pl.enabled  # should always be false
-    config[f'{pl}DarkTheme'] = pl.theme_dark
-    config[f'{pl}LightTheme'] = pl.theme_bright
+config["systemEnabled"] = False
+if config["desktop"] == "kde":
+    config["systemLightTheme"] = "org.kde.breeze.desktop"
+    config["systemDarkTheme"] = "org.kde.breezedark.desktop"
+else:
+    # TODO add default system themes for non-kde systems
+    config["systemLightTheme"] = ""
+    config["systemDarkTheme"] = ""
+
+config["gtkEnabled"] = False
+if config["desktop"] == "kde":
+    # these are the same, as breeze syncs its colors with qt
+    config["gtkLightTheme"] = "Breeze"
+    config["gtkDarkTheme"] = "Breeze"
+else:
+    # TODO add default gtk themes for non-kde systems
+    config["gtkLightTheme"] = ""
+    config["gtkDarkTheme"] = ""
+
+config["atomEnabled"] = False
+config["atomLightTheme"] = "one-light"
+config["atomDarkTheme"] = "one-dark"
+
+# TODO add default wallpapers
+config["wallpaperEnabled"] = False
+config["wallpaperLightTheme"] = ""
+config["wallpaperDarkTheme"] = ""
+
+config["firefoxEnabled"] = False
+config["firefoxLightTheme"] = "firefox-compact-light@mozilla.org"
+config["firefoxDarkTheme"] = "firefox-compact-dark@mozilla.org"
+
+config["kvantumEnabled"] = False
+config["kvantumLightTheme"] = "KvFlatLight"
+config["kvantumDarkTheme"] = "KvFlat"
 
 if exists():
     # making config global for this module
     with open(path + "/yin_yang/yin_yang.json", "r") as conf:
         config = json.load(conf)
 
-    for pl in plugins:
-        try:
-            pl.enabled = config[f'{pl}Enabled']
-            pl.theme_bright = config[f'{pl}LightTheme']
-            pl.theme_dark = config[f'{pl}DarkTheme']
-        except KeyError:
-            if pl.name == "System":
-                # decide which old plugin should be used
-                if config['kdeEnabled']:
-                    name = 'kde'
-                else:
-                    name = 'gnome'
+    if config["version"] < assembly_version:
+        if config['kdeEnabled']:
+            name = 'kde'
+        else:
+            name = 'gnome'
 
-                # apply old values
-                pl.enabled = config[f'{name}Enabled']
-                pl.theme_bright = config[f'{name}LightTheme']
-                pl.theme_dark = config[f'{name}DarkTheme']
+        config['systemEnabled'] = config[f'{name}Enabled']
+        config['systemLightTheme'] = config[f'{name}LightTheme']
+        config['systemDarkTheme'] = config[f'{name}DarkTheme']
 
-                config[f'{pl}Enabled'] = pl.enabled
-                config[f'{pl}LightTheme'] = pl.theme_bright
-                config[f'{pl}DarkTheme'] = pl.theme_dark
-
-                # delete old keys
-                for pl_old in ['kde', 'gnome']:
-                    for key in ['Enabled', 'LightTheme', 'DarkTheme']:
-                        config.pop(pl_old + key)
+        # delete old keys
+        for pl_old in ['kde', 'gnome']:
+            for key in ['Enabled', 'LightTheme', 'DarkTheme']:
+                config.pop(pl_old + key)
 
 
 def get_config():
