@@ -121,16 +121,18 @@ config["kvantumEnabled"] = False
 config["kvantumLightTheme"] = "KvFlatLight"
 config["kvantumDarkTheme"] = "KvFlat"
 
-if exists():
+
+def load_config():
+    """Load the config file and update it
+    Needed for unittests
+    """
+    global config
     # making config global for this module
     with open(path + "/yin_yang/yin_yang.json", "r") as conf:
         config = json.load(conf)
 
     if config["version"] < assembly_version:
-        if config['kdeEnabled']:
-            name = 'kde'
-        else:
-            name = 'gnome'
+        name = "kde" if config["desktop"] == "kde" else "gnome"
 
         config['systemEnabled'] = config[f'{name}Enabled']
         config['systemLightTheme'] = config[f'{name}LightTheme']
@@ -140,6 +142,10 @@ if exists():
         for pl_old in ['kde', 'gnome']:
             for key in ['Enabled', 'LightTheme', 'DarkTheme']:
                 config.pop(pl_old + key)
+
+
+if exists():
+    load_config()
 
 
 def get_config():
