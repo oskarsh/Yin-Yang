@@ -18,7 +18,7 @@ class PluginsTest(unittest.TestCase):
                                           'Available themes always should be a dict.')
 
     # NOTE if you want to test that your theme changes, set this value to true
-    @unittest.skipUnless(True, 'test_theme_changes is disabled')
+    @unittest.skipUnless(False, 'test_theme_changes is disabled')
     def test_set_theme_works(self):
         for pl in [pl for pl in plugins if pl.enabled]:
             with self.subTest('Changing the theme should be successful', plugin=pl.name):
