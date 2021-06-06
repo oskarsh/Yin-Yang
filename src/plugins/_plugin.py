@@ -2,7 +2,6 @@ import subprocess
 from abc import ABC, abstractmethod
 from os import listdir
 from os.path import isdir, join, isfile
-from typing import Optional
 
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QCheckBox
 
@@ -37,14 +36,16 @@ class Plugin(ABC):
         """
         return {}
 
-    def set_mode(self, dark: bool) -> Optional[str]:
-        """Set the dark or light theme"""
+    def set_mode(self, dark: bool) -> bool:
+        """Set the dark or light theme
+        :return: True, if operation was successful
+        """
 
         if not self.enabled:
-            return
+            return False
 
         theme = self.theme_dark if dark else self.theme_bright
-        return self.set_theme(theme)
+        return self.set_theme(theme) == theme
 
     @abstractmethod
     def set_theme(self, theme: str) -> str:
@@ -104,15 +105,15 @@ class PluginCommandline(Plugin):
         super().__init__(theme_light, theme_dark)
         self.command = command
 
-    def set_theme(self, theme: str):
+    def set_theme(self, theme: str) -> str:
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
         # insert theme in command and run it
         command = self.insert_theme(theme)
 
-        if subprocess.run(command).returncode != 0:
-            raise ValueError('Command execution was not successful!')
+        if subprocess.run(command).returncode == 0:
+            return theme
 
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
@@ -183,11 +184,11 @@ class PluginDesktopDependent(Plugin):
     def theme_bright(self, theme: str):
         self.strategy.theme_bright = theme
 
-    def set_theme(self, theme: str):
+    def set_theme(self, theme: str) -> str:
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
-        self.strategy.set_theme(theme)
+        return self.strategy.set_theme(theme)
 
     @property
     def available_themes(self) -> dict:
@@ -203,7 +204,7 @@ class PluginDesktopDependent(Plugin):
         self.strategy.enabled = value
 
 
-def inplace_change(filename, old_string, new_string):
+def inplace_change(filename: str, old_string: str, new_string: str):
     """Replaces a given string by a new string in a specific file
     :param filename: the full path to the file that should be changed
     :param old_string: the old string that should be found in the file

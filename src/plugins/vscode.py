@@ -25,13 +25,13 @@ class Vscode(Plugin):
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
         assert self.available, 'VS Code is not installed!'
-        path = str(Path.home()) + "/.config"
+        path = str(Path.home()) + "/.config/"
 
         possible_editors = [
-            path + "/VSCodium/User/settings.json",
-            path + "/Code - OSS/User/settings.json",
-            path + "/Code/User/settings.json",
-            path + "/Code - Insiders/User/settings.json",
+            path + "VSCodium/User/settings.json",
+            path + "Code - OSS/User/settings.json",
+            path + "Code/User/settings.json",
+            path + "Code - Insiders/User/settings.json",
         ]
 
         for editor in possible_editors:
@@ -45,6 +45,8 @@ class Vscode(Plugin):
                 settings['workbench.colorTheme'] = theme
                 with open(editor, 'w') as sett:
                     json.dump(settings, sett)
+
+                return theme
 
     @property
     def available_themes(self) -> dict:

@@ -36,3 +36,5 @@ class Kde(Plugin):
 
         with open(config_file, "w") as file:
             config.write(file)
+
+        return theme

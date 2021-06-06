@@ -29,10 +29,12 @@ class Atom(Plugin):
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
         # getting the old theme first
-        current_theme = get_old_theme(self.config_path)
+        current_theme: str = get_old_theme(self.config_path)
 
         # updating the old theme with theme specified in config
         inplace_change(self.config_path, current_theme, theme)
+
+        return theme
 
     @property
     def available(self) -> bool:

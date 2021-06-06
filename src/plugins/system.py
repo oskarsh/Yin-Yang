@@ -61,9 +61,12 @@ def get_readable_kde_theme_name(file) -> str:
             return name
 
 
-class Kde(Plugin):
+class Kde(PluginCommandline):
     name = 'KDE'
     translations = {}
+
+    def __init__(self, theme_light: str, theme_dark: str):
+        super().__init__(theme_light, theme_dark, ["lookandfeeltool", "-a", '%t'])
 
     @property
     def available_themes(self) -> dict:
@@ -99,8 +102,3 @@ class Kde(Plugin):
                     self.translations[long_name] = long_name
 
         return self.translations
-
-    def set_theme(self, theme: str):
-        # uses a kde api to switch to a light theme
-        # noinspection SpellCheckingInspection
-        subprocess.run(["lookandfeeltool", "-a", theme])
