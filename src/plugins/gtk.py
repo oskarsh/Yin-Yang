@@ -29,12 +29,14 @@ class Gnome(PluginCommandline):
 class Kde(Plugin):
     def set_theme(self, theme: str):
         config = ConfigParser()
-        config_file = str(Path.home()) + "/.config/gtk-3.0/settings.ini"
-        config.read(config_file)
 
-        config['Settings']['gtk-theme-name'] = theme
+        for version in ['gtk-3.0', 'gtk-4.0']:
+            config_file = str(Path.home()) + f"/.config/{version}/settings.ini"
+            config.read(config_file)
 
-        with open(config_file, "w") as file:
-            config.write(file)
+            config['Settings']['gtk-theme-name'] = theme
+
+            with open(config_file, "w") as file:
+                config.write(file)
 
         return theme
