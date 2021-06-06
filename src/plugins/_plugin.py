@@ -2,6 +2,7 @@ import subprocess
 from abc import ABC, abstractmethod
 from os import listdir
 from os.path import isdir, join, isfile
+from typing import Optional
 
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QCheckBox
 
@@ -105,7 +106,10 @@ class PluginCommandline(Plugin):
         super().__init__(theme_light, theme_dark)
         self.command = command
 
-    def set_theme(self, theme: str) -> str:
+    def set_theme(self, theme: str) -> Optional[str]:
+        if not (self.available and self.enabled):
+            return
+
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
@@ -184,7 +188,10 @@ class PluginDesktopDependent(Plugin):
     def theme_bright(self, theme: str):
         self.strategy.theme_bright = theme
 
-    def set_theme(self, theme: str) -> str:
+    def set_theme(self, theme: str) -> Optional[str]:
+        if not (self.available and self.enabled):
+            return
+
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 

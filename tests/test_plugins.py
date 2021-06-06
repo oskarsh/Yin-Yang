@@ -32,6 +32,15 @@ class PluginsTest(unittest.TestCase):
                 # try to return to previous theme
                 pl.set_theme(config.get(pl.name + config.get('theme').title() + 'Theme'))
 
+    def test_set_theme_invalid_state(self):
+        for pl in plugins:
+            with self.subTest(plugin=pl):
+                if pl.enabled:
+                    pl.enabled = False
+
+                self.assertFalse(pl.set_theme('dark'),
+                                 'set_theme() should not be successful if the plugin is disabled')
+
     # NOTE if you want to test that your theme changes, set this value to true
     @unittest.skipUnless(False, 'test_theme_changes is disabled')
     def test_set_theme_works(self):

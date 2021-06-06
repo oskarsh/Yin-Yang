@@ -3,6 +3,7 @@ import json
 import logging
 from os.path import isdir
 from pathlib import Path
+from typing import Optional
 
 from ._plugin import Plugin, get_stuff_in_dir
 
@@ -20,11 +21,13 @@ def write_new_settings(settings, path):
 class Vscode(Plugin):
     name = 'VS Code'
 
-    def set_theme(self, theme: str):
+    def set_theme(self, theme: str) -> Optional[str]:
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
-        assert self.available, 'VS Code is not installed!'
+        if not (self.available and self.enabled):
+            return
+
         path = str(Path.home()) + "/.config/"
 
         possible_editors = [

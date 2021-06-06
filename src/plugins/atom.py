@@ -1,6 +1,7 @@
 import re
 from os.path import isfile
 from pathlib import Path
+from typing import Optional
 
 from ._plugin import Plugin, inplace_change
 
@@ -24,7 +25,10 @@ class Atom(Plugin):
     # noinspection SpellCheckingInspection
     config_path = str(Path.home()) + "/.atom/config.cson"
 
-    def set_theme(self, theme: str):
+    def set_theme(self, theme: str) -> Optional[str]:
+        if not (self.available and self.enabled):
+            return
+
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 

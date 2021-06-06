@@ -25,7 +25,13 @@ class Firefox(Plugin):
         super().__init__(theme_bright, theme_dark)
 
     def set_theme(self, theme: str):
-        # throws error if in debug mode
+        if not (self.available and self.enabled):
+            return
+
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
+        # throws error if in debug mode, else ignored
         assert False, 'Changing the theme is only possible from the Firefox plugin'
 
     @property
