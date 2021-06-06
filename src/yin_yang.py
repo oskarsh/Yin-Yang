@@ -18,6 +18,7 @@ import subprocess
 import sys
 import threading
 import time
+import traceback
 
 from src import config
 
@@ -37,11 +38,14 @@ class Yang(threading.Thread):
 
     def run(self):
         for pl in plugins:
-            try:
-                pl.set_mode(False)
-            except Exception as e:
-                print('Error while changing the theme in plugin ' + pl.name)
-                print(e)
+            if pl.enabled:
+                print('Changing theme in plugin ' + pl.name)
+                try:
+                    if not pl.set_mode(False):
+                        raise ValueError('set_mode() did not return True.')
+                except Exception as e:
+                    print('Error while changing the theme in plugin ' + pl.name)
+                    traceback.print_exception(type(e), e, e.__traceback__)
         play_sound("./assets/light.wav")
 
 
@@ -52,11 +56,14 @@ class Yin(threading.Thread):
 
     def run(self):
         for pl in plugins:
-            try:
-                pl.set_mode(True)
-            except Exception as e:
-                print('Error while changing the theme in plugin ' + pl.name)
-                print(e)
+            if pl.enabled:
+                print('Changing theme in plugin ' + pl.name)
+                try:
+                    if not pl.set_mode(True):
+                        raise ValueError('set_mode() did not return True.')
+                except Exception as e:
+                    print('Error while changing the theme in plugin ' + pl.name)
+                    traceback.print_exception(type(e), e, e.__traceback__)
         play_sound("./assets/dark.wav")
 
 
