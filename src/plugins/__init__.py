@@ -49,7 +49,7 @@ def set_mode(dark_mode: bool):
         if not pl.enabled:
             continue
 
-        print('Changing to light theme in plugin ' + pl.name)
+        print(f'Changing theme in plugin ' + pl.name)
         try:
             pl.set_mode(dark_mode)
         except Exception as e:
