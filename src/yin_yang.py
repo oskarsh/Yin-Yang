@@ -20,10 +20,9 @@ import threading
 import time
 
 from src import config
+from src import plugins
 
 # aliases for path to use later on
-from src.plugins import plugins
-
 user = pwd.getpwuid(os.getuid())[0]
 path = "/home/" + user + "/.config/"
 
@@ -36,12 +35,7 @@ class Yang(threading.Thread):
         self.thread_id = thread_id
 
     def run(self):
-        for pl in plugins:
-            try:
-                pl.set_mode(False)
-            except Exception as e:
-                print('Error while changing the theme in plugin ' + pl.name)
-                print(e)
+        plugins.set_mode(False)
         play_sound("./assets/light.wav")
 
 
@@ -51,12 +45,7 @@ class Yin(threading.Thread):
         self.thread_id = thread_id
 
     def run(self):
-        for pl in plugins:
-            try:
-                pl.set_mode(True)
-            except Exception as e:
-                print('Error while changing the theme in plugin ' + pl.name)
-                print(e)
+        plugins.set_mode(True)
         play_sound("./assets/dark.wav")
 
 
