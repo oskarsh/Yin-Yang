@@ -31,6 +31,10 @@ class Atom(Plugin):
         # getting the old theme first
         current_theme: str = get_old_theme(self.config_path)
 
+        if not current_theme:
+            raise ValueError("Current theme could not be determined."
+                             "If you see this error, try to set a custom theme once and then try again")
+
         # updating the old theme with theme specified in config
         inplace_change(self.config_path, current_theme, theme)
 

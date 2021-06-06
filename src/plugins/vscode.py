@@ -48,6 +48,9 @@ class Vscode(Plugin):
 
                 return theme
 
+            raise FileNotFoundError('No config file found.'
+                                    'If you see this error try, to set a custom theme manually once and try again.')
+
     @property
     def available_themes(self) -> dict:
         paths = ['/usr/lib/code/extensions',
