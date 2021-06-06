@@ -49,7 +49,7 @@ class Gnome(PluginCommandline):
 class Kde(PluginCommandline):
     def __init__(self, theme_light: str, theme_dark: str):
         super().__init__(theme_light, theme_dark,
-                         ["./scripts/change_wallpaper.sh", "%t"])
+                         ["bash", "./src/change_wallpaper.sh", "%t"])
 
     @property
     def available(self) -> bool:
