@@ -36,7 +36,4 @@ plugins: [Plugin] = [
 ]
 
 for plugin in plugins:
-    if not plugin.available:
-        plugins.pop(plugins.index(plugin))
-        continue
     plugin.enabled = config[f'{str(plugin)}Enabled']
