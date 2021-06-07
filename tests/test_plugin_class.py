@@ -29,12 +29,12 @@ class GenericTest(unittest.TestCase):
                              'Available plugins should be empty if not implemented')
 
     def test_set_theme(self):
-        self.assertEqual(None, self.plugin.set_mode(False),
-                         'Plugin should return None if it is not enabled')
+        self.assertEqual(False, self.plugin.set_mode(False),
+                         'Plugin should return False if it is not enabled')
 
         self.plugin.enabled = True
-        self.assertEqual('light', self.plugin.set_mode(False))
-        self.assertEqual('dark', self.plugin.set_mode(True))
+        self.assertEqual(True, self.plugin.set_mode(False))
+        self.assertEqual(True, self.plugin.set_mode(True))
 
 
 class CommandlineTest(unittest.TestCase):
