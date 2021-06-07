@@ -13,6 +13,9 @@ class Gtk(PluginDesktopDependent):
             self.strategy_instance = Kde(theme_light, theme_dark)
         else:
             self.strategy_instance = Gnome(theme_light, theme_dark)
+            if not self.strategy_instance.available():
+                print('You need to install an extension for gnome to use it. \n'
+                      'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
         super().__init__(theme_light, theme_dark,
                          desktop)
 
