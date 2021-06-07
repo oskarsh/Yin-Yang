@@ -107,11 +107,11 @@ class PluginCommandline(Plugin):
         self.command = command
 
     def set_theme(self, theme: str) -> Optional[str]:
-        if not (self.available and self.enabled):
-            return
-
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
+
+        if not (self.available and self.enabled):
+            return
 
         # insert theme in command and run it
         command = self.insert_theme(theme)
@@ -189,11 +189,11 @@ class PluginDesktopDependent(Plugin):
         self.strategy.theme_bright = theme
 
     def set_theme(self, theme: str) -> Optional[str]:
-        if not (self.available and self.enabled):
-            return
-
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
+
+        if not (self.available and self.enabled):
+            return
 
         return self.strategy.set_theme(theme)
 
