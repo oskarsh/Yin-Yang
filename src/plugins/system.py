@@ -5,6 +5,22 @@ import os
 from src.plugins._plugin import Plugin, PluginDesktopDependent, PluginCommandline
 
 
+def test_gnome_availability(command) -> bool:
+    # Runs the first entry in the command list with --help
+    try:
+        out = subprocess.run(
+            [command[0], 'get', command[2], command[3]],
+            stdout=subprocess.DEVNULL
+        ).stdout
+        if out == f'No such schema \"{command[2]}\"':
+            # in this case, you might want to run https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0
+            # or you have to install that extension
+            return False
+    except FileNotFoundError:
+        # if no such command is available, the plugin is not available
+        return False
+
+
 class System(PluginDesktopDependent):
     def __init__(self, theme_light: str, theme_dark: str, desktop: str):
         if desktop == 'kde':
@@ -29,19 +45,7 @@ class Gnome(PluginCommandline):
 
     @property
     def available(self) -> bool:
-        # Runs the first entry in the command list with --help
-        try:
-            out = subprocess.run(
-                [self.command[0], 'get', self.command[2], self.command[3]],
-                stdout=subprocess.DEVNULL
-            ).stdout
-            if out == f'No such schema \"{self.command[2]}\"':
-                # in this case, you might want to run https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0
-                # or you have to install that extension
-                return False
-        except FileNotFoundError:
-            # if no such command is available, the plugin is not available
-            return False
+        return test_gnome_availability(self.command)
 
 
 def get_readable_kde_theme_name(file) -> str:

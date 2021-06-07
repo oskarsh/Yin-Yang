@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout
 
 from ._plugin import PluginDesktopDependent, PluginCommandline
+from .system import test_gnome_availability
 
 
 class Wallpaper(PluginDesktopDependent):
@@ -44,6 +45,9 @@ class Gnome(PluginCommandline):
     def __init__(self, theme_light: str, theme_dark: str):
         super().__init__(theme_light, theme_dark,
                          ["gsettings", "set", "org.gnome.desktop.background", "picture-uri", "file://%t"])
+
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
 
 
 class Kde(PluginCommandline):
