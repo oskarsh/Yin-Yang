@@ -12,9 +12,9 @@ class Gtk(PluginDesktopDependent):
     def __init__(self):
         desktop = config.get('desktop')
         if desktop == 'kde':
-            self.strategy_instance = Kde()
+            self.strategy_instance = _Kde()
         else:
-            self.strategy_instance = Gnome()
+            self.strategy_instance = _Gnome()
             if not self.strategy_instance.available():
                 print('You need to install an extension for gnome to use it. \n'
                       'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
@@ -25,7 +25,7 @@ class Gtk(PluginDesktopDependent):
         return self.strategy_instance
 
 
-class Gnome(PluginCommandline):
+class _Gnome(PluginCommandline):
     name = 'GTK'
 
     def __init__(self):
@@ -35,7 +35,7 @@ class Gnome(PluginCommandline):
         return test_gnome_availability(self.command)
 
 
-class Kde(Plugin):
+class _Kde(Plugin):
     name = 'GTK'
 
     def set_theme(self, theme: str):

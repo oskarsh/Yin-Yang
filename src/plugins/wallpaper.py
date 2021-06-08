@@ -12,9 +12,9 @@ class Wallpaper(PluginDesktopDependent):
     def __init__(self):
         desktop = config.get('desktop')
         if desktop == 'kde':
-            self.strategy_instance = Kde()
+            self.strategy_instance = _Kde()
         elif desktop == 'gtk':
-            self.strategy_instance = Gnome()
+            self.strategy_instance = _Gnome()
         else:
             raise ValueError('Unsupported desktop environment!')
         super().__init__()
@@ -43,7 +43,7 @@ class Wallpaper(PluginDesktopDependent):
         return widgets
 
 
-class Gnome(PluginCommandline):
+class _Gnome(PluginCommandline):
     name = 'Wallpaper'
 
     def __init__(self):
@@ -53,7 +53,7 @@ class Gnome(PluginCommandline):
         return test_gnome_availability(self.command)
 
 
-class Kde(PluginCommandline):
+class _Kde(PluginCommandline):
     name = 'Wallpaper'
 
     def __init__(self):

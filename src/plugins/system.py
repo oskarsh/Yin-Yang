@@ -26,9 +26,9 @@ class System(PluginDesktopDependent):
     def __init__(self):
         desktop = config.get('desktop')
         if desktop == 'kde':
-            self._strategy_instance = Kde()
+            self._strategy_instance = _Kde()
         elif desktop == 'gtk':
-            self._strategy_instance = Gnome()
+            self._strategy_instance = _Gnome()
         else:
             raise ValueError('Unsupported desktop environment!')
         super().__init__()
@@ -38,7 +38,7 @@ class System(PluginDesktopDependent):
         return self._strategy_instance
 
 
-class Gnome(PluginCommandline):
+class _Gnome(PluginCommandline):
     name = 'System'
     # TODO allow using the default themes, not only user themes
 
@@ -67,7 +67,7 @@ def get_readable_kde_theme_name(file) -> str:
             return name
 
 
-class Kde(PluginCommandline):
+class _Kde(PluginCommandline):
     name = 'System'
     translations = {}
 
