@@ -6,6 +6,7 @@ from pathlib import Path
 from PyQt5.QtWidgets import QGroupBox, QCheckBox
 
 from ._plugin import Plugin
+from .. import config
 
 
 def get_default_profile_path() -> str:
@@ -19,10 +20,6 @@ def get_default_profile_path() -> str:
 
 class Firefox(Plugin):
     """This class has no functionality except providing a section in the config"""
-
-    def __init__(self, theme_bright: str, theme_dark: str):
-        self.enabled_value = False
-        super().__init__(theme_bright, theme_dark)
 
     def set_theme(self, theme: str):
         if not (self.available and self.enabled):
@@ -61,13 +58,13 @@ class Firefox(Plugin):
 
         return widget
 
-    @property
-    def enabled(self) -> bool:
-        return self.enabled_value
-
-    @enabled.setter
+    @Plugin.enabled.setter
     def enabled(self, value: bool):
-        self.enabled_value = value
+        # needs to be copied because super().setter does not work
+        # for more information see:
+        # https://stackoverflow.com/questions/10810369/python-super-and-setting-parent-class-property
+        config.update(str(self) + 'Enabled', value)
+
         if value:
             print(
                 'Please remember to install the Yin-Yang plugin in Firefox.\n' +

@@ -6,6 +6,8 @@ from typing import Optional
 
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QCheckBox
 
+from src import config
+
 
 class Plugin(ABC):
     """An abstract base class for plugins"""
@@ -14,8 +16,6 @@ class Plugin(ABC):
         # set the themes
         self.theme_dark = theme_dark
         self.theme_bright = theme_bright
-
-        self.enabled: bool = False
 
     @property
     def name(self) -> str:
@@ -36,6 +36,14 @@ class Plugin(ABC):
         :return: Dict[intern_name, readable_name]
         """
         return {}
+
+    @property
+    def enabled(self) -> bool:
+        return config.get(str(self) + 'Enabled')
+
+    @enabled.setter
+    def enabled(self, value: bool):
+        config.update(str(self) + 'Enabled', value)
 
     def set_mode(self, dark: bool) -> bool:
         """Set the dark or light theme
@@ -153,7 +161,6 @@ class PluginDesktopDependent(Plugin):
     @abstractmethod
     def __init__(self, theme_light: str, theme_dark: str, desktop: str):
         super().__init__(theme_light, theme_dark)
-        self.enabled_value = False
 
     @property
     @abstractmethod
@@ -200,15 +207,6 @@ class PluginDesktopDependent(Plugin):
     @property
     def available_themes(self) -> dict:
         return self.strategy.available_themes
-
-    @property
-    def enabled(self):
-        return self.enabled_value
-
-    @enabled.setter
-    def enabled(self, value: bool):
-        self.enabled_value = value
-        self.strategy.enabled = value
 
 
 def inplace_change(filename: str, old_string: str, new_string: str):
