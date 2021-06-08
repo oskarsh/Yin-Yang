@@ -10,7 +10,7 @@ from src import config
 from src.yin_yang import should_be_light
 
 
-def should_be_dark_extensions(time_current: int, time_light: int, time_dark: int):
+def should_be_dark_extensions(time_current: int, time_dark: int):
     """Determines if dark mode should be active like the extensions do"""
     return time_dark <= time_current
 
@@ -106,7 +106,7 @@ class CommunicationTest(unittest.TestCase):
                 self.assertDictEqual(message_expected, response_decoded,
                                      'Returned message should be equal to the message')
 
-        process.terminate()
+        process.__exit__(None, None, None)
 
     def test_dark_mode_detection(self):
         time_light = config.get('switchToLight')
@@ -121,7 +121,7 @@ class CommunicationTest(unittest.TestCase):
         is_dark = not should_be_light()
         # NOTE: this should be equal to how the extension calculates the theme
         detected_dark = should_be_dark_extensions(int(time_current.timestamp()),
-                                                  time_light_unix, time_dark_unix)
+                                                  time_dark_unix)
 
         self.assertEqual(is_dark, detected_dark,
                          f'Dark mode should be {"active" if is_dark else "inactive"} at {time_current.isoformat()}')
