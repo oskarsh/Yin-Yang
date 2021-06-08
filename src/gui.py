@@ -36,20 +36,23 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
             widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
 
-            config.update(str(plugin) + 'Enabled', widget.findChild(QCheckBox).isChecked())
+            plugin.enabled = widget.findChild(QCheckBox).isChecked()
             if plugin.available_themes:
                 # extra behaviour for combobox
                 children = widget.findChildren(QtWidgets.QComboBox)
                 for child in children:
-                    theme = 'Light' if children.index(child) == 0 else 'Dark'
                     theme_name: str = list(plugin.available_themes.keys())[child.currentIndex()]
-                    config.update(str(plugin) + f'{theme}Theme', theme_name)
+                    if children.index(child) == 0:
+                        # dropdown for light theme selected
+                        plugin.theme_light = theme_name
+                    else:
+                        plugin.theme_dark = theme_name
             else:
                 if plugin.name == 'Wallpaper':
                     continue
                 children = widget.findChildren(QtWidgets.QLineEdit)
-                config.update(str(plugin) + 'LightTheme', children[0].text())
-                config.update(str(plugin) + 'DarkTheme', children[1].text())
+                plugin.theme_light = children[0].text()
+                plugin.theme_dark = children[1].text()
 
         # showing the main window and hiding the current one
         self.hide()
@@ -71,7 +74,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
             assert widget is not None, f'No widget for plugin {plugin.name} found'
 
-            widget.findChild(QCheckBox).setChecked(config.get(str(plugin) + 'Enabled'))
+            widget.findChild(QCheckBox).setChecked(plugin.enabled)
 
             if plugin.name == 'Wallpaper':
                 children = widget.findChildren(QtWidgets.QPushButton)
@@ -82,22 +85,22 @@ class SettingsWindow(QtWidgets.QMainWindow):
                 # uses combobox instead of line edit
                 # set the index
                 for child in widget.findChildren(QtWidgets.QComboBox):
-                    theme = 'Light' if widget.findChildren(QtWidgets.QComboBox).index(child) == 0 else 'Dark'
-                    used_theme: str = config.get(str(plugin) + f'{theme}Theme')
+                    light_mode: bool = widget.findChildren(QtWidgets.QComboBox).index(child) == 0
+                    used_theme: str = plugin.theme_light if light_mode else plugin.theme_dark
                     index: int
                     if used_theme == '':
                         index = 0
                     else:
                         index = child.findText(
                             plugin.available_themes[
-                                config.get(str(plugin) + f'{theme}Theme')
+                                used_theme
                             ]
                         )
                     child.setCurrentIndex(index)
             elif plugin.name != 'Wallpaper':
                 children = widget.findChildren(QtWidgets.QLineEdit)
-                children[0].setText(config.get(str(plugin) + 'LightTheme'))
-                children[1].setText(config.get(str(plugin) + 'DarkTheme'))
+                children[0].setText(plugin.theme_light)
+                children[1].setText(plugin.theme_dark)
 
             if not plugin.available:
                 widget.setEnabled(False)
