@@ -12,11 +12,6 @@ from src import config
 class Plugin(ABC):
     """An abstract base class for plugins"""
 
-    def __init__(self, theme_bright: str, theme_dark: str):
-        # set the themes
-        self.theme_dark = theme_dark
-        self.theme_bright = theme_bright
-
     @property
     def name(self) -> str:
         """Returns a readable name of the plugin"""
@@ -45,6 +40,22 @@ class Plugin(ABC):
     def enabled(self, value: bool):
         config.update(str(self) + 'Enabled', value)
 
+    @property
+    def theme_dark(self) -> str:
+        return config.get(str(self) + 'DarkTheme')
+
+    @theme_dark.setter
+    def theme_dark(self, theme: str):
+        config.update(str(self) + 'DarkTheme', theme)
+
+    @property
+    def theme_light(self) -> str:
+        return config.get(str(self) + 'LightTheme')
+
+    @theme_light.setter
+    def theme_light(self, theme: str):
+        config.update(str(self) + 'LightTheme', theme)
+
     def set_mode(self, dark: bool) -> bool:
         """Set the dark or light theme
         :return: True, if operation was successful
@@ -53,7 +64,7 @@ class Plugin(ABC):
         if not self.enabled:
             return False
 
-        theme = self.theme_dark if dark else self.theme_bright
+        theme = self.theme_dark if dark else self.theme_light
         return self.set_theme(theme) == theme
 
     @abstractmethod
@@ -110,8 +121,7 @@ class Plugin(ABC):
 
 
 class PluginCommandline(Plugin):
-    def __init__(self, theme_light: str, theme_dark: str, command: list):
-        super().__init__(theme_light, theme_dark)
+    def __init__(self, command: list):
         self.command = command
 
     def set_theme(self, theme: str) -> Optional[str]:
@@ -158,10 +168,6 @@ class PluginCommandline(Plugin):
 class PluginDesktopDependent(Plugin):
     """Plugins that behave differently on different desktops"""
 
-    @abstractmethod
-    def __init__(self, theme_light: str, theme_dark: str, desktop: str):
-        super().__init__(theme_light, theme_dark)
-
     @property
     @abstractmethod
     def strategy(self) -> Plugin:
@@ -170,30 +176,6 @@ class PluginDesktopDependent(Plugin):
     @property
     def available(self) -> bool:
         return self.strategy.available
-
-    @property
-    def theme_dark(self):
-        if hasattr(self, 'strategy'):
-            # needed since the plugin class checks if the themes are set correctly
-            # in it's init
-            return self.strategy.theme_dark
-        else:
-            return ''
-
-    @theme_dark.setter
-    def theme_dark(self, theme: str):
-        self.strategy.theme_dark = theme
-
-    @property
-    def theme_bright(self):
-        if hasattr(self, 'strategy'):
-            return self.strategy.theme_bright
-        else:
-            return ''
-
-    @theme_bright.setter
-    def theme_bright(self, theme: str):
-        self.strategy.theme_bright = theme
 
     def set_theme(self, theme: str) -> Optional[str]:
         if not theme:

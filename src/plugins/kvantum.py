@@ -2,8 +2,8 @@ from ._plugin import PluginCommandline, get_stuff_in_dir
 
 
 class Kvantum(PluginCommandline):
-    def __init__(self, theme_light: str, theme_dark: str):
-        super().__init__(theme_light, theme_dark, ["kvantummanager", "--set", '%t'])
+    def __init__(self):
+        super().__init__(["kvantummanager", "--set", '%t'])
 
     @property
     def available_themes(self) -> dict:

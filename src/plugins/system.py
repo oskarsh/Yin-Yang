@@ -2,6 +2,7 @@ import subprocess
 import pwd
 import os
 
+from src import config
 from src.plugins._plugin import Plugin, PluginDesktopDependent, PluginCommandline
 
 
@@ -22,14 +23,15 @@ def test_gnome_availability(command) -> bool:
 
 
 class System(PluginDesktopDependent):
-    def __init__(self, theme_light: str, theme_dark: str, desktop: str):
+    def __init__(self):
+        desktop = config.get('desktop')
         if desktop == 'kde':
-            self._strategy_instance = Kde(theme_light, theme_dark)
+            self._strategy_instance = Kde()
         elif desktop == 'gtk':
-            self._strategy_instance = Gnome(theme_light, theme_dark)
+            self._strategy_instance = Gnome()
         else:
             raise ValueError('Unsupported desktop environment!')
-        super().__init__(theme_light, theme_dark, desktop)
+        super().__init__()
 
     @property
     def strategy(self) -> Plugin:
@@ -37,11 +39,11 @@ class System(PluginDesktopDependent):
 
 
 class Gnome(PluginCommandline):
+    name = 'System'
     # TODO allow using the default themes, not only user themes
 
-    def __init__(self, theme_light: str, theme_dark: str):
-        super().__init__(theme_light, theme_dark,
-                         ["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name", "%t"])
+    def __init__(self):
+        super().__init__(["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name", "%t"])
 
     @property
     def available(self) -> bool:
@@ -66,11 +68,11 @@ def get_readable_kde_theme_name(file) -> str:
 
 
 class Kde(PluginCommandline):
-    name = 'KDE'
+    name = 'System'
     translations = {}
 
-    def __init__(self, theme_light: str, theme_dark: str):
-        super().__init__(theme_light, theme_dark, ["lookandfeeltool", "-a", '%t'])
+    def __init__(self):
+        super().__init__(["lookandfeeltool", "-a", '%t'])
 
     @property
     def available_themes(self) -> dict:
