@@ -31,21 +31,33 @@ class Vscode(Plugin):
         path = str(Path.home()) + "/.config/"
 
         possible_editors = [
-            path + "VSCodium/User/settings.json",
-            path + "Code - OSS/User/settings.json",
-            path + "Code/User/settings.json",
-            path + "Code - Insiders/User/settings.json",
+            "VSCodium",
+            "Code - OSS",
+            "Code",
+            "Code - Insiders",
         ]
 
         for editor in possible_editors:
+            editor = path + editor + '/User/settings.json'
             if os.path.isfile(editor):
-                # getting the old theme to replace it
+                # load the settings
                 with open(editor, "r") as sett:
                     try:
                         settings = json.load(sett)
-                    except json.decoder.JSONDecodeError:
-                        settings = {"workbench.colorTheme": ""}
-                settings['workbench.colorTheme'] = theme
+                        settings['workbench.colorTheme'] = theme
+                    except json.decoder.JSONDecodeError as e:
+                        # check if the file is completely empty
+                        sett.seek(0)
+                        first_char: str = sett.read(1)
+                        if not first_char:
+                            # file is empty
+                            print('File is empty')
+                            settings = {"workbench.colorTheme": theme}
+                        else:
+                            # settings file is malformed
+                            raise e
+
+                # write changed settings into the file
                 with open(editor, 'w') as sett:
                     json.dump(settings, sett)
 
