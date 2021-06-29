@@ -2,8 +2,9 @@ import json
 from configparser import ConfigParser
 from os.path import isdir
 from pathlib import Path
+from typing import Optional
 
-from PyQt5.QtWidgets import QGroupBox, QCheckBox
+from PyQt5.QtWidgets import QGroupBox
 
 from ._plugin import Plugin
 from .. import config
@@ -21,7 +22,7 @@ def get_default_profile_path() -> str:
 class Firefox(Plugin):
     """This class has no functionality except providing a section in the config"""
 
-    def set_theme(self, theme: str):
+    def set_theme(self, theme: str) -> Optional[str]:
         if not (self.available and self.enabled):
             return
 

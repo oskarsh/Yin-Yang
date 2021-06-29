@@ -68,7 +68,7 @@ class Plugin(ABC):
         return self.set_theme(theme) == theme
 
     @abstractmethod
-    def set_theme(self, theme: str) -> str:
+    def set_theme(self, theme: str) -> Optional[str]:
         """Sets a specific theme
         :param theme: the theme that should be used
         :return: the theme that has been set (should be the same as the parameter

@@ -1,5 +1,6 @@
 from configparser import ConfigParser
 from pathlib import Path
+from typing import Optional
 
 from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
 from .system import test_gnome_availability
@@ -38,7 +39,7 @@ class _Gnome(PluginCommandline):
 class _Kde(Plugin):
     name = 'GTK'
 
-    def set_theme(self, theme: str):
+    def set_theme(self, theme: str) -> Optional[str]:
         conf = ConfigParser()
 
         for version in ['gtk-3.0', 'gtk-4.0']:
