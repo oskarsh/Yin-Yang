@@ -4,7 +4,7 @@ from os import listdir
 from os.path import isdir, join, isfile
 from typing import Optional
 
-from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox, QCheckBox
+from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
 from src import config
 
@@ -82,11 +82,11 @@ class Plugin(ABC):
 
         widget = QGroupBox(area)
         widget.setTitle(self.name)
+        widget.setCheckable(True)
         widget.setObjectName('group' + self.name)
 
         horizontal_layout = QHBoxLayout(widget)
 
-        horizontal_layout.addWidget(QCheckBox(widget))
         for inp in self.get_input(widget):
             horizontal_layout.addWidget(inp)
 

@@ -33,10 +33,9 @@ class SettingsWindow(QtWidgets.QMainWindow):
         print("saving options")
 
         for plugin in plugins:
+            widget: QtWidgets.QGroupBox = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
 
-            widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
-
-            plugin.enabled = widget.findChild(QCheckBox).isChecked()
+            plugin.enabled = widget.isChecked()
             if plugin.available_themes:
                 # extra behaviour for combobox
                 children = widget.findChildren(QtWidgets.QComboBox)
@@ -64,7 +63,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
     def sync_with_config(self):
         """Adds the plugin widgets to the ui"""
-        widget: QtWidgets.QWidget
+        widget: QtWidgets.QGroupBox
         for plugin in plugins:
 
             widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'group' + plugin.name)
@@ -74,7 +73,7 @@ class SettingsWindow(QtWidgets.QMainWindow):
 
             assert widget is not None, f'No widget for plugin {plugin.name} found'
 
-            widget.findChild(QCheckBox).setChecked(plugin.enabled)
+            widget.setChecked(plugin.enabled)
 
             if plugin.name == 'Wallpaper':
                 children = widget.findChildren(QtWidgets.QPushButton)
