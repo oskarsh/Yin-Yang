@@ -108,7 +108,6 @@ config["atomEnabled"] = False
 config["atomLightTheme"] = "one-light"
 config["atomDarkTheme"] = "one-dark"
 
-# TODO add default wallpapers
 config["wallpaperEnabled"] = False
 config["wallpaperLightTheme"] = ""
 config["wallpaperDarkTheme"] = ""
