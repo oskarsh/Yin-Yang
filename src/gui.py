@@ -226,12 +226,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def time_changed(self):
         # update config if time has changed
-        l_hour, l_minute = str(self.ui.light_time.time().hour()), str(
-            self.ui.light_time.time().minute())
-        d_hour, d_minute = str(self.ui.dark_time.time().hour()), str(
-            self.ui.dark_time.time().minute())
-        config.update("switchToLight", l_hour + ":" + l_minute)
-        config.update("switchToDark", d_hour + ":" + d_minute)
+        time_light = self.ui.light_time.time().toPyTime()
+        time_dark = self.ui.dark_time.time().toPyTime()
+        config.update("switchToLight", time_light.strftime("%H:%M"))
+        config.update("switchToDark", time_dark.strftime("%H:%M"))
 
     def toggle_schedule_cliked(self):
         checked = self.ui.schedule_radio.isChecked()
