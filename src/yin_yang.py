@@ -21,10 +21,9 @@ import time
 import traceback
 
 from src import config
-
-# aliases for path to use later on
 from src.plugins import plugins
 
+# aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
 path = "/home/" + user + "/.config/"
 
