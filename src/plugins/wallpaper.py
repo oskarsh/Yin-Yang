@@ -1,32 +1,65 @@
-import subprocess
-import os
-import pwd
-from src import config
+from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout
 
-def switch_to_dark():
-
-    wallpaper_dark = config.get("wallpaperDarkTheme")
-
-    if wallpaper_dark == "":
-        subprocess.run(["notify-send", "looks like no dark wallpaper is set"])
-    else:
-        if config.get("desktop") == "kde":
-            subprocess.run(
-                ["sh", "/opt/yin-yang/src/change_wallpaper.sh", wallpaper_dark])
-        if config.get("desktop") == "gtk":
-            subprocess.run(["gsettings", "set", "org.gnome.desktop.background",
-                            "picture-uri", "file://"+wallpaper_dark])
+from ._plugin import PluginDesktopDependent, PluginCommandline
+from .system import test_gnome_availability
+from .. import config
 
 
-def switch_to_light():
-    wallpaper_light = config.get("wallpaperLightTheme")
+class Wallpaper(PluginDesktopDependent):
+    # themes are image file paths
 
-    if wallpaper_light == "":
-        subprocess.run(["notify-send", "looks like no light wallpaper is set"])
-    else:
-        if config.get("desktop") == "kde":
-            subprocess.run(
-                ["sh", "/opt/yin-yang/src/change_wallpaper.sh", wallpaper_light])
-        if config.get("desktop") == "gtk":
-            subprocess.run(["gsettings", "set", "org.gnome.desktop.background",
-                            "picture-uri", "file://"+wallpaper_light])
+    def __init__(self):
+        desktop = config.get('desktop')
+        if desktop == 'kde':
+            self.strategy_instance = _Kde()
+        elif desktop == 'gtk':
+            self.strategy_instance = _Gnome()
+        else:
+            raise ValueError('Unsupported desktop environment!')
+        super().__init__()
+
+    @property
+    def strategy(self):
+        return self.strategy_instance
+
+    @property
+    def available(self) -> bool:
+        return self.strategy is not None
+
+    def get_input(self, widget):
+        widgets = []
+
+        for _ in ['Light', 'Dark']:
+            grp = QtWidgets.QWidget(widget)
+            horizontal_layout = QVBoxLayout(grp)
+
+            btn = QtWidgets.QDialogButtonBox(grp)
+            btn.setStandardButtons(QDialogButtonBox.Open)
+            horizontal_layout.addWidget(btn)
+
+            widgets.append(grp)
+
+        return widgets
+
+
+class _Gnome(PluginCommandline):
+    name = 'Wallpaper'
+
+    def __init__(self):
+        super().__init__(["gsettings", "set", "org.gnome.desktop.background", "picture-uri", "file://%t"])
+
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
+
+
+class _Kde(PluginCommandline):
+    name = 'Wallpaper'
+
+    def __init__(self):
+        super().__init__(["bash", "./src/change_wallpaper.sh", "%t"])
+
+    @property
+    def available(self) -> bool:
+        # the script change_wallpaper comes with this tool, so we can except that it is available
+        return True

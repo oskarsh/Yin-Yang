@@ -2,9 +2,9 @@ import json
 import os
 import pathlib
 import re
-
-from main import assembly_version
 from suntime import Sun, SunTimeException
+
+assembly_version = 2.2
 
 # aliases for path to use later on
 home = os.getenv("HOME")
@@ -79,39 +79,78 @@ config["switchToDark"] = "20:00"
 config["switchToLight"] = "07:00"
 config["running"] = False
 config["theme"] = ""
-config["codeLightTheme"] = "Default Light+"
-config["codeDarkTheme"] = "Default Dark+"
-config["codeEnabled"] = False
-config["kdeLightTheme"] = "org.kde.breeze.desktop"
-config["kdeDarkTheme"] = "org.kde.breezedark.desktop"
-config["kdeEnabled"] = False
-config["gtkLightTheme"] = ""
-config["gtkDarkTheme"] = ""
-config["atomLightTheme"] = ""
-config["atomDarkTheme"] = ""
-config["atomEnabled"] = False
-config["gtkEnabled"] = False
-config["wallpaperLightTheme"] = ""
-config["wallpaperDarkTheme"] = ""
-config["wallpaperEnabled"] = False
-config["firefoxEnabled"] = False
-config["firefoxDarkTheme"] = "firefox-compact-dark@mozilla.org"
-config["firefoxLightTheme"] = "firefox-compact-light@mozilla.org"
-config["firefoxActiveTheme"] = "firefox-compact-light@mozilla.org"
-config["gnomeEnabled"] = False
-config["gnomeLightTheme"] = ""
-config["gnomeDarkTheme"] = ""
-config["kvantumEnabled"] = False
-config["kvantumLightTheme"] = ""
-config["kvantumDarkTheme"] = ""
 config["soundEnabled"] = True
 
-if exists():
+config["codeEnabled"] = False
+config["codeLightTheme"] = "Default Light+"
+config["codeDarkTheme"] = "Default Dark+"
+
+config["systemEnabled"] = False
+if config["desktop"] == "kde":
+    config["systemLightTheme"] = "org.kde.breeze.desktop"
+    config["systemDarkTheme"] = "org.kde.breezedark.desktop"
+else:
+    # TODO add default system themes for non-kde systems
+    config["systemLightTheme"] = ""
+    config["systemDarkTheme"] = ""
+
+config["gtkEnabled"] = False
+if config["desktop"] == "kde":
+    # these are the same, as breeze syncs its colors with qt
+    config["gtkLightTheme"] = "Breeze"
+    config["gtkDarkTheme"] = "Breeze"
+else:
+    # TODO add default gtk themes for non-kde systems
+    config["gtkLightTheme"] = ""
+    config["gtkDarkTheme"] = ""
+
+config["atomEnabled"] = False
+config["atomLightTheme"] = "one-light"
+config["atomDarkTheme"] = "one-dark"
+
+config["wallpaperEnabled"] = False
+config["wallpaperLightTheme"] = ""
+config["wallpaperDarkTheme"] = ""
+
+config["firefoxEnabled"] = False
+config["firefoxLightTheme"] = "firefox-compact-light@mozilla.org"
+config["firefoxDarkTheme"] = "firefox-compact-dark@mozilla.org"
+
+config["kvantumEnabled"] = False
+config["kvantumLightTheme"] = "KvFlatLight"
+config["kvantumDarkTheme"] = "KvFlat"
+
+
+def load_config():
+    """Load the config file and update it
+    Needed for unittests
+    """
+    global config
     # making config global for this module
     with open(path + "/yin_yang/yin_yang.json", "r") as conf:
         config = json.load(conf)
 
-config["desktop"] = get_desktop()
+    if config["version"] < assembly_version:
+        # Add or update keys to be compatible with the current version
+        if "soundEnabled" not in config:
+            config["soundEnabled"] = True
+
+        name = "kde" if config["desktop"] == "kde" else "gnome"
+
+        config['systemEnabled'] = config[f'{name}Enabled']
+        config['systemLightTheme'] = config[f'{name}LightTheme']
+        config['systemDarkTheme'] = config[f'{name}DarkTheme']
+
+        # delete old keys
+        for pl_old in ['kde', 'gnome']:
+            for key in ['Enabled', 'LightTheme', 'DarkTheme']:
+                config.pop(pl_old + key)
+
+        config["version"] = assembly_version
+
+
+if exists():
+    load_config()
 
 
 def get_config():

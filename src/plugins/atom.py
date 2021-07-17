@@ -1,78 +1,49 @@
-import os
-import pwd
-import json
 import re
-from src import config
+from os.path import isfile
+from pathlib import Path
+from typing import Optional
 
-# aliases for path to use later on
-user = pwd.getpwuid(os.getuid())[0]
-path = "/home/"+user+"/.atom/"
+from ._plugin import Plugin, inplace_change
 
-
-def inplace_change(filename, old_string, new_string):
-    """@params: config - config to be written into file
-                path - the path where the config is will be written into.
-                    Defaults to the default path
-    """
-    # Safely read the input filename using 'with'
-    with open(filename) as f:
-        s = f.read()
-    # write the changed content, if found in the file
-    with open(filename, 'w') as f:
-        print(
-            'Changing "{old_string}" to "{new_string}" in {filename}'
-            .format(**locals()))
-        s = s.replace(old_string, new_string)
-        f.write(s)
-
-
-def write_new_settings(settings, path):
-    print("SETTINGS ", len(settings))
-    # simple adds a new field to the settings
-    settings["workbench.colorTheme"] = "Default"
-    with open(path, 'w') as conf:
-        json.dump(settings, conf, indent=4)
 
 def get_old_theme(settings):
     """returns the theme which is currently used
        uses regex to find the currently used theme
-       i excpect that themes follow this pattern
+       i expect that themes follow this pattern
        XXXX-XXXX-ui     XXXX-XXXX-syntax
     """
     with open(settings, "r") as file:
         string = file.read()
-        # themes = findall(themes: [ anyword anword])
         themes = re.findall(r'themes: \[[\s]*"([A-Za-z0-9\-]*)"[\s]*"([A-Za-z0-9\-]*)"', string)
-        if len(themes) == 0:
-            # setting defaut value for themes
-            themes = [["one-dark-ui", "one-dark-syntax"]]
         if len(themes) >= 1:
-            ui_theme, syntax_theme = themes[0]
-            used_theme = re.findall("([A-z\-A-z]*)\-", ui_theme)[0]
-            print(used_theme)
+            ui_theme, _ = themes[0]
+            used_theme = re.findall('([A-z-A-z]*)-', ui_theme)[0]
             return used_theme
 
-def switch_to_light():
-    # get theme out of config
-    atom_theme = config.get("atomLightTheme")
 
-    # getting the old theme first
-    current_theme = get_old_theme(path+"config.cson")
+class Atom(Plugin):
+    # noinspection SpellCheckingInspection
+    config_path = str(Path.home()) + "/.atom/config.cson"
 
-    # check if already used
-    if atom_theme != current_theme:
-        # updating the old theme with theme specfied in config
-        inplace_change(path+"config.cson", current_theme, atom_theme)
+    def set_theme(self, theme: str) -> Optional[str]:
+        if not (self.available and self.enabled):
+            return
 
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
 
-def switch_to_dark():
-    # get theme out of config
-    atom_theme = config.get("atomDarkTheme")
+        # getting the old theme first
+        current_theme: str = get_old_theme(self.config_path)
 
-    # getting the old theme first
-    current_theme = get_old_theme(path+"config.cson")
+        if not current_theme:
+            raise ValueError("Current theme could not be determined."
+                             "If you see this error, try to set a custom theme once and then try again")
 
-    # check if already used
-    if atom_theme != current_theme:
-        # updating the old theme with theme specfied in config
-        inplace_change(path+"config.cson", current_theme, atom_theme)
+        # updating the old theme with theme specified in config
+        inplace_change(self.config_path, current_theme, theme)
+
+        return theme
+
+    @property
+    def available(self) -> bool:
+        return isfile(self.config_path)

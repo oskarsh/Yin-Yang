@@ -1,16 +1,24 @@
-import subprocess
-from src import config
+from ._plugin import PluginCommandline, get_stuff_in_dir
 
 
-def switch_to_light():
-    kvantum_theme = config.get("kvantumLightTheme")
-    # uses a kvantummanager cli to switch to a light theme
-    print("Kvantum Light theme:", kvantum_theme)
-    subprocess.run(["kvantummanager", "--set", kvantum_theme])
+class Kvantum(PluginCommandline):
+    def __init__(self):
+        super().__init__(["kvantummanager", "--set", '%t'])
 
+    @property
+    def available_themes(self) -> dict:
+        if not self.available:
+            return {}
 
-def switch_to_dark():
-    kvantum_theme = config.get("kvantumDarkTheme")
-    # uses a kvantummanager cli to switch to a dark theme
-    print("Kvantum Dark theme:", kvantum_theme)
-    subprocess.run(["kvantummanager", "--set", kvantum_theme])
+        path = '/usr/share/Kvantum'
+
+        themes = get_stuff_in_dir(path, type='dir')
+        themes_dict: dict = {}
+        assert len(themes) > 0, 'No themes were found'
+
+        themes.sort()
+        for theme in themes:
+            themes_dict[theme] = theme
+
+        assert themes_dict != {}, 'No themes found!'
+        return themes_dict
