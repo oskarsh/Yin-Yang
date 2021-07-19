@@ -10,7 +10,7 @@ class Kvantum(PluginCommandline):
         if not self.available:
             return {}
 
-        paths = ['/usr/share/Kvantum',str(Path.home()) + '/.config/Kvantum']
+        paths = ['/usr/share/Kvantum', str(Path.home()) + '/.config/Kvantum']
         themes = list()
         # At present, it seems that the function of finding themes is based
         # on dirs, but .kvconfig. So some theme will no be recognized. This
