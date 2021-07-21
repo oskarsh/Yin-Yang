@@ -33,7 +33,7 @@
 ## Installation
 To install Yin-Yang copy the command below:
 
-```git clone https://github.com/daehruoydeef/Yin-Yang && cd Yin-Yang && sh install.sh```
+```git clone https://github.com/daehruoydeef/Yin-Yang && cd Yin-Yang && ./install.sh```
 
 and follow the onscreen Instructions.
 
