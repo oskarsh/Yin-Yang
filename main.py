@@ -62,7 +62,8 @@ def main():
                 "Looks like you have not specified a time."
                 "You can use the GUI by running Yin & Yang or "
                 "edit the config found in ~/.config/yin_yang/yin_yang.json."
-                "You need to set schedule to true and edit the time to toggles.")
+                "You need to set schedule to true and edit the time to toggles."
+            )
 
     if args.toggle:
         # terminate any running instances
