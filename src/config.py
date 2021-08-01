@@ -54,11 +54,6 @@ def set_sun_time():
         today_sr = sun.get_local_sunrise_time()
         today_ss = sun.get_local_sunset_time()
 
-        logger.debug(
-            f'Today the sun raised at {today_sr.strftime("%H:%M")} and '
-            f'gets down at {today_ss.strftime("%H:%M")}'
-        )
-
         # Get today's sunrise and sunset in UTC
         update("switchToLight", today_sr.strftime('%H:%M'))
         update("switchToDark", today_ss.strftime('%H:%M'))
