@@ -1,4 +1,3 @@
-import logging
 import sys
 import logging
 from argparse import ArgumentParser
@@ -58,7 +57,8 @@ def main():
         if config.get("schedule"):
             yin_yang.start_daemon()
         else:
-            logger.warning(
+            logger.warning("Tried to start scheduler, but schedule was not enabled.")
+            print(
                 "Looks like you have not specified a time."
                 "You can use the GUI by running Yin & Yang or "
                 "edit the config found in ~/.config/yin_yang/yin_yang.json."
