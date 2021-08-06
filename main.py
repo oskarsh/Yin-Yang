@@ -74,7 +74,7 @@ def main():
 
 
 if __name__ == "__main__":
-    # __debug__ is true when main.py is run without the -o argument.
+    # __debug__ is true when main.py is run without the -O argument.
     if __debug__:
         # noinspection SpellCheckingInspection
         logging.basicConfig(
