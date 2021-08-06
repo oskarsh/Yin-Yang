@@ -1,6 +1,7 @@
 import sys
 import logging
 from argparse import ArgumentParser
+from logging.handlers import TimedRotatingFileHandler
 from pathlib import Path
 
 from PyQt5 import QtWidgets
@@ -71,7 +72,7 @@ def main():
 
 
 if __name__ == "__main__":
-    # __debug__ is true when main.py is run without the -O argument.
+    # __debug__ is true when you run main.py without the -O argument (python main.py)
     if __debug__:
         # noinspection SpellCheckingInspection
         logging.basicConfig(
@@ -79,11 +80,18 @@ if __name__ == "__main__":
             format='%(asctime)s %(levelname)s - %(name)s: %(message)s'
         )
     else:
-        # logger to see what happens when application is running in background
+        # if you run it with "python -O main.py" instead, debug is false
+
+        # let the default logger print to the console
         # noinspection SpellCheckingInspection
         logging.basicConfig(
-            filename=str(Path.home()) + '/.local/share/yin_yang.log',
             level=logging.WARNING,
             format='%(asctime)s %(levelname)s - %(name)s: %(message)s'
         )
+        # and add a handler to save the logs of the last two days in a file
+        file_handler = TimedRotatingFileHandler(
+            str(Path.home()) + '/.local/share/yin_yang.log',
+            when='d', interval=2
+        )
+        logging.root.addHandler(file_handler)
     main()
