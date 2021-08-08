@@ -51,7 +51,7 @@ class Firefox(Plugin):
 
     @property
     def available(self) -> bool:
-        return isdir(get_default_profile_path())
+        return isdir(str(Path.home()) + '/.mozilla/firefox/')
 
     def get_widget(self, area) -> QGroupBox:
         widget = super().get_widget(area)
