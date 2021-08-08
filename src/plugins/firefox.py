@@ -6,7 +6,7 @@ from typing import Optional
 
 from PyQt5.QtWidgets import QGroupBox
 
-from ._plugin import Plugin
+from ._plugin import ExternalPlugin
 from .. import config
 
 
@@ -19,7 +19,7 @@ def get_default_profile_path() -> str:
     return path
 
 
-class Firefox(Plugin):
+class Firefox(ExternalPlugin):
     """This class has no functionality except providing a section in the config"""
 
     def set_theme(self, theme: str) -> Optional[str]:
@@ -58,16 +58,3 @@ class Firefox(Plugin):
         widget.setToolTip("You need to install the Yin-Yang extension for Firefox")
 
         return widget
-
-    @Plugin.enabled.setter
-    def enabled(self, value: bool):
-        # needs to be copied because super().setter does not work
-        # for more information see:
-        # https://stackoverflow.com/questions/10810369/python-super-and-setting-parent-class-property
-        config.update(str(self) + 'Enabled', value)
-
-        if value:
-            print(
-                'Please remember to install the Yin-Yang plugin in Firefox.\n' +
-                'You can get it here: https://addons.mozilla.org/de/firefox/addon/yin-yang-linux/'
-            )
