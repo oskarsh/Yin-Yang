@@ -20,6 +20,7 @@ import threading
 import time
 import traceback
 
+import src.yin_yang
 from src import config
 from src.plugins import plugins
 
@@ -37,6 +38,9 @@ class Yang(threading.Thread):
 
     def run(self):
         for pl in plugins:
+            if isinstance(pl, src.plugins.ExternalPlugin):
+                continue
+
             if pl.enabled:
                 print('Changing theme in plugin ' + pl.name)
                 try:
@@ -55,6 +59,9 @@ class Yin(threading.Thread):
 
     def run(self):
         for pl in plugins:
+            if isinstance(pl, src.plugins.ExternalPlugin):
+                continue
+
             if pl.enabled:
                 print('Changing theme in plugin ' + pl.name)
                 try:

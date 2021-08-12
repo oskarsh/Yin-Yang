@@ -191,6 +191,34 @@ class PluginDesktopDependent(Plugin):
         return self.strategy.available_themes
 
 
+class ExternalPlugin(Plugin):
+    """A class for all plugins whose theme can only be changed externally via communication."""
+
+    def set_theme(self, theme: str) -> Optional[str]:
+
+        if not (self.available and self.enabled):
+            return
+
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
+        # throws error if in debug mode, else ignored
+        assert False, 'This is an external plugin, the mode can only be changed externally.'
+
+    @Plugin.enabled.setter
+    def enabled(self, value: bool):
+        # needs to be copied because super().setter does not work
+        # for more information see:
+        # https://stackoverflow.com/questions/10810369/python-super-and-setting-parent-class-property
+        config.update(str(self) + 'Enabled', value)
+
+        if value:
+            print(
+                'Please remember to install the Yin-Yang plugin in Firefox.\n' +
+                'You can get it here: https://addons.mozilla.org/de/firefox/addon/yin-yang-linux/'
+            )
+
+
 def inplace_change(filename: str, old_string: str, new_string: str):
     """Replaces a given string by a new string in a specific file
     :param filename: the full path to the file that should be changed

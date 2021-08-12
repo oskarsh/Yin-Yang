@@ -13,3 +13,6 @@ plugins: [Plugin] = [
     vscode.Vscode(),
     atom.Atom()
 ]
+
+# this lets us skip all external plugins in yin_yang.py while keeping _plugin "private"
+ExternalPlugin = _plugin.ExternalPlugin

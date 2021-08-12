@@ -10,6 +10,12 @@ from ._plugin import Plugin, get_stuff_in_dir
 
 logger = logging.getLogger(__name__)
 
+EXTENSION_PATHS = [
+    str(Path.home()) + '/.vscode/extensions',
+    '/usr/lib/code/extensions',
+    str(Path.home()) + '/.vscode-oss/extensions'
+]
+
 
 def write_new_settings(settings, path):
     # simple adds a new field to the settings
@@ -68,13 +74,11 @@ class Vscode(Plugin):
 
     @property
     def available_themes(self) -> dict:
-        paths = ['/usr/lib/code/extensions',
-                 str(Path.home()) + '/.vscode-oss/extensions']
         themes_dict = {}
         if not self.available:
             return themes_dict
 
-        for path in paths:
+        for path in EXTENSION_PATHS:
             extension_dirs = get_stuff_in_dir(path, type='dir')
             # filter for a dir that doesnt seem to be an extension
             # since it has no manifest
@@ -123,4 +127,6 @@ class Vscode(Plugin):
 
     @property
     def available(self) -> bool:
-        return isdir('/usr/lib/code/extensions')
+        for path in EXTENSION_PATHS:
+            if isdir(path):
+                return True
