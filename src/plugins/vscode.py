@@ -78,7 +78,7 @@ class Vscode(Plugin):
         if not self.available:
             return themes_dict
 
-        for path in EXTENSION_PATHS:
+        for path in filter(isdir, EXTENSION_PATHS):
             extension_dirs = get_stuff_in_dir(path, type='dir')
             # filter for a dir that doesnt seem to be an extension
             # since it has no manifest
