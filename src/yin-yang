@@ -1,2 +1,3 @@
-#!/bin/sh
+#!/bin/bash
+cd /opt/yin-yang/
 python3 -O /opt/yin-yang/main.py $@
