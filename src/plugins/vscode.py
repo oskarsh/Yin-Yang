@@ -12,8 +12,9 @@ logger = logging.getLogger(__name__)
 
 EXTENSION_PATHS = [
     str(Path.home()) + '/.vscode/extensions',
+    str(Path.home()) + '/.vscode-oss/extensions',
     '/usr/lib/code/extensions',
-    str(Path.home()) + '/.vscode-oss/extensions'
+    '/opt/visual-studio-code/resources/app/extensions/'
 ]
 
 
@@ -34,8 +35,6 @@ class Vscode(Plugin):
         if not (self.available and self.enabled):
             return
 
-        path = str(Path.home()) + "/.config/"
-
         possible_editors = [
             "VSCodium",
             "Code - OSS",
@@ -43,34 +42,38 @@ class Vscode(Plugin):
             "Code - Insiders",
         ]
 
-        for editor in possible_editors:
-            editor = path + editor + '/User/settings.json'
-            if os.path.isfile(editor):
-                # load the settings
-                with open(editor, "r") as sett:
-                    try:
-                        settings = json.load(sett)
-                        settings['workbench.colorTheme'] = theme
-                    except json.decoder.JSONDecodeError as e:
-                        # check if the file is completely empty
-                        sett.seek(0)
-                        first_char: str = sett.read(1)
-                        if not first_char:
-                            # file is empty
-                            print('File is empty')
-                            settings = {"workbench.colorTheme": theme}
-                        else:
-                            # settings file is malformed
-                            raise e
+        path = str(Path.home()) + "/.config/"
+        file = '/User/settings.json'
+        for i in range(len(possible_editors)):
+            name = possible_editors.pop(i)
+            possible_editors.append(path + name + file)
 
-                # write changed settings into the file
-                with open(editor, 'w') as sett:
-                    json.dump(settings, sett)
+        for editor in filter(os.path.isfile, possible_editors):
+            # load the settings
+            with open(editor, "r") as sett:
+                try:
+                    settings = json.load(sett)
+                    settings['workbench.colorTheme'] = theme
+                except json.decoder.JSONDecodeError as e:
+                    # check if the file is completely empty
+                    sett.seek(0)
+                    first_char: str = sett.read(1)
+                    if not first_char:
+                        # file is empty
+                        print('File is empty')
+                        settings = {"workbench.colorTheme": theme}
+                    else:
+                        # settings file is malformed
+                        raise e
 
-                return theme
+            # write changed settings into the file
+            with open(editor, 'w') as sett:
+                json.dump(settings, sett)
 
-        raise FileNotFoundError('No config file found. '
-                                'If you see this error, try to set a custom theme manually once and try again.')
+        if filter(os.path.isfile, possible_editors).__next__() is None:
+            raise FileNotFoundError('No config file found. '
+                                    'If you see this error, try to set a custom theme manually once and try again.')
+        return theme
 
     @property
     def available_themes(self) -> dict:
