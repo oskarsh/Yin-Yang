@@ -12,6 +12,7 @@ license: MIT
 """
 
 import datetime
+import logging
 import os
 import pwd
 import subprocess
@@ -23,6 +24,8 @@ import traceback
 import src.yin_yang
 from src import config
 from src.plugins import plugins
+
+logger = logging.getLogger(__name__)
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
@@ -42,12 +45,12 @@ class Yang(threading.Thread):
                 continue
 
             if pl.enabled:
-                print('Changing theme in plugin ' + pl.name)
+                logger.info('Changing theme in plugin ' + pl.name)
                 try:
                     if not pl.set_mode(False):
                         raise ValueError('set_mode() did not return True.')
                 except Exception as e:
-                    print('Error while changing the theme in plugin ' + pl.name)
+                    logger.error('Error while changing the theme in plugin ' + pl.name)
                     traceback.print_exception(type(e), e, e.__traceback__)
         play_sound("./assets/light.wav")
 
@@ -63,12 +66,12 @@ class Yin(threading.Thread):
                 continue
 
             if pl.enabled:
-                print('Changing theme in plugin ' + pl.name)
+                logger.info('Changing theme in plugin ' + pl.name)
                 try:
                     if not pl.set_mode(True):
                         raise ValueError('set_mode() did not return True.')
                 except Exception as e:
-                    print('Error while changing the theme in plugin ' + pl.name)
+                    logger.error('Error while changing the theme in plugin ' + pl.name)
                     traceback.print_exception(type(e), e, e.__traceback__)
         play_sound("./assets/dark.wav")
 

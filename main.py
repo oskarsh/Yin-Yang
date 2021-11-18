@@ -1,11 +1,17 @@
 import sys
+import logging
 from argparse import ArgumentParser
-from src import yin_yang
-from src import config
-from src import gui
+from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
+from pathlib import Path
+
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
 
+from src import yin_yang
+from src import config
+from src import gui
+
+logger = logging.getLogger(__name__)
 
 # fix HiDpi scaling
 QtWidgets.QApplication.setAttribute(
@@ -43,7 +49,7 @@ def main():
     # checks whether the script should be ran as a daemon
     if args.schedule:
         config.update("running", False)
-        print("START thread listener")
+        logger.debug("START thread listener")
 
         if config.get("followSun"):
             # calculate time if needed
@@ -52,10 +58,13 @@ def main():
         if config.get("schedule"):
             yin_yang.start_daemon()
         else:
-            print("looks like you did not specified a time")
-            print("You can use the gui with yin-yang -gui")
-            print("Or edit the config found in ~/.config/yin_yang/yin_yang.json")
-            print("You need to set schedule to True and edit the time to toggles")
+            logger.warning("Tried to start scheduler, but schedule was not enabled.")
+            print(
+                "Looks like you have not specified a time."
+                "You can use the GUI by running Yin & Yang or "
+                "edit the config found in ~/.config/yin_yang/yin_yang.json."
+                "You need to set schedule to true and edit the time to toggles."
+            )
 
     if args.toggle:
         # terminate any running instances
@@ -66,4 +75,26 @@ def main():
 
 
 if __name__ == "__main__":
+    # __debug__ is true when you run main.py without the -O argument (python main.py)
+    if __debug__:
+        # noinspection SpellCheckingInspection
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format='%(asctime)s %(levelname)s - %(name)s: %(message)s'
+        )
+    else:
+        # if you run it with "python -O main.py" instead, debug is false
+
+        # let the default logger print to the console
+        # noinspection SpellCheckingInspection
+        logging.basicConfig(
+            level=logging.WARNING,
+            format='%(asctime)s %(levelname)s - %(name)s: %(message)s'
+        )
+        # and add a handler that limits the size to 1 GB
+        file_handler = RotatingFileHandler(
+            str(Path.home()) + '/.local/share/yin_yang.log',
+            maxBytes=10**9, backupCount=1
+        )
+        logging.root.addHandler(file_handler)
     main()

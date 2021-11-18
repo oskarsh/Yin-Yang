@@ -1,11 +1,12 @@
 import json
+import logging
 import os
 import pathlib
 import re
 from suntime import Sun, SunTimeException
 
+logger = logging.getLogger(__name__)
 assembly_version = 2.2
-
 # aliases for path to use later on
 home = os.getenv("HOME")
 path = home + "/.config"
@@ -53,15 +54,12 @@ def set_sun_time():
         today_sr = sun.get_local_sunrise_time()
         today_ss = sun.get_local_sunset_time()
 
-        print('Today the sun raised at {} and get down at {}'.
-              format(today_sr.strftime('%H:%M'), today_ss.strftime('%H:%M')))
-
         # Get today's sunrise and sunset in UTC
         update("switchToLight", today_sr.strftime('%H:%M'))
         update("switchToDark", today_ss.strftime('%H:%M'))
 
     except SunTimeException as e:
-        print("Error: {0}.".format(e))
+        logger.error(f"Error: {e}.")
 
 
 # generate path for yin-yang if there is none this will be skipped
