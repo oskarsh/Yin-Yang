@@ -20,6 +20,7 @@ import sys
 import threading
 import time
 import traceback
+import dbus
 
 import src.yin_yang
 from src import config
@@ -52,7 +53,7 @@ class Yang(threading.Thread):
                 except Exception as e:
                     logger.error('Error while changing the theme in plugin ' + pl.name)
                     traceback.print_exception(type(e), e, e.__traceback__)
-        play_sound("./assets/light.wav")
+        os_notificate("Theme changed to light")
 
 
 class Yin(threading.Thread):
@@ -73,7 +74,7 @@ class Yin(threading.Thread):
                 except Exception as e:
                     logger.error('Error while changing the theme in plugin ' + pl.name)
                     traceback.print_exception(type(e), e, e.__traceback__)
-        play_sound("./assets/dark.wav")
+        os_notificate("Theme changed to dark")
 
 
 class Daemon(threading.Thread):
@@ -141,17 +142,24 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
+def os_notificate(message: str):
+    session = dbus.SessionBus()
+    notify_proxy = session.get_object(
+        'org.freedesktop.Notifications',
+        '/org/freedesktop/Notifications'
+    )
 
-def play_sound(sound):
-    """ Description - only works with pulseaudio.
-    :type sound: String (Path)
-    :param sound: Sound path to be played audio file from
-    :rtype: I hope you will hear your Sound ;)
-    """
-
-    if config.sound_get_checkbox():
-        subprocess.run(["paplay", resource_path(sound)])
-
+    notify_proxy.Notify(
+        'Yin & Yang', 
+        0, 
+        '', 
+        message, 
+        '', 
+        [], 
+        [], 
+        5000, 
+        dbus_interface="org.freedesktop.Notifications"
+    )
 
 def should_be_light():
     # desc: return if the Theme should be light
