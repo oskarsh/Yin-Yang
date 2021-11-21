@@ -149,17 +149,18 @@ def os_notificate(message: str):
         '/org/freedesktop/Notifications'
     )
 
-    notify_proxy.Notify(
-        'Yin & Yang', 
-        0, 
-        '', 
-        message, 
-        '', 
-        [], 
-        [], 
-        5000, 
-        dbus_interface="org.freedesktop.Notifications"
-    )
+    app_name = 'Yin & Yang'
+    replaces_id = 0
+    app_icon = ''
+    summary = message
+    body = ''
+    actions = []
+    hints = []
+    timeout = 5000
+    iface = "org.freedesktop.Notifications"
+
+    notify_proxy.Notify(app_name, replaces_id, app_icon, summary, body, 
+        actions, hints, timeout, dbus_interface = iface)
 
 def should_be_light():
     # desc: return if the Theme should be light
