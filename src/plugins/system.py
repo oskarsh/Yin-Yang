@@ -74,6 +74,14 @@ class _Kde(PluginCommandline):
     def __init__(self):
         super().__init__(["lookandfeeltool", "-a", '%t'])
 
+    def set_mode(self, dark: bool) -> bool:
+        # TODO remove this once https://bugs.kde.org/show_bug.cgi?id=446074 is fixed
+        if not self.enabled:
+            return False
+
+        theme = self.theme_dark if dark else self.theme_light
+        return self.set_theme(theme) == theme and self.set_theme(theme) == theme
+
     @property
     def available_themes(self) -> dict:
         if self.translations != {}:
