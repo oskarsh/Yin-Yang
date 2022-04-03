@@ -64,7 +64,8 @@
 
 本项目由诸多开源志愿者用爱浇灌而成。
 
-[参与社区贡献](CONTRIBUTING.md).
+[参与社区贡献](https://github.com/oskarsh/Yin-Yang/wiki/Contributing)
+
 <a href="https://github.com/oskarsh/Yin-Yang/graphs/contributors"><img src="https://opencollective.com/Yin-Yang/contributors.svg?width=890&button=false" /></a>
 
 ### 资金支持

@@ -40,7 +40,7 @@ and follow the onscreen Instructions.
 
 
 You will need some dependencies for the installation process to work correctly check the Wiki for what is needed:
-[![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang>)
+[![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
 
 <p align="center" >
   <img alt="Yin-Yang" title="Yin & Yang" src="assets/settings.png" height="400">
@@ -49,7 +49,7 @@ You will need some dependencies for the installation process to work correctly c
 
 Want to know more? Visit the Wiki and read about Installation, Building, Troubleshooting and more.
 
-[![Generic badge](https://img.shields.io/badge/Visit-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang>)
+[![Generic badge](https://img.shields.io/badge/Visit-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
 
 
 
@@ -57,7 +57,7 @@ Want to know more? Visit the Wiki and read about Installation, Building, Trouble
 
 Yin-Yang comes with custom made Wallpaper in order to get you started with Light / Dark Wallpapers, you can check out the repository here
 
-The Wallpapers are open source and can be used however you want. I also accept contributions in form of open source Wallpapers see the [contribution Section](https://github.com/oskarsh/Yin-Yang/Supporting-Yin-Yang#create-yin-yang-wallpapers).
+The Wallpapers are open source and can be used however you want. I also accept contributions in form of open source Wallpapers see the [contribution Section](https://github.com/oskarsh/Yin-Yang/wiki/Supporting-Yin-Yang#create-yin-yang-wallpapers).
 
 [![Generic badge](https://img.shields.io/badge/Get-Wallpapers-BLUE.svg)](https://github.com/oskarsh/Wallpaper-yin-yang)
 
@@ -67,7 +67,7 @@ The Wallpapers are open source and can be used however you want. I also accept c
 
 ### Code Contributors
 
-This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+This project exists thanks to all the people who contribute. [[Contribute](https://github.com/oskarsh/Yin-Yang/wiki/Contributing)].
 
 <a href="https://github.com/oskarsh/Yin-Yang/graphs/contributors"><img src="https://opencollective.com/Yin-Yang/contributors.svg?width=890&button=false" /></a>
 
