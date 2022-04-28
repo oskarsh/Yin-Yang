@@ -119,7 +119,6 @@ class Vscode(Plugin):
 
                 except FileNotFoundError as e:
                     logger.error(str(e))
-                    themes_dict = {}
                     break
 
         assert themes_dict != {}, 'No themes found'
