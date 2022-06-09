@@ -45,7 +45,7 @@ fi
 echo ""
 echo "done"
 echo ""
-echo "Installin yin-yang for Commandline usage"
+echo "Installing yin-yang for Commandline usage"
 # copy files
 cp -r ./* /opt/yin-yang/
 # copy manifest for firefox extension
@@ -92,7 +92,7 @@ cat << "EOF"
                                        |___/
 EOF
 echo ""
-echo "Yin-Yang brings Auto Nightmode for KDE and VSCode"
+echo "Yin-Yang brings Auto Nightmode for Linux"
 echo ""
 cat << "EOF"
        _..oo8"""Y8b.._
