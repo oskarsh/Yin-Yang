@@ -1,3 +1,5 @@
+> Searching for Maintainers! Due to my personal situation I am not able to maintain this project anymore, if you are interested in maintaining and developing this project I am happy to organize a handover. 
+
 <a href="README_zh.md">简体中文(zh-cn)</a>
 <p align="center">
   <img alt="Yin-Yang" title="Yin & Yang" src="./src/ui/assets/icon.png" height="120">
