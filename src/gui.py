@@ -4,10 +4,9 @@ import os
 import sys
 from PyQt5 import QtWidgets
 from PyQt5.QtCore import QTime
-from PyQt5.QtWidgets import QFileDialog, QCheckBox
+from PyQt5.QtWidgets import QFileDialog
 
-from src import config
-from src.plugins import plugins
+from src.config import config, plugins, Modes
 from src.ui.mainwindow import Ui_MainWindow
 from src.ui.settings import Ui_MainWindow as Ui_SettingsWindow
 from src import yin_yang
@@ -162,7 +161,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def sync_with_config(self):
         # sets the scheduled button to be enabled or disabled
-        if config.is_scheduled():
+        if config.mode == Modes.scheduled:
             self.ui.schedule_radio.setChecked(True)
             self.ui.dark_time.setEnabled(True)
             self.ui.light_time.setEnabled(True)
@@ -202,37 +201,31 @@ class MainWindow(QtWidgets.QMainWindow):
         os.execl(python, python, *sys.argv)
 
     def set_correct_time(self):
-        new_config = config.get_config()
-        d_hour = new_config["switchToDark"].split(":")[0]
-        d_minute = new_config["switchToDark"].split(":")[1]
-        l_hour = new_config["switchToLight"].split(":")[0]
-        l_minute = new_config["switchToLight"].split(":")[1]
+        time_light, time_dark = config.times
 
         # giving the time widget the values of the config
-        dark_time = QTime(int(d_hour), int(d_minute))
-        light_time = QTime(int(l_hour), int(l_minute))
+        dark_time = QTime(time_dark)
+        light_time = QTime(time_light)
         self.ui.dark_time.setTime(dark_time)
         self.ui.light_time.setTime(light_time)
 
     def set_correct_buttons(self):
-        theme = config.get_theme()
-        if theme == "dark":
+        if config.dark_mode:
             self.ui.light_push.setEnabled(True)
             self.ui.dark_push.setEnabled(False)
-        if theme == "light":
+        else:
             self.ui.light_push.setEnabled(False)
             self.ui.dark_push.setEnabled(True)
-        if theme == "":
+        if config.mode == Modes.manual:
             self.ui.light_push.setEnabled(True)
             self.ui.dark_push.setEnabled(True)
-        self.ui.sound_checkBox.setChecked(config.sound_get_checkbox())
 
     def time_changed(self):
         # update config if time has changed
-        time_light = self.ui.light_time.time().toPyTime()
-        time_dark = self.ui.dark_time.time().toPyTime()
-        config.update("switchToLight", time_light.strftime("%H:%M"))
-        config.update("switchToDark", time_dark.strftime("%H:%M"))
+        if config.mode == Modes.scheduled:
+            time_light = self.ui.light_time.time().toPyTime()
+            time_dark = self.ui.dark_time.time().toPyTime()
+            config.times = time_light, time_dark
 
     def toggle_schedule_cliked(self):
         checked = self.ui.schedule_radio.isChecked()

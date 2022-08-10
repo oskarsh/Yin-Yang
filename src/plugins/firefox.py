@@ -7,7 +7,6 @@ from typing import Optional
 from PyQt5.QtWidgets import QGroupBox
 
 from ._plugin import ExternalPlugin
-from .. import config
 
 
 def get_default_profile_path() -> str:
@@ -21,6 +20,11 @@ def get_default_profile_path() -> str:
 
 class Firefox(ExternalPlugin):
     """This class has no functionality except providing a section in the config"""
+
+    def __init__(self):
+        super().__init__('https://addons.mozilla.org/de/firefox/addon/yin-yang-linux/')
+        self.theme_light = 'firefox-compact-light@mozilla.org'
+        self.theme_dark = 'firefox-compact-dark@mozilla.org'
 
     def set_theme(self, theme: str) -> Optional[str]:
         if not (self.available and self.enabled):

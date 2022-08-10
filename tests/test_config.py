@@ -4,7 +4,7 @@ from os import rename
 from os.path import isfile
 from pathlib import Path
 from shutil import copyfile
-from src import config
+from src.config import config, get_desktop
 
 config_path = f"{Path.home()}/.config/yin_yang/yin_yang.json"
 
@@ -68,28 +68,20 @@ class ConfigTest(unittest.TestCase):
             "test": True  # this is used for verification purpose
         }
 
-        for desktop in desktops:
-            config_v2_1["desktop"] = desktop
+        with open(config_path, "w+") as file:
+            json.dump(config_v2_1, file)
 
-            with self.subTest('Updating the config should apply correct themes to the system plugin',
-                              desktop=desktop):
-                with open(config_path, "w+") as file:
-                    json.dump(config_v2_1, file)
+        config.load()
 
-                config.load_config()
-
-                # check that the correct config is loaded, not an actual unittest
-                assert config.config["test"]
-
-                plugin = 'kde' if desktop == 'kde' else 'gnome'
-                settings = [
-                    'Enabled',
-                    'LightTheme',
-                    'DarkTheme'
-                ]
-                for value in settings:
-                    self.assertEqual(config_v2_1[plugin + value], config.config['system' + value],
-                                     'Updating old config files should apply correct values')
+        settings = [
+            'Enabled',
+            'LightTheme',
+            'DarkTheme'
+        ]
+        for plugin_property in settings:
+            self.assertEqual(config_v2_1[get_desktop() + plugin_property],
+                             config.get('system', plugin_property.replace('Theme', '_theme').lower()),
+                             'Updating old config files should apply correct values')
 
 
 if __name__ == '__main__':

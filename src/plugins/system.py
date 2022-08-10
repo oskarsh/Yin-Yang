@@ -2,8 +2,7 @@ import subprocess
 import pwd
 import os
 
-from src import config
-from src.plugins._plugin import Plugin, PluginDesktopDependent, PluginCommandline
+from src.plugins._plugin import PluginDesktopDependent, PluginCommandline
 
 
 def test_gnome_availability(command) -> bool:
@@ -23,23 +22,21 @@ def test_gnome_availability(command) -> bool:
 
 
 class System(PluginDesktopDependent):
-    def __init__(self):
-        desktop = config.get('desktop')
-        if desktop == 'kde':
-            self._strategy_instance = _Kde()
-        elif desktop == 'gtk':
-            self._strategy_instance = _Gnome()
-        else:
-            raise ValueError('Unsupported desktop environment!')
-        super().__init__()
+    def __init__(self, desktop: str):
+        match desktop:
+            case 'kde':
+                super().__init__(_Kde())
+            case 'gtk':
+                super().__init__(_Gnome())
+            case _:
+                raise ValueError('Unsupported desktop environment!')
 
-    @property
-    def strategy(self) -> Plugin:
-        return self._strategy_instance
+        super().__init__(_Kde())
 
 
 class _Gnome(PluginCommandline):
     name = 'System'
+
     # TODO allow using the default themes, not only user themes
 
     def __init__(self):
@@ -73,6 +70,8 @@ class _Kde(PluginCommandline):
 
     def __init__(self):
         super().__init__(["lookandfeeltool", "-a", '%t'])
+        self.theme_light = 'org.kde.breeze.desktop'
+        self.theme_dark = 'org.kde.breezedark.desktop'
 
     def set_mode(self, dark: bool) -> bool:
         # TODO remove this once https://bugs.kde.org/show_bug.cgi?id=446074 is fixed

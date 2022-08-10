@@ -6,11 +6,14 @@ from typing import Optional
 
 from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
-from src import config
-
 
 class Plugin(ABC):
     """An abstract base class for plugins"""
+
+    def __init__(self):
+        self.enabled = False
+        self.theme_light = ''
+        self.theme_dark = ''
 
     @property
     def name(self) -> str:
@@ -31,30 +34,6 @@ class Plugin(ABC):
         :return: Dict[intern_name, readable_name]
         """
         return {}
-
-    @property
-    def enabled(self) -> bool:
-        return config.get(str(self) + 'Enabled')
-
-    @enabled.setter
-    def enabled(self, value: bool):
-        config.update(str(self) + 'Enabled', value)
-
-    @property
-    def theme_dark(self) -> str:
-        return config.get(str(self) + 'DarkTheme')
-
-    @theme_dark.setter
-    def theme_dark(self, theme: str):
-        config.update(str(self) + 'DarkTheme', theme)
-
-    @property
-    def theme_light(self) -> str:
-        return config.get(str(self) + 'LightTheme')
-
-    @theme_light.setter
-    def theme_light(self, theme: str):
-        config.update(str(self) + 'LightTheme', theme)
 
     def set_mode(self, dark: bool) -> bool:
         """Set the dark or light theme
@@ -124,6 +103,7 @@ class Plugin(ABC):
 
 class PluginCommandline(Plugin):
     def __init__(self, command: list):
+        super().__init__()
         self.command = command
 
     def set_theme(self, theme: str) -> Optional[str]:
@@ -170,10 +150,16 @@ class PluginCommandline(Plugin):
 class PluginDesktopDependent(Plugin):
     """Plugins that behave differently on different desktops"""
 
+    def __init__(self, strategy_instance: Plugin):
+        super().__init__()
+        if strategy_instance:
+            self._strategy_instance = strategy_instance
+        else:
+            raise ValueError('Strategy is not valid!')
+
     @property
-    @abstractmethod
     def strategy(self) -> Plugin:
-        raise NotImplementedError
+        return self._strategy_instance
 
     @property
     def available(self) -> bool:
@@ -196,6 +182,15 @@ class PluginDesktopDependent(Plugin):
 class ExternalPlugin(Plugin):
     """A class for all plugins whose theme can only be changed externally via communication."""
 
+    def __init__(self, url):
+        super().__init__()
+        self._url = url
+
+    @property
+    def url(self) -> str:
+        return ('Please remember to install the plugin.\n'
+                f'You can get it here: {self._url}')
+
     def set_theme(self, theme: str) -> Optional[str]:
 
         if not (self.available and self.enabled):
@@ -206,19 +201,6 @@ class ExternalPlugin(Plugin):
 
         # throws error if in debug mode, else ignored
         assert False, 'This is an external plugin, the mode can only be changed externally.'
-
-    @Plugin.enabled.setter
-    def enabled(self, value: bool):
-        # needs to be copied because super().setter does not work
-        # for more information see:
-        # https://stackoverflow.com/questions/10810369/python-super-and-setting-parent-class-property
-        config.update(str(self) + 'Enabled', value)
-
-        if value:
-            print(
-                'Please remember to install the Yin-Yang plugin in Firefox.\n' +
-                'You can get it here: https://addons.mozilla.org/de/firefox/addon/yin-yang-linux/'
-            )
 
 
 def inplace_change(filename: str, old_string: str, new_string: str):
@@ -245,6 +227,7 @@ def get_stuff_in_dir(path: str, type: str) -> [str]:
     :param type: The type. Either dir (a directory) or file
     """
     # source: https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
+    # TODO replace with generator
     if type == 'dir':
         return [f for f in listdir(path) if isdir(join(path, f))]
     elif type == 'file':

@@ -25,6 +25,11 @@ class Atom(Plugin):
     # noinspection SpellCheckingInspection
     config_path = str(Path.home()) + "/.atom/config.cson"
 
+    def __init__(self):
+        super().__init__()
+        self.theme_light = 'one-light'
+        self.theme_dark = 'one-dark'
+
     def set_theme(self, theme: str) -> Optional[str]:
         if not (self.available and self.enabled):
             return

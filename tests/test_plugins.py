@@ -1,7 +1,7 @@
 import unittest
 
 from src.config import config
-from src.plugins import plugins
+from src.config import plugins
 from src.plugins._plugin import Plugin
 
 

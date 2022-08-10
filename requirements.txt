@@ -1,0 +1,4 @@
+PyQt5~=5.15.7
+suntime~=1.2.5
+requests~=2.28.1
+psutil~=5.9.1

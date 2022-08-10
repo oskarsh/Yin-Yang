@@ -4,26 +4,22 @@ from typing import Optional
 
 from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
 from .system import test_gnome_availability
-from .. import config
 
 
 class Gtk(PluginDesktopDependent):
     name = 'GTK'
 
-    def __init__(self):
-        desktop = config.get('desktop')
-        if desktop == 'kde':
-            self.strategy_instance = _Kde()
-        else:
-            self.strategy_instance = _Gnome()
-            if not self.strategy_instance.available():
-                print('You need to install an extension for gnome to use it. \n'
-                      'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
-        super().__init__()
-
-    @property
-    def strategy(self):
-        return self.strategy_instance
+    def __init__(self, desktop: str):
+        match desktop:
+            case 'kde':
+                super().__init__(_Kde())
+            case 'gtk':
+                super().__init__(_Gnome())
+                if not self.strategy.available:
+                    print('You need to install an extension for gnome to use it. \n'
+                          'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
+            case _:
+                raise ValueError('Unsupported desktop environment!')
 
 
 class _Gnome(PluginCommandline):
@@ -38,6 +34,11 @@ class _Gnome(PluginCommandline):
 
 class _Kde(Plugin):
     name = 'GTK'
+
+    def __init__(self):
+        super().__init__()
+        self.theme_light = 'Breeze'
+        self.theme_dark = 'Breeze'
 
     def set_theme(self, theme: str) -> Optional[str]:
         conf = ConfigParser()

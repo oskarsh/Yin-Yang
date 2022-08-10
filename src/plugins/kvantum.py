@@ -1,9 +1,12 @@
 from ._plugin import PluginCommandline, get_stuff_in_dir
 from pathlib import Path
 
+
 class Kvantum(PluginCommandline):
     def __init__(self):
         super().__init__(["kvantummanager", "--set", '%t'])
+        self.theme_light = 'KvFlatLight'
+        self.theme_dark = 'KvFlatDark'
 
     @property
     def available_themes(self) -> dict:

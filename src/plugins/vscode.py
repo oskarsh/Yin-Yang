@@ -29,6 +29,11 @@ def write_new_settings(settings, path):
 class Vscode(Plugin):
     name = 'VS Code'
 
+    def __init__(self):
+        super(Vscode, self).__init__()
+        self.theme_light = 'Default Light+'
+        self.theme_light = 'Default Dark+'
+
     def set_theme(self, theme: str) -> Optional[str]:
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')

@@ -21,11 +21,11 @@ import threading
 import time
 import traceback
 
-import src.yin_yang
-from src import config
-from src.plugins import plugins
+from src.config import config
+from src.plugins import get_plugins, ExternalPlugin
 
 logger = logging.getLogger(__name__)
+plugins = get_plugins(config.desktop)
 
 # aliases for path to use later on
 user = pwd.getpwuid(os.getuid())[0]
@@ -41,7 +41,7 @@ class Yang(threading.Thread):
 
     def run(self):
         for pl in plugins:
-            if isinstance(pl, src.plugins.ExternalPlugin):
+            if isinstance(pl, ExternalPlugin):
                 continue
 
             if pl.enabled:
@@ -62,7 +62,7 @@ class Yin(threading.Thread):
 
     def run(self):
         for pl in plugins:
-            if isinstance(pl, src.plugins.ExternalPlugin):
+            if isinstance(pl, ExternalPlugin):
                 continue
 
             if pl.enabled:
@@ -158,22 +158,10 @@ def should_be_light():
     # returns: True if it should be light
     # returns: False if the theme should be dark
 
-    d_hour = int(config.get("switchToDark").split(":")[0])
-    d_minute = int(config.get("switchToDark").split(":")[1])
-    l_hour = int(config.get("switchToLight").split(":")[0])
-    l_minute = int(config.get("switchToLight").split(":")[1])
-    hour = datetime.datetime.now().time().hour
-    minute = datetime.datetime.now().time().minute
+    time_light, time_dark = config.times
+    time_current = datetime.datetime.now().time()
 
-    # if light comes before dark (True if 00:00 -> light -> dark -> 23:59)
-    if l_hour < d_hour or (l_hour == d_hour and l_minute < d_minute):
-        if hour >= l_hour and hour < d_hour:
-            return not (hour == l_hour and minute <= l_minute)
-        else:
-            return hour == d_hour and minute <= d_minute
+    if time_light < time_dark:
+        return time_light <= time_current < time_dark
     else:
-        # same as above, but checks for dark and inverts the result
-        if hour >= d_hour and hour < l_hour:
-            return hour == d_hour and minute <= d_minute
-        else:
-            return not (hour == l_hour and minute <= l_minute)
+        return not (time_dark <= time_current < time_light)

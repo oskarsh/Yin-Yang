@@ -3,25 +3,19 @@ from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout
 
 from ._plugin import PluginDesktopDependent, PluginCommandline
 from .system import test_gnome_availability
-from .. import config
 
 
 class Wallpaper(PluginDesktopDependent):
     # themes are image file paths
 
-    def __init__(self):
-        desktop = config.get('desktop')
-        if desktop == 'kde':
-            self.strategy_instance = _Kde()
-        elif desktop == 'gtk':
-            self.strategy_instance = _Gnome()
-        else:
-            raise ValueError('Unsupported desktop environment!')
-        super().__init__()
-
-    @property
-    def strategy(self):
-        return self.strategy_instance
+    def __init__(self, desktop: str):
+        match desktop:
+            case 'kde':
+                super().__init__(_Kde())
+            case 'gtk':
+                super().__init__(_Gnome())
+            case _:
+                raise ValueError('Unsupported desktop environment!')
 
     @property
     def available(self) -> bool:
