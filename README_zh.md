@@ -16,7 +16,7 @@
   
 
 <p align="center">
-  <img alt="Yin-Yang" title="Yin & Yang" src="assets/header.png">
+  <img alt="Yin-Yang" title="Yin & Yang" src="resources/header.png">
 
 
 ## 特性
@@ -40,7 +40,7 @@
 [![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
 
 <p align="center" >
-  <img alt="Yin-Yang" title="Yin & Yang" src="assets/settings.png" height="400">
+  <img alt="Yin-Yang" title="Yin & Yang" src="resources/settings.png" height="400">
 
 ## 文档
 

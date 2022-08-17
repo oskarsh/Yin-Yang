@@ -6,10 +6,11 @@ from pathlib import Path
 
 from PyQt5 import QtWidgets
 from PyQt5 import QtCore
+from PyQt5.QtCore import QTranslator
 
 from src import yin_yang
 from src import config
-from src import gui
+from src.ui import config_window
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +43,20 @@ def main():
     if len(sys.argv) == 1 and not args.toggle:
         # load GUI
         app = QtWidgets.QApplication(sys.argv)
-        window = gui.MainWindow()
+
+        # load translation
+        try:
+            translator = QTranslator()
+            lang = QtCore.QLocale().name()
+            logger.debug(f'Using language {lang}')
+            if not translator.load(f'./resources/translations/yin_yang.{lang}.qm'):
+                raise FileNotFoundError('Loading was not successful!')
+            app.installTranslator(translator)
+        except Exception as e:
+            logger.error(str(e))
+            print('Error while loading translation. Using default language.')
+
+        window = config_window.MainWindow()
         window.show()
         sys.exit(app.exec_())
 

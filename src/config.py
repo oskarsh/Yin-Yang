@@ -183,6 +183,10 @@ class ConfigManager:
         if config_loaded['version'] < self.defaults['version']:
             config_loaded = update_config(config_loaded, self.defaults)
 
+        for pl in plugins:
+            pl.theme_light = config_loaded['plugins'][pl.name.lower()]['light_theme']
+            pl.theme_dark = config_loaded['plugins'][pl.name.lower()]['dark_theme']
+
         self._config_data = config_loaded
 
     def write(self) -> bool:
