@@ -102,7 +102,9 @@ class Plugin(ABC):
 
             # add all theme names
             for inp in inputs:
-                for theme in self.available_themes.values():
+                themes = list(self.available_themes.values())
+                themes.sort()
+                for theme in themes:
                     inp.addItem(theme)
 
             return inputs
