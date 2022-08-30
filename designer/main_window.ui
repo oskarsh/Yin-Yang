@@ -2,16 +2,8 @@
 <ui version="4.0">
  <class>main_window</class>
  <widget class="QMainWindow" name="main_window">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>380</width>
-    <height>633</height>
-   </rect>
-  </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -28,23 +20,6 @@
   </property>
   <widget class="QWidget" name="central_widget">
    <layout class="QVBoxLayout" name="central_widget_layout">
-    <item>
-     <layout class="QHBoxLayout" name="logo_layout">
-      <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-       <widget class="QLabel" name="logo">
-        <property name="pixmap">
-         <pixmap resource="../resources/resources.qrc">:/icons/logo</pixmap>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item>
      <widget class="QTabWidget" name="tab_widget">
       <property name="minimumSize">
@@ -342,7 +317,7 @@
              <x>0</x>
              <y>0</y>
              <width>348</width>
-             <height>411</height>
+             <height>451</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="plugins_scroll_content_layout"/>

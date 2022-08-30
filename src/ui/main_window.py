@@ -16,18 +16,17 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QDialogButtonBox,
-    QDoubleSpinBox, QFormLayout, QFrame, QHBoxLayout,
-    QLabel, QMainWindow, QRadioButton, QScrollArea,
-    QSizePolicy, QSpacerItem, QStatusBar, QTabWidget,
-    QTimeEdit, QVBoxLayout, QWidget)
+    QDoubleSpinBox, QFormLayout, QFrame, QLabel,
+    QMainWindow, QRadioButton, QScrollArea, QSizePolicy,
+    QSpacerItem, QStatusBar, QTabWidget, QTimeEdit,
+    QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_main_window(object):
     def setupUi(self, main_window):
         if not main_window.objectName():
             main_window.setObjectName(u"main_window")
-        main_window.resize(380, 633)
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(main_window.sizePolicy().hasHeightForWidth())
@@ -48,20 +47,6 @@ class Ui_main_window(object):
         self.central_widget_layout.setSpacing(6)
         self.central_widget_layout.setContentsMargins(11, 11, 11, 11)
         self.central_widget_layout.setObjectName(u"central_widget_layout")
-        self.logo_layout = QHBoxLayout()
-        self.logo_layout.setSpacing(6)
-        self.logo_layout.setObjectName(u"logo_layout")
-        self.logo = QLabel(self.central_widget)
-        self.logo.setObjectName(u"logo")
-        self.logo.setPixmap(QPixmap(u":/icons/logo"))
-        self.logo.setScaledContents(True)
-        self.logo.setAlignment(Qt.AlignCenter)
-
-        self.logo_layout.addWidget(self.logo, 0, Qt.AlignHCenter|Qt.AlignVCenter)
-
-
-        self.central_widget_layout.addLayout(self.logo_layout)
-
         self.tab_widget = QTabWidget(self.central_widget)
         self.tab_widget.setObjectName(u"tab_widget")
         self.tab_widget.setMinimumSize(QSize(368, 0))
@@ -255,7 +240,7 @@ class Ui_main_window(object):
         self.plugins_scroll.setWidgetResizable(True)
         self.plugins_scroll_content = QWidget()
         self.plugins_scroll_content.setObjectName(u"plugins_scroll_content")
-        self.plugins_scroll_content.setGeometry(QRect(0, 0, 348, 411))
+        self.plugins_scroll_content.setGeometry(QRect(0, 0, 348, 451))
         self.plugins_scroll_content_layout = QVBoxLayout(self.plugins_scroll_content)
         self.plugins_scroll_content_layout.setSpacing(6)
         self.plugins_scroll_content_layout.setContentsMargins(11, 11, 11, 11)
