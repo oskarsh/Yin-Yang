@@ -32,62 +32,62 @@
 <context>
     <name>main_window</name>
     <message>
-        <location filename="../../designer/main_window.ui" line="64"/>
+        <location filename="../../designer/main_window.ui" line="61"/>
         <source>Settings</source>
         <translation>Einstellungen</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="70"/>
+        <location filename="../../designer/main_window.ui" line="67"/>
         <source>Automatic theme switching</source>
         <translation type="unfinished">Automatischer Themawechsel</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="90"/>
+        <location filename="../../designer/main_window.ui" line="87"/>
         <source>Custom Schedule</source>
         <translation>Benutzerdefinierter Zeitraum</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="190"/>
+        <location filename="../../designer/main_window.ui" line="187"/>
         <source>Sunset to Sunrise</source>
         <translation>Sonnenaufgang bis Sonnenuntergang</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="115"/>
+        <location filename="../../designer/main_window.ui" line="112"/>
         <source>Light:</source>
         <translation>Hell:</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="151"/>
+        <location filename="../../designer/main_window.ui" line="148"/>
         <source>Dark:</source>
         <translation>Dunkel:</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="203"/>
+        <location filename="../../designer/main_window.ui" line="200"/>
         <source>Longitude:</source>
         <translation>Längengrad:</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="238"/>
+        <location filename="../../designer/main_window.ui" line="235"/>
         <source>Latitude:</source>
         <translation>Breitengrad:</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="276"/>
+        <location filename="../../designer/main_window.ui" line="273"/>
         <source>update automatically</source>
         <translation>Automatisch aktualisieren</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="296"/>
+        <location filename="../../designer/main_window.ui" line="293"/>
         <source>Make a sound when switching the theme</source>
         <translation>Mache ein Geräusch, wenn das Thema geändert wird</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="303"/>
+        <location filename="../../designer/main_window.ui" line="300"/>
         <source>Send a notification</source>
         <translation>Sende eine Benachrichtigung</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="331"/>
+        <location filename="../../designer/main_window.ui" line="328"/>
         <source>Plugins</source>
         <translation type="unfinished"></translation>
     </message>

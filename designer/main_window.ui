@@ -2,6 +2,20 @@
 <ui version="4.0">
  <class>main_window</class>
  <widget class="QMainWindow" name="main_window">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>380</width>
+    <height>633</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string notr="true">Yin &amp; Yang</string>
   </property>
@@ -328,7 +342,7 @@
              <x>0</x>
              <y>0</y>
              <width>348</width>
-             <height>451</height>
+             <height>411</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="plugins_scroll_content_layout"/>
