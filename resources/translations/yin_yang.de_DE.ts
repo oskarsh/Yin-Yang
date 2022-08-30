@@ -15,18 +15,23 @@
     </message>
     <message>
         <location filename="../../src/ui/config_window.py" line="217"/>
-        <source>Open {&quot;dark&quot; if dark else &quot;light&quot;} wallpaper</source>
-        <translation type="unfinished"></translation>
+        <source>Open light wallpaper</source>
+        <translation>Öffne helles Hintergrundbild</translation>
     </message>
     <message>
-        <location filename="../../src/ui/config_window.py" line="247"/>
+        <location filename="../../src/ui/config_window.py" line="218"/>
+        <source>Open dark wallpaper</source>
+        <translation>Öffne dunkles Hintergrundbild</translation>
+    </message>
+    <message>
+        <location filename="../../src/ui/config_window.py" line="248"/>
         <source>The settings have been modified. Do you want to save them?</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Einstellungen wurden geändert. Möchten Sie sie speichern?</translation>
     </message>
     <message>
-        <location filename="../../src/ui/config_window.py" line="247"/>
+        <location filename="../../src/ui/config_window.py" line="248"/>
         <source>Unsaved changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Ungespeicherte Änderungen</translation>
     </message>
 </context>
 <context>
@@ -39,7 +44,7 @@
     <message>
         <location filename="../../designer/main_window.ui" line="67"/>
         <source>Automatic theme switching</source>
-        <translation type="unfinished">Automatischer Themawechsel</translation>
+        <translation>Automatischer Themenwechsel</translation>
     </message>
     <message>
         <location filename="../../designer/main_window.ui" line="87"/>
@@ -89,7 +94,7 @@
     <message>
         <location filename="../../designer/main_window.ui" line="328"/>
         <source>Plugins</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

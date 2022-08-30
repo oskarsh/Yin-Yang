@@ -213,9 +213,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 config.update(plugin.name, 'dark_theme', children[1].text())
 
     def save_wallpaper(self, dark: bool):
-        message = self.tr('Open {"dark" if dark else "light"} wallpaper')
+        message_light = self.tr('Open light wallpaper')
+        message_dark = self.tr('Open dark wallpaper')
         file_name, _ = QFileDialog.getOpenFileName(
-            self, message,
+            self, message_dark if dark else message_light,
             str(Path.home()), 'Images (*.png *.jpg *.jpeg *.JPG *.JPEG)')
 
         group_wallpaper = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'groupWallpaper')
