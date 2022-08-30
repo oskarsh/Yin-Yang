@@ -2,26 +2,18 @@
 
 set -euo pipefail
 
-YIN_YANG_HOME=${1-${HOME}}
-
 if test ${EUID} -ne 0; then
     echo enter password in order to install Yin-Yang correctly
     exec sudo su -c "${0} ${HOME}"
     exit 0
 fi
 
-echo "removing old Yin-Yang files if they exist"
-echo "your home here is" ${YIN_YANG_HOME}
-./scripts/uninstall.sh ${YIN_YANG_HOME}
+echo "Uninstalling old version, if it exists"
+./scripts/uninstall.sh
 
-echo "Installing Yin-Yang ..."
-echo ""
-echo "Checking for QT dependencies"
-echo ""
-#checking python dependencies
+echo "Installing dependencies …"
 pip3 install -r requirements.txt
-echo ""
-echo "Checking and creating correct folders ..."
+echo "Installing yin yang"
 #check if /opt/ directory exists else create
 if [ ! -d /opt/ ]; then
     mkdir -p /opt/
@@ -40,44 +32,14 @@ fi
 if [ ! -d "${YIN_YANG_HOME}/.local/share/applications/" ]; then
     mkdir -p "${YIN_YANG_HOME}/.local/share/applications/"
 fi
-echo ""
-echo "done"
-echo ""
-echo "Installing yin-yang for Commandline usage"
-# copy files
+# copy files TODO this copies a bunch of unnecessary files
 cp -r ./* /opt/yin-yang/
 # copy manifest for firefox extension
 cp ./resources/yin_yang.json /usr/lib/mozilla/native-messaging-hosts/
-#copy terminal executive
+# copy terminal executive
 cp ./scripts/yin-yang /usr/bin/
-chmod +x /usr/bin/yin-yang
-echo "Creating .desktop file for native environment execution"
-#create .desktop file
-cat > "${YIN_YANG_HOME}/.local/share/applications/Yin-Yang.desktop" <<EOF
-[Desktop Entry]
-# The type as listed above
-Type=Application
-# The version of the desktop entry specification to which this file complies
-Version=1.4
-# The name of the application
-Name=Yin & Yang
-# Generic name of the application, for example "Web Browser"
-GenericName=Theme Switcher
-# A comment which can/will be used as a tooltip
-Comment=Auto Nightmode for KDE and VSCode
-# The path to the folder in which the executable is run
-Path=/opt/yin-yang
-# The executable of the application, possibly with arguments.
-Exec=/usr/bin/yin-yang
-# The name of the icon that will be used to display this entry
-Icon=/opt/yin-yang/resources/logo.svg
-# Describes whether this application needs to be run in a terminal or not
-Terminal=false
-# Describes the categories in which this entry should be shown
-Categories=Utility; System; Settings;
-# A list of strings which may be used in addition to other metadata to describe this entry
-Keywords=night;dark;day;bright;color;theme;
-EOF
+# copy .desktop file
+cp ./resources/Yin-Yang.dekstop "${YIN_YANG_HOME}/.local/share/applications/Yin-Yang.desktop"
 
 cat << "EOF"
  __     ___          __     __
