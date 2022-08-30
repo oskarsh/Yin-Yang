@@ -1,8 +1,11 @@
 #!/bin/bash
 
 # resource file
-pyrcc5 ./designer/resources.qrc -o ./resources_rc.py
+pyside6-rcc ./resources/resources.qrc -o ./resources_rc.py
 # ui file from qt designer
-pyuic5 -o ./src/ui/main_window.py ./designer/main_window.ui
-# translation files
-pylupdate5 ./yin-yang.pro
+pyside6-uic ./designer/main_window.ui > ./src/ui/main_window.py
+# extract strings to translate (doesn't work with .pro file unfortunately)
+pyside6-lupdate ./designer/main_window.ui ./src/ui/config_window.py \
+  -ts resources/translations/yin_yang.de_DE.ts -no-obsolete
+# generate binary translation files
+lrelease-pro ./yin-yang.pro

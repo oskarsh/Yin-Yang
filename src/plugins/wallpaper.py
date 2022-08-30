@@ -1,5 +1,5 @@
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout
+from PySide6 import QtWidgets
+from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout
 
 from ._plugin import PluginDesktopDependent, PluginCommandline
 from .system import test_gnome_availability

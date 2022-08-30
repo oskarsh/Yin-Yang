@@ -4,7 +4,7 @@ from os import listdir
 from os.path import isdir, join, isfile
 from typing import Optional
 
-from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
+from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
 
 class Plugin(ABC):
@@ -221,16 +221,16 @@ def inplace_change(filename: str, old_string: str, new_string: str):
         file.write(file_content)
 
 
-def get_stuff_in_dir(path: str, type: str) -> [str]:
+def get_stuff_in_dir(path: str, search_type: str) -> [str]:
     """Returns all files or directories in the path
     :param path: The path where to search.
-    :param type: The type. Either dir (a directory) or file
+    :param search_type: The type. Either dir (a directory) or file
     """
     # source: https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
     # TODO replace with generator
-    if type == 'dir':
+    if search_type == 'dir':
         return [f for f in listdir(path) if isdir(join(path, f))]
-    elif type == 'file':
+    elif search_type == 'file':
         return [f for f in listdir(path) if isfile(join(path, f))]
     else:
         raise ValueError('Unknown type! Use dir or file')

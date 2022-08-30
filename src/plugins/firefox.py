@@ -4,7 +4,7 @@ from os.path import isdir
 from pathlib import Path
 from typing import Optional
 
-from PyQt5.QtWidgets import QGroupBox
+from PySide6.QtWidgets import QGroupBox
 
 from ._plugin import ExternalPlugin
 

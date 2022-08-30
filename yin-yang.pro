@@ -1,4 +1,3 @@
-SOURCES += src/ui/main_window.py
 SOURCES += src/ui/config_window.py
 
 FORMS += designer/main_window.ui

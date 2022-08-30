@@ -1,13 +1,11 @@
 from pathlib import Path
 
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
-from PyQt5.QtCore import QCoreApplication
+from PySide6 import QtWidgets
+from PySide6.QtGui import QScreen
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
 
 from src.ui.main_window import Ui_main_window
 from src.config import config, Modes, plugins
-
-_translate = QCoreApplication.translate
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -20,7 +18,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # center the window
         frame_gm = self.frameGeometry()
-        center_point = QtWidgets.QDesktopWidget().availableGeometry().center()
+        center_point = QScreen.availableGeometry(self.screen()).center()
         frame_gm.moveCenter(center_point)
         self.move(frame_gm.topLeft())
 
@@ -34,9 +32,8 @@ class MainWindow(QtWidgets.QMainWindow):
         """Sets the values from the config to the elements"""
 
         # set current version in statusbar
-        self.ui.status_bar.showMessage(
-            self.tr('You are using version %1. ', '', str(config.version))
-        )
+        self.ui.status_bar.showMessage(self.tr('You are using version {}', '')
+                                       .format(str(config.version)))
 
         # set the correct mode
         mode = config.mode
@@ -125,12 +122,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 children[1].setText(plugin.theme_dark)
 
     def update_label_enabled(self):
-        time_light = self.ui.inp_time_light.time().toPyTime()
-        time_dark = self.ui.inp_time_dark.time().toPyTime()
+        time_light = self.ui.inp_time_light.time().toPython()
+        time_dark = self.ui.inp_time_dark.time().toPython()
         self.ui.label_active.setText(
-            _translate(
-                'main_window',
-                f'Dark mode will be active between {time_dark.strftime("%H:%M")} and {time_light.strftime("%H:%M")}.'))
+            self.tr('Dark mode will be active between {} and {}.')
+                .format(time_dark.strftime("%H:%M"), time_light.strftime("%H:%M")))
 
     def register_handlers(self):
         # set sunrise and sunset times if mode is set to followSun or coordinates changed
@@ -172,8 +168,8 @@ class MainWindow(QtWidgets.QMainWindow):
             return
 
         # update config if time has changed
-        time_light = self.ui.inp_time_light.time().toPyTime()
-        time_dark = self.ui.inp_time_dark.time().toPyTime()
+        time_light = self.ui.inp_time_light.time().toPython()
+        time_dark = self.ui.inp_time_dark.time().toPython()
         config.times = time_light, time_dark
 
         self.update_label_enabled()
@@ -217,7 +213,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 config.update(plugin.name, 'dark_theme', children[1].text())
 
     def save_wallpaper(self, dark: bool):
-        message = _translate('main_window', f'Open Wallpaper {"dark" if dark else "light"}')
+        message = self.tr('Open {"dark" if dark else "light"} wallpaper')
         file_name, _ = QFileDialog.getOpenFileName(
             self, message,
             str(Path.home()), 'Images (*.png *.jpg *.jpeg *.JPG *.JPEG)')
@@ -247,8 +243,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # ask the user if he wants to save changes
         if config.changed:
-            message = _translate('main_window', 'The settings have been modified. Do you want to save them?')
-            ret = QMessageBox.warning(self, _translate('main_window', 'Unsaved changes'),
+            message = self.tr('The settings have been modified. Do you want to save them?')
+            ret = QMessageBox.warning(self, self.tr('Unsaved changes'),
                                       message,
                                       QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
             if ret == QMessageBox.Save:

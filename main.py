@@ -4,9 +4,9 @@ from argparse import ArgumentParser
 from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
 from pathlib import Path
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
-from PyQt5.QtCore import QTranslator
+from PySide6 import QtWidgets
+from PySide6 import QtCore
+from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 
 from src import yin_yang
 from src import config
@@ -46,19 +46,32 @@ def main():
 
         # load translation
         try:
-            translator = QTranslator()
-            lang = QtCore.QLocale().name()
+            lang = QLocale().name()
             logger.debug(f'Using language {lang}')
-            if not translator.load(f'./resources/translations/yin_yang.{lang}.qm'):
-                raise FileNotFoundError('Loading was not successful!')
-            app.installTranslator(translator)
+
+            # system translations
+            path = QLibraryInfo.location(QLibraryInfo.TranslationsPath)
+            translator = QTranslator(app)
+            if translator.load(QLocale.system(), 'qtbase', '_', path):
+                app.installTranslator(translator)
+            else:
+                raise FileNotFoundError('Error while loading system translations!')
+
+            # application translations
+            translator = QTranslator(app)
+            path = ':translations'
+            if translator.load(QLocale.system(), 'yin_yang', '.', path):
+                app.installTranslator(translator)
+            else:
+                raise FileNotFoundError('Error while loading application translations!')
+
         except Exception as e:
             logger.error(str(e))
             print('Error while loading translation. Using default language.')
 
         window = config_window.MainWindow()
         window.show()
-        sys.exit(app.exec_())
+        sys.exit(app.exec())
 
     # checks whether the script should be ran as a daemon
     if args.schedule:
