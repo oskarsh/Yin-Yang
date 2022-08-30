@@ -6,6 +6,7 @@ from src.plugins._plugin import PluginCommandline, Plugin
 
 class MinimalPlugin(Plugin):
     def __init__(self, theme_dark, theme_light):
+        super().__init__()
         self._theme_dark_value = theme_dark
         self._theme_light_value = theme_light
         self._enabled_value = True

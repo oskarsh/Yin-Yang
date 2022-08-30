@@ -88,7 +88,7 @@ class Vscode(Plugin):
             return themes_dict
 
         for path in filter(isdir, EXTENSION_PATHS):
-            extension_dirs = get_stuff_in_dir(path, type='dir')
+            extension_dirs = get_stuff_in_dir(path, search_type='dir')
             # filter for a dir that doesnt seem to be an extension
             # since it has no manifest
             if 'node_modules' in extension_dirs:

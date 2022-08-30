@@ -56,8 +56,8 @@ def update_config(config_old: dict, defaults: dict):
         config_new['dark_mode'] = config_old.pop('theme') == 'dark'
 
         # put settings for PLUGINS into sections
-        plugins: dict = defaults['plugins']
-        for plugin_name, plugin_config in plugins.items():
+        plugin_settings: dict = defaults['plugins']
+        for plugin_name, plugin_config in plugin_settings.items():
             for key in plugin_config.keys():
                 try:
                     key_old = str(key).replace('_', ' ').title().replace(' ', '')

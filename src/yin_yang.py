@@ -92,8 +92,6 @@ class Daemon(threading.Thread):
                 config.update("running", False)
                 break
 
-            editable = config.get_config()
-
             theme = config.get("theme")
 
             if should_be_light():

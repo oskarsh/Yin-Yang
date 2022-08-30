@@ -1,7 +1,7 @@
 import sys
 import logging
 from argparse import ArgumentParser
-from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from PySide6 import QtWidgets
@@ -9,7 +9,7 @@ from PySide6 import QtCore
 from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 
 from src import yin_yang
-from src import config
+from src.config import config
 from src.ui import config_window
 
 logger = logging.getLogger(__name__)
@@ -21,11 +21,10 @@ QtWidgets.QApplication.setAttribute(
 
 def toggle_theme():
     """Switch themes"""
-    theme = config.get_theme()
-    if theme == "dark":
-        yin_yang.switch_to_light()
-    elif theme == "light":
+    if config.dark_mode:
         yin_yang.switch_to_dark()
+    else:
+        yin_yang.switch_to_light()
 
 
 def main():
@@ -103,6 +102,7 @@ def main():
 
 if __name__ == "__main__":
     # __debug__ is true when you run main.py without the -O argument (python main.py)
+    # noinspection PyUnreachableCode
     if __debug__:
         # noinspection SpellCheckingInspection
         logging.basicConfig(

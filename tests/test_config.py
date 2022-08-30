@@ -28,7 +28,6 @@ class ConfigTest(unittest.TestCase):
         rename(config_path.replace("yin_yang.json", "yin_yang_backup.json"), config_path)
 
     def test_update_old_configs(self):
-        desktops = ['kde', 'gtk', 'else']
         config_v2_1 = {
             "version": 2.1,
             "followSun": False,
