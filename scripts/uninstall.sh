@@ -14,7 +14,8 @@ if test ${EUID} -ne 0; then
 fi
 
 echo "Removing config and .desktop file"
-rm -rf ${YIN_YANG_HOME}/.local/share/applications/Yin-Yang.desktop
+rm -f ${YIN_YANG_HOME}/.local/share/applications/Yin-Yang.desktop
+rm -f ${YIN_YANG_HOME}/.local/share/yin_yang.log
 rm -rf ${YIN_YANG_HOME}/.config/yin_yang
 
 echo "Removing program and terminal execution"

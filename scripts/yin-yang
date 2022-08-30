@@ -1,0 +1,3 @@
+#!/bin/bash
+cd /opt/yin-yang/ || exit
+python3 -O /opt/yin-yang/main.py "$@"
