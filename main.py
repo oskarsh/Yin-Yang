@@ -5,7 +5,6 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from PySide6 import QtWidgets
-from PySide6 import QtCore
 from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 
 from src import yin_yang
@@ -13,10 +12,6 @@ from src.config import config
 from src.ui import config_window
 
 logger = logging.getLogger(__name__)
-
-# fix HiDpi scaling
-QtWidgets.QApplication.setAttribute(
-    QtCore.Qt.AA_EnableHighDpiScaling, True)
 
 
 def toggle_theme():

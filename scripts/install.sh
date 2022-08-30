@@ -68,7 +68,7 @@ Comment=Auto Nightmode for KDE and VSCode
 # The path to the folder in which the executable is run
 Path=/opt/yin-yang
 # The executable of the application, possibly with arguments.
-Exec=env QT_AUTO_SCREEN_SCALE_FACTOR=1 sh /usr/bin/yin-yang
+Exec=/usr/bin/yin-yang
 # The name of the icon that will be used to display this entry
 Icon=/opt/yin-yang/resources/logo.svg
 # Describes whether this application needs to be run in a terminal or not
