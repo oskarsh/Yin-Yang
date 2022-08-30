@@ -34,7 +34,12 @@ class Ui_main_window(object):
         main_window.setSizePolicy(sizePolicy)
         main_window.setWindowTitle(u"Yin & Yang")
         icon = QIcon()
-        icon.addFile(u":/icons/logo", QSize(), QIcon.Normal, QIcon.Off)
+        iconThemeName = u"yin_yang"
+        if QIcon.hasThemeIcon(iconThemeName):
+            icon = QIcon.fromTheme(iconThemeName)
+        else:
+            icon.addFile(u":/icons/logo", QSize(), QIcon.Normal, QIcon.Off)
+        
         main_window.setWindowIcon(icon)
         main_window.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
         self.central_widget = QWidget(main_window)

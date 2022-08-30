@@ -29,8 +29,8 @@ fi
 if [ ! -d /usr/lib/mozilla/native-messaging-hosts/ ]; then
     mkdir -p /usr/lib/mozilla/native-messaging-hosts/
 fi
-if [ ! -d "${YIN_YANG_HOME}/.local/share/applications/" ]; then
-    mkdir -p "${YIN_YANG_HOME}/.local/share/applications/"
+if [ ! -d "$HOME/.local/share/applications/" ]; then
+    mkdir -p "$HOME/.local/share/applications/"
 fi
 # copy files TODO this copies a bunch of unnecessary files
 cp -r ./* /opt/yin-yang/
@@ -39,7 +39,9 @@ cp ./resources/yin_yang.json /usr/lib/mozilla/native-messaging-hosts/
 # copy terminal executive
 cp ./scripts/yin-yang /usr/bin/
 # copy .desktop file
-cp ./resources/Yin-Yang.dekstop "${YIN_YANG_HOME}/.local/share/applications/Yin-Yang.desktop"
+cp ./resources/Yin-Yang.desktop "$HOME/.local/share/applications/Yin-Yang.desktop"
+# copy icon
+cp ./resources/logo.svg /usr/share/icons/hicolor/scalable/apps/yin_yang.svg
 
 cat << "EOF"
  __     ___          __     __

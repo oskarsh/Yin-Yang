@@ -20,7 +20,7 @@
    <string notr="true">Yin &amp; Yang</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/resources.qrc">
+   <iconset theme="yin_yang" resource="../resources/resources.qrc">
     <normaloff>:/icons/logo</normaloff>:/icons/logo</iconset>
   </property>
   <property name="locale">
