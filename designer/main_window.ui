@@ -2,29 +2,12 @@
 <ui version="4.0">
  <class>main_window</class>
  <widget class="QMainWindow" name="main_window">
-  <property name="enabled">
-   <bool>true</bool>
-  </property>
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>391</width>
-    <height>633</height>
-   </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>377</width>
-    <height>0</height>
-   </size>
-  </property>
   <property name="windowTitle">
    <string notr="true">Yin &amp; Yang</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>:/icons/Logo</normaloff>:/icons/Logo</iconset>
+   <iconset resource="../resources/resources.qrc">
+    <normaloff>:/icons/logo</normaloff>:/icons/logo</iconset>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
@@ -36,7 +19,7 @@
       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
        <widget class="QLabel" name="logo">
         <property name="pixmap">
-         <pixmap resource="resources.qrc">:/icons/logo</pixmap>
+         <pixmap resource="../resources/resources.qrc">:/icons/logo</pixmap>
         </property>
         <property name="scaledContents">
          <bool>true</bool>
@@ -344,8 +327,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>359</width>
-             <height>411</height>
+             <width>348</width>
+             <height>451</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="plugins_scroll_content_layout"/>
@@ -369,7 +352,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources>
-  <include location="resources.qrc"/>
+  <include location="../resources/resources.qrc"/>
  </resources>
  <connections>
   <connection>
