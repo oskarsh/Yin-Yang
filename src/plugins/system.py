@@ -1,6 +1,9 @@
+import json
 import subprocess
 import pwd
 import os
+
+from PySide6.QtCore import QLocale
 
 from src.plugins._plugin import PluginDesktopDependent, PluginCommandline
 
@@ -64,6 +67,16 @@ def get_readable_kde_theme_name(file) -> str:
             return name
 
 
+def get_name_key(meta):
+    locale = filter(
+        lambda name: name in meta['KPlugin'],
+        [f'Name[{QLocale().name()}]',
+         f'Name[{QLocale().language()}]',
+         'Name']
+    )
+    return next(locale)
+
+
 class _Kde(PluginCommandline):
     name = 'System'
     translations = {}
@@ -100,18 +113,25 @@ class _Kde(PluginCommandline):
         for long_name in long_names:
             # trying to get the Desktop file
             try:
-                # load the name from the metadata.desktop file
-                with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.desktop', 'r') as file:
-                    self.translations[long_name] = get_readable_kde_theme_name(file)
+                # json in newer versions
+                with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.json', 'r') as file:
+                    meta = json.load(file)
+                    key = get_name_key(meta)
+                    self.translations[long_name] = meta['KPlugin'][key]
             except OSError:
-                # check the next path if the themes exist there
                 try:
                     # load the name from the metadata.desktop file
-                    with open('{path}{long_name}/metadata.desktop'.format(**locals()), 'r') as file:
-                        # search for the name
+                    with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.desktop', 'r') as file:
                         self.translations[long_name] = get_readable_kde_theme_name(file)
                 except OSError:
-                    # if no file exist lets just use the long name
-                    self.translations[long_name] = long_name
+                    # check the next path if the themes exist there
+                    try:
+                        # load the name from the metadata.desktop file
+                        with open(f'{path}{long_name}/metadata.desktop', 'r') as file:
+                            # search for the name
+                            self.translations[long_name] = get_readable_kde_theme_name(file)
+                    except OSError:
+                        # if no file exist lets just use the long name
+                        self.translations[long_name] = long_name
 
         return self.translations
