@@ -44,7 +44,7 @@ class _Gnome(PluginCommandline):
     name = 'Wallpaper'
 
     def __init__(self):
-        super().__init__(["gsettings", "set", "org.gnome.desktop.background", "picture-uri", "file://%t"])
+        super().__init__(['gsettings', 'set', 'org.gnome.desktop.background', 'picture-uri', 'file://{theme}'])
 
     def available(self) -> bool:
         return test_gnome_availability(self.command)
@@ -54,7 +54,7 @@ class _Kde(PluginCommandline):
     name = 'Wallpaper'
 
     def __init__(self):
-        super().__init__(["bash", "./src/change_wallpaper.sh", "%t"])
+        super().__init__(['./src/change_wallpaper.sh', '{theme}'])
 
     @property
     def available(self) -> bool:

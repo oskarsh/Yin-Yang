@@ -97,21 +97,21 @@ class GenericTest(unittest.TestCase):
 
 class CommandlineTest(unittest.TestCase):
     def test_command_substitution(self):
-        plugin = TestPluginCommandLine(['command', '%t', 'argument'], 'light', 'dark')
+        plugin = TestPluginCommandLine(['command', '{theme}', 'argument'], 'light', 'dark')
         self.assertEqual(['command', 'theme', 'argument'], plugin.insert_theme('theme'),
                          'insert_theme should replace %t with the theme name')
 
-        plugin = TestPluginCommandLine(['command', '%targument'], 'light', 'dark')
+        plugin = TestPluginCommandLine(['command', '{theme}argument'], 'light', 'dark')
         self.assertEqual(['command', 'themeargument'],
                          plugin.insert_theme('theme'),
                          'insert_theme should replace %t with the theme name, even if it is inside of an argument')
 
-        plugin = TestPluginCommandLine(['command', 'argument%t'], 'light', 'dark')
+        plugin = TestPluginCommandLine(['command', 'argument{theme}'], 'light', 'dark')
         self.assertEqual(['command', 'argumenttheme'],
                          plugin.insert_theme('theme'),
                          'insert_theme should replace %t with the theme name, even if it is inside of an argument')
 
-        plugin = TestPluginCommandLine(['command', 'argu%tment'], 'light', 'dark')
+        plugin = TestPluginCommandLine(['command', 'argu{theme}ment'], 'light', 'dark')
         self.assertEqual(['command', 'arguthemement'],
                          plugin.insert_theme('theme'),
                          'insert_theme should replace %t with the theme name, even if it is inside of an argument')

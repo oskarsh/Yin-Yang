@@ -102,7 +102,10 @@ class Plugin(ABC):
 
 
 class PluginCommandline(Plugin):
-    def __init__(self, command: list):
+    def __init__(self, command: [str]):
+        """
+        :param command: list of arguments as passed to @subprocess.run, with the theme being inserted as {theme}
+        """
         super().__init__()
         self.command = command
 
@@ -121,19 +124,9 @@ class PluginCommandline(Plugin):
 
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
-        placeholder = '%t'
 
-        if placeholder not in command:
-            for argument in command:
-                if placeholder in argument:
-                    # replace placeholder with argument, so the theme gets inserted into the argument
-                    placeholder = argument
-                    break
-            assert placeholder != '%t'
-
-        i = command.index(placeholder)
-        command.pop(i)
-        command.insert(i, placeholder.replace('%t', theme))
+        for i, arg in enumerate(command):
+            command[i] = arg.format(theme=theme)
 
         return command
 

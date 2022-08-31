@@ -4,7 +4,7 @@ from pathlib import Path
 
 class Kvantum(PluginCommandline):
     def __init__(self):
-        super().__init__(["kvantummanager", "--set", '%t'])
+        super().__init__(['kvantummanager', '--set', '{theme}'])
         self.theme_light = 'KvFlatLight'
         self.theme_dark = 'KvFlatDark'
 

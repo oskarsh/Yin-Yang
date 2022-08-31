@@ -26,7 +26,7 @@ class _Gnome(PluginCommandline):
     name = 'GTK'
 
     def __init__(self):
-        super().__init__(["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", '%t'])
+        super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
 
     def available(self) -> bool:
         return test_gnome_availability(self.command)

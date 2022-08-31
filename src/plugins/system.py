@@ -43,7 +43,7 @@ class _Gnome(PluginCommandline):
     # TODO allow using the default themes, not only user themes
 
     def __init__(self):
-        super().__init__(["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name", "%t"])
+        super().__init__(['gsettings', 'set', 'org.gnome.shell.extensions.user-theme', 'name', '{theme}'])
 
     @property
     def available(self) -> bool:
@@ -82,7 +82,7 @@ class _Kde(PluginCommandline):
     translations = {}
 
     def __init__(self):
-        super().__init__(["lookandfeeltool", "-a", '%t'])
+        super().__init__(['lookandfeeltool', '-a', '{theme}'])
         self.theme_light = 'org.kde.breeze.desktop'
         self.theme_dark = 'org.kde.breezedark.desktop'
 
