@@ -78,7 +78,7 @@ class ConfigTest(unittest.TestCase):
             'DarkTheme'
         ]
         for plugin_property in settings:
-            self.assertEqual(config_v2_1[get_desktop() + plugin_property],
+            self.assertEqual(config_v2_1[get_desktop().value + plugin_property],
                              config.get('system', plugin_property.replace('Theme', '_theme').lower()),
                              'Updating old config files should apply correct values')
 
