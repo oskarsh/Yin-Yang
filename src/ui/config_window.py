@@ -1,6 +1,5 @@
-from pathlib import Path
-
 from PySide6 import QtWidgets
+from PySide6.QtCore import QStandardPaths
 from PySide6.QtGui import QScreen
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
 
@@ -217,7 +216,8 @@ class MainWindow(QtWidgets.QMainWindow):
         message_dark = self.tr('Open dark wallpaper')
         file_name, _ = QFileDialog.getOpenFileName(
             self, message_dark if dark else message_light,
-            str(Path.home()), 'Images (*.png *.jpg *.jpeg *.JPG *.JPEG)')
+            QStandardPaths.standardLocations(QStandardPaths.PicturesLocation)[0],
+            'Images (*.png *.jpg *.jpeg *.JPG *.JPEG)')
 
         group_wallpaper = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'groupWallpaper')
         inputs_wallpaper = group_wallpaper.findChildren(QtWidgets.QLineEdit)
