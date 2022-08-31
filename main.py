@@ -1,3 +1,5 @@
+#!/bin/env python3
+
 import sys
 import logging
 from argparse import ArgumentParser
@@ -8,18 +10,10 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 
 from src import yin_yang
-from src.config import config
+from src.config import config, Modes
 from src.ui import config_window
 
 logger = logging.getLogger(__name__)
-
-
-def toggle_theme():
-    """Switch themes"""
-    if config.dark_mode:
-        yin_yang.switch_to_dark()
-    else:
-        yin_yang.switch_to_light()
 
 
 def main():
@@ -33,7 +27,7 @@ def main():
                         action="store_true")
     args = parser.parse_args()
 
-    # checks whether $ yin-yang is ran without args
+    # checks whether $ yin-yang is run without args
     if len(sys.argv) == 1 and not args.toggle:
         # load GUI
         app = QtWidgets.QApplication(sys.argv)
@@ -67,17 +61,12 @@ def main():
         window.show()
         sys.exit(app.exec())
 
-    # checks whether the script should be ran as a daemon
+    # checks whether the script should be run as a daemon
     if args.schedule:
-        config.update("running", False)
-        logger.debug("START thread listener")
+        config.running = False
 
-        if config.get("followSun"):
-            # calculate time if needed
-            config.set_sun_time()
-
-        if config.get("schedule"):
-            yin_yang.start_daemon()
+        if config.mode != Modes.manual:
+            yin_yang.run()
         else:
             logger.warning("Tried to start scheduler, but schedule was not enabled.")
             print(
@@ -89,10 +78,9 @@ def main():
 
     if args.toggle:
         # terminate any running instances
-        config.update("running", False)
-        config.update("followSun", False)
-        config.update("schedule", False)
-        toggle_theme()
+        config.running = False
+        config.mode = Modes.manual
+        yin_yang.set_mode(not config.dark_mode)
 
 
 if __name__ == "__main__":

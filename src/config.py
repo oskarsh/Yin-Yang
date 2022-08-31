@@ -26,7 +26,7 @@ class Modes(Enum):
 
 # aliases for path to use later on
 home = str(pathlib.Path.home())
-path = home + '/.config'
+config_path = home + '/.config/yin_yang/yin_yang.json'
 
 
 def update_config(config_old: dict, defaults: dict):
@@ -149,6 +149,8 @@ class ConfigManager:
 
     def __init__(self):
         self._config_data = self.defaults
+        self._last_save_time = 0
+        self._changed = False
         self.load()
 
     def set_default(self):
@@ -156,22 +158,27 @@ class ConfigManager:
 
         logger.info('Setting default values.')
         self._config_data = self.defaults
+        self._changed = True
 
     def load(self) -> None:
         """Load config from file"""
 
-        logger.debug('Loading config file')
-
         # generate path for yin-yang if there is none this will be skipped
-        pathlib.Path(path + '/yin_yang').mkdir(parents=True, exist_ok=True)
+        pathlib.Path(home + '/.config/yin_yang').mkdir(parents=True, exist_ok=True)
 
         config_loaded = {}
 
         # check if conf exists
-        if os.path.isfile(path + '/yin_yang/yin_yang.json'):
+        if os.path.isfile(config_path):
+            if self._last_save_time == os.stat(config_path).st_mtime:
+                logger.debug('Loaded config file is up-to-date, skipping load')
+                return
+
             # load conf
-            with open(path + '/yin_yang/yin_yang.json', 'r') as config_file:
+            logger.debug('Loading config file')
+            with open(config_path, 'r') as config_file:
                 config_loaded = json.load(config_file)
+                self._last_save_time = os.stat(config_path).st_mtime
 
         if config_loaded is None or config_loaded == {}:
             # use default values if something went wrong
@@ -186,6 +193,7 @@ class ConfigManager:
         for pl in plugins:
             pl.theme_light = config_loaded['plugins'][pl.name.lower()]['light_theme']
             pl.theme_dark = config_loaded['plugins'][pl.name.lower()]['dark_theme']
+            pl.enabled = config_loaded['plugins'][pl.name.lower()]['enabled']
 
         self._config_data = config_loaded
 
@@ -195,15 +203,16 @@ class ConfigManager:
         :returns: whether save was successful
         """
 
-        if not self.changed:
+        if not self._changed:
             logger.debug('No changes were made, skipping save')
             return True
 
         logger.debug('Saving the config')
         try:
-            with open(path + '/yin_yang/yin_yang.json', 'w') as conf_file:
+            with open(config_path, 'w') as conf_file:
                 json.dump(self._config_data, conf_file, indent=4)
-
+            # update time
+            self._last_save_time = os.stat(config_path).st_mtime
             return True
         except IOError as e:
             logger.error(f'Error while writing the file: {e}')
@@ -236,6 +245,7 @@ class ConfigManager:
 
         try:
             self._config_data['plugins'][plugin][key] = value
+            self._changed = True
             return self.get(plugin, key)
         except KeyError as e:
             logger.error(f'Error while updating {plugin}.{key}')
@@ -269,17 +279,6 @@ class ConfigManager:
         return conf_default
 
     @property
-    def changed(self):
-        logger.debug('Checking if something has been changed.')
-        # compare data in dict to data in file
-        current_config = self._config_data.copy()
-        self.load()
-        changed: bool = current_config != self._config_data
-        self._config_data = current_config
-
-        return changed
-
-    @property
     def data(self) -> dict:
         """All config values. Only use this for testing purposes!"""
 
@@ -306,6 +305,7 @@ class ConfigManager:
     @running.setter
     def running(self, value: bool):
         self._config_data['running'] = value
+        self._changed = True
 
     @property
     def dark_mode(self) -> bool:
@@ -316,6 +316,7 @@ class ConfigManager:
     @dark_mode.setter
     def dark_mode(self, dark_mode: bool):
         self._config_data['dark_mode'] = dark_mode
+        self._changed = True
         self.write()
 
     @property
@@ -332,6 +333,7 @@ class ConfigManager:
     @mode.setter
     def mode(self, mode: Modes):
         self._config_data['mode'] = mode.value
+        self._changed = True
 
     @property
     def location(self) -> tuple[float, float]:
@@ -352,6 +354,7 @@ class ConfigManager:
             raise ValueError('Updating location while not in mode follow sun is forbidden')
 
         self._config_data['coordinates'] = coordinates
+        self._changed = True
 
     @property
     def update_location(self) -> bool:
@@ -362,6 +365,7 @@ class ConfigManager:
     @update_location.setter
     def update_location(self, enabled: bool):
         self._config_data['update_location'] = enabled
+        self._changed = True
 
     @property
     def times(self) -> tuple[time, time]:
@@ -383,6 +387,7 @@ class ConfigManager:
     def times(self, times: tuple[time, time]):
         if self.mode == Modes.scheduled:
             self._config_data['times'] = times[0].isoformat(), times[1].isoformat()
+            self._changed = True
         else:
             raise ValueError('Changing times is only allowed in mode scheduled!')
 
