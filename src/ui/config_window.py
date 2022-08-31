@@ -88,7 +88,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
             assert widget is not None, f'No widget for plugin {plugin.name} found'
 
-            widget.setChecked(config.get(plugin.name, 'Enabled'))
+            widget.setChecked(plugin.enabled)
+            widget.setVisible(plugin.available)
 
             if plugin.name == 'Wallpaper':
                 children: [QtWidgets.QPushButton] = widget.findChildren(QtWidgets.QDialogButtonBox)
