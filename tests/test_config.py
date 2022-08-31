@@ -4,6 +4,8 @@ from os import rename
 from os.path import isfile
 from pathlib import Path
 from shutil import copyfile
+
+from src.enums import Desktop
 from src.config import config, get_desktop
 
 config_path = f"{Path.home()}/.config/yin_yang/yin_yang.json"
@@ -63,8 +65,7 @@ class ConfigTest(unittest.TestCase):
             "kvantumEnabled": False,
             "kvantumLightTheme": "",
             "kvantumDarkTheme": "",
-            "soundEnabled": False,
-            "test": True  # this is used for verification purpose
+            "soundEnabled": False
         }
 
         with open(config_path, "w+") as file:
@@ -72,15 +73,11 @@ class ConfigTest(unittest.TestCase):
 
         config.load()
 
-        settings = [
-            'Enabled',
-            'LightTheme',
-            'DarkTheme'
-        ]
-        for plugin_property in settings:
-            self.assertEqual(config_v2_1[get_desktop().value + plugin_property],
-                             config.get('system', plugin_property.replace('Theme', '_theme').lower()),
-                             'Updating old config files should apply correct values')
+        for plugin_property in ['Enabled', 'LightTheme', 'DarkTheme']:
+            if get_desktop() != Desktop.UNKNOWN:
+                self.assertEqual(config_v2_1[get_desktop().value + plugin_property],
+                                 config.get('system', plugin_property.replace('Theme', '_theme').lower()),
+                                 'Updating old config files should apply correct values')
 
 
 if __name__ == '__main__':

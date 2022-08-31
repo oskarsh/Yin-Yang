@@ -148,9 +148,9 @@ class PluginDesktopDependent(Plugin):
 
     def __init__(self, strategy_instance: Optional[Plugin]):
         super().__init__()
-        if strategy_instance:
-            self._strategy_instance = strategy_instance
-        else:
+        self._strategy_instance = strategy_instance
+
+        if strategy_instance is None:
             logger.warning('Unsupported desktop environment!')
 
     @property
@@ -159,7 +159,7 @@ class PluginDesktopDependent(Plugin):
 
     @property
     def available(self) -> bool:
-        return self.strategy.available
+        return False if self.strategy is None else self.strategy.available
 
     def set_theme(self, theme: str) -> Optional[str]:
         if not theme:
