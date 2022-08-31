@@ -4,22 +4,22 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/ui/config_window.py" line="36"/>
+        <location filename="../../src/ui/config_window.py" line="35"/>
         <source>You are using version {}</source>
         <translation>Sie verwenden Version {}</translation>
     </message>
     <message>
-        <location filename="../../src/ui/config_window.py" line="129"/>
+        <location filename="../../src/ui/config_window.py" line="128"/>
         <source>Dark mode will be active between {} and {}.</source>
         <translation>Dunkler Modus wird zwischen {} und {} aktiv sein.</translation>
     </message>
     <message>
-        <location filename="../../src/ui/config_window.py" line="217"/>
+        <location filename="../../src/ui/config_window.py" line="216"/>
         <source>Open light wallpaper</source>
         <translation>Öffne helles Hintergrundbild</translation>
     </message>
     <message>
-        <location filename="../../src/ui/config_window.py" line="218"/>
+        <location filename="../../src/ui/config_window.py" line="217"/>
         <source>Open dark wallpaper</source>
         <translation>Öffne dunkles Hintergrundbild</translation>
     </message>

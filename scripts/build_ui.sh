@@ -8,4 +8,4 @@ pyside6-uic ./designer/main_window.ui > ./src/ui/main_window.py
 pyside6-lupdate ./designer/main_window.ui ./src/ui/config_window.py \
   -ts resources/translations/yin_yang.de_DE.ts -no-obsolete
 # generate binary translation files
-lrelease-pro ./yin-yang.pro
+pyside6-lrelease ./resources/translations/yin_yang.de_DE.ts
