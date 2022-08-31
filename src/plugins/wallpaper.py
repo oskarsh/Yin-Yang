@@ -1,5 +1,4 @@
 import logging
-from typing import Optional
 
 from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
@@ -62,7 +61,7 @@ class _Kde(Plugin):
     def __init__(self):
         super().__init__()
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         connection = QDBusConnection.sessionBus()
         message = QDBusMessage.createMethodCall(
             'org.kde.plasmashell',
@@ -81,8 +80,6 @@ class _Kde(Plugin):
             '}'
         ])
         connection.call(message)
-        # can't check if this worked or not
-        return theme
 
     @property
     def available(self) -> bool:

@@ -2,7 +2,6 @@ import json
 from configparser import ConfigParser
 from os.path import isdir
 from pathlib import Path
-from typing import Optional
 
 from PySide6.QtWidgets import QGroupBox
 
@@ -25,16 +24,6 @@ class Firefox(ExternalPlugin):
         super().__init__('https://addons.mozilla.org/de/firefox/addon/yin-yang-linux/')
         self.theme_light = 'firefox-compact-light@mozilla.org'
         self.theme_dark = 'firefox-compact-dark@mozilla.org'
-
-    def set_theme(self, theme: str) -> Optional[str]:
-        if not (self.available and self.enabled):
-            return
-
-        if not theme:
-            raise ValueError(f'Theme \"{theme}\" is invalid')
-
-        # throws error if in debug mode, else ignored
-        assert False, 'Changing the theme is only possible from the Firefox plugin'
 
     @property
     def available_themes(self) -> dict:

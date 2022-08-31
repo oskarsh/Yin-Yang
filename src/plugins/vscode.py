@@ -3,7 +3,6 @@ import json
 import logging
 from os.path import isdir
 from pathlib import Path
-from typing import Optional
 
 from ._plugin import Plugin, get_stuff_in_dir
 
@@ -51,7 +50,7 @@ class Vscode(Plugin):
         self.theme_light = 'Default Light+'
         self.theme_dark = 'Default Dark+'
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
@@ -92,7 +91,6 @@ class Vscode(Plugin):
         except StopIteration:
             raise FileNotFoundError('No config file found. '
                                     'If you see this error, try to set a custom theme manually once and try again.')
-        return theme
 
     @property
     def available_themes(self) -> dict:

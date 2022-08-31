@@ -35,10 +35,9 @@ class PluginsTest(unittest.TestCase):
     def test_set_theme_invalid_state(self):
         for pl in plugins:
             with self.subTest(plugin=pl):
-                if pl.enabled:
-                    pl.enabled = False
+                pl.enabled = False
 
-                self.assertFalse(pl.set_theme('dark'),
+                self.assertFalse(pl.set_mode(True),
                                  'set_theme() should not be successful if the plugin is disabled')
 
     # NOTE if you want to test that your theme changes, set this value to true
@@ -53,7 +52,7 @@ class PluginsTest(unittest.TestCase):
                     self.assertEqual(theme, pl.set_theme(theme),
                                      'set_theme() should return the name of the theme to indicate it was successful')
                     self.assertTrue(pl.set_mode(config['theme'] == 'dark'),
-                                    'set_mode() should be true, indication that it was successful')
+                                    'set_mode() should be true, indicating that it was successful')
 
 
 if __name__ == '__main__':

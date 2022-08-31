@@ -47,10 +47,11 @@ class Plugin(ABC):
             return False
 
         theme = self.theme_dark if dark else self.theme_light
-        return self.set_theme(theme) == theme
+        self.set_theme(theme)
+        return True
 
     @abstractmethod
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         """Sets a specific theme
         :param theme: the theme that should be used
         :return: the theme that has been set (should be the same as the parameter
@@ -112,7 +113,7 @@ class PluginCommandline(Plugin):
         super().__init__()
         self.command = command
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
@@ -121,9 +122,10 @@ class PluginCommandline(Plugin):
 
         # insert theme in command and run it
         command = self.insert_theme(theme)
+        result = subprocess.run(command)
 
-        if subprocess.run(command).returncode == 0:
-            return theme
+        if result.returncode != 0:
+            raise ValueError('Command execution failed:', result.stderr)
 
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
@@ -161,14 +163,14 @@ class PluginDesktopDependent(Plugin):
     def available(self) -> bool:
         return False if self.strategy is None else self.strategy.available
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
         if not (self.available and self.enabled):
             return
 
-        return self.strategy.set_theme(theme)
+        self.strategy.set_theme(theme)
 
     @property
     def available_themes(self) -> dict:
@@ -187,14 +189,7 @@ class ExternalPlugin(Plugin):
         return ('Please remember to install the plugin.\n'
                 f'You can get it here: {self._url}')
 
-    def set_theme(self, theme: str) -> Optional[str]:
-
-        if not (self.available and self.enabled):
-            return
-
-        if not theme:
-            raise ValueError(f'Theme \"{theme}\" is invalid')
-
+    def set_theme(self, theme: str):
         # throws error if in debug mode, else ignored
         assert False, 'This is an external plugin, the mode can only be changed externally.'
 

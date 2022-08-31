@@ -1,5 +1,4 @@
 import unittest
-from typing import Optional
 
 from src.plugins._plugin import PluginCommandline, Plugin
 
@@ -11,12 +10,10 @@ class MinimalPlugin(Plugin):
         self._theme_light_value = theme_light
         self._enabled_value = True
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         print(f'Changing to theme {theme}')
         if not (self.enabled and self.available):
             return
-
-        return theme
 
     @property
     def theme_dark(self) -> str:

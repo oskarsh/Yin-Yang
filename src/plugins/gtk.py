@@ -1,7 +1,6 @@
 import logging
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Optional
 
 from src.enums import Desktop
 from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
@@ -44,7 +43,7 @@ class _Kde(Plugin):
         self.theme_light = 'Breeze'
         self.theme_dark = 'Breeze'
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         conf = ConfigParser()
 
         for version in ['gtk-3.0', 'gtk-4.0']:
@@ -55,5 +54,3 @@ class _Kde(Plugin):
 
             with open(config_file, "w") as file:
                 conf.write(file)
-
-        return theme
