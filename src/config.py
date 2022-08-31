@@ -4,6 +4,10 @@ import os
 import pathlib
 import re
 from functools import cache
+from time import sleep
+
+from PySide6.QtCore import QObject
+from PySide6.QtPositioning import QGeoPositionInfoSource, QGeoPositionInfo, QGeoCoordinate
 from psutil import process_iter, NoSuchProcess
 from datetime import time
 from typing import Union
@@ -91,14 +95,25 @@ def get_sun_time(latitude, longitude) -> tuple[time, time]:
         logger.error(f'Error: {e}.')
 
 
+parent = QObject()
+locationSource = QGeoPositionInfoSource.createDefaultSource(parent)
+
+
 @cache
-def get_current_location() -> tuple[float, float]:
-    logger.debug('Updating location.')
-    loc_response = requests.get('https://www.ipinfo.io/loc').text.split(',')
-    # convert the strings to floats
-    loc: [float] = [float(coordinate) for coordinate in loc_response]
-    assert len(loc) == 2, 'The returned location should have exactly 2 values.'
-    return loc[0], loc[1]
+def get_current_location() -> QGeoCoordinate:
+    if locationSource is None:
+        logger.error("No location source is available")
+        return QGeoCoordinate(0, 0)
+
+    pos: QGeoPositionInfo = locationSource.lastKnownPosition()
+    if pos is None:
+        locationSource.requestUpdate(10)
+    tries = 0
+    while pos is None and tries < 10:
+        pos = locationSource.lastKnownPosition()
+        tries += 1
+        sleep(1)
+    return pos.coordinate()
 
 
 def get_desktop() -> Desktop:
@@ -334,7 +349,8 @@ class ConfigManager:
     def location(self) -> tuple[float, float]:
         if self._config_data['update_location']:
             try:
-                return get_current_location()
+                coordinate = get_current_location()
+                return coordinate.latitude(), coordinate.longitude()
             except requests.exceptions.ConnectionError as e:
                 logger.warning('Could not update location. Please check your internet connection.')
                 logger.error(str(e))
