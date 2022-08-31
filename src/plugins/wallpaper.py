@@ -1,7 +1,9 @@
-from PySide6 import QtWidgets
-from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout
+from typing import Optional
 
-from ._plugin import PluginDesktopDependent, PluginCommandline
+from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
+from PySide6.QtDBus import QDBusConnection, QDBusMessage
+
+from ._plugin import PluginDesktopDependent, PluginCommandline, Plugin
 from .system import test_gnome_availability
 
 
@@ -25,13 +27,13 @@ class Wallpaper(PluginDesktopDependent):
         widgets = []
 
         for _ in ['Light', 'Dark']:
-            grp = QtWidgets.QWidget(widget)
+            grp = QWidget(widget)
             horizontal_layout = QVBoxLayout(grp)
 
-            line = QtWidgets.QLineEdit(grp)
+            line = QLineEdit(grp)
             horizontal_layout.addWidget(line)
 
-            btn = QtWidgets.QDialogButtonBox(grp)
+            btn = QDialogButtonBox(grp)
             btn.setStandardButtons(QDialogButtonBox.Open)
             horizontal_layout.addWidget(btn)
 
@@ -50,11 +52,33 @@ class _Gnome(PluginCommandline):
         return test_gnome_availability(self.command)
 
 
-class _Kde(PluginCommandline):
+class _Kde(Plugin):
     name = 'Wallpaper'
 
     def __init__(self):
-        super().__init__(['./src/change_wallpaper.sh', '{theme}'])
+        super().__init__()
+
+    def set_theme(self, theme: str) -> Optional[str]:
+        connection = QDBusConnection.sessionBus()
+        message = QDBusMessage.createMethodCall(
+            'org.kde.plasmashell',
+            '/PlasmaShell',
+            'org.kde.PlasmaShell',
+            'evaluateScript',
+        )
+        message.setArguments([
+            'string:'
+            'var Desktops = desktops();'
+            'for (let i = 0; i < Desktops.length; i++) {'
+            '    let d = Desktops[i];'
+            '    d.wallpaperPlugin = "org.kde.image";'
+            '    d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");'
+            '    d.writeConfig("Image", "file:{theme}");'
+            '}'
+        ])
+        connection.call(message)
+        # can't check if this worked or not
+        return theme
 
     @property
     def available(self) -> bool:
