@@ -15,7 +15,7 @@ echo "Removing config and .desktop file"
 rm -f "$HOME/.local/share/applications/Yin-Yang.desktop"
 rm -f "$HOME/.local/share/yin_yang.log"
 rm -f "/usr/share/icons/hicolor/scalable/apps/yin_yang.svg"
-rm -rf "$HOME/.config/yin_yang"
+# rm -rf "$HOME/.config/yin_yang"
 
 echo "Removing program and terminal execution"
 rm -rf /opt/yin-yang /usr/bin/yin-yang
