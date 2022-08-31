@@ -1,20 +1,9 @@
-import subprocess
-from src.plugins._plugin import Plugin
+from src.plugins._plugin import PluginCommandline
 
 
-class Notification(Plugin):
+class Notification(PluginCommandline):
     def __init__(self):
-        super().__init__()
+        super().__init__(['notify-send', 'Theme changed', f'Set the theme to %t',
+                          '-a', 'Yin & Yang', '-u', 'low', '--icon', 'yin_yang'])
         self.theme_light = 'Day'
-        self.theme_light = 'Night'
-
-    def set_theme(self, theme: str):
-        # TODO set an icon
-        subprocess.run(['notify-send', f'Set the theme to {theme}', '-a', 'Yin & Yang', '-u', 'low'])
-
-    @property
-    def available(self) -> bool:
-        try:
-            return subprocess.run(['notify-send', '--help'], stdout=subprocess.DEVNULL).returncode == 0
-        except FileNotFoundError:
-            return False
+        self.theme_dark = 'Night'

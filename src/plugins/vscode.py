@@ -32,7 +32,7 @@ class Vscode(Plugin):
     def __init__(self):
         super(Vscode, self).__init__()
         self.theme_light = 'Default Light+'
-        self.theme_light = 'Default Dark+'
+        self.theme_dark = 'Default Dark+'
 
     def set_theme(self, theme: str) -> Optional[str]:
         if not theme:
