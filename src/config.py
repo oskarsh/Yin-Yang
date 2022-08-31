@@ -261,7 +261,7 @@ class ConfigManager:
 
         # NOTE: if you change or add new values here, make sure to update the version number and update_config() method
         conf_default = {
-            'version': 2.3,
+            'version': 3.0,
             'running': False,
             'dark_mode': False,
             'mode': Modes.manual.value,
