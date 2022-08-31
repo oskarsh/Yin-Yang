@@ -1,3 +1,4 @@
+import logging
 import subprocess
 from abc import ABC, abstractmethod
 from os import listdir
@@ -5,6 +6,8 @@ from os.path import isdir, join, isfile
 from typing import Optional
 
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
+
+logger = logging.getLogger(__name__)
 
 
 class Plugin(ABC):
@@ -143,12 +146,12 @@ class PluginCommandline(Plugin):
 class PluginDesktopDependent(Plugin):
     """Plugins that behave differently on different desktops"""
 
-    def __init__(self, strategy_instance: Plugin):
+    def __init__(self, strategy_instance: Optional[Plugin]):
         super().__init__()
         if strategy_instance:
             self._strategy_instance = strategy_instance
         else:
-            raise ValueError('Strategy is not valid!')
+            logger.warning('Unsupported desktop environment!')
 
     @property
     def strategy(self) -> Plugin:

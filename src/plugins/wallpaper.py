@@ -21,7 +21,7 @@ class Wallpaper(PluginDesktopDependent):
             case Desktop.GNOME:
                 super().__init__(_Gnome())
             case _:
-                logger.warning('Unsupported desktop environment!')
+                super().__init__(None)
 
     @property
     def available(self) -> bool:

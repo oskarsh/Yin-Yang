@@ -23,7 +23,7 @@ class Gtk(PluginDesktopDependent):
                     print('You need to install an extension for gnome to use it. \n'
                           'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
             case _:
-                logger.warning('Unsupported desktop environment!')
+                super().__init__(None)
 
 
 class _Gnome(PluginCommandline):
