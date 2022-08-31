@@ -73,7 +73,7 @@ class CommunicationTest(unittest.TestCase):
         plugins = ['firefox']
 
         for plugin in plugins:
-            if not config.get(plugin + 'Enabled'):
+            if not config.get(plugin, 'Enabled'):
                 print('Skipped test for ' + plugin)
                 continue
 
