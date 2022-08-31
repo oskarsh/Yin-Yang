@@ -7,7 +7,7 @@ from subprocess import Popen, PIPE
 
 import communicate
 from src.config import config
-from src.yin_yang import should_be_light
+from src.yin_yang import should_be_dark
 
 
 def should_be_dark_extensions(time_current: int, time_dark: int):
@@ -115,7 +115,7 @@ class CommunicationTest(unittest.TestCase):
         time_current = datetime.today()
         time_light_unix, time_dark_unix = communicate._move_times(time_current, time_light, time_dark)
 
-        is_dark = not should_be_light()
+        is_dark = should_be_dark(time_current.time(), time_light, time_dark)
         # NOTE: this should be equal to how the extension calculates the theme
         detected_dark = should_be_dark_extensions(int(time_current.timestamp()),
                                                   time_dark_unix)
