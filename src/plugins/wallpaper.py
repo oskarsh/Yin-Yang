@@ -1,3 +1,4 @@
+import logging
 from typing import Optional
 
 from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
@@ -6,6 +7,8 @@ from PySide6.QtDBus import QDBusConnection, QDBusMessage
 from src.enums import Desktop
 from ._plugin import PluginDesktopDependent, PluginCommandline, Plugin
 from .system import test_gnome_availability
+
+logger = logging.getLogger(__name__)
 
 
 class Wallpaper(PluginDesktopDependent):
@@ -18,7 +21,7 @@ class Wallpaper(PluginDesktopDependent):
             case Desktop.GNOME:
                 super().__init__(_Gnome())
             case _:
-                raise ValueError('Unsupported desktop environment!')
+                logger.warning('Unsupported desktop environment!')
 
     @property
     def available(self) -> bool:

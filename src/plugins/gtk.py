@@ -1,3 +1,4 @@
+import logging
 from configparser import ConfigParser
 from pathlib import Path
 from typing import Optional
@@ -5,6 +6,8 @@ from typing import Optional
 from src.enums import Desktop
 from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
 from .system import test_gnome_availability
+
+logger = logging.getLogger(__name__)
 
 
 class Gtk(PluginDesktopDependent):
@@ -20,7 +23,7 @@ class Gtk(PluginDesktopDependent):
                     print('You need to install an extension for gnome to use it. \n'
                           'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
             case _:
-                raise ValueError('Unsupported desktop environment!')
+                logger.warning('Unsupported desktop environment!')
 
 
 class _Gnome(PluginCommandline):

@@ -1,4 +1,5 @@
 import json
+import logging
 import subprocess
 import pwd
 import os
@@ -7,6 +8,8 @@ from PySide6.QtCore import QLocale
 
 from src.enums import Desktop
 from src.plugins._plugin import PluginDesktopDependent, PluginCommandline
+
+logger = logging.getLogger(__name__)
 
 
 def test_gnome_availability(command) -> bool:
@@ -33,7 +36,7 @@ class System(PluginDesktopDependent):
             case Desktop.GNOME:
                 super().__init__(_Gnome())
             case _:
-                raise ValueError('Unsupported desktop environment!')
+                logger.warning('Unsupported desktop environment!')
 
         super().__init__(_Kde())
 
