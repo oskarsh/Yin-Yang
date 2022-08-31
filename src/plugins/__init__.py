@@ -1,3 +1,4 @@
+from src.enums import Desktop
 from src.plugins import system, gtk, kvantum, wallpaper, firefox, vscode, atom, sound, notify
 
 # NOTE initialize your plugin over here:
@@ -5,7 +6,7 @@ from src.plugins import system, gtk, kvantum, wallpaper, firefox, vscode, atom, 
 from src.plugins._plugin import Plugin, ExternalPlugin
 
 
-def get_plugins(desktop: str) -> [Plugin]:
+def get_plugins(desktop: Desktop) -> [Plugin]:
     return [
         system.System(desktop),
         gtk.Gtk(desktop),

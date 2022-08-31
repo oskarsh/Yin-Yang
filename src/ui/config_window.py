@@ -36,9 +36,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # set the correct mode
         mode = config.mode
-        self.ui.btn_enable.setChecked(mode != Modes.manual)
+        self.ui.btn_enable.setChecked(mode != Modes.MANUAL)
 
-        if mode == Modes.followSun:
+        if mode == Modes.FOLLOW_SUN:
             self.ui.time.setVisible(False)
             self.ui.btn_sun.setChecked(True)
         else:
@@ -65,7 +65,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def load_location(self):
         if self.ui.btn_sun.isChecked():
-            config.mode = Modes.followSun
+            config.mode = Modes.FOLLOW_SUN
         self.ui.btn_location.setChecked(config.update_location)
         self.ui.location_input.setDisabled(config.update_location)
         # set correct coordinates
@@ -152,18 +152,18 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def save_mode(self):
         if not self.ui.btn_enable.isChecked():
-            config.mode = Modes.manual
+            config.mode = Modes.MANUAL
         elif self.ui.btn_schedule.isChecked():
-            config.mode = Modes.scheduled
+            config.mode = Modes.SCHEDULED
         elif self.ui.btn_sun.isChecked():
-            config.mode = Modes.followSun
+            config.mode = Modes.FOLLOW_SUN
 
         self.load_times()
 
     def save_times(self):
         """Sets the time set in the ui to the config"""
 
-        if config.mode != Modes.scheduled:
+        if config.mode != Modes.SCHEDULED:
             return
 
         # update config if time has changed
@@ -174,7 +174,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.update_label_enabled()
 
     def save_location(self):
-        if config.mode != Modes.followSun:
+        if config.mode != Modes.FOLLOW_SUN:
             return
         config.update_location = self.ui.btn_location.isChecked()
         if config.update_location:

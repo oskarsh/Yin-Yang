@@ -65,7 +65,7 @@ def main():
     if args.schedule:
         config.running = False
 
-        if config.mode != Modes.manual:
+        if config.mode != Modes.MANUAL:
             yin_yang.run()
         else:
             logger.warning("Tried to start scheduler, but schedule was not enabled.")
@@ -79,7 +79,7 @@ def main():
     if args.toggle:
         # terminate any running instances
         config.running = False
-        config.mode = Modes.manual
+        config.mode = Modes.MANUAL
         yin_yang.set_mode(not config.dark_mode)
 
 

@@ -5,6 +5,7 @@ import os
 
 from PySide6.QtCore import QLocale
 
+from src.enums import Desktop
 from src.plugins._plugin import PluginDesktopDependent, PluginCommandline
 
 
@@ -25,11 +26,11 @@ def test_gnome_availability(command) -> bool:
 
 
 class System(PluginDesktopDependent):
-    def __init__(self, desktop: str):
+    def __init__(self, desktop: Desktop):
         match desktop:
-            case 'kde':
+            case Desktop.KDE:
                 super().__init__(_Kde())
-            case 'gtk':
+            case Desktop.GNOME:
                 super().__init__(_Gnome())
             case _:
                 raise ValueError('Unsupported desktop environment!')

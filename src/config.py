@@ -6,23 +6,14 @@ import re
 from functools import cache
 from psutil import process_iter, NoSuchProcess
 from datetime import time
-from enum import Enum
 from typing import Union
 
 import requests
 from suntime import Sun, SunTimeException
 from src.plugins import get_plugins
+from src.enums import Modes, Desktop
 
 logger = logging.getLogger(__name__)
-
-
-class Modes(Enum):
-    """Different modes for determining the theme that should be used"""
-
-    manual = 'manual'
-    scheduled = 'manual time'
-    followSun = 'sunset to sunrise'
-
 
 # aliases for path to use later on
 home = str(pathlib.Path.home())
@@ -46,11 +37,11 @@ def update_config(config_old: dict, defaults: dict):
     if config_old['version'] <= 2.1:
         # determine mode
         if config_old.pop('schedule'):
-            mode = Modes.scheduled.value
+            mode = Modes.SCHEDULED.value
         elif config_old.pop('followSun'):
-            mode = Modes.followSun.value
+            mode = Modes.FOLLOW_SUN.value
         else:
-            mode = Modes.manual.value
+            mode = Modes.MANUAL.value
         config_new['mode'] = mode
 
         config_new['dark_mode'] = config_old.pop('theme') == 'dark'
@@ -71,7 +62,7 @@ def update_plugin_config(config_old, plugin_config, plugin_name):
                 plugin_config[key] = config_old['code' + key_old]
                 continue
             if plugin_name == 'system':
-                plugin_config[key] = config_old[get_desktop() + key_old]
+                plugin_config[key] = config_old[get_desktop().value + key_old]
                 continue
             plugin_config[key] = config_old[plugin_name.casefold() + key_old]
         except KeyError:
@@ -110,7 +101,7 @@ def get_current_location() -> tuple[float, float]:
     return loc[0], loc[1]
 
 
-def get_desktop() -> str:
+def get_desktop() -> Desktop:
     # just to get all possible implementations of desktop variables
     # noinspection SpellCheckingInspection
     env = str(os.getenv('GDMSESSION')).lower()
@@ -127,20 +118,20 @@ def get_desktop() -> str:
 
     if (gnome_re.search(env) or
             gnome_re.search(second_env) or gnome_re.search(third_env)):
-        return 'gtk'
+        return Desktop.GNOME
     if (budgie_re.search(env) or
             budgie_re.search(second_env) or budgie_re.search(third_env)):
-        return 'gtk'
+        return Desktop.GNOME
     if (kde_re.search(env) or
             kde_re.search(second_env) or kde_re.search(third_env)):
-        return 'kde'
+        return Desktop.KDE
     if (plasma_re.search(env) or
             plasma_re.search(second_env) or plasma_re.search(third_env)):
-        return 'kde'
+        return Desktop.KDE
     if (plasma5_re.search(env) or
             plasma5_re.search(second_env) or plasma5_re.search(third_env)):
-        return 'kde'
-    return 'unknown'
+        return Desktop.KDE
+    return Desktop.UNKNOWN
 
 
 plugins = get_plugins(get_desktop())
@@ -264,7 +255,7 @@ class ConfigManager:
             'version': 3.0,
             'running': False,
             'dark_mode': False,
-            'mode': Modes.manual.value,
+            'mode': Modes.MANUAL.value,
             'coordinates': (0, 0),
             'update_location': False,
             'update_interval': 60,
@@ -354,7 +345,7 @@ class ConfigManager:
     def location(self, coordinates: tuple[float, float]):
         if self._config_data['update_location']:
             raise ValueError('Location is updated automatically!')
-        elif self.mode != Modes.followSun:
+        elif self.mode != Modes.FOLLOW_SUN:
             raise ValueError('Updating location while not in mode follow sun is forbidden')
 
         self._config_data['coordinates'] = coordinates
@@ -375,7 +366,7 @@ class ConfigManager:
     def times(self) -> tuple[time, time]:
         """Times during which dark mode should be inactive"""
 
-        if self.mode == Modes.followSun:
+        if self.mode == Modes.FOLLOW_SUN:
             latitude, longitude = self.location
             return get_sun_time(latitude, longitude)
 
@@ -389,14 +380,14 @@ class ConfigManager:
 
     @times.setter
     def times(self, times: tuple[time, time]):
-        if self.mode == Modes.scheduled:
+        if self.mode == Modes.SCHEDULED:
             self._config_data['times'] = times[0].isoformat(), times[1].isoformat()
             self._changed = True
         else:
             raise ValueError('Changing times is only allowed in mode scheduled!')
 
     @property
-    def desktop(self) -> str:
+    def desktop(self) -> Desktop:
         """Return the current desktops name or 'unknown' if can't determine it"""
 
         return get_desktop()

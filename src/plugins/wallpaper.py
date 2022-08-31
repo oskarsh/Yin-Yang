@@ -3,6 +3,7 @@ from typing import Optional
 from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
+from src.enums import Desktop
 from ._plugin import PluginDesktopDependent, PluginCommandline, Plugin
 from .system import test_gnome_availability
 
@@ -10,11 +11,11 @@ from .system import test_gnome_availability
 class Wallpaper(PluginDesktopDependent):
     # themes are image file paths
 
-    def __init__(self, desktop: str):
+    def __init__(self, desktop: Desktop):
         match desktop:
-            case 'kde':
+            case Desktop.KDE:
                 super().__init__(_Kde())
-            case 'gtk':
+            case Desktop.GNOME:
                 super().__init__(_Gnome())
             case _:
                 raise ValueError('Unsupported desktop environment!')

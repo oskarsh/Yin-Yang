@@ -46,7 +46,7 @@ def set_mode(dark: bool):
 
 def run():
     logger.info(f'System is currently using a {"dark" if config.dark_mode else "light"} theme.')
-    while config.mode != Modes.manual:
+    while config.mode != Modes.MANUAL:
         # load settings if something has changed
         config.load()
         time_light, time_dark = config.times

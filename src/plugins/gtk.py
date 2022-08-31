@@ -2,6 +2,7 @@ from configparser import ConfigParser
 from pathlib import Path
 from typing import Optional
 
+from src.enums import Desktop
 from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
 from .system import test_gnome_availability
 
@@ -9,11 +10,11 @@ from .system import test_gnome_availability
 class Gtk(PluginDesktopDependent):
     name = 'GTK'
 
-    def __init__(self, desktop: str):
+    def __init__(self, desktop: Desktop):
         match desktop:
-            case 'kde':
+            case Desktop.KDE:
                 super().__init__(_Kde())
-            case 'gtk':
+            case Desktop.GNOME:
                 super().__init__(_Gnome())
                 if not self.strategy.available:
                     print('You need to install an extension for gnome to use it. \n'
