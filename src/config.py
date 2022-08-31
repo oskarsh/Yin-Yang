@@ -58,24 +58,28 @@ def update_config(config_old: dict, defaults: dict):
         # put settings for PLUGINS into sections
         plugin_settings: dict = defaults['plugins']
         for plugin_name, plugin_config in plugin_settings.items():
-            for key in plugin_config.keys():
-                try:
-                    key_old = str(key).replace('_', ' ').title().replace(' ', '')
-                    # code was renamed to vs code
-                    if plugin_name == 'vs code':
-                        plugin_config[key] = config_old['code' + key_old]
-                        continue
-                    if plugin_name == 'system':
-                        plugin_config[key] = config_old[get_desktop() + key_old]
-                        continue
-                    plugin_config[key] = config_old[plugin_name.casefold() + key_old]
-                except KeyError:
-                    if plugin_name == 'sound' and key in ['light_theme', 'dark_theme']:
-                        # this is expected since there is no theme
-                        continue
-                    logger.warning(f'Error while updating old config file. No value found for {plugin_name}.{key}')
-                    logger.info('This is most likely because the plugin was added in a later version')
+            update_plugin_config(config_old, plugin_config, plugin_name)
     return config_new
+
+
+def update_plugin_config(config_old, plugin_config, plugin_name):
+    for key in plugin_config.keys():
+        try:
+            key_old = str(key).replace('_', ' ').title().replace(' ', '')
+            # code was renamed to vs code
+            if plugin_name == 'vs code':
+                plugin_config[key] = config_old['code' + key_old]
+                continue
+            if plugin_name == 'system':
+                plugin_config[key] = config_old[get_desktop() + key_old]
+                continue
+            plugin_config[key] = config_old[plugin_name.casefold() + key_old]
+        except KeyError:
+            if plugin_name == 'sound' and key in ['light_theme', 'dark_theme']:
+                # this is expected since there is no theme
+                continue
+            logger.warning(f'Error while updating old config file. No value found for {plugin_name}.{key}')
+            logger.info('This is most likely because the plugin was added in a later version')
 
 
 @cache

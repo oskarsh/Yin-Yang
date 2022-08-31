@@ -7,7 +7,6 @@ from typing import Optional
 
 from ._plugin import Plugin, get_stuff_in_dir
 
-
 logger = logging.getLogger(__name__)
 
 EXTENSION_PATHS = [
@@ -24,6 +23,24 @@ def write_new_settings(settings, path):
     settings["workbench.colorTheme"] = "Default"
     with open(path, 'w') as conf:
         json.dump(settings, conf, indent=4)
+
+
+def get_theme_name(path):
+    # open metadata
+    manifest: dict
+    with open(path, 'r') as file:
+        manifest = json.load(file)
+
+    # collect themes
+    themes: list
+    if 'themes' in manifest['contributes']:
+        themes = manifest['contributes']['themes']
+    elif 'Themes' in manifest['contributes']:
+        themes = manifest['contributes']['Themes']
+    else:
+        return []
+
+    return (theme['id'] if 'id' in theme else theme['label'] for theme in themes)
 
 
 class Vscode(Plugin):
@@ -48,35 +65,31 @@ class Vscode(Plugin):
             "Code - Insiders",
         ]
 
-        path = str(Path.home()) + "/.config/"
-        file = '/User/settings.json'
-        for i in range(len(possible_editors)):
-            name = possible_editors.pop(i)
-            possible_editors.append(path + name + file)
+        try:
+            for editor in filter(
+                    os.path.isfile,
+                    (f'{str(Path.home())}/.config/{name}/User/settings.json' for name in possible_editors)):
+                # load the settings
+                with open(editor, "r") as sett:
+                    try:
+                        settings = json.load(sett)
+                        settings['workbench.colorTheme'] = theme
+                    except json.decoder.JSONDecodeError as e:
+                        # check if the file is completely empty
+                        sett.seek(0)
+                        first_char: str = sett.read(1)
+                        if not first_char:
+                            # file is empty
+                            logger.info('File is empty')
+                            settings = {"workbench.colorTheme": theme}
+                        else:
+                            # settings file is malformed
+                            raise e
 
-        for editor in filter(os.path.isfile, possible_editors):
-            # load the settings
-            with open(editor, "r") as sett:
-                try:
-                    settings = json.load(sett)
-                    settings['workbench.colorTheme'] = theme
-                except json.decoder.JSONDecodeError as e:
-                    # check if the file is completely empty
-                    sett.seek(0)
-                    first_char: str = sett.read(1)
-                    if not first_char:
-                        # file is empty
-                        print('File is empty')
-                        settings = {"workbench.colorTheme": theme}
-                    else:
-                        # settings file is malformed
-                        raise e
-
-            # write changed settings into the file
-            with open(editor, 'w') as sett:
-                json.dump(settings, sett)
-
-        if filter(os.path.isfile, possible_editors).__next__() is None:
+                # write changed settings into the file
+                with open(editor, 'w') as sett:
+                    json.dump(settings, sett)
+        except StopIteration:
             raise FileNotFoundError('No config file found. '
                                     'If you see this error, try to set a custom theme manually once and try again.')
         return theme
@@ -95,36 +108,8 @@ class Vscode(Plugin):
                 extension_dirs.pop(extension_dirs.index('node_modules'))
 
             for extension_dir in extension_dirs:
-                try:
-                    with open(f'{path}/{extension_dir}/package.json', 'r') as file:
-                        manifest = json.load(file)
-
-                    try:
-                        if 'Themes' not in manifest['categories']:
-                            continue
-                    except KeyError:
-                        pass
-                    try:
-                        if 'themes' not in manifest['contributes']:
-                            continue
-                    except KeyError:
-                        pass
-
-                    try:
-                        themes: list = manifest['contributes']['themes']
-
-                        for theme in themes:
-                            if 'id' in theme:
-                                themes_dict[theme['id']] = theme['id']
-                            else:
-                                themes_dict[theme['label']] = theme['label']
-                    except KeyError as e:
-                        logger.error(str(e))
-                        continue
-
-                except FileNotFoundError as e:
-                    logger.error(str(e))
-                    break
+                for theme_name in get_theme_name(f'{path}/{extension_dir}/package.json'):
+                    themes_dict[theme_name] = theme_name
 
         assert themes_dict != {}, 'No themes found'
         return themes_dict
