@@ -76,7 +76,7 @@ class _Kde(Plugin):
             '    let d = Desktops[i];'
             '    d.wallpaperPlugin = "org.kde.image";'
             '    d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");'
-            '    d.writeConfig("Image", "file:{theme}");'
+            f'    d.writeConfig("Image", "file:{theme}");'
             '}'
         ])
         connection.call(message)
