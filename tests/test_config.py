@@ -18,7 +18,7 @@ class ConfigTest(unittest.TestCase):
 
         # if there already exists a backup, its likely because a test in failed in the past
         # do not override that backup
-        if not isfile(config_path + 'yin_yang_backup.json'):
+        if isfile(config_path) and not isfile(config_path + '.backup'):
             # make a backup of the currently used config file
             copyfile(config_path, config_path.replace("yin_yang.json", "yin_yang_backup.json"))
 
@@ -27,7 +27,7 @@ class ConfigTest(unittest.TestCase):
         super().tearDownClass()
         # override the config file with the backup so that
         # these tests do not override the users preferences
-        rename(config_path.replace("yin_yang.json", "yin_yang_backup.json"), config_path)
+        rename(config_path.replace(".backup", ""), config_path)
 
     def test_update_old_configs(self):
         config_v2_1 = {
