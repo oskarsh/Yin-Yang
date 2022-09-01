@@ -1,3 +1,5 @@
+import logging
+
 from PySide6 import QtWidgets
 from PySide6.QtCore import QStandardPaths
 from PySide6.QtGui import QScreen
@@ -5,6 +7,8 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
 
 from src.ui.main_window import Ui_main_window
 from src.config import config, Modes, plugins
+
+logger = logging.getLogger(__name__)
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -110,6 +114,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     used_theme: str = plugin.theme_dark if is_dark_checkbox else plugin.theme_light
                     index: int
                     if used_theme == '':
+                        logger.debug(f'Used theme is unknown for plugin {plugin.name}')
                         index = 0
                     else:
                         index = child.findText(

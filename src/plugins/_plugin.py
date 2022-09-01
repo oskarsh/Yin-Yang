@@ -149,6 +149,7 @@ class PluginDesktopDependent(Plugin):
     """Plugins that behave differently on different desktops"""
 
     def __init__(self, strategy_instance: Optional[Plugin]):
+        self._strategy_instance = None
         super().__init__()
         self._strategy_instance = strategy_instance
 
@@ -175,6 +176,28 @@ class PluginDesktopDependent(Plugin):
     @property
     def available_themes(self) -> dict:
         return self.strategy.available_themes
+
+    @property
+    def theme_light(self):
+        if self._strategy_instance is not None:
+            return self._strategy_instance.theme_light
+        return ''
+
+    @theme_light.setter
+    def theme_light(self, value):
+        if self._strategy_instance is not None:
+            self._strategy_instance.theme_light = value
+
+    @property
+    def theme_dark(self):
+        if self._strategy_instance is not None:
+            return self._strategy_instance.theme_dark
+        return ''
+
+    @theme_dark.setter
+    def theme_dark(self, value):
+        if self._strategy_instance is not None:
+            self._strategy_instance.theme_dark = value
 
 
 class ExternalPlugin(Plugin):

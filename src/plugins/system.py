@@ -38,8 +38,6 @@ class System(PluginDesktopDependent):
             case _:
                 super().__init__(None)
 
-        super().__init__(_Kde())
-
 
 class _Gnome(PluginCommandline):
     name = 'System'
