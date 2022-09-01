@@ -2,7 +2,7 @@ import unittest
 
 from src.config import config
 from src.config import plugins
-from src.plugins._plugin import Plugin
+from src.plugins._plugin import Plugin, ExternalPlugin
 
 
 class PluginsTest(unittest.TestCase):
@@ -43,16 +43,12 @@ class PluginsTest(unittest.TestCase):
     # NOTE if you want to test that your theme changes, set this value to true
     @unittest.skipUnless(False, 'test_theme_changes is disabled')
     def test_set_theme_works(self):
-        # FIXME the path in the wallpaper plugin is relative, therefore it is not testable
-        for pl in [pl for pl in plugins if pl.name != 'Wallpaper']:
-            if pl.enabled:
-                with self.subTest('Changing the theme should be successful', plugin=pl.name):
-                    theme = config[str(pl) + ('Dark' if config['theme'] == 'dark' else 'Light') + 'Theme']
-
-                    self.assertEqual(theme, pl.set_theme(theme),
-                                     'set_theme() should return the name of the theme to indicate it was successful')
-                    self.assertTrue(pl.set_mode(config['theme'] == 'dark'),
-                                    'set_mode() should be true, indicating that it was successful')
+        for pl in filter(lambda p: not isinstance(p, ExternalPlugin) and p.enabled, plugins):
+            with self.subTest('Changing the theme should be successful', plugin=pl.name):
+                self.assertTrue(pl.set_mode(True),
+                                'set_mode() should be true, indicating that it was successful')
+                self.assertTrue(pl.set_mode(False),
+                                'set_mode() should be true, indicating that it was successful')
 
 
 if __name__ == '__main__':
