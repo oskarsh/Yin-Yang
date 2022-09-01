@@ -18,7 +18,7 @@ class ConfigTest(unittest.TestCase):
 
         # if there already exists a backup, its likely because a test in failed in the past
         # do not override that backup
-        if isfile(config_path) and not isfile(config_path + '.backup'):
+        if isfile(config_path):
             # make a backup of the currently used config file
             copyfile(config_path, config_path.replace("yin_yang.json", "yin_yang_backup.json"))
 
@@ -75,9 +75,10 @@ class ConfigTest(unittest.TestCase):
 
         for plugin_property in ['Enabled', 'LightTheme', 'DarkTheme']:
             if get_desktop() != Desktop.UNKNOWN:
-                self.assertEqual(config_v2_1[get_desktop().value + plugin_property],
-                                 config.get('system', plugin_property.replace('Theme', '_theme').lower()),
-                                 'Updating old config files should apply correct values')
+                self.assertEqual(
+                    config_v2_1[get_desktop().value + plugin_property],
+                    config.get('system', plugin_property.replace('Theme', '_theme').lower()),
+                    'Updating old config files should apply correct values')
 
 
 if __name__ == '__main__':
