@@ -22,6 +22,8 @@ logger = logging.getLogger(__name__)
 # aliases for path to use later on
 home = str(pathlib.Path.home())
 config_path = home + '/.config/yin_yang/yin_yang.json'
+if __debug__:
+    config_path = config_path.replace('.json', '_dev.json')
 
 
 def update_config(config_old: dict, defaults: dict):
