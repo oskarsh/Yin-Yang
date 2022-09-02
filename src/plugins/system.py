@@ -88,13 +88,10 @@ class _Kde(PluginCommandline):
         self.theme_light = 'org.kde.breeze.desktop'
         self.theme_dark = 'org.kde.breezedark.desktop'
 
-    def set_mode(self, dark: bool) -> bool:
+    def set_theme(self, theme: str) -> bool:
         # TODO remove this once https://bugs.kde.org/show_bug.cgi?id=446074 is fixed
-        if not self.enabled:
-            return False
-
-        theme = self.theme_dark if dark else self.theme_light
-        return self.set_theme(theme) == theme and self.set_theme(theme) == theme
+        super().set_theme(theme)
+        super().set_theme(theme)
 
     @property
     def available_themes(self) -> dict:

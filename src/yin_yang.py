@@ -37,6 +37,7 @@ def set_mode(dark: bool, force=False):
     for p in plugins:
         if config.get(p.name, 'enabled'):
             try:
+                logger.info(f'Changing theme in plugin {p.name}')
                 p.set_mode(dark)
             except Exception as e:
                 logger.error('Error while changing theme in ' + p.name, exc_info=e)

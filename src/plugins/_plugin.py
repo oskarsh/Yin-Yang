@@ -161,6 +161,15 @@ class PluginDesktopDependent(Plugin):
         return self._strategy_instance
 
     @property
+    def enabled(self):
+        return self._strategy_instance.enabled if self._strategy_instance is not None else False
+
+    @enabled.setter
+    def enabled(self, value):
+        if self._strategy_instance is not None:
+            self._strategy_instance.enabled = value
+
+    @property
     def available(self) -> bool:
         return False if self.strategy is None else self.strategy.available
 
