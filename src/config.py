@@ -41,11 +41,27 @@ def update_config(config_old: dict, defaults: dict):
 
     # replace default values with previous ones
     if config_old['version'] <= 2.1:
+        # Add or update keys to be compatible with the current version
+        if "soundEnabled" not in defaults:
+            config_old["soundEnabled"] = True
+
+        name = "kde" if config_old["desktop"] == "kde" else "gnome"
+
+        config_old['systemEnabled'] = config_old[f'{name}Enabled']
+        config_old['systemLightTheme'] = config_old[f'{name}LightTheme']
+        config_old['systemDarkTheme'] = config_old[f'{name}DarkTheme']
+
+        # delete old keys
+        for pl_old in ['kde', 'gnome']:
+            for key in ['Enabled', 'LightTheme', 'DarkTheme']:
+                config_old.pop(pl_old + key)
+
+    if config_old['version'] <= 2.2:
         # determine mode
-        if config_old.pop('schedule'):
-            mode = Modes.SCHEDULED.value
-        elif config_old.pop('followSun'):
+        if config_old.pop('followSun'):
             mode = Modes.FOLLOW_SUN.value
+        elif config_old.pop('schedule'):
+            mode = Modes.SCHEDULED.value
         else:
             mode = Modes.MANUAL.value
         config_new['mode'] = mode
@@ -64,13 +80,15 @@ def update_plugin_config(config_old, plugin_config, plugin_name):
         try:
             key_old = str(key).replace('_', ' ').title().replace(' ', '')
             # code was renamed to vs code
-            if plugin_name == 'vs code':
-                plugin_config[key] = config_old['code' + key_old]
-                continue
-            if plugin_name == 'system':
-                plugin_config[key] = config_old[get_desktop().value + key_old]
-                continue
-            plugin_config[key] = config_old[plugin_name.casefold() + key_old]
+            match plugin_name:
+                case 'vs code':
+                    plugin_config[key] = config_old['code' + key_old]
+                    continue
+                case 'system':
+                    plugin_config[key] = config_old[get_desktop().value + key_old]
+                    continue
+                case _:
+                    plugin_config[key] = config_old[plugin_name.casefold() + key_old]
         except KeyError:
             if plugin_name == 'sound' and key in ['light_theme', 'dark_theme']:
                 # this is expected since there is no theme
