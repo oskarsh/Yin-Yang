@@ -27,10 +27,10 @@ def should_be_dark(time_current: time, time_light: time, time_dark: time) -> boo
         return time_dark <= time_current < time_light
 
 
-def set_mode(dark: bool):
+def set_mode(dark: bool, force=False):
     """Activates light or dark theme"""
 
-    if dark == config.dark_mode:
+    if not force and dark == config.dark_mode:
         return
 
     logger.info(f'Switching to {"dark" if dark else "light"} mode.')
@@ -46,10 +46,12 @@ def set_mode(dark: bool):
 
 def run():
     logger.info(f'System is currently using a {"dark" if config.dark_mode else "light"} theme.')
+    first_run = True
     while config.mode != Modes.MANUAL:
         # load settings if something has changed
         config.load()
         time_light, time_dark = config.times
-        set_mode(should_be_dark(datetime.now().time(), time_light, time_dark))
+        set_mode(should_be_dark(datetime.now().time(), time_light, time_dark), force=first_run)
+        first_run = False
         # subtract seconds so that the next switch is on the full minute
         time.sleep(config.update_interval - datetime.now().second)
