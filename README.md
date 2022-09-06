@@ -5,7 +5,7 @@
 
 <h1 align="center"> Yin-Yang </h1> <br>
 <p align="center">
-   Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes for your favourite editors like VSCode or Atom. 
+   Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes your favourite editors like VSCode or Atom. 
 </p>
 
 <p align="center" >
