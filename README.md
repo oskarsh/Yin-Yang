@@ -5,7 +5,7 @@
 
 <h1 align="center"> Yin-Yang </h1> <br>
 <p align="center">
-   Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes your favourite Editors like VSCode or Atom. 
+   Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes for your favourite editors like VSCode or Atom. 
 </p>
 
 <p align="center" >
@@ -22,24 +22,24 @@
 
 ## Features
 
-* adjust theme based on Time or Sunset
-* workes on Gnome, Budgie and KDE
-* toggles themes from light / dark
-* supports VSCode
-* support Atom
-* support Wallpaper change based on themes
-* toggle themes based on given time
-* support theme based on suntime
+* Adjust theme based on Time or Sunset
+* Works on Gnome, Budgie and KDE
+* Toggles theme from light to dark
+* Supports VSCode
+* Supports Atom
+* Supports Wallpaper change based on theme
+* Toggles themes based on given time
+* Supports changing theme based on sunrise and sunset
 
 ## Installation
-To install Yin-Yang copy the command below:
+To install Yin-Yang, copy the command below:
 
 ```git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./install.sh```
 
 and follow the onscreen Instructions.
 
 
-You will need some dependencies for the installation process to work correctly check the Wiki for what is needed:
+You will need some dependencies for the installation process to work correctly, check the Wiki for what is needed:
 [![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
 
 <p align="center" >
@@ -55,15 +55,15 @@ Want to know more? Visit the Wiki and read about Installation, Building, Trouble
 
 ## Wallpapers
 
-Yin-Yang comes with custom made Wallpaper in order to get you started with Light / Dark Wallpapers, you can check out the repository here
+Yin-Yang comes with custom made Wallpapers in order to get you started with Light / Dark Wallpapers, you can check out the repository here:
 
-The Wallpapers are open source and can be used however you want. I also accept contributions in form of open source Wallpapers see the [contribution Section](https://github.com/oskarsh/Yin-Yang/wiki/Supporting-Yin-Yang#create-yin-yang-wallpapers).
+The Wallpapers are open source and can be used however you want. I also accept contributions in the form of open source Wallpapers, see the [contribution Section](https://github.com/oskarsh/Yin-Yang/wiki/Supporting-Yin-Yang#create-yin-yang-wallpapers).
 
 [![Generic badge](https://img.shields.io/badge/Get-Wallpapers-BLUE.svg)](https://github.com/oskarsh/Wallpaper-yin-yang)
 
 
 
-## Thanks to all Contributors 
+## Thanks to All Contributors 
 
 ### Code Contributors
 
