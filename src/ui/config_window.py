@@ -78,14 +78,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.inp_longitude.setValue(coordinates[1])
 
     def load_plugins(self):
-        widget: QtWidgets.QWidget
+        widget: QtWidgets.QGroupBox
         for plugin in plugins:
             # filter out plugins for application
             if plugin.name.casefold() in ['notification', 'sound']:
                 continue
 
-            widget: QtWidgets.QGroupBox = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox,
-                                                                                   'group' + plugin.name)
+            widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'group' + plugin.name)
             if widget is None:
                 widget = plugin.get_widget(self.ui.plugins_scroll_content)
                 self.ui.plugins_scroll_content_layout.addWidget(widget)

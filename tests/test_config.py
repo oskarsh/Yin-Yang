@@ -2,8 +2,8 @@ import json
 import unittest
 from pathlib import Path
 
+from src.config import config
 from src.enums import Desktop, Modes
-from src.config import config, get_desktop
 
 config_path = f"{Path.home()}/.config/yin_yang/yin_yang_dev.json"
 
@@ -91,25 +91,46 @@ def downgrade_config(old_config):
     config.load()
 
 
-class ConfigTest(unittest.TestCase):
-    def test_update_old_configs(self):
-        for version in [2.1, 2.2]:
+def use_all_versions(func):
+    def inner(self):
+        for version in old_configs:
             with self.subTest('Testing update from old version', version=version):
                 old_config = old_configs[version]
                 downgrade_config(old_config)
+                func(self, version, old_config)
+    return inner
 
-                if version == 2.1:
-                    if get_desktop() != Desktop.UNKNOWN:
-                        for plugin_property in ['Enabled', 'LightTheme', 'DarkTheme']:
-                            self.assertEqual(
-                                old_config[get_desktop().value + plugin_property],
-                                config.get('system', plugin_property.replace('Theme', '_theme').lower()),
-                                'Updating old config files should apply correct values')
 
-                if version == 2.2:
-                    self.assertEqual(config.mode, Modes.SCHEDULED)
-                    self.assertEqual(old_config['systemEnabled'], config.get('system', 'enabled'))
-                    self.assertEqual(old_config['systemLightTheme'], config.get('system', 'light_theme'))
+class ConfigTest(unittest.TestCase):
+    @use_all_versions
+    def test_update_old_configs(self, version, old_config):
+        match version:
+            case 2.1:
+                for plugin_property in ['Enabled', 'LightTheme', 'DarkTheme']:
+                    self.assertEqual(
+                        old_config['wallpaper' + plugin_property],
+                        config.get('wallpaper', plugin_property.replace('Theme', '_theme').lower()),
+                        'Updating old config files should apply correct values')
+            case 2.2:
+                self.assertEqual(config.mode, Modes.SCHEDULED)
+                self.assertEqual(old_config['wallpaperEnabled'], config.get('wallpaper', 'enabled'))
+                self.assertEqual(old_config['wallpaperLightTheme'], config.get('wallpaper', 'light_theme'))
+
+    @unittest.skipIf(config.desktop == Desktop.UNKNOWN, 'Desktop is unsupported')
+    @use_all_versions
+    def test_updates_system_plugin_values(self, version, old_config):
+        match version:
+            case 2.1:
+                for plugin_property in ['Enabled', 'LightTheme', 'DarkTheme']:
+                    self.assertEqual(
+                        old_config['wallpaper' + plugin_property],
+                        config.get('wallpaper', plugin_property.replace('Theme', '_theme').lower()),
+                        'Updating old config files should apply correct values')
+
+            case 2.2:
+                self.assertEqual(config.mode, Modes.SCHEDULED)
+                self.assertEqual(old_config['wallpaperEnabled'], config.get('wallpaper', 'enabled'))
+                self.assertEqual(old_config['wallpaperLightTheme'], config.get('wallpaper', 'light_theme'))
 
 
 if __name__ == '__main__':
