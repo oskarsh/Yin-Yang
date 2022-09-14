@@ -14,7 +14,7 @@ old_configs = {
         "followSun": False,
         "latitude": "",
         "longitude": "",
-        "schedule": False,
+        "schedule": True,
         "switchToDark": "20:0",
         "switchToLight": "7:0",
         "running": False,
