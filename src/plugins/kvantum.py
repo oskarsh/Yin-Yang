@@ -1,9 +1,12 @@
 from ._plugin import PluginCommandline, get_stuff_in_dir
 from pathlib import Path
 
+
 class Kvantum(PluginCommandline):
     def __init__(self):
-        super().__init__(["kvantummanager", "--set", '%t'])
+        super().__init__(['kvantummanager', '--set', '{theme}'])
+        self.theme_light = 'KvFlatLight'
+        self.theme_dark = 'KvFlatDark'
 
     @property
     def available_themes(self) -> dict:
@@ -16,7 +19,7 @@ class Kvantum(PluginCommandline):
         # on dirs, but .kvconfig. So some theme will no be recognized. This
         # may be fixed next time
         for path in paths:
-            themes = themes + get_stuff_in_dir(path, type='dir')
+            themes = themes + get_stuff_in_dir(path, search_type='dir')
         themes_dict: dict = {}
         assert len(themes) > 0, 'No themes were found'
 

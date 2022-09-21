@@ -2,12 +2,10 @@ import json
 from configparser import ConfigParser
 from os.path import isdir
 from pathlib import Path
-from typing import Optional
 
-from PyQt5.QtWidgets import QGroupBox
+from PySide6.QtWidgets import QGroupBox
 
 from ._plugin import ExternalPlugin
-from .. import config
 
 
 def get_default_profile_path() -> str:
@@ -22,15 +20,10 @@ def get_default_profile_path() -> str:
 class Firefox(ExternalPlugin):
     """This class has no functionality except providing a section in the config"""
 
-    def set_theme(self, theme: str) -> Optional[str]:
-        if not (self.available and self.enabled):
-            return
-
-        if not theme:
-            raise ValueError(f'Theme \"{theme}\" is invalid')
-
-        # throws error if in debug mode, else ignored
-        assert False, 'Changing the theme is only possible from the Firefox plugin'
+    def __init__(self):
+        super().__init__('https://addons.mozilla.org/de/firefox/addon/yin-yang-linux/')
+        self.theme_light = 'firefox-compact-light@mozilla.org'
+        self.theme_dark = 'firefox-compact-dark@mozilla.org'
 
     @property
     def available_themes(self) -> dict:

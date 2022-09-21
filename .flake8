@@ -1,0 +1,2 @@
+[flake8]
+exclude = resources_rc.py,.venv,main_window.py

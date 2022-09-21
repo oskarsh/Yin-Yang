@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>main_window</class>
+ <widget class="QMainWindow" name="main_window">
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string notr="true">Yin &amp; Yang</string>
+  </property>
+  <property name="windowIcon">
+   <iconset theme="yin_yang" resource="../resources/resources.qrc">
+    <normaloff>:/icons/logo</normaloff>:/icons/logo</iconset>
+  </property>
+  <property name="locale">
+   <locale language="English" country="UnitedKingdom"/>
+  </property>
+  <widget class="QWidget" name="central_widget">
+   <layout class="QVBoxLayout" name="central_widget_layout">
+    <item>
+     <widget class="QTabWidget" name="tab_widget">
+      <property name="minimumSize">
+       <size>
+        <width>368</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="settings">
+       <attribute name="title">
+        <string>Settings</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="settings_layout">
+        <item>
+         <widget class="QCheckBox" name="btn_enable">
+          <property name="text">
+           <string>Automatic theme switching</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="schedule_settings" native="true">
+          <layout class="QVBoxLayout" name="schedule_settings_layout">
+           <item>
+            <widget class="Line" name="line_top">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="btn_schedule">
+             <property name="text">
+              <string>Custom Schedule</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="time">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <layout class="QFormLayout" name="time_layout">
+              <property name="labelAlignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="leftMargin">
+               <number>37</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_light">
+                <property name="text">
+                 <string>Light:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QTimeEdit" name="inp_time_light">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>88</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="displayFormat">
+                 <string notr="true">HH:mm</string>
+                </property>
+                <property name="time">
+                 <time>
+                  <hour>8</hour>
+                  <minute>0</minute>
+                  <second>0</second>
+                 </time>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_dark">
+                <property name="text">
+                 <string>Dark:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QTimeEdit" name="inp_time_dark">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>88</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="displayFormat">
+                 <string notr="true">HH:mm</string>
+                </property>
+                <property name="time">
+                 <time>
+                  <hour>20</hour>
+                  <minute>0</minute>
+                  <second>0</second>
+                 </time>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="btn_sun">
+             <property name="text">
+              <string>Sunset to Sunrise</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QFrame" name="location">
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <widget class="QWidget" name="location_input" native="true">
+                <layout class="QFormLayout" name="formLayout">
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_longitude">
+                   <property name="text">
+                    <string>Longitude:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QDoubleSpinBox" name="inp_longitude">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>88</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="suffix">
+                    <string notr="true">°</string>
+                   </property>
+                   <property name="minimum">
+                    <double>-180.000000000000000</double>
+                   </property>
+                   <property name="maximum">
+                    <double>180.000000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="label_latitude">
+                   <property name="text">
+                    <string>Latitude:</string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="QDoubleSpinBox" name="inp_latitude">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="minimumSize">
+                    <size>
+                     <width>88</width>
+                     <height>0</height>
+                    </size>
+                   </property>
+                   <property name="suffix">
+                    <string notr="true">°</string>
+                   </property>
+                   <property name="minimum">
+                    <double>-90.000000000000000</double>
+                   </property>
+                   <property name="maximum">
+                    <double>90.000000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="btn_location">
+                <property name="text">
+                 <string>update automatically</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line_bottom">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="toggle_sound">
+          <property name="text">
+           <string>Make a sound when switching the theme</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="toggle_notification">
+          <property name="text">
+           <string>Send a notification</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_active">
+          <property name="text">
+           <string notr="true">Darkmode will be active between</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="space_vertical">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="plugins">
+       <attribute name="title">
+        <string>Plugins</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="plugins_layout">
+        <item>
+         <widget class="QScrollArea" name="plugins_scroll">
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="plugins_scroll_content">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>348</width>
+             <height>451</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="plugins_scroll_content_layout"/>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QDialogButtonBox" name="btn_box">
+      <property name="standardButtons">
+       <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel|QDialogButtonBox::RestoreDefaults</set>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="status_bar"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>btn_sun</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>location</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>273</x>
+     <y>308</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>254</x>
+     <y>379</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_schedule</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>time</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>114</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>219</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_enable</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>schedule_settings</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>188</x>
+     <y>153</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>188</x>
+     <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

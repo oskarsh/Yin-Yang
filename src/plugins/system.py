@@ -1,9 +1,15 @@
+import json
+import logging
 import subprocess
 import pwd
 import os
 
-from src import config
-from src.plugins._plugin import Plugin, PluginDesktopDependent, PluginCommandline
+from PySide6.QtCore import QLocale
+
+from src.enums import Desktop
+from src.plugins._plugin import PluginDesktopDependent, PluginCommandline
+
+logger = logging.getLogger(__name__)
 
 
 def test_gnome_availability(command) -> bool:
@@ -23,27 +29,23 @@ def test_gnome_availability(command) -> bool:
 
 
 class System(PluginDesktopDependent):
-    def __init__(self):
-        desktop = config.get('desktop')
-        if desktop == 'kde':
-            self._strategy_instance = _Kde()
-        elif desktop == 'gtk':
-            self._strategy_instance = _Gnome()
-        else:
-            raise ValueError('Unsupported desktop environment!')
-        super().__init__()
-
-    @property
-    def strategy(self) -> Plugin:
-        return self._strategy_instance
+    def __init__(self, desktop: Desktop):
+        match desktop:
+            case Desktop.KDE:
+                super().__init__(_Kde())
+            case Desktop.GNOME:
+                super().__init__(_Gnome())
+            case _:
+                super().__init__(None)
 
 
 class _Gnome(PluginCommandline):
     name = 'System'
+
     # TODO allow using the default themes, not only user themes
 
     def __init__(self):
-        super().__init__(["gsettings", "set", "org.gnome.shell.extensions.user-theme", "name", "%t"])
+        super().__init__(['gsettings', 'set', 'org.gnome.shell.extensions.user-theme', 'name', '{theme}'])
 
     @property
     def available(self) -> bool:
@@ -67,20 +69,29 @@ def get_readable_kde_theme_name(file) -> str:
             return name
 
 
+def get_name_key(meta):
+    locale = filter(
+        lambda name: name in meta['KPlugin'],
+        [f'Name[{QLocale().name()}]',
+         f'Name[{QLocale().language()}]',
+         'Name']
+    )
+    return next(locale)
+
+
 class _Kde(PluginCommandline):
     name = 'System'
     translations = {}
 
     def __init__(self):
-        super().__init__(["lookandfeeltool", "-a", '%t'])
+        super().__init__(['lookandfeeltool', '-a', '{theme}'])
+        self.theme_light = 'org.kde.breeze.desktop'
+        self.theme_dark = 'org.kde.breezedark.desktop'
 
-    def set_mode(self, dark: bool) -> bool:
+    def set_theme(self, theme: str) -> bool:
         # TODO remove this once https://bugs.kde.org/show_bug.cgi?id=446074 is fixed
-        if not self.enabled:
-            return False
-
-        theme = self.theme_dark if dark else self.theme_light
-        return self.set_theme(theme) == theme and self.set_theme(theme) == theme
+        super().set_theme(theme)
+        super().set_theme(theme)
 
     @property
     def available_themes(self) -> dict:
@@ -101,18 +112,25 @@ class _Kde(PluginCommandline):
         for long_name in long_names:
             # trying to get the Desktop file
             try:
-                # load the name from the metadata.desktop file
-                with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.desktop', 'r') as file:
-                    self.translations[long_name] = get_readable_kde_theme_name(file)
+                # json in newer versions
+                with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.json', 'r') as file:
+                    meta = json.load(file)
+                    key = get_name_key(meta)
+                    self.translations[long_name] = meta['KPlugin'][key]
             except OSError:
-                # check the next path if the themes exist there
                 try:
                     # load the name from the metadata.desktop file
-                    with open('{path}{long_name}/metadata.desktop'.format(**locals()), 'r') as file:
-                        # search for the name
+                    with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.desktop', 'r') as file:
                         self.translations[long_name] = get_readable_kde_theme_name(file)
                 except OSError:
-                    # if no file exist lets just use the long name
-                    self.translations[long_name] = long_name
+                    # check the next path if the themes exist there
+                    try:
+                        # load the name from the metadata.desktop file
+                        with open(f'{path}{long_name}/metadata.desktop', 'r') as file:
+                            # search for the name
+                            self.translations[long_name] = get_readable_kde_theme_name(file)
+                    except OSError:
+                        # if no file exist lets just use the long name
+                        self.translations[long_name] = long_name
 
         return self.translations

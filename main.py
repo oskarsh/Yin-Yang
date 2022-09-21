@@ -1,30 +1,19 @@
+#!/bin/env python3
+
 import sys
 import logging
 from argparse import ArgumentParser
-from logging.handlers import TimedRotatingFileHandler, RotatingFileHandler
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
-from PyQt5 import QtWidgets
-from PyQt5 import QtCore
+from PySide6 import QtWidgets
+from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 
 from src import yin_yang
-from src import config
-from src import gui
+from src.config import config, Modes
+from src.ui import config_window
 
 logger = logging.getLogger(__name__)
-
-# fix HiDpi scaling
-QtWidgets.QApplication.setAttribute(
-    QtCore.Qt.AA_EnableHighDpiScaling, True)
-
-
-def toggle_theme():
-    """Switch themes"""
-    theme = config.get_theme()
-    if theme == "dark":
-        yin_yang.switch_to_light()
-    elif theme == "light":
-        yin_yang.switch_to_dark()
 
 
 def main():
@@ -38,25 +27,46 @@ def main():
                         action="store_true")
     args = parser.parse_args()
 
-    # checks whether $ yin-yang is ran without args
+    # checks whether $ yin-yang is run without args
     if len(sys.argv) == 1 and not args.toggle:
         # load GUI
         app = QtWidgets.QApplication(sys.argv)
-        window = gui.MainWindow()
+
+        # load translation
+        try:
+            lang = QLocale().name()
+            logger.debug(f'Using language {lang}')
+
+            # system translations
+            path = QLibraryInfo.location(QLibraryInfo.TranslationsPath)
+            translator = QTranslator(app)
+            if translator.load(QLocale.system(), 'qtbase', '_', path):
+                app.installTranslator(translator)
+            else:
+                raise FileNotFoundError('Error while loading system translations!')
+
+            # application translations
+            translator = QTranslator(app)
+            path = ':translations'
+            if translator.load(QLocale.system(), 'yin_yang', '.', path):
+                app.installTranslator(translator)
+            else:
+                raise FileNotFoundError('Error while loading application translations!')
+
+        except Exception as e:
+            logger.error(str(e))
+            print('Error while loading translation. Using default language.')
+
+        window = config_window.MainWindow()
         window.show()
-        sys.exit(app.exec_())
+        sys.exit(app.exec())
 
-    # checks whether the script should be ran as a daemon
+    # checks whether the script should be run as a daemon
     if args.schedule:
-        config.update("running", False)
-        logger.debug("START thread listener")
+        config.running = False
 
-        if config.get("followSun"):
-            # calculate time if needed
-            config.set_sun_time()
-
-        if config.get("schedule"):
-            yin_yang.start_daemon()
+        if config.mode != Modes.MANUAL:
+            yin_yang.run()
         else:
             logger.warning("Tried to start scheduler, but schedule was not enabled.")
             print(
@@ -68,14 +78,14 @@ def main():
 
     if args.toggle:
         # terminate any running instances
-        config.update("running", False)
-        config.update("followSun", False)
-        config.update("schedule", False)
-        toggle_theme()
+        config.running = False
+        config.mode = Modes.MANUAL
+        yin_yang.set_mode(not config.dark_mode)
 
 
 if __name__ == "__main__":
     # __debug__ is true when you run main.py without the -O argument (python main.py)
+    # noinspection PyUnreachableCode
     if __debug__:
         # noinspection SpellCheckingInspection
         logging.basicConfig(

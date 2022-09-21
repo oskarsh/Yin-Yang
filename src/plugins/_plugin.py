@@ -1,16 +1,22 @@
+import logging
 import subprocess
 from abc import ABC, abstractmethod
 from os import listdir
 from os.path import isdir, join, isfile
 from typing import Optional
 
-from PyQt5.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
+from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
-from src import config
+logger = logging.getLogger(__name__)
 
 
 class Plugin(ABC):
     """An abstract base class for plugins"""
+
+    def __init__(self):
+        self.enabled = False
+        self.theme_light = ''
+        self.theme_dark = ''
 
     @property
     def name(self) -> str:
@@ -32,30 +38,6 @@ class Plugin(ABC):
         """
         return {}
 
-    @property
-    def enabled(self) -> bool:
-        return config.get(str(self) + 'Enabled')
-
-    @enabled.setter
-    def enabled(self, value: bool):
-        config.update(str(self) + 'Enabled', value)
-
-    @property
-    def theme_dark(self) -> str:
-        return config.get(str(self) + 'DarkTheme')
-
-    @theme_dark.setter
-    def theme_dark(self, theme: str):
-        config.update(str(self) + 'DarkTheme', theme)
-
-    @property
-    def theme_light(self) -> str:
-        return config.get(str(self) + 'LightTheme')
-
-    @theme_light.setter
-    def theme_light(self, theme: str):
-        config.update(str(self) + 'LightTheme', theme)
-
     def set_mode(self, dark: bool) -> bool:
         """Set the dark or light theme
         :return: True, if operation was successful
@@ -65,10 +47,11 @@ class Plugin(ABC):
             return False
 
         theme = self.theme_dark if dark else self.theme_light
-        return self.set_theme(theme) == theme
+        self.set_theme(theme)
+        return True
 
     @abstractmethod
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         """Sets a specific theme
         :param theme: the theme that should be used
         :return: the theme that has been set (should be the same as the parameter
@@ -123,10 +106,14 @@ class Plugin(ABC):
 
 
 class PluginCommandline(Plugin):
-    def __init__(self, command: list):
+    def __init__(self, command: [str]):
+        """
+        :param command: list of arguments as passed to @subprocess.run, with the theme being inserted as {theme}
+        """
+        super().__init__()
         self.command = command
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
@@ -135,25 +122,16 @@ class PluginCommandline(Plugin):
 
         # insert theme in command and run it
         command = self.insert_theme(theme)
+        result = subprocess.run(command)
 
-        if subprocess.run(command).returncode == 0:
-            return theme
+        if result.returncode != 0:
+            raise ValueError('Command execution failed:', result.stderr)
 
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
-        placeholder = '%t'
 
-        if placeholder not in command:
-            for argument in command:
-                if placeholder in argument:
-                    # replace placeholder with argument, so the theme gets inserted into the argument
-                    placeholder = argument
-                    break
-            assert placeholder != '%t'
-
-        i = command.index(placeholder)
-        command.pop(i)
-        command.insert(i, placeholder.replace('%t', theme))
+        for i, arg in enumerate(command):
+            command[i] = arg.format(theme=theme)
 
         return command
 
@@ -170,55 +148,82 @@ class PluginCommandline(Plugin):
 class PluginDesktopDependent(Plugin):
     """Plugins that behave differently on different desktops"""
 
+    def __init__(self, strategy_instance: Optional[Plugin]):
+        self._strategy_instance = None
+        super().__init__()
+        self._strategy_instance = strategy_instance
+
+        if strategy_instance is None:
+            logger.warning('Unsupported desktop environment!')
+
     @property
-    @abstractmethod
     def strategy(self) -> Plugin:
-        raise NotImplementedError
+        return self._strategy_instance
+
+    @property
+    def enabled(self):
+        return self._strategy_instance.enabled if self._strategy_instance is not None else False
+
+    @enabled.setter
+    def enabled(self, value):
+        if self._strategy_instance is not None:
+            self._strategy_instance.enabled = value
 
     @property
     def available(self) -> bool:
-        return self.strategy.available
+        return False if self.strategy is None else self.strategy.available
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
         if not (self.available and self.enabled):
             return
 
-        return self.strategy.set_theme(theme)
+        self.strategy.set_theme(theme)
 
     @property
     def available_themes(self) -> dict:
         return self.strategy.available_themes
 
+    @property
+    def theme_light(self):
+        if self._strategy_instance is not None:
+            return self._strategy_instance.theme_light
+        return ''
+
+    @theme_light.setter
+    def theme_light(self, value):
+        if self._strategy_instance is not None:
+            self._strategy_instance.theme_light = value
+
+    @property
+    def theme_dark(self):
+        if self._strategy_instance is not None:
+            return self._strategy_instance.theme_dark
+        return ''
+
+    @theme_dark.setter
+    def theme_dark(self, value):
+        if self._strategy_instance is not None:
+            self._strategy_instance.theme_dark = value
+
 
 class ExternalPlugin(Plugin):
     """A class for all plugins whose theme can only be changed externally via communication."""
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def __init__(self, url):
+        super().__init__()
+        self._url = url
 
-        if not (self.available and self.enabled):
-            return
+    @property
+    def url(self) -> str:
+        return ('Please remember to install the plugin.\n'
+                f'You can get it here: {self._url}')
 
-        if not theme:
-            raise ValueError(f'Theme \"{theme}\" is invalid')
-
+    def set_theme(self, theme: str):
         # throws error if in debug mode, else ignored
         assert False, 'This is an external plugin, the mode can only be changed externally.'
-
-    @Plugin.enabled.setter
-    def enabled(self, value: bool):
-        # needs to be copied because super().setter does not work
-        # for more information see:
-        # https://stackoverflow.com/questions/10810369/python-super-and-setting-parent-class-property
-        config.update(str(self) + 'Enabled', value)
-
-        if value:
-            print(
-                'Please remember to install the Yin-Yang plugin in Firefox.\n' +
-                'You can get it here: https://addons.mozilla.org/de/firefox/addon/yin-yang-linux/'
-            )
 
 
 def inplace_change(filename: str, old_string: str, new_string: str):
@@ -239,15 +244,16 @@ def inplace_change(filename: str, old_string: str, new_string: str):
         file.write(file_content)
 
 
-def get_stuff_in_dir(path: str, type: str) -> [str]:
+def get_stuff_in_dir(path: str, search_type: str) -> [str]:
     """Returns all files or directories in the path
     :param path: The path where to search.
-    :param type: The type. Either dir (a directory) or file
+    :param search_type: The type. Either dir (a directory) or file
     """
     # source: https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
-    if type == 'dir':
+    # TODO replace with generator
+    if search_type == 'dir':
         return [f for f in listdir(path) if isdir(join(path, f))]
-    elif type == 'file':
+    elif search_type == 'file':
         return [f for f in listdir(path) if isfile(join(path, f))]
     else:
         raise ValueError('Unknown type! Use dir or file')
