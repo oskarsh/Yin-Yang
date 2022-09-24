@@ -270,7 +270,7 @@ class ConfigManager(dict):
             self._changed = False
             if ConfigEvent.SAVE in self._listeners:
                 for listener in self._listeners[ConfigEvent.SAVE]:
-                    listener.notify(ConfigEvent.SAVE)
+                    listener.notify(ConfigEvent.SAVE, None)
             return True
         except IOError as e:
             logger.error(f'Error while writing the file: {e}')

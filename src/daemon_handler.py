@@ -1,9 +1,11 @@
+import logging
 import subprocess
 from pathlib import Path
 
 from config import ConfigWatcher, config
 from enums import ConfigEvent, Modes
 
+logger = logging.getLogger(__name__)
 TIMER_PATH = str(Path.home()) + '/.local/share/systemd/user/yin_yang.timer'
 
 
@@ -15,8 +17,10 @@ class SaveWatcher(ConfigWatcher):
     def notify(self, event: ConfigEvent, values):
         if config.mode.value == Modes.MANUAL.value:
             run_command('stop')
+            logger.debug('Stopping systemd timer')
             return
 
+        logger.debug('Updating systemd timer')
         # update timer times
         with open(TIMER_PATH, 'r') as file:
             lines = file.readlines()
