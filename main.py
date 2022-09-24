@@ -10,6 +10,8 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 from systemd import journal
 
+import daemon_handler
+from enums import ConfigEvent
 from src import yin_yang
 from src.config import config, Modes
 from src.ui import config_window
@@ -49,6 +51,7 @@ def setup_logger(use_systemd_journal: bool):
 def main(arguments):
     # checks whether $ yin-yang is run without args
     if len(sys.argv) == 1 and not arguments.toggle:
+        config.add_event_listener(ConfigEvent.SAVE, daemon_handler.watcher)
         # load GUI
         app = QtWidgets.QApplication(sys.argv)
 
