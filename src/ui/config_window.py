@@ -6,6 +6,8 @@ from PySide6.QtGui import QScreen
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
 
 from src.ui.main_window import Ui_main_window
+
+from enums import PluginKey
 from src.config import config, Modes, plugins
 
 logger = logging.getLogger(__name__)
@@ -151,8 +153,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def save(self):
         """Sets the values to the config object, but does not save them"""
 
-        config.update_plugin_key('sound', 'enabled', self.ui.toggle_sound.isChecked())
-        config.update_plugin_key('notification', 'enabled', self.ui.toggle_notification.isChecked())
+        config.update_plugin_key('sound', PluginKey.ENABLED, self.ui.toggle_sound.isChecked())
+        config.update_plugin_key('notification', PluginKey.ENABLED, self.ui.toggle_notification.isChecked())
         self.save_plugins()
 
     def save_mode(self):
@@ -203,22 +205,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
             widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
 
-            config.update_plugin_key(plugin.name, 'enabled', widget.isChecked())
+            config.update_plugin_key(plugin.name, PluginKey.ENABLED, widget.isChecked())
             if plugin.available_themes:
                 # extra behaviour for combobox
                 combo_boxes = widget.findChildren(QtWidgets.QComboBox)
                 for combo_box in combo_boxes:
-                    key = 'light_theme' if combo_boxes.index(combo_box) == 0 else 'dark_theme'
+                    key = PluginKey.THEME_LIGHT if combo_boxes.index(combo_box) == 0 else PluginKey.THEME_DARK
                     # reverse dict search: internal name from readable name
                     theme_name: str = next(
                         internal_name for internal_name, readable_name in plugin.available_themes.items()
                         if readable_name == combo_box.currentText()
                     )
-                    config.update(plugin.name, key, theme_name)
+                    config.update_plugin_key(plugin.name, key, theme_name)
             else:
                 combo_boxes = widget.findChildren(QtWidgets.QLineEdit)
-                config.update_plugin_key(plugin.name, 'light_theme', combo_boxes[0].text())
-                config.update_plugin_key(plugin.name, 'dark_theme', combo_boxes[1].text())
+                config.update_plugin_key(plugin.name, PluginKey.THEME_LIGHT, combo_boxes[0].text())
+                config.update_plugin_key(plugin.name, PluginKey.THEME_DARK, combo_boxes[1].text())
 
     def save_wallpaper(self, dark: bool):
         message_light = self.tr('Open light wallpaper')
