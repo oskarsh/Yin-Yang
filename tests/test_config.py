@@ -182,6 +182,24 @@ class ConfigTest(unittest.TestCase):
             pass
         self.assertTrue(len(watcher.updates) == 0)
 
+    def test_notify_when_saved(self):
+        config.reset()
+        config.save()
+
+        class Watcher(ConfigWatcher):
+            def __init__(self):
+                self.saved = False
+
+            def notify(self, event: ConfigEvent, values: dict):
+                self.saved = True
+
+        watcher = Watcher()
+        config.add_event_listener(ConfigEvent.SAVE, watcher)
+        self.assertFalse(watcher.saved)
+        config.mode = Modes.SCHEDULED
+        config.save()
+        self.assertTrue(watcher.saved)
+
     def test_write_when_changed(self):
         config.reset()
         config.save()
