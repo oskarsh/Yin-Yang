@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 from src.config import config, ConfigWatcher
-from src.enums import Desktop, Modes, PluginKey
+from src.enums import Desktop, Modes, PluginKey, ConfigEvent
 
 config_path = f"{Path.home()}/.config/yin_yang/yin_yang_dev.json"
 
@@ -138,24 +138,42 @@ class ConfigTest(unittest.TestCase):
 
         class Watcher(ConfigWatcher):
             def __init__(self):
-                self.updates: [(str, any, any, str)] = []
+                self.updates: [dict] = []
 
-            def notify(self, key, old, new, plugin=None):
-                self.updates.append((key, old, new, plugin))
+            def notify(self, event, values):
+                self.updates.append(values)
 
         watcher = Watcher()
-        config.add_update_listener(watcher)
+        config.add_event_listener(ConfigEvent.CHANGE, watcher)
 
         config.mode = Modes.SCHEDULED
-        self.assertTrue(('mode', Modes.MANUAL.value, Modes.SCHEDULED.value, None) in watcher.updates)
+        self.assertTrue(
+            {
+                'key': 'mode',
+                'old_value': Modes.MANUAL.value,
+                'new_value': Modes.SCHEDULED.value,
+                'plugin': None
+            } in watcher.updates)
         watcher.updates = []
 
         config.mode = Modes.SCHEDULED
-        self.assertFalse(('mode', Modes.MANUAL.value, Modes.SCHEDULED.value, None) in watcher.updates)
+        self.assertFalse(
+            {
+                'key': 'mode',
+                'old_value': Modes.MANUAL.value,
+                'new_value': Modes.SCHEDULED.value,
+                'plugin': None
+            } in watcher.updates)
         watcher.updates = []
 
         config.update_plugin_key('wallpaper', PluginKey.ENABLED, True)
-        self.assertTrue(('enabled', False, True, 'wallpaper') in watcher.updates)
+        self.assertTrue(
+            {
+                'key': PluginKey.ENABLED.value,
+                'old_value': False,
+                'new_value': True,
+                'plugin': 'wallpaper'
+            } in watcher.updates)
         watcher.updates = []
 
         try:
