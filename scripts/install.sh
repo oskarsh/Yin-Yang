@@ -39,11 +39,14 @@ cp -r ./* /opt/yin-yang/
 # copy manifest for firefox extension
 cp ./resources/yin_yang.json /usr/lib/mozilla/native-messaging-hosts/
 # copy terminal executive
-cp ./scripts/yin-yang /usr/bin/
+cp ./resources/yin-yang /usr/bin/
 # copy .desktop file
 cp ./resources/Yin-Yang.desktop "$USER_HOME/.local/share/applications/Yin-Yang.desktop"
 # copy icon
 cp ./resources/logo.svg /usr/share/icons/hicolor/scalable/apps/yin_yang.svg
+# systemd unit files
+cp ./resources/yin_yang.service "$HOME/.local/share/systemd/user/yin_yang.service"
+cp ./resources/yin_yang.timer "$HOME/.local/share/systemd/user/yin_yang.timer"
 
 cat << "EOF"
  __     ___          __     __
