@@ -194,6 +194,9 @@ class ConfigManager(dict):
             self._listeners[event] = set()
         self._listeners[event].add(listener)
 
+    def remove_event_listener(self, event: ConfigEvent, listener: ConfigWatcher):
+        self._listeners[event].remove(listener)
+
     def __setitem__(self, key, value):
         if value != self[key]:
             self._changed = True

@@ -1,6 +1,7 @@
 import json
 import unittest
 from pathlib import Path
+from typing import Optional
 
 from src.config import config, ConfigWatcher
 from src.enums import Desktop, Modes, PluginKey, ConfigEvent
@@ -185,6 +186,24 @@ class ConfigTest(unittest.TestCase):
         except KeyError:
             pass
         self.assertTrue(len(watcher.updates) == 0)
+
+    def test_removes_listener(self):
+        config.reset()
+        config.save()
+
+        class Watcher(ConfigWatcher):
+            def __init__(self):
+                self.notified = 0
+
+            def notify(self, event: ConfigEvent, values: Optional[dict]):
+                self.notified += 1
+
+        watcher = Watcher()
+        config.add_event_listener(ConfigEvent.CHANGE, watcher)
+        config.mode = Modes.SCHEDULED
+        config.remove_event_listener(ConfigEvent.CHANGE, watcher)
+        config.mode = Modes.MANUAL
+        self.assertEqual(1, watcher.notified)
 
     def test_notify_when_saved(self):
         config.reset()
