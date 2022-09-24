@@ -11,7 +11,7 @@ from PySide6.QtCore import QObject
 from PySide6.QtPositioning import QGeoPositionInfoSource, QGeoPositionInfo, QGeoCoordinate
 from psutil import process_iter, NoSuchProcess
 from datetime import time
-from typing import Union
+from typing import Union, Optional
 
 from suntime import Sun, SunTimeException
 from src.plugins import get_plugins
@@ -173,14 +173,14 @@ plugins = get_plugins(get_desktop())
 
 class ConfigWatcher(ABC):
     @abstractmethod
-    def notify(self, event: ConfigEvent, values: dict):
+    def notify(self, event: ConfigEvent, values: Optional[dict]):
         raise NotImplementedError
 
 
 class ConfigManager(dict):
     """Manages the configuration using the singleton pattern"""
 
-    _listeners: {ConfigEvent: [ConfigWatcher]} = {}
+    _listeners: dict[ConfigEvent, set[ConfigWatcher]] = {}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -191,8 +191,8 @@ class ConfigManager(dict):
 
     def add_event_listener(self, event: ConfigEvent, listener: ConfigWatcher):
         if event not in self._listeners:
-            self._listeners[event] = []
-        self._listeners[event].append(listener)
+            self._listeners[event] = set()
+        self._listeners[event].add(listener)
 
     def __setitem__(self, key, value):
         if value != self[key]:

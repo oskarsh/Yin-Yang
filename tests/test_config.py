@@ -156,12 +156,16 @@ class ConfigTest(unittest.TestCase):
             }, watcher.updates)
         watcher.updates = []
 
-        config.mode = Modes.SCHEDULED
+        config.add_event_listener(ConfigEvent.CHANGE, watcher)
+        config.mode = Modes.MANUAL
+        self.assertEqual(1, len(watcher.updates), 'Watcher should only be added once')
+
+        config.mode = Modes.MANUAL
         self.assertNotIn(
             {
                 'key': 'mode',
                 'old_value': Modes.MANUAL.value,
-                'new_value': Modes.SCHEDULED.value,
+                'new_value': Modes.MANUAL.value,
                 'plugin': None
             }, watcher.updates)
         watcher.updates = []
