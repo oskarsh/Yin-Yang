@@ -37,4 +37,3 @@ class SaveWatcher(ConfigWatcher):
 
 
 watcher = SaveWatcher()
-config.add_event_listener(ConfigEvent.SAVE, watcher)
