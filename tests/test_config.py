@@ -3,7 +3,7 @@ import unittest
 from pathlib import Path
 
 from src.config import config, ConfigWatcher
-from src.enums import Desktop, Modes
+from src.enums import Desktop, Modes, PluginKey
 
 config_path = f"{Path.home()}/.config/yin_yang/yin_yang_dev.json"
 
@@ -154,12 +154,12 @@ class ConfigTest(unittest.TestCase):
         self.assertFalse(('mode', Modes.MANUAL.value, Modes.SCHEDULED.value, None) in watcher.updates)
         watcher.updates = []
 
-        config.update_plugin_key('wallpaper', 'enabled', True)
+        config.update_plugin_key('wallpaper', PluginKey.ENABLED, True)
         self.assertTrue(('enabled', False, True, 'wallpaper') in watcher.updates)
         watcher.updates = []
 
         try:
-            config.update_plugin_key('abcd', 'enabled', True)
+            config.update_plugin_key('abcd', PluginKey.ENABLED, True)
         except KeyError:
             pass
         self.assertTrue(len(watcher.updates) == 0)
@@ -170,6 +170,9 @@ class ConfigTest(unittest.TestCase):
         self.assertFalse(config.save())
 
         config.mode = Modes.SCHEDULED
+        self.assertTrue(config.save())
+
+        config.update_plugin_key('wallpaper', PluginKey.ENABLED, True)
         self.assertTrue(config.save())
 
 

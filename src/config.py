@@ -16,7 +16,7 @@ from typing import Union
 import requests
 from suntime import Sun, SunTimeException
 from src.plugins import get_plugins
-from src.enums import Modes, Desktop
+from src.enums import Modes, Desktop, PluginKey
 
 logger = logging.getLogger(__name__)
 
@@ -279,7 +279,7 @@ class ConfigManager(dict):
 
         return self['plugins'][plugin][key]
 
-    def update_plugin_key(self, plugin: str, key: str, value: Union[bool, str]) -> Union[bool, str]:
+    def update_plugin_key(self, plugin: str, key: PluginKey, value: Union[bool, str]) -> Union[bool, str]:
         """Update the value of a key in configuration
 
         :param key: The setting to change
@@ -290,11 +290,12 @@ class ConfigManager(dict):
         """
 
         plugin = plugin.casefold()
-        key = key.casefold()
+        key = key.value.casefold()
 
         try:
             old_value = self['plugins'][plugin][key]
             self['plugins'][plugin][key] = value
+            self._changed = True
             for listener in self._listeners:
                 listener.notify(key, old_value, value, plugin=plugin)
             return self.get_plugin_key(plugin, key)
