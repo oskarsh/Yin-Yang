@@ -52,6 +52,7 @@ def main(arguments):
     # checks whether $ yin-yang is run without args
     if len(sys.argv) == 1 and not arguments.toggle:
         config.add_event_listener(ConfigEvent.SAVE, daemon_handler.watcher)
+        config.add_event_listener(ConfigEvent.CHANGE, daemon_handler.watcher)
         # load GUI
         app = QtWidgets.QApplication(sys.argv)
 
