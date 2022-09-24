@@ -9,7 +9,8 @@ from enums import ConfigEvent, Modes
 
 
 def notify():
-    daemon_handler.watcher.notify(ConfigEvent.SAVE, None)
+    daemon_handler.watcher.notify(ConfigEvent.CHANGE, {'key': 'times'})
+    daemon_handler.watcher.notify(ConfigEvent.SAVE, config)
 
 
 class DaemonTest(unittest.TestCase):
@@ -26,8 +27,8 @@ class DaemonTest(unittest.TestCase):
     def test_updates_times(self):
         config.reset()
         config.mode = Modes.SCHEDULED
-        time_light = time.fromisoformat('06:00')
-        time_dark = time.fromisoformat('18:00')
+        time_light = time(6, 0)
+        time_dark = time(18, 0)
         config.times = time_light, time_dark
 
         notify()

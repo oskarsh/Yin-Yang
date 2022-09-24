@@ -13,8 +13,8 @@ def run_command(command, **kwargs):
     return subprocess.run(['systemctl', '--user', command, 'yin_yang.timer'], **kwargs)
 
 
-def update_timer():
-    if config.mode.value == Modes.MANUAL.value:
+def update_timer(saved_config):
+    if saved_config.mode.value == Modes.MANUAL.value:
         run_command('stop')
         logger.debug('Stopping systemd timer')
         return
@@ -24,7 +24,7 @@ def update_timer():
     with open(TIMER_PATH, 'r') as file:
         lines = file.readlines()
 
-    time_light, time_dark = config.times
+    time_light, time_dark = saved_config.times
     lines[4] = f'OnCalendar={time_light.isoformat()}\n'
     lines[5] = f'OnCalendar={time_dark.isoformat()}\n'
 
@@ -40,15 +40,15 @@ class SaveWatcher(ConfigWatcher):
         self._update = False
 
     def notify(self, event: ConfigEvent, values):
-        match event:
-            case ConfigEvent.CHANGE:
+        match event.value:
+            case ConfigEvent.CHANGE.value:
                 if values['key'] == 'times'\
                         or values['key'] == 'mode'\
                         or values['key'] == 'coordinates':
                     self._update = True
-            case ConfigEvent.SAVE:
+            case ConfigEvent.SAVE.value:
                 if self._update:
-                    update_timer()
+                    update_timer(values)
                     self._update = False
 
 
