@@ -2,9 +2,11 @@
 
 set -euo pipefail
 
+USER_HOME=$HOME
+
 if test ${EUID} -ne 0; then
     echo enter password in order to install Yin-Yang correctly
-    exec sudo su -c "${0} ${HOME}"
+    exec sudo su -c "${0} ${USER_HOME}"
     exit 0
 fi
 
@@ -29,8 +31,8 @@ fi
 if [ ! -d /usr/lib/mozilla/native-messaging-hosts/ ]; then
     mkdir -p /usr/lib/mozilla/native-messaging-hosts/
 fi
-if [ ! -d "$HOME/.local/share/applications/" ]; then
-    mkdir -p "$HOME/.local/share/applications/"
+if [ ! -d "$USER_HOME/.local/share/applications/" ]; then
+    mkdir -p "$USER_HOME/.local/share/applications/"
 fi
 # copy files TODO this copies a bunch of unnecessary files
 cp -r ./* /opt/yin-yang/
@@ -39,7 +41,7 @@ cp ./resources/yin_yang.json /usr/lib/mozilla/native-messaging-hosts/
 # copy terminal executive
 cp ./scripts/yin-yang /usr/bin/
 # copy .desktop file
-cp ./resources/Yin-Yang.desktop "$HOME/.local/share/applications/Yin-Yang.desktop"
+cp ./resources/Yin-Yang.desktop "$USER_HOME/.local/share/applications/Yin-Yang.desktop"
 # copy icon
 cp ./resources/logo.svg /usr/share/icons/hicolor/scalable/apps/yin_yang.svg
 
