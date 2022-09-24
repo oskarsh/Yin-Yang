@@ -16,7 +16,7 @@ from typing import Union
 import requests
 from suntime import Sun, SunTimeException
 from src.plugins import get_plugins
-from src.enums import Modes, Desktop, PluginKey
+from src.enums import Modes, Desktop, PluginKey, ConfigEvent
 
 logger = logging.getLogger(__name__)
 
@@ -175,14 +175,14 @@ plugins = get_plugins(get_desktop())
 
 class ConfigWatcher(ABC):
     @abstractmethod
-    def notify(self, key, old, new, plugin=None):
+    def notify(self, event: ConfigEvent, values: dict):
         raise NotImplementedError
 
 
 class ConfigManager(dict):
     """Manages the configuration using the singleton pattern"""
 
-    _listeners: [ConfigWatcher] = []
+    _listeners: {ConfigEvent: [ConfigWatcher]} = {}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -191,14 +191,22 @@ class ConfigManager(dict):
         self._changed = False
         self.load()
 
-    def add_update_listener(self, listener: ConfigWatcher):
-        self._listeners.append(listener)
+    def add_event_listener(self, event: ConfigEvent, listener: ConfigWatcher):
+        if event not in self._listeners:
+            self._listeners[event] = []
+        self._listeners[event].append(listener)
 
     def __setitem__(self, key, value):
         if value != self[key]:
             self._changed = True
-            for listener in self._listeners:
-                listener.notify(key, self[key], value)
+            if ConfigEvent.CHANGE in self._listeners:
+                for listener in self._listeners[ConfigEvent.CHANGE]:
+                    listener.notify(ConfigEvent.CHANGE, {
+                        'key': key,
+                        'old_value': self[key],
+                        'new_value': value,
+                        'plugin': None
+                    })
         super().__setitem__(key, value)
 
     def reset(self):
@@ -262,6 +270,9 @@ class ConfigManager(dict):
             # update time
             self._last_save_time = os.stat(config_path).st_mtime
             self._changed = False
+            if ConfigEvent.SAVE in self._listeners:
+                for listener in self._listeners[ConfigEvent.SAVE]:
+                    listener.notify(ConfigEvent.SAVE)
             return True
         except IOError as e:
             logger.error(f'Error while writing the file: {e}')
@@ -296,8 +307,14 @@ class ConfigManager(dict):
             old_value = self['plugins'][plugin][key]
             self['plugins'][plugin][key] = value
             self._changed = True
-            for listener in self._listeners:
-                listener.notify(key, old_value, value, plugin=plugin)
+            if ConfigEvent.CHANGE in self._listeners:
+                for listener in self._listeners[ConfigEvent.CHANGE]:
+                    listener.notify(ConfigEvent.CHANGE, {
+                        'key': key,
+                        'old_value': old_value,
+                        'new_value': value,
+                        'plugin': plugin
+                    })
             return self.get_plugin_key(plugin, key)
         except KeyError as e:
             logger.error(f'Error while updating {plugin}.{key}')
