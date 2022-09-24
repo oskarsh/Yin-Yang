@@ -147,33 +147,33 @@ class ConfigTest(unittest.TestCase):
         config.add_event_listener(ConfigEvent.CHANGE, watcher)
 
         config.mode = Modes.SCHEDULED
-        self.assertTrue(
+        self.assertIn(
             {
                 'key': 'mode',
                 'old_value': Modes.MANUAL.value,
                 'new_value': Modes.SCHEDULED.value,
                 'plugin': None
-            } in watcher.updates)
+            }, watcher.updates)
         watcher.updates = []
 
         config.mode = Modes.SCHEDULED
-        self.assertFalse(
+        self.assertNotIn(
             {
                 'key': 'mode',
                 'old_value': Modes.MANUAL.value,
                 'new_value': Modes.SCHEDULED.value,
                 'plugin': None
-            } in watcher.updates)
+            }, watcher.updates)
         watcher.updates = []
 
         config.update_plugin_key('wallpaper', PluginKey.ENABLED, True)
-        self.assertTrue(
+        self.assertIn(
             {
                 'key': PluginKey.ENABLED.value,
                 'old_value': False,
                 'new_value': True,
                 'plugin': 'wallpaper'
-            } in watcher.updates)
+            }, watcher.updates)
         watcher.updates = []
 
         try:
