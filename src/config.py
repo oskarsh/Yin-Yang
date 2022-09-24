@@ -198,22 +198,21 @@ class ConfigManager(dict):
         self._listeners[event].remove(listener)
 
     def __setitem__(self, key, value):
-        super().__setitem__(key, value)
-
         if value == self[key]:
             return
 
         self._changed = True
-        if ConfigEvent.CHANGE not in self._listeners:
-            return
 
-        for listener in self._listeners[ConfigEvent.CHANGE]:
-            listener.notify(ConfigEvent.CHANGE, {
-                'key': key,
-                'old_value': self[key],
-                'new_value': value,
-                'plugin': None
-            })
+        if ConfigEvent.CHANGE in self._listeners:
+            for listener in self._listeners[ConfigEvent.CHANGE]:
+                listener.notify(ConfigEvent.CHANGE, {
+                    'key': key,
+                    'old_value': self[key],
+                    'new_value': value,
+                    'plugin': None
+                })
+
+        super().__setitem__(key, value)
 
     def reset(self):
         """Resets all values to the defaults specified in the defaults property."""
