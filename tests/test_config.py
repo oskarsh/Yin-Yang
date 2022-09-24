@@ -207,9 +207,11 @@ class ConfigTest(unittest.TestCase):
 
         config.mode = Modes.SCHEDULED
         self.assertTrue(config.save())
+        self.assertFalse(config.save())
 
         config.update_plugin_key('wallpaper', PluginKey.ENABLED, True)
         self.assertTrue(config.save())
+        self.assertFalse(config.save())
 
 
 if __name__ == '__main__':
