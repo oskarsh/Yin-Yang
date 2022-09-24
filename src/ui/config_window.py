@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
 
 from src.ui.main_window import Ui_main_window
 
-from enums import PluginKey
+from src.enums import PluginKey
 from src.config import config, Modes, plugins
 
 logger = logging.getLogger(__name__)

@@ -11,3 +11,8 @@ The files in this directory should be installed to these locations:
 | `yin_yang.json`                      | `/usr/lib/mozilla/native-messaging-hosts/` | Manifest file for the Firefox extension          |
 
 There is an installation script available under `./scripts/install.sh`
+
+After installation, the systemd timer must be enabled:
+```shell
+systemctl --user enable yin_yang.timer
+```
