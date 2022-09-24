@@ -303,16 +303,17 @@ class ConfigManager(dict):
 
         try:
             old_value = self['plugins'][plugin][key]
-            self['plugins'][plugin][key] = value
-            self._changed = True
-            if ConfigEvent.CHANGE in self._listeners:
-                for listener in self._listeners[ConfigEvent.CHANGE]:
-                    listener.notify(ConfigEvent.CHANGE, {
-                        'key': key,
-                        'old_value': old_value,
-                        'new_value': value,
-                        'plugin': plugin
-                    })
+            if value != old_value:
+                self['plugins'][plugin][key] = value
+                self._changed = True
+                if ConfigEvent.CHANGE in self._listeners:
+                    for listener in self._listeners[ConfigEvent.CHANGE]:
+                        listener.notify(ConfigEvent.CHANGE, {
+                            'key': key,
+                            'old_value': old_value,
+                            'new_value': value,
+                            'plugin': plugin
+                        })
             return self.get_plugin_key(plugin, key)
         except KeyError as e:
             logger.error(f'Error while updating {plugin}.{key}')
