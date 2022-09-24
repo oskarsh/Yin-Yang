@@ -19,7 +19,11 @@ class ConfigSaveNotifier(ConfigWatcher):
         self.config_changed = False
 
     def notify(self, event: ConfigEvent, values: dict):
-        self.config_changed = True
+        match event:
+            case ConfigEvent.CHANGE:
+                self.config_changed = True
+            case ConfigEvent.SAVE:
+                self.config_changed = False
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -31,6 +35,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self._config_watcher = ConfigSaveNotifier()
         config.add_event_listener(ConfigEvent.CHANGE, self._config_watcher)
+        config.add_event_listener(ConfigEvent.SAVE, self._config_watcher)
 
         # center the window
         frame_gm = self.frameGeometry()
