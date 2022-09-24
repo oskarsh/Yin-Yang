@@ -50,8 +50,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.btn_schedule.setChecked(True)
             self.ui.location.setVisible(False)
 
-        self.ui.toggle_sound.setChecked(config.get(plugin='sound', key='enabled'))
-        self.ui.toggle_notification.setChecked(config.get(plugin='notification', key='enabled'))
+        self.ui.toggle_sound.setChecked(config.get_plugin_key(plugin='sound', key='enabled'))
+        self.ui.toggle_notification.setChecked(config.get_plugin_key(plugin='notification', key='enabled'))
 
         # sets the correct time based on config
         self.load_times()
@@ -151,8 +151,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def save(self):
         """Sets the values to the config object, but does not save them"""
 
-        config.update('sound', 'enabled', self.ui.toggle_sound.isChecked())
-        config.update('notification', 'enabled', self.ui.toggle_notification.isChecked())
+        config.update_plugin_key('sound', 'enabled', self.ui.toggle_sound.isChecked())
+        config.update_plugin_key('notification', 'enabled', self.ui.toggle_notification.isChecked())
         self.save_plugins()
 
     def save_mode(self):
@@ -203,7 +203,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
             widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
 
-            config.update(plugin.name, 'enabled', widget.isChecked())
+            config.update_plugin_key(plugin.name, 'enabled', widget.isChecked())
             if plugin.available_themes:
                 # extra behaviour for combobox
                 combo_boxes = widget.findChildren(QtWidgets.QComboBox)
@@ -217,8 +217,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     config.update(plugin.name, key, theme_name)
             else:
                 combo_boxes = widget.findChildren(QtWidgets.QLineEdit)
-                config.update(plugin.name, 'light_theme', combo_boxes[0].text())
-                config.update(plugin.name, 'dark_theme', combo_boxes[1].text())
+                config.update_plugin_key(plugin.name, 'light_theme', combo_boxes[0].text())
+                config.update_plugin_key(plugin.name, 'dark_theme', combo_boxes[1].text())
 
     def save_wallpaper(self, dark: bool):
         message_light = self.tr('Open light wallpaper')
@@ -239,9 +239,9 @@ class MainWindow(QtWidgets.QMainWindow):
         button = QDialogButtonBox.standardButton(self.ui.btn_box, button)
         if button == QDialogButtonBox.Apply:
             self.save()
-            return config.write()
+            return config.save()
         elif button == QDialogButtonBox.RestoreDefaults:
-            config.set_default()
+            config.reset()
             self.load()
         elif button == QDialogButtonBox.Cancel:
             self.close()
@@ -258,7 +258,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                       message,
                                       QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
             if ret == QMessageBox.Save:
-                return config.write()
+                return config.save()
             elif ret == QMessageBox.Cancel:
                 return False
         return True

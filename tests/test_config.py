@@ -2,7 +2,7 @@ import json
 import unittest
 from pathlib import Path
 
-from src.config import config
+from src.config import config, ConfigWatcher
 from src.enums import Desktop, Modes
 
 config_path = f"{Path.home()}/.config/yin_yang/yin_yang_dev.json"
@@ -98,6 +98,7 @@ def use_all_versions(func):
                 old_config = old_configs[version]
                 downgrade_config(old_config)
                 func(self, version, old_config)
+
     return inner
 
 
@@ -109,12 +110,12 @@ class ConfigTest(unittest.TestCase):
                 for plugin_property in ['Enabled', 'LightTheme', 'DarkTheme']:
                     self.assertEqual(
                         old_config['wallpaper' + plugin_property],
-                        config.get('wallpaper', plugin_property.replace('Theme', '_theme').lower()),
+                        config.get_plugin_key('wallpaper', plugin_property.replace('Theme', '_theme').lower()),
                         'Updating old config files should apply correct values')
             case 2.2:
                 self.assertEqual(config.mode, Modes.SCHEDULED)
-                self.assertEqual(old_config['wallpaperEnabled'], config.get('wallpaper', 'enabled'))
-                self.assertEqual(old_config['wallpaperLightTheme'], config.get('wallpaper', 'light_theme'))
+                self.assertEqual(old_config['wallpaperEnabled'], config.get_plugin_key('wallpaper', 'enabled'))
+                self.assertEqual(old_config['wallpaperLightTheme'], config.get_plugin_key('wallpaper', 'light_theme'))
 
     @unittest.skipIf(config.desktop == Desktop.UNKNOWN, 'Desktop is unsupported')
     @use_all_versions
@@ -124,13 +125,52 @@ class ConfigTest(unittest.TestCase):
                 for plugin_property in ['Enabled', 'LightTheme', 'DarkTheme']:
                     self.assertEqual(
                         old_config['wallpaper' + plugin_property],
-                        config.get('wallpaper', plugin_property.replace('Theme', '_theme').lower()),
+                        config.get_plugin_key('wallpaper', plugin_property.replace('Theme', '_theme').lower()),
                         'Updating old config files should apply correct values')
 
             case 2.2:
                 self.assertEqual(config.mode, Modes.SCHEDULED)
-                self.assertEqual(old_config['wallpaperEnabled'], config.get('wallpaper', 'enabled'))
-                self.assertEqual(old_config['wallpaperLightTheme'], config.get('wallpaper', 'light_theme'))
+                self.assertEqual(old_config['wallpaperEnabled'], config.get_plugin_key('wallpaper', 'enabled'))
+                self.assertEqual(old_config['wallpaperLightTheme'], config.get_plugin_key('wallpaper', 'light_theme'))
+
+    def test_notifies_on_change(self):
+        config.reset()
+
+        class Watcher(ConfigWatcher):
+            def __init__(self):
+                self.updates: [(str, any, any, str)] = []
+
+            def notify(self, key, old, new, plugin=None):
+                self.updates.append((key, old, new, plugin))
+
+        watcher = Watcher()
+        config.add_update_listener(watcher)
+
+        config.mode = Modes.SCHEDULED
+        self.assertTrue(('mode', Modes.MANUAL.value, Modes.SCHEDULED.value, None) in watcher.updates)
+        watcher.updates = []
+
+        config.mode = Modes.SCHEDULED
+        self.assertFalse(('mode', Modes.MANUAL.value, Modes.SCHEDULED.value, None) in watcher.updates)
+        watcher.updates = []
+
+        config.update_plugin_key('wallpaper', 'enabled', True)
+        self.assertTrue(('enabled', False, True, 'wallpaper') in watcher.updates)
+        watcher.updates = []
+
+        try:
+            config.update_plugin_key('abcd', 'enabled', True)
+        except KeyError:
+            pass
+        self.assertTrue(len(watcher.updates) == 0)
+
+    def test_write_when_changed(self):
+        config.reset()
+        config.save()
+        self.assertFalse(config.save())
+
+        config.mode = Modes.SCHEDULED
+        self.assertTrue(config.save())
 
 
 if __name__ == '__main__':

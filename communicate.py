@@ -60,7 +60,7 @@ def send_config(plugin: str) -> dict:
     """
     logger.debug('Building message')
 
-    enabled = config.get(plugin, 'Enabled')
+    enabled = config.get_plugin_key(plugin, 'Enabled')
     message = {
         'enabled': enabled,
         'dark_mode': config.dark_mode
@@ -71,8 +71,8 @@ def send_config(plugin: str) -> dict:
 
         message['scheduled'] = mode != 'manual'
         message['themes'] = [
-            config.get(plugin, 'light_theme'),
-            config.get(plugin, 'dark_theme')
+            config.get_plugin_key(plugin, 'light_theme'),
+            config.get_plugin_key(plugin, 'dark_theme')
         ]
         if message['scheduled']:
             # time string is parsed to time object

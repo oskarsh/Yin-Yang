@@ -30,7 +30,7 @@ class PluginsTest(unittest.TestCase):
                 self.assertTrue(False,
                                 'set_theme() should throw an exception if the theme is empty!')
                 # try to return to previous theme
-                pl.set_theme(config.get(pl.name + config.get('theme').title() + 'Theme'))
+                pl.set_theme(config.get_plugin_key(pl.name + config.get_plugin_key('theme').title() + 'Theme'))
 
     def test_set_theme_invalid_state(self):
         for pl in plugins:
