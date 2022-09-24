@@ -206,15 +206,19 @@ class MainWindow(QtWidgets.QMainWindow):
             config.update(plugin.name, 'enabled', widget.isChecked())
             if plugin.available_themes:
                 # extra behaviour for combobox
-                children = widget.findChildren(QtWidgets.QComboBox)
-                for child in children:
-                    theme = 'light' if children.index(child) == 0 else 'dark'
-                    theme_name: str = list(plugin.available_themes.keys())[child.currentIndex()]
-                    config.update(plugin.name, f'{theme}_theme', theme_name)
+                combo_boxes = widget.findChildren(QtWidgets.QComboBox)
+                for combo_box in combo_boxes:
+                    key = 'light_theme' if combo_boxes.index(combo_box) == 0 else 'dark_theme'
+                    # reverse dict search: internal name from readable name
+                    theme_name: str = next(
+                        internal_name for internal_name, readable_name in plugin.available_themes.items()
+                        if readable_name == combo_box.currentText()
+                    )
+                    config.update(plugin.name, key, theme_name)
             else:
-                children = widget.findChildren(QtWidgets.QLineEdit)
-                config.update(plugin.name, 'light_theme', children[0].text())
-                config.update(plugin.name, 'dark_theme', children[1].text())
+                combo_boxes = widget.findChildren(QtWidgets.QLineEdit)
+                config.update(plugin.name, 'light_theme', combo_boxes[0].text())
+                config.update(plugin.name, 'dark_theme', combo_boxes[1].text())
 
     def save_wallpaper(self, dark: bool):
         message_light = self.tr('Open light wallpaper')
