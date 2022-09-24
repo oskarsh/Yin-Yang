@@ -7,10 +7,19 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
 
 from src.ui.main_window import Ui_main_window
 
+from src.enums import ConfigEvent
 from src.enums import PluginKey
-from src.config import config, Modes, plugins
+from src.config import config, Modes, plugins, ConfigWatcher
 
 logger = logging.getLogger(__name__)
+
+
+class ConfigSaveNotifier(ConfigWatcher):
+    def __init__(self):
+        self.config_changed = False
+
+    def notify(self, event: ConfigEvent, values: dict):
+        self.config_changed = True
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -20,6 +29,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Yin & Yang")
         self.ui = Ui_main_window()
         self.ui.setupUi(self)
+        self._config_watcher = ConfigSaveNotifier()
+        config.add_event_listener(ConfigEvent.CHANGE, self._config_watcher)
 
         # center the window
         frame_gm = self.frameGeometry()
@@ -32,6 +43,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # connects all buttons to the correct routes
         self.register_handlers()
+
+    @property
+    def config_changed(self) -> bool:
+        return self._config_watcher.config_changed
 
     def load(self):
         """Sets the values from the config to the elements"""
@@ -254,21 +269,27 @@ class MainWindow(QtWidgets.QMainWindow):
         """Returns true if the user wants to close the application"""
 
         # ask the user if he wants to save changes
-        if config.changed:
+        if self.config_changed:
             message = self.tr('The settings have been modified. Do you want to save them?')
             ret = QMessageBox.warning(self, self.tr('Unsaved changes'),
                                       message,
                                       QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
-            if ret == QMessageBox.Save:
-                return config.save()
-            elif ret == QMessageBox.Cancel:
-                return False
+            match ret:
+                case QMessageBox.Save:
+                    return config.save()
+                case QMessageBox.Discard:
+                    return True
+                case QMessageBox.Cancel:
+                    return False
+                case _:
+                    logger.warning('Unexpected return value from warning dialog.')
+                    return False
         return True
 
-    def close(self):
+    def closeEvent(self, event):
         """Overwrite the function that gets called when window is closed"""
 
         if self.should_close():
-            super().close()
+            event.accept()
         else:
-            pass
+            event.ignore()
