@@ -198,17 +198,22 @@ class ConfigManager(dict):
         self._listeners[event].remove(listener)
 
     def __setitem__(self, key, value):
-        if value != self[key]:
-            self._changed = True
-            if ConfigEvent.CHANGE in self._listeners:
-                for listener in self._listeners[ConfigEvent.CHANGE]:
-                    listener.notify(ConfigEvent.CHANGE, {
-                        'key': key,
-                        'old_value': self[key],
-                        'new_value': value,
-                        'plugin': None
-                    })
         super().__setitem__(key, value)
+
+        if value == self[key]:
+            return
+
+        self._changed = True
+        if ConfigEvent.CHANGE not in self._listeners:
+            return
+
+        for listener in self._listeners[ConfigEvent.CHANGE]:
+            listener.notify(ConfigEvent.CHANGE, {
+                'key': key,
+                'old_value': self[key],
+                'new_value': value,
+                'plugin': None
+            })
 
     def reset(self):
         """Resets all values to the defaults specified in the defaults property."""
@@ -442,10 +447,10 @@ class ConfigManager(dict):
 
     @times.setter
     def times(self, times: tuple[time, time]):
-        if self.mode == Modes.SCHEDULED:
-            self['times'] = times[0].isoformat(), times[1].isoformat()
-        else:
+        if self.mode != Modes.SCHEDULED:
             raise ValueError('Changing times is only allowed in mode scheduled!')
+
+        self['times'] = times[0].isoformat(), times[1].isoformat()
 
     @property
     def desktop(self) -> Desktop:
