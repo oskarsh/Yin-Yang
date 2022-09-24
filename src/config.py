@@ -3,6 +3,7 @@ import logging
 import os
 import pathlib
 import re
+from abc import ABC, abstractmethod
 from functools import cache
 from time import sleep
 
@@ -170,22 +171,39 @@ def get_desktop() -> Desktop:
 plugins = get_plugins(get_desktop())
 
 
-class ConfigManager:
+class ConfigWatcher(ABC):
+    @abstractmethod
+    def notify(self, key, old, new, plugin=None):
+        raise NotImplementedError
+
+
+class ConfigManager(dict):
     """Manages the configuration using the singleton pattern"""
 
-    _config_data: dict = None
+    _listeners: [ConfigWatcher] = []
 
-    def __init__(self):
-        self._config_data = self.defaults
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.update(self.defaults)
         self._last_save_time = 0
         self._changed = False
         self.load()
 
-    def set_default(self):
+    def add_update_listener(self, listener: ConfigWatcher):
+        self._listeners.append(listener)
+
+    def __setitem__(self, key, value):
+        if value != self[key]:
+            self._changed = True
+            for listener in self._listeners:
+                listener.notify(key, self[key], value)
+        super().__setitem__(key, value)
+
+    def reset(self):
         """Resets all values to the defaults specified in the defaults property."""
 
         logger.info('Setting default values.')
-        self._config_data = self.defaults
+        self.update(self.defaults)
         self._changed = True
 
     def load(self) -> None:
@@ -223,9 +241,9 @@ class ConfigManager:
             pl.theme_dark = config_loaded['plugins'][pl.name.lower()]['dark_theme']
             pl.enabled = config_loaded['plugins'][pl.name.lower()]['enabled']
 
-        self._config_data = config_loaded
+        self.update(config_loaded)
 
-    def write(self) -> bool:
+    def save(self) -> bool:
         """Write configuration
 
         :returns: whether save was successful
@@ -233,20 +251,21 @@ class ConfigManager:
 
         if not self._changed:
             logger.debug('No changes were made, skipping save')
-            return True
+            return False
 
         logger.debug('Saving the config')
         try:
             with open(config_path, 'w') as conf_file:
-                json.dump(self._config_data, conf_file, indent=4)
+                json.dump(self, conf_file, indent=4)
             # update time
             self._last_save_time = os.stat(config_path).st_mtime
+            self._changed = False
             return True
         except IOError as e:
             logger.error(f'Error while writing the file: {e}')
             return False
 
-    def get(self, plugin: str, key: str) -> Union[bool, str]:
+    def get_plugin_key(self, plugin: str, key: str) -> Union[bool, str]:
         """Return the given key from the config
         :param plugin: name of the plugin
         :param key: the key to change
@@ -256,9 +275,9 @@ class ConfigManager:
         plugin = plugin.casefold()
         key = key.casefold()
 
-        return self._config_data['plugins'][plugin][key]
+        return self['plugins'][plugin][key]
 
-    def update(self, plugin: str, key: str, value: Union[bool, str]) -> Union[bool, str]:
+    def update_plugin_key(self, plugin: str, key: str, value: Union[bool, str]) -> Union[bool, str]:
         """Update the value of a key in configuration
 
         :param key: The setting to change
@@ -272,9 +291,11 @@ class ConfigManager:
         key = key.casefold()
 
         try:
-            self._config_data['plugins'][plugin][key] = value
-            self._changed = True
-            return self.get(plugin, key)
+            old_value = self['plugins'][plugin][key]
+            self['plugins'][plugin][key] = value
+            for listener in self._listeners:
+                listener.notify(key, old_value, value, plugin=plugin)
+            return self.get_plugin_key(plugin, key)
         except KeyError as e:
             logger.error(f'Error while updating {plugin}.{key}')
             raise e
@@ -307,14 +328,8 @@ class ConfigManager:
         return conf_default
 
     @property
-    def data(self) -> dict:
-        """All config values. Only use this for testing purposes!"""
-
-        return self._config_data
-
-    @property
     def version(self) -> float:
-        return self._config_data['version']
+        return self['version']
 
     @property
     def running(self) -> bool:
@@ -332,26 +347,24 @@ class ConfigManager:
 
     @running.setter
     def running(self, value: bool):
-        self._config_data['running'] = value
-        self._changed = True
+        self['running'] = value
 
     @property
     def dark_mode(self) -> bool:
         """Currently used theme. Might be wrong on initial start."""
 
-        return self._config_data['dark_mode']
+        return self['dark_mode']
 
     @dark_mode.setter
     def dark_mode(self, dark_mode: bool):
-        self._config_data['dark_mode'] = dark_mode
-        self._changed = True
-        self.write()
+        self['dark_mode'] = dark_mode
+        self.save()
 
     @property
     def mode(self) -> Modes:
         """Mode that should be used to check wether dark mode should be active or not"""
 
-        mode_string = self._config_data['mode']
+        mode_string = self['mode']
         for mode in list(Modes):
             if mode_string == mode.value:
                 return mode
@@ -360,37 +373,34 @@ class ConfigManager:
 
     @mode.setter
     def mode(self, mode: Modes):
-        self._config_data['mode'] = mode.value
-        self._changed = True
+        self['mode'] = mode.value
 
     @property
     def location(self) -> tuple[float, float]:
-        if self._config_data['update_location']:
+        if self['update_location']:
             coordinate = get_current_location()
             return coordinate.latitude(), coordinate.longitude()
 
-        return self._config_data['coordinates']
+        return self['coordinates']
 
     @location.setter
     def location(self, coordinates: tuple[float, float]):
-        if self._config_data['update_location']:
+        if self['update_location']:
             raise ValueError('Location is updated automatically!')
         elif self.mode != Modes.FOLLOW_SUN:
             raise ValueError('Updating location while not in mode follow sun is forbidden')
 
-        self._config_data['coordinates'] = coordinates
-        self._changed = True
+        self['coordinates'] = coordinates
 
     @property
     def update_location(self) -> bool:
-        """Wether the location should be updated automatically"""
+        """Whether the location should be updated automatically"""
 
-        return self._config_data['update_location']
+        return self['update_location']
 
     @update_location.setter
     def update_location(self, enabled: bool):
-        self._config_data['update_location'] = enabled
-        self._changed = True
+        self['update_location'] = enabled
 
     @property
     def times(self) -> tuple[time, time]:
@@ -401,7 +411,7 @@ class ConfigManager:
             return get_sun_time(latitude, longitude)
 
         # return time in config data
-        time_light, time_dark = self._config_data['times']
+        time_light, time_dark = self['times']
 
         time_light = time.fromisoformat(time_light)
         time_dark = time.fromisoformat(time_dark)
@@ -411,8 +421,7 @@ class ConfigManager:
     @times.setter
     def times(self, times: tuple[time, time]):
         if self.mode == Modes.SCHEDULED:
-            self._config_data['times'] = times[0].isoformat(), times[1].isoformat()
-            self._changed = True
+            self['times'] = times[0].isoformat(), times[1].isoformat()
         else:
             raise ValueError('Changing times is only allowed in mode scheduled!')
 
@@ -426,7 +435,7 @@ class ConfigManager:
     def update_interval(self) -> int:
         """Seconds that should pass until next check"""
 
-        return self._config_data['update_interval']
+        return self['update_interval']
 
 
 # create global object with current version
@@ -437,6 +446,6 @@ logger.info('Detected desktop:', config.desktop)
 
 # set plugin themes
 for p in filter(lambda pl: pl.available, plugins):
-    p.enabled = config.get(p.name, 'enabled')
-    p.theme_bright = config.get(p.name, 'light_theme')
-    p.theme_dark = config.get(p.name, 'dark_theme')
+    p.enabled = config.get_plugin_key(p.name, 'enabled')
+    p.theme_bright = config.get_plugin_key(p.name, 'light_theme')
+    p.theme_dark = config.get_plugin_key(p.name, 'dark_theme')

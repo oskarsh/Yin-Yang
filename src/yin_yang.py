@@ -35,7 +35,7 @@ def set_mode(dark: bool, force=False):
 
     logger.info(f'Switching to {"dark" if dark else "light"} mode.')
     for p in plugins:
-        if config.get(p.name, 'enabled'):
+        if config.get_plugin_key(p.name, 'enabled'):
             try:
                 logger.info(f'Changing theme in plugin {p.name}')
                 p.set_mode(dark)
