@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-USER_HOME=${1-${HOME}}
+USER_HOME=$HOME
 
 if test ${EUID} -ne 0; then
     echo enter password in order to install Yin-Yang correctly
