@@ -2,8 +2,8 @@ import logging
 import subprocess
 from pathlib import Path
 
-from config import ConfigWatcher, config
-from enums import ConfigEvent, Modes
+from src.config import ConfigWatcher, config
+from src.enums import ConfigEvent, Modes
 
 logger = logging.getLogger(__name__)
 TIMER_PATH = str(Path.home()) + '/.local/share/systemd/user/yin_yang.timer'

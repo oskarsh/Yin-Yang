@@ -10,8 +10,8 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 from systemd import journal
 
-import daemon_handler
-from enums import ConfigEvent
+from src import daemon_handler
+from src.enums import ConfigEvent
 from src import yin_yang
 from src.config import config, Modes
 from src.ui import config_window
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--toggle",
                         help="toggles Yin-Yang",
                         action="store_true")
-    parser.add_argument("--systemd", help="uses systemd journal handler", default=False)
+    parser.add_argument("--systemd", help="uses systemd journal handler", action='store_true')
     args = parser.parse_args()
     setup_logger(args.systemd)
     main(args)
