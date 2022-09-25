@@ -12,7 +12,6 @@ from psutil import process_iter, NoSuchProcess
 from datetime import time
 from typing import Union
 
-import requests
 from suntime import Sun, SunTimeException
 from src.plugins import get_plugins
 from src.enums import Modes, Desktop
@@ -119,7 +118,6 @@ parent = QObject()
 locationSource = QGeoPositionInfoSource.createDefaultSource(parent)
 
 
-@cache
 def get_current_location() -> QGeoCoordinate:
     if locationSource is None:
         logger.error("No location source is available")
@@ -368,12 +366,8 @@ class ConfigManager:
     @property
     def location(self) -> tuple[float, float]:
         if self._config_data['update_location']:
-            try:
-                coordinate = get_current_location()
-                return coordinate.latitude(), coordinate.longitude()
-            except requests.exceptions.ConnectionError as e:
-                logger.warning('Could not update location. Please check your internet connection.')
-                logger.error(str(e))
+            coordinate = get_current_location()
+            return coordinate.latitude(), coordinate.longitude()
 
         return self._config_data['coordinates']
 
