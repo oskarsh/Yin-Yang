@@ -121,3 +121,4 @@ class Vscode(Plugin):
         for path in EXTENSION_PATHS:
             if isdir(path):
                 return True
+        return False

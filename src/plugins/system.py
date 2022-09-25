@@ -15,14 +15,13 @@ logger = logging.getLogger(__name__)
 def test_gnome_availability(command) -> bool:
     # Runs the first entry in the command list with --help
     try:
-        out = subprocess.run(
+        # if not available, you might want to run https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0
+        # or you have to install that extension
+        process = subprocess.run(
             [command[0], 'get', command[2], command[3]],
             stdout=subprocess.DEVNULL
-        ).stdout
-        if out == f'No such schema \"{command[2]}\"':
-            # in this case, you might want to run https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0
-            # or you have to install that extension
-            return False
+        )
+        return process.stdout == 0
     except FileNotFoundError:
         # if no such command is available, the plugin is not available
         return False
@@ -88,7 +87,7 @@ class _Kde(PluginCommandline):
         self.theme_light = 'org.kde.breeze.desktop'
         self.theme_dark = 'org.kde.breezedark.desktop'
 
-    def set_theme(self, theme: str) -> bool:
+    def set_theme(self, theme: str) -> None:
         # TODO remove this once https://bugs.kde.org/show_bug.cgi?id=446074 is fixed
         super().set_theme(theme)
         super().set_theme(theme)
