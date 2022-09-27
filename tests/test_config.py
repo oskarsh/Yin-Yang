@@ -1,5 +1,6 @@
 import json
 import unittest
+from datetime import time
 from pathlib import Path
 from typing import Optional
 
@@ -235,6 +236,27 @@ class ConfigTest(unittest.TestCase):
         config.update_plugin_key('wallpaper', PluginKey.ENABLED, True)
         self.assertTrue(config.save())
         self.assertFalse(config.save())
+
+    def test_follow_sun(self):
+        config.reset()
+
+        config.mode = Modes.SCHEDULED
+        time_light_man = time(5, 9)
+        time_dark_man = time(20, 0)
+        config.times = time_light_man, time_dark_man
+
+        config.mode = Modes.FOLLOW_SUN
+        config.location = 0, 0
+        time_light, time_dark = config.times
+
+        self.assertNotEqual(time_light, time_light_man)
+        self.assertNotEqual(time_dark, time_dark_man)
+
+        config.update_location = True
+        time_light, time_dark = config.times
+
+        self.assertNotEqual(time_light, time_light_man)
+        self.assertNotEqual(time_dark, time_dark_man)
 
 
 if __name__ == '__main__':
