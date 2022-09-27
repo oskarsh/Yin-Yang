@@ -192,6 +192,8 @@ class ConfigManager(dict):
         self.load()
 
     def add_event_listener(self, event: ConfigEvent, listener: ConfigWatcher):
+        assert event == ConfigEvent.CHANGE or event == ConfigEvent.SAVE, 'enums are different!'
+
         if event not in self._listeners:
             self._listeners[event] = set()
         self._listeners[event].add(listener)

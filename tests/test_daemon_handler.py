@@ -3,17 +3,23 @@ import subprocess
 import unittest
 from datetime import time
 
-import daemon_handler
-from config import config
-from enums import ConfigEvent, Modes
-
-
-def notify():
-    daemon_handler.watcher.notify(ConfigEvent.CHANGE, {'key': 'times'})
-    daemon_handler.watcher.notify(ConfigEvent.SAVE, config)
+from src import daemon_handler
+from src.config import config
+from src.enums import Modes, ConfigEvent
 
 
 class DaemonTest(unittest.TestCase):
+    def setUp(self) -> None:
+        super().setUp()
+        config.reset()
+        config.add_event_listener(ConfigEvent.CHANGE, daemon_handler.watcher)
+        config.add_event_listener(ConfigEvent.SAVE, daemon_handler.watcher)
+
+    def tearDown(self) -> None:
+        super().tearDown()
+        config.remove_event_listener(ConfigEvent.CHANGE, daemon_handler.watcher)
+        config.remove_event_listener(ConfigEvent.SAVE, daemon_handler.watcher)
+
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
@@ -24,33 +30,51 @@ class DaemonTest(unittest.TestCase):
         super().tearDownClass()
         shutil.move(daemon_handler.TIMER_PATH + '_backup', daemon_handler.TIMER_PATH)
 
+    def test_starts_stops(self):
+        config.mode = Modes.SCHEDULED
+        config.save()
+        output = daemon_handler.run_command('is-active', stdout=subprocess.PIPE).stdout
+        self.assertEqual(b'active\n', output)
+
+        config.mode = Modes.MANUAL
+        config.save()
+        output = daemon_handler.run_command('is-active', stdout=subprocess.PIPE).stdout
+        self.assertEqual(b'inactive\n', output)
+
+        config.mode = Modes.FOLLOW_SUN
+        config.save()
+        output = daemon_handler.run_command('is-active', stdout=subprocess.PIPE).stdout
+        self.assertEqual(b'active\n', output)
+
     def test_updates_times(self):
-        config.reset()
         config.mode = Modes.SCHEDULED
         time_light = time(6, 0)
         time_dark = time(18, 0)
         config.times = time_light, time_dark
+        config.save()
 
-        notify()
-
-        with open(daemon_handler.TIMER_PATH) as file:
+        with open(daemon_handler.TIMER_PATH, 'r') as file:
             lines = file.readlines()
-            light = lines[4]
-            dark = lines[5]
+            light, dark = lines[4:6]
 
         self.assertEqual(f'OnCalendar={time_light.isoformat()}\n', light)
         self.assertEqual(f'OnCalendar={time_dark.isoformat()}\n', dark)
 
     def test_updates_timer(self):
-        config.reset()
+        config.mode = Modes.SCHEDULED
+        config.save()
+
+        output = daemon_handler.run_command('is-active', stdout=subprocess.PIPE).stdout
+        self.assertEqual(b'active\n', output)
+
         config.mode = Modes.MANUAL
-        notify()
+        config.save()
 
         output = daemon_handler.run_command('is-active', stdout=subprocess.PIPE).stdout
         self.assertEqual(b'inactive\n', output)
 
-        config.mode = Modes.SCHEDULED
-        notify()
+        config.mode = Modes.FOLLOW_SUN
+        config.save()
 
         output = daemon_handler.run_command('is-active', stdout=subprocess.PIPE).stdout
         self.assertEqual(b'active\n', output)
