@@ -246,7 +246,7 @@ def inplace_change(filename: str, old_string: str, new_string: str):
 
 def get_stuff_in_dir(path: str, search_type: str) -> [str]:
     """Returns all files or directories in the path
-    :param path: The path where to search.
+    :param path: The path where to search
     :param search_type: The type. Either dir (a directory) or file
     """
     # source: https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory

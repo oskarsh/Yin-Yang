@@ -6,9 +6,24 @@ from PySide6.QtGui import QScreen
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
 
 from src.ui.main_window import Ui_main_window
-from src.config import config, Modes, plugins
+
+from src.enums import ConfigEvent
+from src.enums import PluginKey
+from src.config import config, Modes, plugins, ConfigWatcher
 
 logger = logging.getLogger(__name__)
+
+
+class ConfigSaveNotifier(ConfigWatcher):
+    def __init__(self):
+        self.config_changed = False
+
+    def notify(self, event: ConfigEvent, values: dict):
+        match event:
+            case ConfigEvent.CHANGE:
+                self.config_changed = True
+            case ConfigEvent.SAVE:
+                self.config_changed = False
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -18,6 +33,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Yin & Yang")
         self.ui = Ui_main_window()
         self.ui.setupUi(self)
+        self._config_watcher = ConfigSaveNotifier()
+        config.add_event_listener(ConfigEvent.CHANGE, self._config_watcher)
+        config.add_event_listener(ConfigEvent.SAVE, self._config_watcher)
 
         # center the window
         frame_gm = self.frameGeometry()
@@ -30,6 +48,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # connects all buttons to the correct routes
         self.register_handlers()
+
+    @property
+    def config_changed(self) -> bool:
+        return self._config_watcher.config_changed
 
     def load(self):
         """Sets the values from the config to the elements"""
@@ -50,8 +72,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.btn_schedule.setChecked(True)
             self.ui.location.setVisible(False)
 
-        self.ui.toggle_sound.setChecked(config.get(plugin='sound', key='enabled'))
-        self.ui.toggle_notification.setChecked(config.get(plugin='notification', key='enabled'))
+        self.ui.toggle_sound.setChecked(config.get_plugin_key(plugin='sound', key='enabled'))
+        self.ui.toggle_notification.setChecked(config.get_plugin_key(plugin='notification', key='enabled'))
 
         # sets the correct time based on config
         self.load_times()
@@ -151,8 +173,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def save(self):
         """Sets the values to the config object, but does not save them"""
 
-        config.update('sound', 'enabled', self.ui.toggle_sound.isChecked())
-        config.update('notification', 'enabled', self.ui.toggle_notification.isChecked())
+        config.update_plugin_key('sound', PluginKey.ENABLED, self.ui.toggle_sound.isChecked())
+        config.update_plugin_key('notification', PluginKey.ENABLED, self.ui.toggle_notification.isChecked())
         self.save_plugins()
 
     def save_mode(self):
@@ -203,22 +225,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
             widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
 
-            config.update(plugin.name, 'enabled', widget.isChecked())
+            config.update_plugin_key(plugin.name, PluginKey.ENABLED, widget.isChecked())
             if plugin.available_themes:
                 # extra behaviour for combobox
                 combo_boxes = widget.findChildren(QtWidgets.QComboBox)
                 for combo_box in combo_boxes:
-                    key = 'light_theme' if combo_boxes.index(combo_box) == 0 else 'dark_theme'
+                    key = PluginKey.THEME_LIGHT if combo_boxes.index(combo_box) == 0 else PluginKey.THEME_DARK
                     # reverse dict search: internal name from readable name
                     theme_name: str = next(
                         internal_name for internal_name, readable_name in plugin.available_themes.items()
                         if readable_name == combo_box.currentText()
                     )
-                    config.update(plugin.name, key, theme_name)
+                    config.update_plugin_key(plugin.name, key, theme_name)
             else:
                 combo_boxes = widget.findChildren(QtWidgets.QLineEdit)
-                config.update(plugin.name, 'light_theme', combo_boxes[0].text())
-                config.update(plugin.name, 'dark_theme', combo_boxes[1].text())
+                config.update_plugin_key(plugin.name, PluginKey.THEME_LIGHT, combo_boxes[0].text())
+                config.update_plugin_key(plugin.name, PluginKey.THEME_DARK, combo_boxes[1].text())
 
     def save_wallpaper(self, dark: bool):
         message_light = self.tr('Open light wallpaper')
@@ -239,9 +261,9 @@ class MainWindow(QtWidgets.QMainWindow):
         button = QDialogButtonBox.standardButton(self.ui.btn_box, button)
         if button == QDialogButtonBox.Apply:
             self.save()
-            return config.write()
+            return config.save()
         elif button == QDialogButtonBox.RestoreDefaults:
-            config.set_default()
+            config.reset()
             self.load()
         elif button == QDialogButtonBox.Cancel:
             self.close()
@@ -252,21 +274,27 @@ class MainWindow(QtWidgets.QMainWindow):
         """Returns true if the user wants to close the application"""
 
         # ask the user if he wants to save changes
-        if config.changed:
+        if self.config_changed:
             message = self.tr('The settings have been modified. Do you want to save them?')
             ret = QMessageBox.warning(self, self.tr('Unsaved changes'),
                                       message,
                                       QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
-            if ret == QMessageBox.Save:
-                return config.write()
-            elif ret == QMessageBox.Cancel:
-                return False
+            match ret:
+                case QMessageBox.Save:
+                    return config.save()
+                case QMessageBox.Discard:
+                    return True
+                case QMessageBox.Cancel:
+                    return False
+                case _:
+                    logger.warning('Unexpected return value from warning dialog.')
+                    return False
         return True
 
-    def close(self):
+    def closeEvent(self, event):
         """Overwrite the function that gets called when window is closed"""
 
         if self.should_close():
-            super().close()
+            event.accept()
         else:
-            pass
+            event.ignore()

@@ -27,7 +27,7 @@ Translations: [🇨🇳](README_zh.md)
 * Supports VSCode
 * Supports Atom
 * Supports Wallpaper change based on theme
-* Toggles themes based on given time
+* Toggle themes based on given time
 * Supports changing theme based on sunrise and sunset
 
 ## Installation

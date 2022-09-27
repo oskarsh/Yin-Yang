@@ -1,7 +1,7 @@
 
 """
 title: yin_yang
-description: yin_yang provides a easy way to toggle between light and dark
+description: yin_yang provides an easy way to toggle between light and dark
 mode for your kde desktop. It also themes your vscode and
 all other qt application with it.
 author: oskarsh
@@ -11,9 +11,8 @@ license: MIT
 
 import logging
 import time
-from datetime import datetime
 
-from src.config import Modes, config, plugins
+from src.config import config, plugins
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +34,7 @@ def set_mode(dark: bool, force=False):
 
     logger.info(f'Switching to {"dark" if dark else "light"} mode.')
     for p in plugins:
-        if config.get(p.name, 'enabled'):
+        if config.get_plugin_key(p.name, 'enabled'):
             try:
                 logger.info(f'Changing theme in plugin {p.name}')
                 p.set_mode(dark)
@@ -43,16 +42,3 @@ def set_mode(dark: bool, force=False):
                 logger.error('Error while changing theme in ' + p.name, exc_info=e)
 
     config.dark_mode = dark
-
-
-def run():
-    logger.info(f'System is currently using a {"dark" if config.dark_mode else "light"} theme.')
-    first_run = True
-    while config.mode != Modes.MANUAL:
-        # load settings if something has changed
-        config.load()
-        time_light, time_dark = config.times
-        set_mode(should_be_dark(datetime.now().time(), time_light, time_dark), force=first_run)
-        first_run = False
-        # subtract seconds so that the next switch is on the full minute
-        time.sleep(config.update_interval - datetime.now().second)
