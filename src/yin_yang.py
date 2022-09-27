@@ -1,7 +1,7 @@
 
 """
 title: yin_yang
-description: yin_yang provides a easy way to toggle between light and dark
+description: yin_yang provides an easy way to toggle between light and dark
 mode for your kde desktop. It also themes your vscode and
 all other qt application with it.
 author: oskarsh

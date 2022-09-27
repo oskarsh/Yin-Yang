@@ -59,7 +59,7 @@ cat << "EOF"
                                        |___/
 EOF
 echo ""
-echo "Yin-Yang brings Auto Nightmode for Linux"
+echo "Yin-Yang brings Auto Night mode for Linux"
 echo ""
 cat << "EOF"
        _..oo8"""Y8b.._

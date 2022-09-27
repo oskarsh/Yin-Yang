@@ -219,7 +219,7 @@ class ConfigManager(dict):
         super().__setitem__(key, value)
 
     def reset(self):
-        """Resets all values to the defaults specified in the defaults property."""
+        """Resets all values to the defaults specified in the defaults' property."""
 
         logger.info('Setting default values.')
         self.update(self.defaults)
@@ -301,7 +301,6 @@ class ConfigManager(dict):
 
     def update_plugin_key(self, plugin: str, key: PluginKey, value: Union[bool, str]) -> Union[bool, str]:
         """Update the value of a key in configuration
-
         :param key: The setting to change
         :param value: The value to set the setting to
         :param plugin: Name of the plugin you may want to change
@@ -392,7 +391,7 @@ class ConfigManager(dict):
 
     @property
     def mode(self) -> Modes:
-        """Mode that should be used to check wether dark mode should be active or not"""
+        """Mode that should be used to check whether dark mode should be active or not"""
 
         mode_string = self['mode']
         for mode in list(Modes):
@@ -461,7 +460,7 @@ class ConfigManager(dict):
 
     @property
     def desktop(self) -> Desktop:
-        """Return the current desktops name or 'unknown' if can't determine it"""
+        """Return the current desktops name or 'unknown' if it can't determine it"""
 
         return get_desktop()
 

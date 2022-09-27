@@ -20,7 +20,7 @@ def test_gnome_availability(command) -> bool:
             stdout=subprocess.DEVNULL
         ).stdout
         if out == f'No such schema \"{command[2]}\"':
-            # in this case, you might want to run https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0
+            # in this case, you might want to run https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0,
             # or you have to install that extension
             return False
     except FileNotFoundError:
@@ -88,7 +88,7 @@ class _Kde(PluginCommandline):
         self.theme_light = 'org.kde.breeze.desktop'
         self.theme_dark = 'org.kde.breezedark.desktop'
 
-    def set_theme(self, theme: str) -> bool:
+    def set_theme(self, theme: str):
         # TODO remove this once https://bugs.kde.org/show_bug.cgi?id=446074 is fixed
         super().set_theme(theme)
         super().set_theme(theme)

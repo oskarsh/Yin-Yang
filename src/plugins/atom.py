@@ -6,10 +6,10 @@ from ._plugin import Plugin, inplace_change
 
 
 def get_old_theme(settings):
-    """returns the theme which is currently used
-       uses regex to find the currently used theme
-       i expect that themes follow this pattern
-       XXXX-XXXX-ui     XXXX-XXXX-syntax
+    """
+    Returns the theme that is currently used.
+    Uses regex to find the currently used theme, I expect that themes follow this pattern:
+    XXXX-XXXX-ui     XXXX-XXXX-syntax
     """
     with open(settings, "r") as file:
         string = file.read()
