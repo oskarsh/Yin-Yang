@@ -135,11 +135,13 @@ def get_current_location() -> QGeoCoordinate:
 
 
 def get_desktop() -> Desktop:
-    desktop = os.getenv('XDG_CURRENT_DESKTOP').lower()
-    if desktop == '':
-        desktop = os.getenv('GDMSESSION').lower()
+    desktop = os.getenv('XDG_CURRENT_DESKTOP')
+    if desktop is None:
+        desktop = os.getenv('GDMSESSION')
+    if desktop is None:
+        desktop = ''
 
-    match desktop:
+    match desktop.lower():
         case 'gnome' | 'budgie':
             return Desktop.GNOME
         case 'kde' | 'plasma' | 'plasma5':
