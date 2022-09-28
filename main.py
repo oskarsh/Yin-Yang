@@ -14,7 +14,7 @@ from src import daemon_handler
 from src.enums import ConfigEvent
 from src import yin_yang
 from src.config import config, Modes
-from src.ui import config_window
+from src.ui import main_window_connector
 
 logger = logging.getLogger()
 
@@ -81,7 +81,7 @@ def main(arguments):
             logger.error(str(e))
             print('Error while loading translation. Using default language.')
 
-        window = config_window.MainWindow()
+        window = main_window_connector.MainWindow()
         window.show()
         sys.exit(app.exec())
 
