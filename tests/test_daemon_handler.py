@@ -2,6 +2,7 @@ import shutil
 import subprocess
 import unittest
 from datetime import time
+from os.path import isfile
 
 from src import daemon_handler
 from src.config import config
@@ -23,6 +24,9 @@ class DaemonTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
+        if not isfile(daemon_handler.TIMER_PATH):
+            shutil.copyfile('../resources/yin_yang.timer', daemon_handler.TIMER_PATH)
+            shutil.copyfile('../resources/yin_yang.service', daemon_handler.TIMER_PATH.replace('timer', 'service'))
         shutil.copyfile(daemon_handler.TIMER_PATH, daemon_handler.TIMER_PATH + '_backup')
 
     @classmethod
