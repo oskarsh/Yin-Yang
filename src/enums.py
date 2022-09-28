@@ -12,6 +12,7 @@ class Modes(Enum):
 class Desktop(Enum):
     KDE = 'kde'
     GNOME = 'gnome'
+    XFCE = 'xfce'
     UNKNOWN = 'unknown'
 
 

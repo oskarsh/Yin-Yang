@@ -144,6 +144,8 @@ def get_desktop() -> Desktop:
             return Desktop.GNOME
         case 'kde' | 'plasma' | 'plasma5':
             return Desktop.KDE
+        case 'xfce':
+            return Desktop.XFCE
         case _:
             return Desktop.UNKNOWN
 
@@ -313,7 +315,7 @@ class ConfigManager(dict):
 
         # NOTE: if you change or add new values here, make sure to update the version number and update_config() method
         conf_default = {
-            'version': 3.0,
+            'version': 3.2,
             'running': False,
             'dark_mode': False,
             'mode': Modes.MANUAL.value,
