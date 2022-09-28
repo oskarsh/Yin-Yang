@@ -237,6 +237,15 @@ class ConfigTest(unittest.TestCase):
         self.assertTrue(config.save())
         self.assertFalse(config.save())
 
+    def test_position(self):
+        config.reset()
+        config.mode = Modes.FOLLOW_SUN
+        config.update_location = True
+
+        lat, long = config.location
+        self.assertIsInstance(lat, float)
+        self.assertIsInstance(long, float)
+
     def test_follow_sun(self):
         config.reset()
 

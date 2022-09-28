@@ -131,7 +131,11 @@ def get_current_location() -> QGeoCoordinate:
         pos = locationSource.lastKnownPosition()
         tries += 1
         sleep(1)
-    return pos.coordinate()
+    coordinate = pos.coordinate()
+    if coordinate is None:
+        logger.error('Location could not be determined')
+        return QGeoCoordinate(0, 0)
+    return coordinate
 
 
 def get_desktop() -> Desktop:
