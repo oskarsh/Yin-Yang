@@ -23,8 +23,16 @@ class ConfigSaveNotifier(ConfigWatcher):
         match event:
             case ConfigEvent.CHANGE:
                 self.config_changed = True
+                logger.debug(values)
             case ConfigEvent.SAVE:
                 self.config_changed = False
+
+
+def reverse_dict_search(dictionary, value):
+    return next(
+        key for key, value_dict in dictionary.items()
+        if value_dict == value
+    )
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -48,7 +56,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.load()
 
         # connects all buttons to the correct routes
-        self.register_handlers()
+        self.setup_config_sync()
 
     @property
     def config_changed(self) -> bool:
@@ -115,18 +123,10 @@ class MainWindow(QtWidgets.QMainWindow):
             assert widget is not None, f'No widget for plugin {plugin.name} found'
 
             widget.setChecked(plugin.enabled)
+            widget.toggled.connect(
+                lambda enabled, p=plugin:
+                    config.update_plugin_key(p.name, PluginKey.ENABLED, enabled))
             widget.setVisible(plugin.available)
-
-            if plugin.name == 'Wallpaper':
-                children: [QtWidgets.QPushButton] = widget.findChildren(QtWidgets.QDialogButtonBox)
-                children[0].clicked.connect(lambda: self.save_wallpaper(False))
-                children[1].clicked.connect(lambda: self.save_wallpaper(True))
-
-                children: [QtWidgets.QLineEdit] = widget.findChildren(QtWidgets.QLineEdit)
-                children[0].setText(plugin.theme_light)
-                children[1].setText(plugin.theme_dark)
-
-                continue
 
             if plugin.available_themes:
                 # uses combobox instead of line edit
@@ -143,10 +143,25 @@ class MainWindow(QtWidgets.QMainWindow):
                             plugin.available_themes[used_theme]
                         )
                     child.setCurrentIndex(index)
+                    child.currentTextChanged.connect(
+                        lambda text, p=plugin: config.update_plugin_key(
+                            p.name,
+                            PluginKey.THEME_DARK if is_dark_checkbox else PluginKey.THEME_LIGHT,
+                            reverse_dict_search(p.available_themes, text)))
             else:
-                children = widget.findChildren(QtWidgets.QLineEdit)
+                children: [QtWidgets.QLineEdit] = widget.findChildren(QtWidgets.QLineEdit)
                 children[0].setText(plugin.theme_light)
+                children[0].textChanged.connect(
+                    lambda text, p=plugin: config.update_plugin_key(p.name, PluginKey.THEME_LIGHT, text))
                 children[1].setText(plugin.theme_dark)
+                children[1].textChanged.connect(
+                    lambda text, p=plugin: config.update_plugin_key(p.name, PluginKey.THEME_DARK, text))
+
+                if plugin.name == 'Wallpaper':
+                    children: [QtWidgets.QPushButton] = widget.findChildren(QtWidgets.QDialogButtonBox)
+                    children[0].clicked.connect(lambda: self.select_wallpaper(False))
+                    children[1].clicked.connect(lambda: self.select_wallpaper(True))
+        plugin = None
 
     def update_label_enabled(self):
         time_light = self.ui.inp_time_light.time().toPython()
@@ -155,29 +170,26 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tr('Dark mode will be active between {} and {}.')
                 .format(time_dark.strftime("%H:%M"), time_light.strftime("%H:%M")))
 
-    def register_handlers(self):
+    def setup_config_sync(self):
         # set sunrise and sunset times if mode is set to followSun or coordinates changed
         self.ui.btn_enable.toggled.connect(self.save_mode)
         self.ui.btn_schedule.toggled.connect(self.save_mode)
         self.ui.btn_sun.toggled.connect(self.save_mode)
 
         # buttons and inputs
-        self.ui.btn_location.stateChanged.connect(self.save_location)
-        self.ui.inp_latitude.valueChanged.connect(self.save_location)
-        self.ui.inp_longitude.valueChanged.connect(self.save_location)
-        self.ui.inp_time_light.timeChanged.connect(self.save_times)
-        self.ui.inp_time_dark.timeChanged.connect(self.save_times)
+        self.ui.btn_location.stateChanged.connect(self.update_location)
+        self.ui.inp_latitude.valueChanged.connect(self.update_location)
+        self.ui.inp_longitude.valueChanged.connect(self.update_location)
+        self.ui.inp_time_light.timeChanged.connect(self.update_times)
+        self.ui.inp_time_dark.timeChanged.connect(self.update_times)
 
         # connect dialog buttons
         self.ui.btn_box.clicked.connect(self.save_config_to_file)
 
-    def save(self):
-        """Sets the values to the config object, but does not save them"""
-
-        config.update_plugin_key('sound', PluginKey.ENABLED, self.ui.toggle_sound.isChecked())
-        config.update_plugin_key('notification', PluginKey.ENABLED, self.ui.toggle_notification.isChecked())
-        self.save_plugins()
-        yin_yang.set_desired_theme(True)
+        self.ui.toggle_sound.toggled.connect(
+            lambda enabled: config.update_plugin_key('sound', PluginKey.ENABLED, enabled))
+        self.ui.toggle_notification.toggled.connect(
+            lambda enabled: config.update_plugin_key('notification', PluginKey.ENABLED, enabled))
 
     def save_mode(self):
         if not self.ui.btn_enable.isChecked():
@@ -189,9 +201,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.load_times()
 
-    def save_times(self):
-        """Sets the time set in the ui to the config"""
-
+    def update_times(self):
         if config.mode != Modes.SCHEDULED:
             return
 
@@ -202,9 +212,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.update_label_enabled()
 
-    def save_location(self):
+    def update_location(self):
         if config.mode != Modes.FOLLOW_SUN:
             return
+
         config.update_location = self.ui.btn_location.isChecked()
         if config.update_location:
             self.load_location()
@@ -216,35 +227,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.inp_longitude.value()
             ]
             config.location = coordinates
-        # update message
+        # update message and times
         self.load_times()
 
-    def save_plugins(self):
-        for plugin in plugins:
-            # filter out all plugins for application
-            if plugin.name.casefold() in ['notification', 'sound']:
-                continue
-
-            widget = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, f'group{plugin.name}')
-
-            config.update_plugin_key(plugin.name, PluginKey.ENABLED, widget.isChecked())
-            if plugin.available_themes:
-                # extra behaviour for combobox
-                combo_boxes = widget.findChildren(QtWidgets.QComboBox)
-                for combo_box in combo_boxes:
-                    key = PluginKey.THEME_LIGHT if combo_boxes.index(combo_box) == 0 else PluginKey.THEME_DARK
-                    # reverse dict search: internal name from readable name
-                    theme_name: str = next(
-                        internal_name for internal_name, readable_name in plugin.available_themes.items()
-                        if readable_name == combo_box.currentText()
-                    )
-                    config.update_plugin_key(plugin.name, key, theme_name)
-            else:
-                combo_boxes = widget.findChildren(QtWidgets.QLineEdit)
-                config.update_plugin_key(plugin.name, PluginKey.THEME_LIGHT, combo_boxes[0].text())
-                config.update_plugin_key(plugin.name, PluginKey.THEME_DARK, combo_boxes[1].text())
-
-    def save_wallpaper(self, dark: bool):
+    def select_wallpaper(self, dark: bool):
         message_light = self.tr('Open light wallpaper')
         message_dark = self.tr('Open dark wallpaper')
         file_name, _ = QFileDialog.getOpenFileName(
@@ -262,8 +248,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         button = QDialogButtonBox.standardButton(self.ui.btn_box, button)
         if button == QDialogButtonBox.Apply:
-            self.save()
-            return config.save()
+            success = config.save()
+            yin_yang.set_desired_theme(True)
+            return success
         elif button == QDialogButtonBox.RestoreDefaults:
             config.reset()
             self.load()
@@ -283,7 +270,8 @@ class MainWindow(QtWidgets.QMainWindow):
                                       QMessageBox.Save | QMessageBox.Discard | QMessageBox.Cancel)
             match ret:
                 case QMessageBox.Save:
-                    return config.save()
+                    # emulate click on apply-button
+                    return self.save_config_to_file(QDialogButtonBox.Apply)
                 case QMessageBox.Discard:
                     return True
                 case QMessageBox.Cancel:
