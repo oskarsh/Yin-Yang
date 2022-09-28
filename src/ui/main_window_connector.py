@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
 
 from src.ui.main_window import Ui_main_window
 
-import yin_yang
+from src.yin_yang import set_desired_theme
 from src.enums import ConfigEvent
 from src.enums import PluginKey
 from src.config import config, Modes, plugins, ConfigWatcher
@@ -249,7 +249,7 @@ class MainWindow(QtWidgets.QMainWindow):
         button = QDialogButtonBox.standardButton(self.ui.btn_box, button)
         if button == QDialogButtonBox.Apply:
             success = config.save()
-            yin_yang.set_desired_theme(True)
+            set_desired_theme(True)
             return success
         elif button == QDialogButtonBox.RestoreDefaults:
             config.reset()
