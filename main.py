@@ -50,7 +50,7 @@ def setup_logger(use_systemd_journal: bool):
 
 def main(arguments):
     # checks whether $ yin-yang is run without args
-    if len(sys.argv) == 1 and not arguments.toggle:
+    if len(sys.argv) == 1:
         config.add_event_listener(ConfigEvent.SAVE, daemon_handler.watcher)
         config.add_event_listener(ConfigEvent.CHANGE, daemon_handler.watcher)
         # load GUI
@@ -91,6 +91,9 @@ def main(arguments):
         config.mode = Modes.MANUAL
         yin_yang.set_mode(not config.dark_mode)
 
+    if arguments.systemd:
+        yin_yang.set_desired_theme()
+
 
 if __name__ == "__main__":
     # using ArgumentParser for parsing arguments
@@ -98,7 +101,7 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--toggle",
                         help="toggles Yin-Yang",
                         action="store_true")
-    parser.add_argument("--systemd", help="uses systemd journal handler", action='store_true')
+    parser.add_argument("--systemd", help="uses systemd journal handler and applies desired theme", action='store_true')
     args = parser.parse_args()
     setup_logger(args.systemd)
     main(args)

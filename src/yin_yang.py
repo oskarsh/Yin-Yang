@@ -8,7 +8,7 @@ author: oskarsh
 date: 21.12.2018
 license: MIT
 """
-
+from datetime import datetime
 import logging
 import time
 
@@ -42,3 +42,12 @@ def set_mode(dark: bool, force=False):
                 logger.error('Error while changing theme in ' + p.name, exc_info=e)
 
     config.dark_mode = dark
+
+
+def set_desired_theme(force: bool = False):
+    time_light, time_dark = config.times
+    set_mode(should_be_dark(
+        datetime.now().time(),
+        time_light,
+        time_dark
+    ), force)

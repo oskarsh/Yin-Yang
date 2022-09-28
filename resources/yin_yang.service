@@ -2,4 +2,4 @@
 Description=Automatic light and dark mode
 
 [Service]
-ExecStart=/usr/bin/yin-yang --toggle --systemd
+ExecStart=/usr/bin/yin-yang --systemd

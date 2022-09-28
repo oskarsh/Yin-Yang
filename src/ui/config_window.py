@@ -7,6 +7,7 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
 
 from src.ui.main_window import Ui_main_window
 
+import yin_yang
 from src.enums import ConfigEvent
 from src.enums import PluginKey
 from src.config import config, Modes, plugins, ConfigWatcher
@@ -176,6 +177,7 @@ class MainWindow(QtWidgets.QMainWindow):
         config.update_plugin_key('sound', PluginKey.ENABLED, self.ui.toggle_sound.isChecked())
         config.update_plugin_key('notification', PluginKey.ENABLED, self.ui.toggle_notification.isChecked())
         self.save_plugins()
+        yin_yang.set_desired_theme(True)
 
     def save_mode(self):
         if not self.ui.btn_enable.isChecked():
