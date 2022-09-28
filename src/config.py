@@ -2,7 +2,6 @@ import json
 import logging
 import os
 import pathlib
-import re
 from abc import ABC, abstractmethod
 from functools import cache
 from time import sleep
@@ -136,36 +135,17 @@ def get_current_location() -> QGeoCoordinate:
 
 
 def get_desktop() -> Desktop:
-    # just to get all possible implementations of desktop variables
-    # noinspection SpellCheckingInspection
-    env = str(os.getenv('GDMSESSION')).lower()
-    second_env = str(os.getenv('XDG_CURRENT_DESKTOP')).lower()
-    third_env = str(os.getenv('XDG_CURRENT_DESKTOP')).lower()
+    desktop = os.getenv('XDG_CURRENT_DESKTOP').lower()
+    if desktop == '':
+        desktop = os.getenv('GDMSESSION').lower()
 
-    # these are the envs I will look for
-    # feel free to add your Desktop and see if it works
-    gnome_re = re.compile(r'gnome')
-    budgie_re = re.compile(r'budgie')
-    kde_re = re.compile(r'kde')
-    plasma_re = re.compile(r'plasma')
-    plasma5_re = re.compile(r'plasma5')
-
-    if (gnome_re.search(env) or
-            gnome_re.search(second_env) or gnome_re.search(third_env)):
-        return Desktop.GNOME
-    if (budgie_re.search(env) or
-            budgie_re.search(second_env) or budgie_re.search(third_env)):
-        return Desktop.GNOME
-    if (kde_re.search(env) or
-            kde_re.search(second_env) or kde_re.search(third_env)):
-        return Desktop.KDE
-    if (plasma_re.search(env) or
-            plasma_re.search(second_env) or plasma_re.search(third_env)):
-        return Desktop.KDE
-    if (plasma5_re.search(env) or
-            plasma5_re.search(second_env) or plasma5_re.search(third_env)):
-        return Desktop.KDE
-    return Desktop.UNKNOWN
+    match desktop:
+        case 'gnome' | 'budgie':
+            return Desktop.GNOME
+        case 'kde' | 'plasma' | 'plasma5':
+            return Desktop.KDE
+        case _:
+            return Desktop.UNKNOWN
 
 
 plugins = get_plugins(get_desktop())
