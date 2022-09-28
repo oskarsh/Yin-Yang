@@ -6,7 +6,7 @@ class Kvantum(PluginCommandline):
     def __init__(self):
         super().__init__(['kvantummanager', '--set', '{theme}'])
         self.theme_light = 'KvFlatLight'
-        self.theme_dark = 'KvFlatDark'
+        self.theme_dark = 'KvFlat'
 
     @property
     def available_themes(self) -> dict:
