@@ -132,7 +132,7 @@ def get_current_location() -> QGeoCoordinate:
         tries += 1
         sleep(1)
     coordinate = pos.coordinate()
-    if coordinate is None:
+    if not coordinate.isValid():
         logger.error('Location could not be determined')
         return QGeoCoordinate(0, 0)
     return coordinate
