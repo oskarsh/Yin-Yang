@@ -25,8 +25,8 @@ class DaemonTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
-        if not isfile(daemon_handler.TIMER_PATH.replace('yin_yang.timer', '')):
-            pathlib.Path(daemon_handler.TIMER_PATH).mkdir(parents=True, exist_ok=True)
+        if not isfile(daemon_handler.TIMER_PATH):
+            pathlib.Path(daemon_handler.TIMER_PATH.replace('yin_yang.timer', '')).mkdir(parents=True, exist_ok=True)
             shutil.copyfile('./resources/yin_yang.timer', daemon_handler.TIMER_PATH)
             shutil.copyfile('./resources/yin_yang.service', daemon_handler.TIMER_PATH.replace('timer', 'service'))
         shutil.copyfile(daemon_handler.TIMER_PATH, daemon_handler.TIMER_PATH + '_backup')
