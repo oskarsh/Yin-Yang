@@ -5,6 +5,7 @@ from os import listdir
 from os.path import isdir, join, isfile
 from typing import Optional
 
+from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
 logger = logging.getLogger(__name__)
@@ -257,3 +258,15 @@ def get_stuff_in_dir(path: str, search_type: str) -> [str]:
         return [f for f in listdir(path) if isfile(join(path, f))]
     else:
         raise ValueError('Unknown type! Use dir or file')
+
+
+def get_qcolor_from_int(color_int: int) -> QColor:
+    # ... + 2^32 converts int to uint
+    color = QColor(QRgba64.fromArgb32(color_int + 2 ** 32))
+    return color
+
+
+def get_int_from_qcolor(color: QColor) -> int:
+    # ... - 2^32 converts uint to int
+    color_int = color.rgba64().toArgb32() - 2 ** 32
+    return color_int

@@ -2,11 +2,12 @@ import logging
 
 from PySide6 import QtWidgets
 from PySide6.QtCore import QStandardPaths
-from PySide6.QtGui import QScreen
-from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
+from PySide6.QtGui import QScreen, QColor
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog
 
 from src.ui.main_window import Ui_main_window
 
+from plugins._plugin import get_qcolor_from_int, get_int_from_qcolor
 from src.yin_yang import set_desired_theme
 from src.enums import ConfigEvent
 from src.enums import PluginKey
@@ -161,6 +162,16 @@ class MainWindow(QtWidgets.QMainWindow):
                     children: [QtWidgets.QPushButton] = widget.findChildren(QtWidgets.QDialogButtonBox)
                     children[0].clicked.connect(lambda: self.select_wallpaper(False))
                     children[1].clicked.connect(lambda: self.select_wallpaper(True))
+                elif plugin.name == 'Brave':
+                    buttons: [QtWidgets.QPushButton] = widget.findChildren(QtWidgets.QPushButton)
+                    for i in range(2):
+                        color_str = config.get_plugin_key(
+                            plugin.name,
+                            PluginKey.THEME_LIGHT.value if i == 0 else PluginKey.THEME_DARK.value)
+                        color = QColor(color_str)
+                        # dark = i == 1
+                        # FIXME only light theme changed
+                        buttons[i].clicked.connect(lambda d=i: self.select_color(d == 1, color))
         plugin = None
 
     def update_label_enabled(self):
@@ -168,7 +179,7 @@ class MainWindow(QtWidgets.QMainWindow):
         time_dark = self.ui.inp_time_dark.time().toPython()
         self.ui.label_active.setText(
             self.tr('Dark mode will be active between {} and {}.')
-                .format(time_dark.strftime("%H:%M"), time_light.strftime("%H:%M")))
+            .format(time_dark.strftime("%H:%M"), time_light.strftime("%H:%M")))
 
     def setup_config_sync(self):
         # set sunrise and sunset times if mode is set to followSun or coordinates changed
@@ -242,6 +253,13 @@ class MainWindow(QtWidgets.QMainWindow):
         inputs_wallpaper = group_wallpaper.findChildren(QtWidgets.QLineEdit)
         i = 1 if dark else 0
         inputs_wallpaper[i].setText(file_name)
+
+    def select_color(self, dark: bool, initial_color: QColor):
+        selected_color = QColorDialog.getColor(initial_color)
+        group_brave = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'groupBrave')
+        inputs_brave = group_brave.findChildren(QtWidgets.QLineEdit)
+        i = 1 if dark else 0
+        inputs_brave[i].setText(selected_color.name())
 
     def save_config_to_file(self, button):
         """Saves the config to the file or restores values"""

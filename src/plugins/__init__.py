@@ -1,4 +1,4 @@
-from plugins import konsole, gedit, only_office
+from plugins import konsole, gedit, only_office, brave
 from src.enums import Desktop
 from src.plugins import system, gtk, kvantum, wallpaper, firefox, vscode, atom, sound, notify, custom
 
@@ -14,6 +14,7 @@ def get_plugins(desktop: Desktop) -> [Plugin]:
         kvantum.Kvantum(),
         wallpaper.Wallpaper(desktop),
         firefox.Firefox(),
+        brave.Brave(),
         vscode.Vscode(),
         atom.Atom(),
         gedit.Gedit(),
