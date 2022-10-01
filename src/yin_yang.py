@@ -11,6 +11,7 @@ license: MIT
 from datetime import datetime
 import logging
 import time
+from threading import Thread
 
 from src.config import config, plugins
 
@@ -37,7 +38,8 @@ def set_mode(dark: bool, force=False):
         if config.get_plugin_key(p.name, 'enabled'):
             try:
                 logger.info(f'Changing theme in plugin {p.name}')
-                p.set_mode(dark)
+                p_thread = Thread(target=p.set_mode, args=[dark], name=p.name)
+                p_thread.start()
             except Exception as e:
                 logger.error('Error while changing theme in ' + p.name, exc_info=e)
 
