@@ -6,7 +6,7 @@ from datetime import datetime, time
 from subprocess import Popen, PIPE
 
 import communicate
-from enums import PluginKey
+from src.enums import PluginKey
 from src.config import config
 from src.yin_yang import should_be_dark
 

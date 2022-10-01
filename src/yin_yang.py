@@ -13,7 +13,7 @@ import logging
 import time
 from threading import Thread
 
-from enums import PluginKey
+from src.enums import PluginKey
 from src.config import config, plugins
 
 logger = logging.getLogger(__name__)
