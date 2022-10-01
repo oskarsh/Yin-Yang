@@ -112,12 +112,14 @@ class ConfigTest(unittest.TestCase):
                 for plugin_property in ['Enabled', 'LightTheme', 'DarkTheme']:
                     self.assertEqual(
                         old_config['wallpaper' + plugin_property],
-                        config.get_plugin_key('wallpaper', plugin_property.replace('Theme', '_theme').lower()),
+                        config.get_plugin_key(
+                            'wallpaper',
+                            plpr_str_to_enum(plugin_property.replace('Theme', '_theme').lower())),
                         'Updating old config files should apply correct values')
             case 2.2:
                 self.assertEqual(config.mode, Modes.SCHEDULED)
-                self.assertEqual(old_config['wallpaperEnabled'], config.get_plugin_key('wallpaper', 'enabled'))
-                self.assertEqual(old_config['wallpaperLightTheme'], config.get_plugin_key('wallpaper', 'light_theme'))
+                self.assertEqual(old_config['wallpaperEnabled'], config.get_plugin_key('wallpaper', PluginKey.ENABLED))
+                self.assertEqual(old_config['wallpaperLightTheme'], config.get_plugin_key('wallpaper', PluginKey.THEME_LIGHT))
 
     @unittest.skipIf(config.desktop == Desktop.UNKNOWN, 'Desktop is unsupported')
     @use_all_versions
@@ -127,13 +129,16 @@ class ConfigTest(unittest.TestCase):
                 for plugin_property in ['Enabled', 'LightTheme', 'DarkTheme']:
                     self.assertEqual(
                         old_config['wallpaper' + plugin_property],
-                        config.get_plugin_key('wallpaper', plugin_property.replace('Theme', '_theme').lower()),
+                        config.get_plugin_key(
+                            'wallpaper',
+                            plpr_str_to_enum(plugin_property.replace('Theme', '_theme').lower())),
                         'Updating old config files should apply correct values')
 
             case 2.2:
                 self.assertEqual(config.mode, Modes.SCHEDULED)
-                self.assertEqual(old_config['wallpaperEnabled'], config.get_plugin_key('wallpaper', 'enabled'))
-                self.assertEqual(old_config['wallpaperLightTheme'], config.get_plugin_key('wallpaper', 'light_theme'))
+                self.assertEqual(old_config['wallpaperEnabled'], config.get_plugin_key('wallpaper', PluginKey.ENABLED))
+                self.assertEqual(old_config['wallpaperLightTheme'],
+                                 config.get_plugin_key('wallpaper', PluginKey.THEME_LIGHT))
 
     def test_notifies_on_change(self):
         config.reset()
@@ -266,6 +271,17 @@ class ConfigTest(unittest.TestCase):
 
         self.assertNotEqual(time_light, time_light_man)
         self.assertNotEqual(time_dark, time_dark_man)
+
+
+def plpr_str_to_enum(string: str):
+    """Returns the matching enum value from a plugin property string"""
+    match string:
+        case 'enabled':
+            return PluginKey.ENABLED
+        case 'dark_theme':
+            return PluginKey.THEME_DARK
+        case 'light_theme':
+            return PluginKey.THEME_LIGHT
 
 
 if __name__ == '__main__':

@@ -81,8 +81,8 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.btn_schedule.setChecked(True)
             self.ui.location.setVisible(False)
 
-        self.ui.toggle_sound.setChecked(config.get_plugin_key(plugin='sound', key='enabled'))
-        self.ui.toggle_notification.setChecked(config.get_plugin_key(plugin='notification', key='enabled'))
+        self.ui.toggle_sound.setChecked(config.get_plugin_key('sound', PluginKey.ENABLED))
+        self.ui.toggle_notification.setChecked(config.get_plugin_key('notification', PluginKey.ENABLED))
 
         # sets the correct time based on config
         self.load_times()

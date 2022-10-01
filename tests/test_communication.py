@@ -6,6 +6,7 @@ from datetime import datetime, time
 from subprocess import Popen, PIPE
 
 import communicate
+from enums import PluginKey
 from src.config import config
 from src.yin_yang import should_be_dark
 
@@ -45,7 +46,7 @@ class CommunicationTest(unittest.TestCase):
                 self.assertTrue(time_light_unix <= time_current_unix <= time_dark_unix or
                                 time_dark_unix <= time_current_unix <= time_light_unix)
 
-    @unittest.skipUnless(config.get_plugin_key('firefox', 'Enabled'), 'Firefox plugin is disabled')
+    @unittest.skipUnless(config.get_plugin_key('firefox', PluginKey.ENABLED), 'Firefox plugin is disabled')
     def test_message_build(self):
         message = communicate.send_config('firefox')
         self.assertNotEqual(message, None,
@@ -66,14 +67,14 @@ class CommunicationTest(unittest.TestCase):
                 self.assertTrue(time_light <= time_now < time_dark or time_dark <= time_now < time_light,
                                 'Current time should always be between light and dark times')
 
-    @unittest.skipUnless(config.get_plugin_key('firefox', 'Enabled'), 'Firefox plugin is disabled')
+    @unittest.skipUnless(config.get_plugin_key('firefox', PluginKey.ENABLED), 'Firefox plugin is disabled')
     def test_encode_decode(self):
         process = Popen([sys.executable, '../communicate.py'],
                         stdin=PIPE, stdout=PIPE)
         plugins = ['firefox']
 
         for plugin in plugins:
-            if not config.get_plugin_key(plugin, 'Enabled'):
+            if not config.get_plugin_key(plugin, PluginKey.ENABLED):
                 print('Skipped test for ' + plugin)
                 continue
 

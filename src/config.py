@@ -271,7 +271,7 @@ class ConfigManager(dict):
             logger.error(f'Error while writing the file: {e}')
             return False
 
-    def get_plugin_key(self, plugin: str, key: str) -> Union[bool, str]:
+    def get_plugin_key(self, plugin: str, key: PluginKey) -> Union[bool, str]:
         """Return the given key from the config
         :param plugin: name of the plugin
         :param key: the key to change
@@ -279,7 +279,7 @@ class ConfigManager(dict):
         """
 
         plugin = plugin.casefold()
-        key = key.casefold()
+        key = key.value.casefold()
 
         return self['plugins'][plugin][key]
 
@@ -293,24 +293,24 @@ class ConfigManager(dict):
         """
 
         plugin = plugin.casefold()
-        key = key.value.casefold()
+        key_str = key.value.casefold()
 
         try:
-            old_value = self['plugins'][plugin][key]
+            old_value = self['plugins'][plugin][key_str]
             if value != old_value:
-                self['plugins'][plugin][key] = value
+                self['plugins'][plugin][key_str] = value
                 self._changed = True
                 if ConfigEvent.CHANGE in self._listeners:
                     for listener in self._listeners[ConfigEvent.CHANGE]:
                         listener.notify(ConfigEvent.CHANGE, {
-                            'key': key,
+                            'key': key_str,
                             'old_value': old_value,
                             'new_value': value,
                             'plugin': plugin
                         })
             return self.get_plugin_key(plugin, key)
         except KeyError as e:
-            logger.error(f'Error while updating {plugin}.{key}')
+            logger.error(f'Error while updating {plugin}.{key_str}')
             raise e
 
     @property
@@ -459,6 +459,6 @@ logger.info('Detected desktop:', config.desktop)
 
 # set plugin themes
 for p in filter(lambda pl: pl.available, plugins):
-    p.enabled = config.get_plugin_key(p.name, 'enabled')
-    p.theme_bright = config.get_plugin_key(p.name, 'light_theme')
-    p.theme_dark = config.get_plugin_key(p.name, 'dark_theme')
+    p.enabled = config.get_plugin_key(p.name, PluginKey.ENABLED)
+    p.theme_bright = config.get_plugin_key(p.name, PluginKey.THEME_LIGHT)
+    p.theme_dark = config.get_plugin_key(p.name, PluginKey.THEME_DARK)
