@@ -30,6 +30,9 @@ def get_theme_name(path):
     with open(path, 'r') as file:
         manifest = json.load(file)
 
+    if 'contributes' not in manifest:
+        return []
+
     # collect themes
     themes: list
     if 'themes' in manifest['contributes']:
