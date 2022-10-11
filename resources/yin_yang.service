@@ -1,0 +1,5 @@
+[Unit]
+Description=Automatic light and dark mode
+
+[Service]
+ExecStart=/usr/bin/yin-yang --systemd

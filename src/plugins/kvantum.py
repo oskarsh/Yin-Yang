@@ -16,7 +16,7 @@ class Kvantum(PluginCommandline):
         paths = ['/usr/share/Kvantum', str(Path.home()) + '/.config/Kvantum']
         themes = list()
         # At present, it seems that the function of finding themes is based
-        # on dirs, but .kvconfig. So some theme will no be recognized. This
+        # on dirs, but .kvconfig. So some theme will not be recognized. This
         # may be fixed next time
         for path in paths:
             themes = themes + get_stuff_in_dir(path, search_type='dir')

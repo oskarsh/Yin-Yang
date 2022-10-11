@@ -9,9 +9,10 @@ import sys
 import json
 import struct
 import time
-from datetime import datetime, time as datetimetime
+from datetime import datetime, time as dt_time
 from pathlib import Path
 
+from src.enums import PluginKey
 from src.config import config
 
 logging.basicConfig(filename=str(Path.home()) + '/.local/share/yin_yang.log', level=logging.DEBUG,
@@ -19,7 +20,7 @@ logging.basicConfig(filename=str(Path.home()) + '/.local/share/yin_yang.log', le
 logger = logging.getLogger(__name__)
 
 
-def _move_times(time_now: datetime, time_light: datetimetime, time_dark: datetimetime) -> list[int, int]:
+def _move_times(time_now: datetime, time_light: dt_time, time_dark: dt_time) -> list[int, int]:
     """
     Converts a time string to seconds since the epoch
     :param time_now: the current time
@@ -60,7 +61,7 @@ def send_config(plugin: str) -> dict:
     """
     logger.debug('Building message')
 
-    enabled = config.get(plugin, 'Enabled')
+    enabled = config.get_plugin_key(plugin, PluginKey.ENABLED)
     message = {
         'enabled': enabled,
         'dark_mode': config.dark_mode
@@ -71,8 +72,8 @@ def send_config(plugin: str) -> dict:
 
         message['scheduled'] = mode != 'manual'
         message['themes'] = [
-            config.get(plugin, 'light_theme'),
-            config.get(plugin, 'dark_theme')
+            config.get_plugin_key(plugin, PluginKey.THEME_LIGHT),
+            config.get_plugin_key(plugin, PluginKey.THEME_DARK)
         ]
         if message['scheduled']:
             # time string is parsed to time object

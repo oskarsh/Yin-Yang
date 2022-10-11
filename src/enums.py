@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, auto
 
 
 class Modes(Enum):
@@ -13,3 +13,14 @@ class Desktop(Enum):
     KDE = 'kde'
     GNOME = 'gnome'
     UNKNOWN = 'unknown'
+
+
+class PluginKey(Enum):
+    ENABLED = 'enabled'
+    THEME_LIGHT = 'light_theme'
+    THEME_DARK = 'dark_theme'
+
+
+class ConfigEvent(Enum):
+    CHANGE = auto()
+    SAVE = auto()

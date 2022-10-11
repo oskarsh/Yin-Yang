@@ -1,0 +1,10 @@
+[Unit]
+Description=Automatic light and dark mode
+
+[Timer]
+OnCalendar=08:00:00
+OnCalendar=20:00:00
+OnStartupSec=10
+
+[Install]
+WantedBy=timers.target

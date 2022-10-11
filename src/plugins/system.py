@@ -87,7 +87,7 @@ class _Kde(PluginCommandline):
         self.theme_light = 'org.kde.breeze.desktop'
         self.theme_dark = 'org.kde.breezedark.desktop'
 
-    def set_theme(self, theme: str) -> None:
+    def set_theme(self, theme: str):
         # TODO remove this once https://bugs.kde.org/show_bug.cgi?id=446074 is fixed
         super().set_theme(theme)
         super().set_theme(theme)
