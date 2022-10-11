@@ -35,7 +35,7 @@ Translations: [🇨🇳](README_zh.md)
 To install Yin-Yang, copy the command below:
 
 ```bash
-git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./install.sh
+git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./scripts/install.sh
 ```
 
 and follow the onscreen Instructions.
