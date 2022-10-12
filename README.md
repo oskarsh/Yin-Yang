@@ -1,65 +1,53 @@
-<div style="text-align: center">
+# ![Yin & Yang logo](resources/logo.svg) Yin-Yang
 
-![Yin and yang](resources/logo.svg)
 
-# Yin-Yang
+Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie 
+and also themes your favourite editors like VSCode or Atom.
 
-</div>
+> Translations: [🇨🇳](README_zh.md)
 
-Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes your favourite editors
-like VSCode or Atom.
-
-Translations: [🇨🇳](README_zh.md)
-
-![](https://img.shields.io/badge/Plasma-5.21-blue)
-![](https://img.shields.io/badge/Yin&Yang-2.0-blue)
-![](https://img.shields.io/badge/License-MIT-blue)
-![](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)
+![](https://img.shields.io/github/v/release/oskarsh/yin-yang)
+![](https://img.shields.io/github/v/release/oskarsh/yin-yang?include_prereleases)
+![](https://img.shields.io/github/downloads/oskarsh/yin-yang/total)
 ![](https://img.shields.io/badge/Build%20with-Python-yellow)
+![](https://img.shields.io/github/license/oskarsh/yin-yang)
 
 ![](.github/images/header.png)
 
 ## Features
 
-* Adjust theme based on Time or Sunset
-* Works on Gnome, Budgie and KDE
-* Toggles theme from light to dark
-* Supports VSCode
-* Supports Atom
-* Supports Wallpaper change based on theme
-* Toggle themes based on given time
-* Supports changing theme based on sunrise and sunset
+![](.github/images/settings.png)
+
+* Changes your themes at certain times or sunrise and sunset
+* Supported Desktops:
+  * Gnome
+  * Budgie
+  * KDE Plasma
+* Supported applications:
+  * VSCode
+  * Atom
+* Miscellaneous:
+  * Wallpaper change
+  * Notifications on theme change
+  * Play a sound
+
+> To see planned features and the development status, visit the [project status page](https://github.com/oskarsh/Yin-Yang/projects?type=classic).
 
 ## Installation
 
-To install Yin-Yang, copy the command below:
+To install Yin-Yang, copy and run the command below and follow the instructions:
 
 ```bash
 git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./scripts/install.sh
 ```
 
-and follow the onscreen Instructions.
-
-You will need some dependencies for the installation process to work correctly, check the Wiki for what is needed:
-[![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
-
-![](.github/images/settings.png)
+Additionally, you need to have systemd installed on your system.
 
 ## Documentation
 
-Want to know more? Visit the Wiki and read about Installation, Building, Troubleshooting and more.
+Want to help out? Check out the wiki to learn how to contribute translations, plugins and more!
 
 [![Generic badge](https://img.shields.io/badge/Visit-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
-
-## Wallpapers
-
-Yin-Yang comes with custom-made wallpapers in order to get you started with Light / Dark Wallpapers, you can check out
-the repository here:
-
-The Wallpapers are open source and can be used however you want. I also accept contributions in the form of open source
-Wallpapers, see the [contribution Section](https://github.com/oskarsh/Yin-Yang/wiki/Supporting-Yin-Yang#create-yin-yang-wallpapers).
-
-[![Generic badge](https://img.shields.io/badge/Get-Wallpapers-BLUE.svg)](https://github.com/oskarsh/Wallpaper-yin-yang)
 
 ## Thanks to all Contributors
 
