@@ -41,7 +41,7 @@ To install Yin-Yang, copy and run the command below and follow the instructions:
 git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./scripts/install.sh
 ```
 
-Additionally, you need to have systemd installed on your system.
+Additionally, you need to have systemd and python-systemd installed on your system.
 
 ## Documentation
 
