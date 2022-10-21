@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from PySide6.QtGui import QColor
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QPushButton
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QPushButton, QStyle
 
 from src.plugins._plugin import Plugin, get_int_from_qcolor
 
@@ -25,15 +25,20 @@ class Brave(Plugin):
     def get_input(self, widget):
         widgets = []
 
-        for theme in ['Light', 'Dark']:
+        for dark_theme in [False, True]:
             grp = QWidget(widget)
             horizontal_layout = QVBoxLayout(grp)
 
             line = QLineEdit(grp)
+            color_str = self.theme_dark if dark_theme else self.theme_light
+            line.setText(color_str)
+            color = QColor(color_str)
+            line.setStyleSheet(f'background-color: {color_str};'
+                               f' color: {"white" if color.lightness() <= 128 else "black"}')
             horizontal_layout.addWidget(line)
 
             btn = QPushButton()
-            btn.setText(f'Pick {theme} color')
+            btn.setText(f'Pick {"dark" if dark_theme else "light"} color')
             horizontal_layout.addWidget(btn)
 
             widgets.append(grp)

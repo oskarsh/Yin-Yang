@@ -125,7 +125,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
             widget.toggled.connect(
                 lambda enabled, p=plugin:
-                    config.update_plugin_key(p.name, PluginKey.ENABLED, enabled))
+                config.update_plugin_key(p.name, PluginKey.ENABLED, enabled))
 
             if plugin.available_themes:
                 # uses combobox instead of line edit
@@ -149,14 +149,14 @@ class MainWindow(QtWidgets.QMainWindow):
                     children[1].clicked.connect(lambda: self.select_wallpaper(True))
                 elif plugin.name == 'Brave':
                     buttons: [QtWidgets.QPushButton] = widget.findChildren(QtWidgets.QPushButton)
-                    for i in range(2):
-                        color_str = config.get_plugin_key(
-                            plugin.name,
-                            PluginKey.THEME_LIGHT.value if i == 0 else PluginKey.THEME_DARK.value)
-                        color = QColor(color_str)
-                        # dark = i == 1
-                        # FIXME only light theme changed
-                        buttons[i].clicked.connect(lambda d=i: self.select_color(d == 1, color))
+                    # this could be a loop, but it didn't work somehow
+                    color_str_0 = config.get_plugin_key(plugin.name, PluginKey.THEME_LIGHT.value)
+                    color_0 = QColor(color_str_0)
+                    buttons[0].clicked.connect(lambda: self.select_color(False, color_0))
+
+                    color_str_1 = config.get_plugin_key(plugin.name, PluginKey.THEME_DARK.value)
+                    color_1 = QColor(color_str_1)
+                    buttons[1].clicked.connect(lambda: self.select_color(True, color_1))
         plugin = None
 
     def update_label_enabled(self):
@@ -245,6 +245,8 @@ class MainWindow(QtWidgets.QMainWindow):
         inputs_brave = group_brave.findChildren(QtWidgets.QLineEdit)
         i = 1 if dark else 0
         inputs_brave[i].setText(selected_color.name())
+        inputs_brave[i].setStyleSheet(f'background-color: {selected_color.name()};'
+                                      f' color: {"white" if selected_color.lightness() <= 128 else "black"}')
 
     def save_config_to_file(self, button):
         """Saves the config to the file or restores values"""
