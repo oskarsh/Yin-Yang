@@ -123,38 +123,23 @@ class MainWindow(QtWidgets.QMainWindow):
 
             assert widget is not None, f'No widget for plugin {plugin.name} found'
 
-            widget.setChecked(plugin.enabled)
             widget.toggled.connect(
                 lambda enabled, p=plugin:
                     config.update_plugin_key(p.name, PluginKey.ENABLED, enabled))
-            widget.setVisible(plugin.available)
 
             if plugin.available_themes:
                 # uses combobox instead of line edit
-                # set the index
                 for child in widget.findChildren(QtWidgets.QComboBox):
-                    is_dark_checkbox: bool = widget.findChildren(QtWidgets.QComboBox).index(child) == 1
-                    used_theme: str = plugin.theme_dark if is_dark_checkbox else plugin.theme_light
-                    index: int
-                    if used_theme == '':
-                        logger.debug(f'Used theme is unknown for plugin {plugin.name}')
-                        index = 0
-                    else:
-                        index = child.findText(
-                            plugin.available_themes[used_theme]
-                        )
-                    child.setCurrentIndex(index)
+                    is_dark: bool = widget.findChildren(QtWidgets.QComboBox).index(child) == 1
                     child.currentTextChanged.connect(
-                        lambda text, p=plugin: config.update_plugin_key(
+                        lambda text, p=plugin, dark=is_dark: config.update_plugin_key(
                             p.name,
-                            PluginKey.THEME_DARK if is_dark_checkbox else PluginKey.THEME_LIGHT,
+                            PluginKey.THEME_DARK if dark else PluginKey.THEME_LIGHT,
                             reverse_dict_search(p.available_themes, text)))
             else:
                 children: [QtWidgets.QLineEdit] = widget.findChildren(QtWidgets.QLineEdit)
-                children[0].setText(plugin.theme_light)
                 children[0].textChanged.connect(
                     lambda text, p=plugin: config.update_plugin_key(p.name, PluginKey.THEME_LIGHT, text))
-                children[1].setText(plugin.theme_dark)
                 children[1].textChanged.connect(
                     lambda text, p=plugin: config.update_plugin_key(p.name, PluginKey.THEME_DARK, text))
 

@@ -67,6 +67,8 @@ class Plugin(ABC):
         widget = QGroupBox(area)
         widget.setTitle(self.name)
         widget.setCheckable(True)
+        widget.setChecked(self.enabled)
+        widget.setVisible(self.available)
         widget.setObjectName('group' + self.name)
 
         horizontal_layout = QHBoxLayout(widget)
@@ -85,19 +87,29 @@ class Plugin(ABC):
             inputs = [QComboBox(widget), QComboBox(widget)]
 
             # add all theme names
-            for inp in inputs:
+            for i, inp in enumerate(inputs):
+                inp: QComboBox
                 themes = list(self.available_themes.values())
                 themes.sort()
-                for theme in themes:
-                    inp.addItem(theme)
+                inp.addItems(themes)
+                # set index
+                is_dark = i == 1
+                theme: str = self.theme_dark if is_dark else self.theme_light
+                if theme == '':
+                    logger.warn(f'Used theme is unknown for plugin {self.name}')
+                    inp.setCurrentIndex(0)
+                else:
+                    inp.setCurrentIndex(themes.index(self.available_themes[theme]))
 
             return inputs
 
-        for theme in ['Light', 'Dark']:
+        for is_dark in [False, True]:
+            theme = 'Dark' if is_dark else 'Light'
             # provide a line edit, if the possible themes are unknown
-            inp = QLineEdit(widget)
+            inp: QLineEdit = QLineEdit(widget)
             inp.setObjectName(f'inp_{theme}')
             inp.setPlaceholderText(f'{theme} Theme')
+            inp.setText(self.theme_dark if is_dark else self.theme_light)
             inputs.append(inp)
 
         return inputs
