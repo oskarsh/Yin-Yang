@@ -1,4 +1,5 @@
 import json
+from os.path import isfile
 from pathlib import Path
 
 from PySide6.QtGui import QColor
@@ -44,3 +45,7 @@ class Brave(Plugin):
             widgets.append(grp)
 
         return widgets
+
+    @property
+    def available(self) -> bool:
+        return isfile(PATH)

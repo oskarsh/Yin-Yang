@@ -1,4 +1,5 @@
 import os
+from os.path import isdir
 from xml.etree import ElementTree
 
 from src.plugins._plugin import PluginCommandline
@@ -17,6 +18,9 @@ class Gedit(PluginCommandline):
 
     @property
     def available_themes(self) -> dict:
+        if not isdir(path):
+            return {}
+
         themes = {}
         with os.scandir(path) as entries:
             for file in (f.path for f in entries if f.is_file() and not f.name.endswith('.rng')):

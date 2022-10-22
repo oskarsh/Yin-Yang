@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+from os.path import isfile
 from pathlib import Path
 
 from src.plugins._plugin import Plugin
@@ -20,6 +21,10 @@ class OnlyOffice(Plugin):
 
         with open(config_path, 'w') as file:
             config.write(file)
+
+    @property
+    def available(self) -> bool:
+        return isfile(config_path)
 
     @property
     def available_themes(self) -> dict:
