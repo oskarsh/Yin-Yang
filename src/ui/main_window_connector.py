@@ -250,18 +250,21 @@ class MainWindow(QtWidgets.QMainWindow):
     def save_config_to_file(self, button):
         """Saves the config to the file or restores values"""
 
-        button = QDialogButtonBox.standardButton(self.ui.btn_box, button)
-        if button == QDialogButtonBox.Apply:
-            success = config.save()
-            set_desired_theme(True)
-            return success
-        elif button == QDialogButtonBox.RestoreDefaults:
-            config.reset()
-            self.load()
-        elif button == QDialogButtonBox.Cancel:
-            self.close()
-        else:
-            raise ValueError(f'Unknown button {button}')
+        match button:
+            case QDialogButtonBox.Apply:
+                success = config.save()
+                set_desired_theme(True)
+                return success
+            case QDialogButtonBox.RestoreDefaults:
+                config.reset()
+                self.load()
+            case QDialogButtonBox.Cancel:
+                self.close()
+            case QDialogButtonBox.NoButton:
+                raise ValueError(f'Unknown button {button}')
+            case _:
+                button = QDialogButtonBox.standardButton(self.ui.btn_box, button)
+                return self.save_config_to_file(button)
 
     def should_close(self) -> bool:
         """Returns true if the user wants to close the application"""
