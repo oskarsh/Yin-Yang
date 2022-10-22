@@ -27,5 +27,4 @@ class Gedit(PluginCommandline):
                 theme_id = attributes.get('id')
                 themes[theme_id] = name if name is not None else theme_id
 
-
         return themes
