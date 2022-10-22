@@ -135,10 +135,7 @@ class PluginCommandline(Plugin):
 
         # insert theme in command and run it
         command = self.insert_theme(theme)
-        result = subprocess.run(command)
-
-        if result.returncode != 0:
-            raise ValueError('Command execution failed:', result.stderr)
+        subprocess.check_call(command)
 
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
