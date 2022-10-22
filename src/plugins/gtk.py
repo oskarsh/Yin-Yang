@@ -49,8 +49,8 @@ class _Gnome(PluginCommandline):
 
     def __init__(self):
         super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
-        self.theme_light = 'Adwaita'
-        self.theme_dark = 'Adwaita-dark'
+        self.theme_light = 'Default'
+        self.theme_dark = 'Default'
 
     @property
     def available(self) -> bool:
