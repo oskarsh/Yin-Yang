@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 from src.config import config, ConfigWatcher
-from src.enums import Desktop, Modes, PluginKey, ConfigEvent
+from src.meta import Desktop, Modes, PluginKey, ConfigEvent
 
 config_path = f"{Path.home()}/.config/yin_yang/yin_yang_dev.json"
 

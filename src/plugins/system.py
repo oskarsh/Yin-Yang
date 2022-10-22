@@ -6,7 +6,7 @@ import os
 
 from PySide6.QtCore import QLocale
 
-from src.enums import Desktop
+from src.meta import Desktop
 from src.plugins._plugin import PluginDesktopDependent, PluginCommandline
 
 logger = logging.getLogger(__name__)

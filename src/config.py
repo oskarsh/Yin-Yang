@@ -14,7 +14,7 @@ from typing import Union, Optional
 
 from suntime import Sun, SunTimeException
 from src.plugins import get_plugins
-from src.enums import Modes, Desktop, PluginKey, ConfigEvent
+from src.meta import Modes, Desktop, PluginKey, ConfigEvent
 
 logger = logging.getLogger(__name__)
 

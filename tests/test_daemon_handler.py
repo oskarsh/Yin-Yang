@@ -5,7 +5,7 @@ from datetime import time
 
 from src import daemon_handler
 from src.config import config
-from src.enums import Modes, ConfigEvent
+from src.meta import Modes, ConfigEvent
 
 
 class DaemonTest(unittest.TestCase):

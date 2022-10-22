@@ -4,7 +4,7 @@ from enum import Enum, auto
 from pathlib import Path
 
 from src.config import ConfigWatcher
-from src.enums import ConfigEvent, Modes
+from src.meta import ConfigEvent, Modes
 
 logger = logging.getLogger(__name__)
 TIMER_PATH = str(Path.home()) + '/.local/share/systemd/user/yin_yang.timer'

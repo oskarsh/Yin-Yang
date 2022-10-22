@@ -1,4 +1,4 @@
-from src.enums import Desktop
+from src.meta import Desktop
 from src.plugins import system, gtk, kvantum, wallpaper, custom
 from src.plugins import firefox, brave, gedit, only_office
 from src.plugins import vscode, atom, konsole

@@ -2,7 +2,7 @@ import logging
 from configparser import ConfigParser
 from pathlib import Path
 
-from src.enums import Desktop
+from src.meta import Desktop
 from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
 from .system import test_gnome_availability
 

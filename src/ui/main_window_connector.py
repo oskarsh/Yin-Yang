@@ -8,8 +8,8 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColor
 from src.ui.main_window import Ui_main_window
 
 from src.yin_yang import set_desired_theme
-from src.enums import ConfigEvent
-from src.enums import PluginKey
+from src.meta import ConfigEvent
+from src.meta import PluginKey
 from src.config import config, Modes, plugins, ConfigWatcher
 
 logger = logging.getLogger(__name__)

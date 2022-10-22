@@ -8,6 +8,8 @@ from typing import Optional
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
+from src.meta import UnsupportedDesktopError
+
 logger = logging.getLogger(__name__)
 
 
@@ -164,7 +166,7 @@ class PluginDesktopDependent(Plugin):
         self._strategy_instance = strategy_instance
 
         if strategy_instance is None:
-            logger.warning('Unsupported desktop environment!')
+            logger.warning(f'Plugin {self.name} has no support for your desktop environment yet!')
 
     @property
     def strategy(self) -> Plugin:
@@ -172,12 +174,12 @@ class PluginDesktopDependent(Plugin):
 
     @property
     def enabled(self):
-        return self._strategy_instance.enabled if self._strategy_instance is not None else False
+        return self.strategy.enabled if self.strategy is not None else False
 
     @enabled.setter
     def enabled(self, value):
-        if self._strategy_instance is not None:
-            self._strategy_instance.enabled = value
+        if self.strategy is not None:
+            self.strategy.enabled = value
 
     @property
     def available(self) -> bool:
@@ -190,33 +192,38 @@ class PluginDesktopDependent(Plugin):
         if not (self.available and self.enabled):
             return
 
+        if self.strategy is None:
+            raise UnsupportedDesktopError
+
         self.strategy.set_theme(theme)
 
     @property
     def available_themes(self) -> dict:
-        return self.strategy.available_themes
+        if self.strategy is not None:
+            return self.strategy.available_themes
+        return {}
 
     @property
     def theme_light(self):
-        if self._strategy_instance is not None:
-            return self._strategy_instance.theme_light
+        if self.strategy is not None:
+            return self.strategy.theme_light
         return ''
 
     @theme_light.setter
     def theme_light(self, value):
-        if self._strategy_instance is not None:
-            self._strategy_instance.theme_light = value
+        if self.strategy is not None:
+            self.strategy.theme_light = value
 
     @property
     def theme_dark(self):
-        if self._strategy_instance is not None:
-            return self._strategy_instance.theme_dark
+        if self.strategy is not None:
+            return self.strategy.theme_dark
         return ''
 
     @theme_dark.setter
     def theme_dark(self, value):
-        if self._strategy_instance is not None:
-            self._strategy_instance.theme_dark = value
+        if self.strategy is not None:
+            self.strategy.theme_dark = value
 
 
 class ExternalPlugin(Plugin):

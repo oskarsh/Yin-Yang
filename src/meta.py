@@ -25,3 +25,7 @@ class PluginKey(Enum):
 class ConfigEvent(Enum):
     CHANGE = auto()
     SAVE = auto()
+
+
+class UnsupportedDesktopError(NotImplementedError):
+    pass

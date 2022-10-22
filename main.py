@@ -11,7 +11,7 @@ from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 from systemd import journal
 
 from src import daemon_handler
-from src.enums import ConfigEvent
+from src.meta import ConfigEvent
 from src import yin_yang
 from src.config import config, Modes
 from src.ui import main_window_connector
