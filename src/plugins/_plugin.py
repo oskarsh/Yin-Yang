@@ -1,13 +1,12 @@
 import logging
 import subprocess
 from abc import ABC, abstractmethod
-from os import scandir
-from typing import Optional, Iterator
+from typing import Optional
 
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
-from src.meta import UnsupportedDesktopError, ItemType
+from src.meta import UnsupportedDesktopError
 
 logger = logging.getLogger(__name__)
 
@@ -258,22 +257,6 @@ def inplace_change(filename: str, old_string: str, new_string: str):
     with open(filename, 'w') as file:
         file_content = file_content.replace(old_string, new_string)
         file.write(file_content)
-
-
-def get_stuff_in_dir(path: str, search_type: ItemType) -> Iterator[str]:
-    """Returns all files or directories in the path
-    :param path: The path where to search
-    :param search_type: The type. Either dir (a directory) or file
-    """
-    # source: https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
-    # TODO replace with generator
-    match search_type:
-        case ItemType.DIRECTORY:
-            return (f.name for f in scandir(path) if f.is_dir())
-        case ItemType.FILE:
-            return (f.name for f in scandir(path) if f.is_file())
-        case ItemType.BOTH:
-            return (f.name for f in scandir(path))
 
 
 def get_qcolor_from_int(color_int: int) -> QColor:

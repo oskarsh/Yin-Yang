@@ -1,7 +1,7 @@
 import itertools
+from os import scandir
 
-from src.meta import ItemType
-from src.plugins._plugin import PluginCommandline, get_stuff_in_dir
+from src.plugins._plugin import PluginCommandline
 from pathlib import Path
 
 
@@ -20,9 +20,11 @@ class Kvantum(PluginCommandline):
         # At present, it seems that the function of finding themes is based
         # on dirs, but .kvconfig. So some theme will not be recognized. This
         # may be fixed next time
-        themes = list(itertools.chain(
-            *(get_stuff_in_dir(path, search_type=ItemType.DIRECTORY) for path in paths)
-        ))
+        themes = []
+        for path in paths:
+            with scandir(path) as entries:
+                themes = list(itertools.chain(themes, (f.name for f in entries if f.is_dir())))
+
         themes_dict: dict = {}
         assert len(themes) > 0, 'No themes were found'
 

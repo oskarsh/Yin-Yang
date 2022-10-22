@@ -4,8 +4,7 @@ import logging
 from os.path import isdir
 from pathlib import Path
 
-from src.meta import ItemType
-from ._plugin import Plugin, get_stuff_in_dir
+from ._plugin import Plugin
 
 logger = logging.getLogger(__name__)
 
@@ -100,16 +99,15 @@ class Vscode(Plugin):
             return themes_dict
 
         for path in filter(isdir, EXTENSION_PATHS):
-            extension_dirs = get_stuff_in_dir(path, search_type=ItemType.DIRECTORY)
+            with os.scandir(path) as entries:
+                for d in entries:
+                    # filter for a dir that doesn't seem to be an extension
+                    # since it has no manifest
+                    if not d.is_dir() or d.name == 'node_modules':
+                        continue
 
-            for extension_dir in extension_dirs:
-                # filter for a dir that doesn't seem to be an extension
-                # since it has no manifest
-                if extension_dir == 'node_modules':
-                    continue
-
-                for theme_name in get_theme_name(f'{path}/{extension_dir}/package.json'):
-                    themes_dict[theme_name] = theme_name
+                    for theme_name in get_theme_name(f'{d.path}/package.json'):
+                        themes_dict[theme_name] = theme_name
 
         assert themes_dict != {}, 'No themes found'
         return themes_dict

@@ -1,10 +1,10 @@
 import logging
 from configparser import ConfigParser
+from os import scandir
 from os.path import isdir
 from pathlib import Path
 
-from src.meta import ItemType
-from src.plugins._plugin import Plugin, get_stuff_in_dir
+from src.plugins._plugin import Plugin
 
 logger = logging.getLogger(__name__)
 
@@ -22,9 +22,8 @@ class Konsole(Plugin):
         # leave casing as is
         config.optionxform = str
         user_path = str(Path.home()) + '/.local/share/konsole'
-        files = get_stuff_in_dir(user_path, search_type=ItemType.FILE)
-        # only take profiles
-        files = [user_path + '/' + f for f in files if f.endswith('.profile')]
+        with scandir(user_path) as entries:
+            files = [f.path for f in entries if f.is_file() and f.name.endswith('.profile')]
 
         assert len(files) > 0, 'No profiles found!'
 
@@ -60,8 +59,10 @@ class Konsole(Plugin):
         if not self.available:
             return {}
 
-        themes_machine = get_stuff_in_dir(self.global_path, search_type=ItemType.FILE)
-        themes_machine = [theme.replace('.colorscheme', '') for theme in themes_machine if theme.endswith('.colorscheme')]
+        with scandir(self.global_path) as entries:
+            themes_machine = list(
+                f.name.replace('.colorscheme', '') for f in entries
+                if f.is_file() and f.name.endswith('.colorscheme'))
         themes_machine.sort()
 
         themes_dict = {}
