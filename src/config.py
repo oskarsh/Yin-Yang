@@ -325,7 +325,7 @@ class ConfigManager(dict):
                 case _:
                     raise KeyError
 
-            return self.get_plugin_key(plugin_name_lower, key_value)
+            return self.get_plugin_key(plugin_name_lower, key)
         except KeyError as e:
             logger.error(f'Error while updating {plugin_name_lower}.{key_value}')
             raise e

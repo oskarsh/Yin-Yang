@@ -149,11 +149,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 elif plugin.name == 'Brave':
                     buttons: [QtWidgets.QPushButton] = widget.findChildren(QtWidgets.QPushButton)
                     # this could be a loop, but it didn't work somehow
-                    color_str_0 = config.get_plugin_key(plugin.name, PluginKey.THEME_LIGHT.value)
+                    color_str_0 = config.get_plugin_key(plugin.name, PluginKey.THEME_LIGHT)
                     color_0 = QColor(color_str_0)
                     buttons[0].clicked.connect(lambda: self.select_color(False, color_0))
 
-                    color_str_1 = config.get_plugin_key(plugin.name, PluginKey.THEME_DARK.value)
+                    color_str_1 = config.get_plugin_key(plugin.name, PluginKey.THEME_DARK)
                     color_1 = QColor(color_str_1)
                     buttons[1].clicked.connect(lambda: self.select_color(True, color_1))
         plugin = None
