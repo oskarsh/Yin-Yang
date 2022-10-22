@@ -21,7 +21,7 @@ def test_gnome_availability(command) -> bool:
             [command[0], 'get', command[2], command[3]],
             stdout=subprocess.DEVNULL
         )
-        return process.stdout == 0
+        return process.returncode == 0
     except FileNotFoundError:
         # if no such command is available, the plugin is not available
         return False
