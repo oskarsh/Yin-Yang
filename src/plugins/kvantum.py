@@ -25,12 +25,10 @@ class Kvantum(PluginCommandline):
             with scandir(path) as entries:
                 themes = list(itertools.chain(themes, (f.name for f in entries if f.is_dir())))
 
-        themes_dict: dict = {}
         assert len(themes) > 0, 'No themes were found'
 
         themes.sort()
-        for theme in themes:
-            themes_dict[theme] = theme
+        themes_dict = {t: t for t in themes}
 
         assert themes_dict != {}, 'No themes found!'
         return themes_dict
