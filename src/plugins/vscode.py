@@ -101,12 +101,13 @@ class Vscode(Plugin):
 
         for path in filter(isdir, EXTENSION_PATHS):
             extension_dirs = get_stuff_in_dir(path, search_type=ItemType.DIRECTORY)
-            # filter for a dir that doesn't seem to be an extension
-            # since it has no manifest
-            if 'node_modules' in extension_dirs:
-                extension_dirs.pop(extension_dirs.index('node_modules'))
 
             for extension_dir in extension_dirs:
+                # filter for a dir that doesn't seem to be an extension
+                # since it has no manifest
+                if extension_dir == 'node_modules':
+                    continue
+
                 for theme_name in get_theme_name(f'{path}/{extension_dir}/package.json'):
                     themes_dict[theme_name] = theme_name
 

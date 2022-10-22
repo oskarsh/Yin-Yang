@@ -1,9 +1,8 @@
 import logging
 import subprocess
 from abc import ABC, abstractmethod
-from os import listdir
-from os.path import isdir, join, isfile
-from typing import Optional
+from os import scandir
+from typing import Optional, Iterator
 
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
@@ -98,7 +97,7 @@ class Plugin(ABC):
                 is_dark = i == 1
                 theme: str = self.theme_dark if is_dark else self.theme_light
                 if theme == '':
-                    logger.warn(f'Used theme is unknown for plugin {self.name}')
+                    logger.warning(f'Used theme is unknown for plugin {self.name}')
                     inp.setCurrentIndex(0)
                 else:
                     inp.setCurrentIndex(themes.index(self.available_themes[theme]))
@@ -261,7 +260,7 @@ def inplace_change(filename: str, old_string: str, new_string: str):
         file.write(file_content)
 
 
-def get_stuff_in_dir(path: str, search_type: ItemType) -> [str]:
+def get_stuff_in_dir(path: str, search_type: ItemType) -> Iterator[str]:
     """Returns all files or directories in the path
     :param path: The path where to search
     :param search_type: The type. Either dir (a directory) or file
@@ -270,9 +269,11 @@ def get_stuff_in_dir(path: str, search_type: ItemType) -> [str]:
     # TODO replace with generator
     match search_type:
         case ItemType.DIRECTORY:
-            return [f for f in listdir(path) if isdir(join(path, f))]
+            return (f.name for f in scandir(path) if f.is_dir())
         case ItemType.FILE:
-            return [f for f in listdir(path) if isfile(join(path, f))]
+            return (f.name for f in scandir(path) if f.is_file())
+        case ItemType.BOTH:
+            return (f.name for f in scandir(path))
 
 
 def get_qcolor_from_int(color_int: int) -> QColor:

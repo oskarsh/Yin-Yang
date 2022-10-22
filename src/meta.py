@@ -30,6 +30,7 @@ class ConfigEvent(Enum):
 class ItemType(Enum):
     DIRECTORY = auto()
     FILE = auto()
+    BOTH = auto()
 
 
 class UnsupportedDesktopError(NotImplementedError):
