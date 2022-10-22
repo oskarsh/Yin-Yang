@@ -1,4 +1,5 @@
 import logging
+import subprocess
 
 from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
@@ -19,6 +20,8 @@ class Wallpaper(PluginDesktopDependent):
                 super().__init__(_Kde())
             case Desktop.GNOME:
                 super().__init__(_Gnome())
+            case Desktop.XFCE:
+                super().__init__(_Xfce())
             case _:
                 super().__init__(None)
 
@@ -83,5 +86,13 @@ class _Kde(Plugin):
 
     @property
     def available(self) -> bool:
-        # the script change_wallpaper comes with this tool, so we can except that it is available
         return True
+
+
+class _Xfce(PluginCommandline):
+    def __init__(self):
+        # first, get all monitors
+        properties = str(subprocess.check_output(['xfconf-query', '-c', 'xfce4-desktop', '-l']))
+        monitor = next(p for p in properties.split('\\n') if p.endswith('/workspace0/last-image'))
+
+        super().__init__(['xfconf-query', '-c', 'xfce4-desktop', '-p', monitor, '-s', '{theme}'])
