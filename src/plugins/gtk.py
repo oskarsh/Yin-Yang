@@ -1,12 +1,16 @@
 import logging
 from configparser import ConfigParser
+from os import scandir, path
 from pathlib import Path
 
 from src.meta import Desktop
-from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
-from .system import test_gnome_availability
+from src.plugins._plugin import PluginDesktopDependent, Plugin, PluginCommandline
+from src.plugins.system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
+
+
+theme_directories = ['/usr/share/themes', f'{Path.home()}/.themes']
 
 
 class Gtk(PluginDesktopDependent):
@@ -25,6 +29,19 @@ class Gtk(PluginDesktopDependent):
                 super().__init__(_Xfce())
             case _:
                 super().__init__(None)
+
+    @property
+    def available_themes(self) -> dict:
+        themes = []
+
+        for directory in theme_directories:
+            if not path.isdir(directory):
+                continue
+
+            with scandir(directory) as entries:
+                themes.extend(d.name for d in entries if d.is_dir() and path.isdir(d.path + '/gtk-3.0'))
+
+        return {t: t for t in themes}
 
 
 class _Gnome(PluginCommandline):
