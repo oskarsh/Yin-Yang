@@ -34,8 +34,6 @@ class System(PluginDesktopDependent):
                 super().__init__(_Kde())
             case Desktop.GNOME:
                 super().__init__(_Gnome())
-            case Desktop.XFCE:
-                super().__init__(_Xfce())
             case _:
                 super().__init__(None)
 
@@ -130,8 +128,3 @@ class _Kde(PluginCommandline):
                         self.translations[long_name] = long_name
 
         return self.translations
-
-
-class _Xfce(PluginCommandline):
-    def __init__(self):
-        super(_Xfce, self).__init__(['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName', '-s', '{theme}'])

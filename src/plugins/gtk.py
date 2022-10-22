@@ -21,6 +21,8 @@ class Gtk(PluginDesktopDependent):
                 if not self.strategy.available:
                     print('You need to install an extension for gnome to use it. \n'
                           'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
+            case Desktop.XFCE:
+                super().__init__(_Xfce())
             case _:
                 super().__init__(None)
 
@@ -55,3 +57,8 @@ class _Kde(Plugin):
 
             with open(config_file, "w") as file:
                 conf.write(file)
+
+
+class _Xfce(PluginCommandline):
+    def __init__(self):
+        super(_Xfce, self).__init__(['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName', '-s', '{theme}'])
