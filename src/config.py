@@ -279,34 +279,49 @@ class ConfigManager(dict):
 
         return self['plugins'][plugin][key]
 
-    def update_plugin_key(self, plugin: str, key: PluginKey, value: Union[bool, str]) -> Union[bool, str]:
+    def update_plugin_key(self, plugin_name: str, key: PluginKey, value: Union[bool, str]) -> Union[bool, str]:
         """Update the value of a key in configuration
         :param key: The setting to change
         :param value: The value to set the setting to
-        :param plugin: Name of the plugin you may want to change
+        :param plugin_name: Name of the plugin you may want to change
 
         :returns: new value
         """
 
-        plugin = plugin.casefold()
-        key = key.value.casefold()
+        plugin_name_lower = plugin_name.casefold()
+        key_value = key.value.casefold()
 
         try:
-            old_value = self['plugins'][plugin][key]
-            if value != old_value:
-                self['plugins'][plugin][key] = value
-                self._changed = True
-                if ConfigEvent.CHANGE in self._listeners:
-                    for listener in self._listeners[ConfigEvent.CHANGE]:
-                        listener.notify(ConfigEvent.CHANGE, {
-                            'key': key,
-                            'old_value': old_value,
-                            'new_value': value,
-                            'plugin': plugin
-                        })
-            return self.get_plugin_key(plugin, key)
+            old_value = self['plugins'][plugin_name_lower][key_value]
+            if value == old_value:
+                return value
+
+            self['plugins'][plugin_name_lower][key_value] = value
+            self._changed = True
+            if ConfigEvent.CHANGE in self._listeners:
+                for listener in self._listeners[ConfigEvent.CHANGE]:
+                    listener.notify(ConfigEvent.CHANGE, {
+                        'key': key_value,
+                        'old_value': old_value,
+                        'new_value': value,
+                        'plugin': plugin_name_lower
+                    })
+
+            # change value in the plugin
+            plugin = next(p for p in plugins if p.name.casefold() == plugin_name_lower)
+            match key:
+                case PluginKey.ENABLED:
+                    plugin.enabled = value
+                case PluginKey.THEME_LIGHT:
+                    plugin.theme_light = value
+                case PluginKey.THEME_DARK:
+                    plugin.theme_dark = value
+                case _:
+                    raise KeyError
+
+            return self.get_plugin_key(plugin_name_lower, key_value)
         except KeyError as e:
-            logger.error(f'Error while updating {plugin}.{key}')
+            logger.error(f'Error while updating {plugin_name_lower}.{key_value}')
             raise e
 
     @property
