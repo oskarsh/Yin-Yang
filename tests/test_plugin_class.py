@@ -1,21 +1,21 @@
 import unittest
-from typing import Optional
 
-from src.plugins._plugin import PluginCommandline, Plugin
+from PySide6.QtGui import QColor
+
+from src.plugins._plugin import PluginCommandline, Plugin, get_qcolor_from_int, get_int_from_qcolor
 
 
 class MinimalPlugin(Plugin):
     def __init__(self, theme_dark, theme_light):
+        super().__init__()
         self._theme_dark_value = theme_dark
         self._theme_light_value = theme_light
         self._enabled_value = True
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def set_theme(self, theme: str):
         print(f'Changing to theme {theme}')
         if not (self.enabled and self.available):
             return
-
-        return theme
 
     @property
     def theme_dark(self) -> str:
@@ -42,7 +42,7 @@ class MinimalPlugin(Plugin):
         self._enabled_value = value
 
 
-class TestPluginCommandLine(PluginCommandline):
+class PluginCommandlineTest(PluginCommandline):
     def __init__(self, command: list, theme_dark: str = None, theme_light: str = None):
         super().__init__(command)
         self._theme_light_value = theme_light
@@ -96,24 +96,39 @@ class GenericTest(unittest.TestCase):
 
 class CommandlineTest(unittest.TestCase):
     def test_command_substitution(self):
-        plugin = TestPluginCommandLine(['command', '%t', 'argument'], 'light', 'dark')
+        plugin = PluginCommandlineTest(['command', '{theme}', 'argument'], 'light', 'dark')
         self.assertEqual(['command', 'theme', 'argument'], plugin.insert_theme('theme'),
                          'insert_theme should replace %t with the theme name')
 
-        plugin = TestPluginCommandLine(['command', '%targument'], 'light', 'dark')
+        plugin = PluginCommandlineTest(['command', '{theme}argument'], 'light', 'dark')
         self.assertEqual(['command', 'themeargument'],
                          plugin.insert_theme('theme'),
                          'insert_theme should replace %t with the theme name, even if it is inside of an argument')
 
-        plugin = TestPluginCommandLine(['command', 'argument%t'], 'light', 'dark')
+        plugin = PluginCommandlineTest(['command', 'argument{theme}'], 'light', 'dark')
         self.assertEqual(['command', 'argumenttheme'],
                          plugin.insert_theme('theme'),
                          'insert_theme should replace %t with the theme name, even if it is inside of an argument')
 
-        plugin = TestPluginCommandLine(['command', 'argu%tment'], 'light', 'dark')
+        plugin = PluginCommandlineTest(['command', 'argu{theme}ment'], 'light', 'dark')
         self.assertEqual(['command', 'arguthemement'],
                          plugin.insert_theme('theme'),
                          'insert_theme should replace %t with the theme name, even if it is inside of an argument')
+
+
+class UtilityTest(unittest.TestCase):
+    def test_color_conversion(self):
+        # white
+        color_int = -1
+        color = get_qcolor_from_int(color_int)
+        self.assertEqual(QColor.fromRgb(255, 255, 255), color)
+        self.assertEqual(get_int_from_qcolor(color), color_int)
+
+        # black
+        color_int = -16777216
+        color = get_qcolor_from_int(color_int)
+        self.assertEqual(QColor.fromRgb(0, 0, 0), color)
+        self.assertEqual(get_int_from_qcolor(color), color_int)
 
 
 if __name__ == '__main__':

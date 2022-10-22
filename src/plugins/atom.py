@@ -1,16 +1,15 @@
 import re
 from os.path import isfile
 from pathlib import Path
-from typing import Optional
 
 from ._plugin import Plugin, inplace_change
 
 
 def get_old_theme(settings):
-    """returns the theme which is currently used
-       uses regex to find the currently used theme
-       i expect that themes follow this pattern
-       XXXX-XXXX-ui     XXXX-XXXX-syntax
+    """
+    Returns the theme that is currently used.
+    Uses regex to find the currently used theme, I expect that themes follow this pattern:
+    XXXX-XXXX-ui     XXXX-XXXX-syntax
     """
     with open(settings, "r") as file:
         string = file.read()
@@ -25,7 +24,12 @@ class Atom(Plugin):
     # noinspection SpellCheckingInspection
     config_path = str(Path.home()) + "/.atom/config.cson"
 
-    def set_theme(self, theme: str) -> Optional[str]:
+    def __init__(self):
+        super().__init__()
+        self.theme_light = 'one-light'
+        self.theme_dark = 'one-dark'
+
+    def set_theme(self, theme: str):
         if not (self.available and self.enabled):
             return
 
@@ -41,8 +45,6 @@ class Atom(Plugin):
 
         # updating the old theme with theme specified in config
         inplace_change(self.config_path, current_theme, theme)
-
-        return theme
 
     @property
     def available(self) -> bool:

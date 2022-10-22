@@ -1,75 +1,61 @@
-<a href="README_zh.md">简体中文(zh-cn)</a>
-<p align="center">
-  <img alt="Yin-Yang" title="Yin & Yang" src="./src/ui/assets/icon.png" height="120">
+# ![Yin & Yang logo](resources/logo.svg) Yin-Yang
 
 
-<h1 align="center"> Yin-Yang </h1> <br>
-<p align="center">
-   Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie and also themes your favourite Editors like VSCode or Atom. 
-</p>
+Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie 
+and also themes your favourite editors like VSCode or Atom.
 
-<p align="center" >
-    <img alt="" title="YinYang" src="https://img.shields.io/badge/Plasma-5.21-blue">
-    <img alt="" title="YinYang" src="https://img.shields.io/badge/Yin&Yang-2.0-blue">
-    <img alt="" title="YinYang" src="https://img.shields.io/badge/License-MIT-blue">
-    <img alt="" title="YinYang" src="https://badges.frapsoft.com/os/v1/open-source.svg?v=103">
-    <img alt="" title="YinYang" src="https://img.shields.io/badge/Build%20with-Python-yellow">
-  
+> Translations: [🇨🇳](README_zh.md)
 
-<p align="center">
-  <img alt="Yin-Yang" title="Yin & Yang" src="assets/header.png">
+![](https://img.shields.io/github/v/release/oskarsh/yin-yang)
+![](https://img.shields.io/github/v/release/oskarsh/yin-yang?include_prereleases)
+![](https://img.shields.io/github/downloads/oskarsh/yin-yang/total)
+![](https://img.shields.io/badge/Build%20with-Python-yellow)
+![](https://img.shields.io/github/license/oskarsh/yin-yang)
 
+![](.github/images/header.png)
 
 ## Features
 
-* adjust theme based on Time or Sunset
-* workes on Gnome, Budgie and KDE
-* toggles themes from light / dark
-* supports VSCode
-* support Atom
-* support Wallpaper change based on themes
-* toggle themes based on given time
-* support theme based on suntime
+![](.github/images/settings.png)
+
+* Changes your themes at certain times or sunrise and sunset
+* Supported Desktops:
+  * Gnome
+  * Budgie
+  * KDE Plasma
+* Supported applications:
+  * VSCode
+  * Atom
+* Miscellaneous:
+  * Wallpaper change
+  * Notifications on theme change
+  * Play a sound
+
+> To see planned features and the development status, visit the [project status page](https://github.com/oskarsh/Yin-Yang/projects?type=classic).
 
 ## Installation
-To install Yin-Yang copy the command below:
 
-```git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./install.sh```
+To install Yin-Yang, copy and run the command below and follow the instructions:
 
-and follow the onscreen Instructions.
+```bash
+git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./scripts/install.sh
+```
 
-
-You will need some dependencies for the installation process to work correctly check the Wiki for what is needed:
-[![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
-
-<p align="center" >
-  <img alt="Yin-Yang" title="Yin & Yang" src="assets/settings.png" height="400">
+Additionally, you need to have systemd and python-systemd installed on your system.
 
 ## Documentation
 
-Want to know more? Visit the Wiki and read about Installation, Building, Troubleshooting and more.
+Want to help out? Check out the wiki to learn how to contribute translations, plugins and more!
 
 [![Generic badge](https://img.shields.io/badge/Visit-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
 
-
-
-## Wallpapers
-
-Yin-Yang comes with custom made Wallpaper in order to get you started with Light / Dark Wallpapers, you can check out the repository here
-
-The Wallpapers are open source and can be used however you want. I also accept contributions in form of open source Wallpapers see the [contribution Section](https://github.com/oskarsh/Yin-Yang/wiki/Supporting-Yin-Yang#create-yin-yang-wallpapers).
-
-[![Generic badge](https://img.shields.io/badge/Get-Wallpapers-BLUE.svg)](https://github.com/oskarsh/Wallpaper-yin-yang)
-
-
-
-## Thanks to all Contributors 
+## Thanks to all Contributors
 
 ### Code Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](https://github.com/oskarsh/Yin-Yang/wiki/Contributing)].
 
-<a href="https://github.com/oskarsh/Yin-Yang/graphs/contributors"><img src="https://opencollective.com/Yin-Yang/contributors.svg?width=890&button=false" /></a>
+[![](https://opencollective.com/Yin-Yang/contributors.svg?button=false)](https://github.com/oskarsh/Yin-Yang/graphs/contributors)
 
 ### Donate
 

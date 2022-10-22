@@ -1,18 +1,32 @@
-from src.plugins import system, gtk, kvantum, wallpaper, firefox, vscode, atom
+from src.meta import Desktop
+from src.plugins import system, gtk, kvantum, wallpaper, custom
+from src.plugins import firefox, brave, gedit, only_office
+from src.plugins import vscode, atom, konsole
+from src.plugins import sound, notify
 
 # NOTE initialize your plugin over here:
 # The order in the list specifies the order in the config gui
-from src.plugins._plugin import Plugin
+from src.plugins._plugin import Plugin, ExternalPlugin
 
-plugins: [Plugin] = [
-    system.System(),
-    gtk.Gtk(),
-    kvantum.Kvantum(),
-    wallpaper.Wallpaper(),
-    firefox.Firefox(),
-    vscode.Vscode(),
-    atom.Atom()
-]
+
+def get_plugins(desktop: Desktop) -> [Plugin]:
+    return [
+        system.System(desktop),
+        gtk.Gtk(desktop),
+        kvantum.Kvantum(),
+        wallpaper.Wallpaper(desktop),
+        firefox.Firefox(),
+        brave.Brave(),
+        vscode.Vscode(),
+        atom.Atom(),
+        gedit.Gedit(),
+        only_office.OnlyOffice(),
+        konsole.Konsole(),
+        custom.Custom(),
+        sound.Sound(),
+        notify.Notification()
+    ]
+
 
 # this lets us skip all external plugins in yin_yang.py while keeping _plugin "private"
-ExternalPlugin = _plugin.ExternalPlugin
+ExternalPlugin = ExternalPlugin

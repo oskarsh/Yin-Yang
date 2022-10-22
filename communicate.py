@@ -9,17 +9,18 @@ import sys
 import json
 import struct
 import time
-from datetime import datetime, time as datetimetime
+from datetime import datetime, time as dt_time
 from pathlib import Path
 
-from src import config
+from src.meta import PluginKey
+from src.config import config
 
 logging.basicConfig(filename=str(Path.home()) + '/.local/share/yin_yang.log', level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s - %(name)s: %(message)s')
 logger = logging.getLogger(__name__)
 
 
-def _move_times(time_now: datetime, time_light: datetimetime, time_dark: datetimetime) -> list[int, int]:
+def _move_times(time_now: datetime, time_light: dt_time, time_dark: dt_time) -> list[int, int]:
     """
     Converts a time string to seconds since the epoch
     :param time_now: the current time
@@ -60,30 +61,23 @@ def send_config(plugin: str) -> dict:
     """
     logger.debug('Building message')
 
-    enabled = config.get(plugin + 'Enabled')
+    enabled = config.get_plugin_key(plugin, PluginKey.ENABLED)
     message = {
         'enabled': enabled,
-        'dark_mode': config.get('theme') == 'dark'
+        'dark_mode': config.dark_mode
     }
 
     if enabled:
-        mode: str
-        if config.get('schedule'):
-            mode = 'schedule'
-        elif config.get('followSun'):
-            mode = 'followSun'
-        else:
-            mode = 'manual'
+        mode = config.mode
 
         message['scheduled'] = mode != 'manual'
         message['themes'] = [
-            config.get(plugin + 'LightTheme'),
-            config.get(plugin + 'DarkTheme')
+            config.get_plugin_key(plugin, PluginKey.THEME_LIGHT),
+            config.get_plugin_key(plugin, PluginKey.THEME_DARK)
         ]
         if message['scheduled']:
             # time string is parsed to time object
-            time_light = datetimetime.fromisoformat(config.get('switchToDark'))
-            time_dark = datetimetime.fromisoformat(config.get('switchToLight'))
+            time_light, time_dark = config.times
             time_now = datetime.now()
 
             message['times'] = _move_times(time_now, time_light, time_dark)

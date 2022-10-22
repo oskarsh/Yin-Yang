@@ -1,27 +1,29 @@
-from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QDialogButtonBox, QVBoxLayout
+import logging
+import subprocess
 
-from ._plugin import PluginDesktopDependent, PluginCommandline
+from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
+from PySide6.QtDBus import QDBusConnection, QDBusMessage
+
+from src.meta import Desktop
+from ._plugin import PluginDesktopDependent, PluginCommandline, Plugin
 from .system import test_gnome_availability
-from .. import config
+
+logger = logging.getLogger(__name__)
 
 
 class Wallpaper(PluginDesktopDependent):
     # themes are image file paths
 
-    def __init__(self):
-        desktop = config.get('desktop')
-        if desktop == 'kde':
-            self.strategy_instance = _Kde()
-        elif desktop == 'gtk':
-            self.strategy_instance = _Gnome()
-        else:
-            raise ValueError('Unsupported desktop environment!')
-        super().__init__()
-
-    @property
-    def strategy(self):
-        return self.strategy_instance
+    def __init__(self, desktop: Desktop):
+        match desktop:
+            case Desktop.KDE:
+                super().__init__(_Kde())
+            case Desktop.GNOME:
+                super().__init__(_Gnome())
+            case Desktop.XFCE:
+                super().__init__(_Xfce())
+            case _:
+                super().__init__(None)
 
     @property
     def available(self) -> bool:
@@ -31,10 +33,13 @@ class Wallpaper(PluginDesktopDependent):
         widgets = []
 
         for _ in ['Light', 'Dark']:
-            grp = QtWidgets.QWidget(widget)
+            grp = QWidget(widget)
             horizontal_layout = QVBoxLayout(grp)
 
-            btn = QtWidgets.QDialogButtonBox(grp)
+            line = QLineEdit(grp)
+            horizontal_layout.addWidget(line)
+
+            btn = QDialogButtonBox(grp)
             btn.setStandardButtons(QDialogButtonBox.Open)
             horizontal_layout.addWidget(btn)
 
@@ -47,19 +52,47 @@ class _Gnome(PluginCommandline):
     name = 'Wallpaper'
 
     def __init__(self):
-        super().__init__(["gsettings", "set", "org.gnome.desktop.background", "picture-uri", "file://%t"])
+        super().__init__(['gsettings', 'set', 'org.gnome.desktop.background', 'picture-uri', 'file://{theme}'])
 
     def available(self) -> bool:
         return test_gnome_availability(self.command)
 
 
-class _Kde(PluginCommandline):
+class _Kde(Plugin):
     name = 'Wallpaper'
 
     def __init__(self):
-        super().__init__(["bash", "./src/change_wallpaper.sh", "%t"])
+        super().__init__()
+
+    def set_theme(self, theme: str):
+        connection = QDBusConnection.sessionBus()
+        message = QDBusMessage.createMethodCall(
+            'org.kde.plasmashell',
+            '/PlasmaShell',
+            'org.kde.PlasmaShell',
+            'evaluateScript',
+        )
+        message.setArguments([
+            'string:'
+            'var Desktops = desktops();'
+            'for (let i = 0; i < Desktops.length; i++) {'
+            '    let d = Desktops[i];'
+            '    d.wallpaperPlugin = "org.kde.image";'
+            '    d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");'
+            f'    d.writeConfig("Image", "file:{theme}");'
+            '}'
+        ])
+        connection.call(message)
 
     @property
     def available(self) -> bool:
-        # the script change_wallpaper comes with this tool, so we can except that it is available
         return True
+
+
+class _Xfce(PluginCommandline):
+    def __init__(self):
+        # first, get all monitors
+        properties = str(subprocess.check_output(['xfconf-query', '-c', 'xfce4-desktop', '-l']))
+        monitor = next(p for p in properties.split('\\n') if p.endswith('/workspace0/last-image'))
+
+        super().__init__(['xfconf-query', '-c', 'xfce4-desktop', '-p', monitor, '-s', '{theme}'])

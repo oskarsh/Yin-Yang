@@ -6,8 +6,9 @@ from datetime import datetime, time
 from subprocess import Popen, PIPE
 
 import communicate
-from src import config
-from src.yin_yang import should_be_light
+from src.meta import PluginKey
+from src.config import config
+from src.yin_yang import should_be_dark
 
 
 def should_be_dark_extensions(time_current: int, time_dark: int):
@@ -45,7 +46,7 @@ class CommunicationTest(unittest.TestCase):
                 self.assertTrue(time_light_unix <= time_current_unix <= time_dark_unix or
                                 time_dark_unix <= time_current_unix <= time_light_unix)
 
-    @unittest.skipUnless(config.get('firefoxEnabled'), 'Firefox plugin is disabled')
+    @unittest.skipUnless(config.get_plugin_key('firefox', PluginKey.ENABLED), 'Firefox plugin is disabled')
     def test_message_build(self):
         message = communicate.send_config('firefox')
         self.assertNotEqual(message, None,
@@ -66,14 +67,14 @@ class CommunicationTest(unittest.TestCase):
                 self.assertTrue(time_light <= time_now < time_dark or time_dark <= time_now < time_light,
                                 'Current time should always be between light and dark times')
 
-    @unittest.skipUnless(config.get('firefoxEnabled'), 'Firefox plugin is disabled')
+    @unittest.skipUnless(config.get_plugin_key('firefox', PluginKey.ENABLED), 'Firefox plugin is disabled')
     def test_encode_decode(self):
         process = Popen([sys.executable, '../communicate.py'],
                         stdin=PIPE, stdout=PIPE)
         plugins = ['firefox']
 
         for plugin in plugins:
-            if not config.get(plugin + 'Enabled'):
+            if not config.get_plugin_key(plugin, PluginKey.ENABLED):
                 print('Skipped test for ' + plugin)
                 continue
 
@@ -109,16 +110,13 @@ class CommunicationTest(unittest.TestCase):
         process.__exit__(None, None, None)
 
     def test_dark_mode_detection(self):
-        time_light = config.get('switchToLight')
-        time_light = time.fromisoformat(time_light)
-        time_dark = config.get('switchToDark')
-        time_dark = time.fromisoformat(time_dark)
+        time_light, time_dark = config.times
 
         # get unix times
         time_current = datetime.today()
         time_light_unix, time_dark_unix = communicate._move_times(time_current, time_light, time_dark)
 
-        is_dark = not should_be_light()
+        is_dark = should_be_dark(time_current.time(), time_light, time_dark)
         # NOTE: this should be equal to how the extension calculates the theme
         detected_dark = should_be_dark_extensions(int(time_current.timestamp()),
                                                   time_dark_unix)

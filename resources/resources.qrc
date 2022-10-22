@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="icons">
+    <file alias="logo">logo.svg</file>
+  </qresource>
+  <qresource prefix="translations">
+    <file alias="yin_yang.de_DE">translations/yin_yang.de_DE.qm</file>
+  </qresource>
+</RCC>

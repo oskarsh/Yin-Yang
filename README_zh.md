@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Yin-Yang" title="Yin & Yang" src="./src/ui/assets/icon.png" height="120">
+  <img alt="Yin-Yang" title="Yin & Yang" src="resources/logo.svg" height="120">
 
 
 <h1 align="center"> 阴阳 </h1> <br>
@@ -16,7 +16,7 @@
   
 
 <p align="center">
-  <img alt="Yin-Yang" title="Yin & Yang" src="assets/header.png">
+  <img alt="Yin-Yang" title="Yin & Yang" src=".github/images/header.png">
 
 
 ## 特性
@@ -31,7 +31,7 @@
 ## 安装
 在终端输入以下命令：
 
-```git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./install.sh```
+```git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./scripts/install.sh```
 
 然后根据提示进行操作。
 
@@ -40,7 +40,7 @@
 [![Generic badge](https://img.shields.io/badge/see-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
 
 <p align="center" >
-  <img alt="Yin-Yang" title="Yin & Yang" src="assets/settings.png" height="400">
+  <img alt="Yin-Yang" title="Yin & Yang" src=".github/images/settings.png" height="400">
 
 ## 文档
 

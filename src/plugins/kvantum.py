@@ -1,10 +1,16 @@
-from ._plugin import PluginCommandline, get_stuff_in_dir
+import itertools
+from os import scandir
+
+from src.plugins._plugin import PluginCommandline
 from pathlib import Path
 import os
 
+
 class Kvantum(PluginCommandline):
     def __init__(self):
-        super().__init__(["kvantummanager", "--set", '%t'])
+        super().__init__(['kvantummanager', '--set', '{theme}'])
+        self.theme_light = 'KvFlatLight'
+        self.theme_dark = 'KvFlat'
 
     @classmethod
     def get_kvantum_theme_from_dir(cls, dir):
@@ -28,8 +34,7 @@ class Kvantum(PluginCommandline):
         assert len(themes) > 0, 'No themes were found'
 
         themes.sort()
-        for theme in themes:
-            themes_dict[theme] = theme
+        themes_dict = {t: t for t in themes}
 
         assert themes_dict != {}, 'No themes found!'
         return themes_dict
