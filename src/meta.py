@@ -27,5 +27,10 @@ class ConfigEvent(Enum):
     SAVE = auto()
 
 
+class ItemType(Enum):
+    DIRECTORY = auto()
+    FILE = auto()
+
+
 class UnsupportedDesktopError(NotImplementedError):
     pass

@@ -8,7 +8,7 @@ from typing import Optional
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
-from src.meta import UnsupportedDesktopError
+from src.meta import UnsupportedDesktopError, ItemType
 
 logger = logging.getLogger(__name__)
 
@@ -261,19 +261,18 @@ def inplace_change(filename: str, old_string: str, new_string: str):
         file.write(file_content)
 
 
-def get_stuff_in_dir(path: str, search_type: str) -> [str]:
+def get_stuff_in_dir(path: str, search_type: ItemType) -> [str]:
     """Returns all files or directories in the path
     :param path: The path where to search
     :param search_type: The type. Either dir (a directory) or file
     """
     # source: https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
     # TODO replace with generator
-    if search_type == 'dir':
-        return [f for f in listdir(path) if isdir(join(path, f))]
-    elif search_type == 'file':
-        return [f for f in listdir(path) if isfile(join(path, f))]
-    else:
-        raise ValueError('Unknown type! Use dir or file')
+    match search_type:
+        case ItemType.DIRECTORY:
+            return [f for f in listdir(path) if isdir(join(path, f))]
+        case ItemType.FILE:
+            return [f for f in listdir(path) if isfile(join(path, f))]
 
 
 def get_qcolor_from_int(color_int: int) -> QColor:

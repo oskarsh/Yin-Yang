@@ -3,6 +3,7 @@ from configparser import ConfigParser
 from os.path import isdir
 from pathlib import Path
 
+from src.meta import ItemType
 from src.plugins._plugin import Plugin, get_stuff_in_dir
 
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ class Konsole(Plugin):
         # leave casing as is
         config.optionxform = str
         user_path = str(Path.home()) + '/.local/share/konsole'
-        files = get_stuff_in_dir(user_path, search_type='file')
+        files = get_stuff_in_dir(user_path, search_type=ItemType.FILE)
         # only take profiles
         files = [user_path + '/' + f for f in files if f.endswith('.profile')]
 
@@ -59,7 +60,7 @@ class Konsole(Plugin):
         if not self.available:
             return {}
 
-        themes_machine = get_stuff_in_dir(self.global_path, search_type='file')
+        themes_machine = get_stuff_in_dir(self.global_path, search_type=ItemType.FILE)
         themes_machine = [theme.replace('.colorscheme', '') for theme in themes_machine if theme.endswith('.colorscheme')]
         themes_machine.sort()
 

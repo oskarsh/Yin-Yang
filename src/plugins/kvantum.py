@@ -1,4 +1,5 @@
-from ._plugin import PluginCommandline, get_stuff_in_dir
+from src.meta import ItemType
+from src.plugins._plugin import PluginCommandline, get_stuff_in_dir
 from pathlib import Path
 
 
@@ -19,7 +20,7 @@ class Kvantum(PluginCommandline):
         # on dirs, but .kvconfig. So some theme will not be recognized. This
         # may be fixed next time
         for path in paths:
-            themes = themes + get_stuff_in_dir(path, search_type='dir')
+            themes = themes + get_stuff_in_dir(path, search_type=ItemType.DIRECTORY)
         themes_dict: dict = {}
         assert len(themes) > 0, 'No themes were found'
 
