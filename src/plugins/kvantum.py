@@ -3,6 +3,7 @@ from os import scandir
 
 from src.plugins._plugin import PluginCommandline
 from pathlib import Path
+import os
 
 
 class Kvantum(PluginCommandline):
@@ -11,20 +12,25 @@ class Kvantum(PluginCommandline):
         self.theme_light = 'KvFlatLight'
         self.theme_dark = 'KvFlat'
 
+    @classmethod
+    def get_kvantum_theme_from_dir(cls, dir):
+        result = set()
+        for _, _, filenames in os.walk(dir):
+            for filename in filenames:
+                if filename.endswith('.kvconfig'):
+                    result.add(filename[:-9])
+        return list(result)
+
     @property
     def available_themes(self) -> dict:
         if not self.available:
             return {}
 
         paths = ['/usr/share/Kvantum', str(Path.home()) + '/.config/Kvantum']
-        # At present, it seems that the function of finding themes is based
-        # on dirs, but .kvconfig. So some theme will not be recognized. This
-        # may be fixed next time
-        themes = []
+        themes = list()
         for path in paths:
-            with scandir(path) as entries:
-                themes = list(itertools.chain(themes, (f.name for f in entries if f.is_dir())))
-
+            themes = themes + self.get_kvantum_theme_from_dir(path)
+        themes_dict: dict = {}
         assert len(themes) > 0, 'No themes were found'
 
         themes.sort()
