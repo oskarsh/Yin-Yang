@@ -1,7 +1,7 @@
 import os
 import json
 import logging
-from os.path import isdir
+from os.path import isdir, isfile
 from pathlib import Path
 
 from ._plugin import Plugin
@@ -25,10 +25,16 @@ def write_new_settings(settings, path):
 
 
 def get_theme_name(path):
+    if not isfile(path):
+        return []
+
     # open metadata
     manifest: dict
     with open(path, 'r') as file:
         manifest = json.load(file)
+
+    if 'contributes' not in manifest:
+        return []
 
     # collect themes
     themes: list

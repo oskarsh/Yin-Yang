@@ -31,7 +31,7 @@
 ## 安装
 在终端输入以下命令：
 
-```git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./install.sh```
+```git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./scripts/install.sh```
 
 然后根据提示进行操作。
 
