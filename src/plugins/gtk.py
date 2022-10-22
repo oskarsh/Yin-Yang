@@ -49,6 +49,8 @@ class _Gnome(PluginCommandline):
 
     def __init__(self):
         super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
+        self.theme_light = 'Adwaita'
+        self.theme_dark = 'Adwaita-dark'
 
     @property
     def available(self) -> bool:
@@ -79,3 +81,5 @@ class _Kde(Plugin):
 class _Xfce(PluginCommandline):
     def __init__(self):
         super(_Xfce, self).__init__(['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName', '-s', '{theme}'])
+        self.theme_light = 'Adwaita'
+        self.theme_dark = 'Adwaita-dark'
