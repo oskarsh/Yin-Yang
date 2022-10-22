@@ -12,6 +12,7 @@ import time
 from datetime import datetime, time as dt_time
 from pathlib import Path
 
+from src.enums import PluginKey
 from src.config import config
 
 logging.basicConfig(filename=str(Path.home()) + '/.local/share/yin_yang.log', level=logging.DEBUG,
@@ -60,7 +61,7 @@ def send_config(plugin: str) -> dict:
     """
     logger.debug('Building message')
 
-    enabled = config.get_plugin_key(plugin, 'Enabled')
+    enabled = config.get_plugin_key(plugin, PluginKey.ENABLED)
     message = {
         'enabled': enabled,
         'dark_mode': config.dark_mode
@@ -71,8 +72,8 @@ def send_config(plugin: str) -> dict:
 
         message['scheduled'] = mode != 'manual'
         message['themes'] = [
-            config.get_plugin_key(plugin, 'light_theme'),
-            config.get_plugin_key(plugin, 'dark_theme')
+            config.get_plugin_key(plugin, PluginKey.THEME_LIGHT),
+            config.get_plugin_key(plugin, PluginKey.THEME_DARK)
         ]
         if message['scheduled']:
             # time string is parsed to time object

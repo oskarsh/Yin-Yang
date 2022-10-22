@@ -131,15 +131,21 @@ def get_current_location() -> QGeoCoordinate:
         pos = locationSource.lastKnownPosition()
         tries += 1
         sleep(1)
-    return pos.coordinate()
+    coordinate = pos.coordinate()
+    if not coordinate.isValid():
+        logger.error('Location could not be determined')
+        return QGeoCoordinate(0, 0)
+    return coordinate
 
 
 def get_desktop() -> Desktop:
-    desktop = os.getenv('XDG_CURRENT_DESKTOP').lower()
-    if desktop == '':
-        desktop = os.getenv('GDMSESSION').lower()
+    desktop = os.getenv('XDG_CURRENT_DESKTOP')
+    if desktop is None:
+        desktop = os.getenv('GDMSESSION')
+    if desktop is None:
+        desktop = ''
 
-    match desktop:
+    match desktop.lower():
         case 'gnome' | 'budgie':
             return Desktop.GNOME
         case 'kde' | 'plasma' | 'plasma5':
@@ -267,7 +273,7 @@ class ConfigManager(dict):
             logger.error(f'Error while writing the file: {e}')
             return False
 
-    def get_plugin_key(self, plugin: str, key: str) -> Union[bool, str]:
+    def get_plugin_key(self, plugin: str, key: PluginKey) -> Union[bool, str]:
         """Return the given key from the config
         :param plugin: name of the plugin
         :param key: the key to change
@@ -275,7 +281,7 @@ class ConfigManager(dict):
         """
 
         plugin = plugin.casefold()
-        key = key.casefold()
+        key = key.value.casefold()
 
         return self['plugins'][plugin][key]
 
@@ -470,6 +476,6 @@ logger.info('Detected desktop:', config.desktop)
 
 # set plugin themes
 for p in filter(lambda pl: pl.available, plugins):
-    p.enabled = config.get_plugin_key(p.name, 'enabled')
-    p.theme_bright = config.get_plugin_key(p.name, 'light_theme')
-    p.theme_dark = config.get_plugin_key(p.name, 'dark_theme')
+    p.enabled = config.get_plugin_key(p.name, PluginKey.ENABLED)
+    p.theme_bright = config.get_plugin_key(p.name, PluginKey.THEME_LIGHT)
+    p.theme_dark = config.get_plugin_key(p.name, PluginKey.THEME_DARK)
