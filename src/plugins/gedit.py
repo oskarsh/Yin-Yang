@@ -1,5 +1,5 @@
-from plugins._plugin import PluginCommandline
-from plugins.system import test_gnome_availability
+from src.plugins._plugin import PluginCommandline
+from src.plugins.system import test_gnome_availability
 
 
 class Gedit(PluginCommandline):

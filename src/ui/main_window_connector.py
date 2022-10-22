@@ -7,7 +7,6 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColor
 
 from src.ui.main_window import Ui_main_window
 
-from plugins._plugin import get_qcolor_from_int, get_int_from_qcolor
 from src.yin_yang import set_desired_theme
 from src.enums import ConfigEvent
 from src.enums import PluginKey

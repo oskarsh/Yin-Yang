@@ -1,6 +1,8 @@
-from plugins import konsole, gedit, only_office, brave
 from src.enums import Desktop
-from src.plugins import system, gtk, kvantum, wallpaper, firefox, vscode, atom, sound, notify, custom
+from src.plugins import system, gtk, kvantum, wallpaper, custom
+from src.plugins import firefox, brave, gedit, only_office
+from src.plugins import vscode, atom, konsole
+from src.plugins import sound, notify
 
 # NOTE initialize your plugin over here:
 # The order in the list specifies the order in the config gui
