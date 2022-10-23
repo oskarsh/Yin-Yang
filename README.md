@@ -35,13 +35,12 @@ and also themes your favourite editors like VSCode or Atom.
 
 ## Installation
 
-To install Yin-Yang, copy and run the command below and follow the instructions:
-
+To install Yin-Yang:
+1. Install the dependencies: `systemd`, `python-systemd` and optionally `pyside6` (from your system package manager) for native widget style
+2. Copy and run the command below and follow the instructions:
 ```bash
 git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./scripts/install.sh
 ```
-
-Additionally, you need to have systemd and python-systemd installed on your system.
 
 ## Documentation
 
