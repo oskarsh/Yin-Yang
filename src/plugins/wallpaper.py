@@ -32,11 +32,12 @@ class Wallpaper(PluginDesktopDependent):
     def get_input(self, widget):
         widgets = []
 
-        for _ in ['Light', 'Dark']:
+        for is_dark in [False, True]:
             grp = QWidget(widget)
             horizontal_layout = QVBoxLayout(grp)
 
             line = QLineEdit(grp)
+            line.setText(self.theme_dark if is_dark else self.theme_light)
             horizontal_layout.addWidget(line)
 
             btn = QDialogButtonBox(grp)
