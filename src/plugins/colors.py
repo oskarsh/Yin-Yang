@@ -1,17 +1,16 @@
 import subprocess
 import re
 
-from src import config
+from src.meta import Desktop
 from src.plugins._plugin import Plugin, PluginDesktopDependent, PluginCommandline
 
+
 class Colors(PluginDesktopDependent):
-    def __init__(self):
-        desktop = config.get('desktop')
-        if desktop == 'kde':
-            self._strategy_instance = _KDEColors()
+    def __init__(self, desktop: Desktop):
+        if desktop == Desktop.KDE:
+            super().__init__(_KDEColors())
         else:
-            raise ValueError('Unsupported desktop environment!')
-        super().__init__()
+            super().__init__(None)
 
     @property
     def strategy(self) -> Plugin:
@@ -23,7 +22,7 @@ class _KDEColors(PluginCommandline):
     translations = {}
 
     def __init__(self):
-        super().__init__(['plasma-apply-colorscheme', '%t'])
+        super().__init__(['plasma-apply-colorscheme', '{theme}'])
 
     @property
     def available_themes(self) -> dict:
@@ -31,15 +30,15 @@ class _KDEColors(PluginCommandline):
         if self.translations:
             return self.translations
 
-        colors = subprocess.check_output(['plasma-apply-colorscheme', '--list-schemes'], 
-            universal_newlines=True)
+        colors = subprocess.check_output(['plasma-apply-colorscheme', '--list-schemes'],
+                                         universal_newlines=True)
 
         colors = colors.splitlines()
         del colors[0]
 
         for color in colors:
-            color = color.replace('*', '').replace(' ', '')
-            color = re.sub(r'\((.*?)\)', '', color)
+            color = color.replace(' * ', '')
+            color = re.sub(r'\((.*?)\)', '', color).strip()
             self.translations[color] = color
 
         return self.translations
