@@ -7,7 +7,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QPushButton
 
 from src.plugins._plugin import Plugin, get_int_from_qcolor
 
-PATH = f'{Path.home()}/.config/BraveSoftware/Brave-Browser/Default/Preferences'
+path = f'{Path.home()}/.config/BraveSoftware/Brave-Browser/Default/Preferences'
 
 
 class Brave(Plugin):
@@ -17,7 +17,7 @@ class Brave(Plugin):
         self.theme_dark = '#000000'
 
     def set_theme(self, color_str: str):
-        with open(PATH, 'r') as file:
+        with open(path, 'r') as file:
             config = json.load(file)
 
         color = get_int_from_qcolor(QColor(color_str))
@@ -48,4 +48,4 @@ class Brave(Plugin):
 
     @property
     def available(self) -> bool:
-        return isfile(PATH)
+        return isfile(path)

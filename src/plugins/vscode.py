@@ -8,7 +8,7 @@ from ._plugin import Plugin
 
 logger = logging.getLogger(__name__)
 
-EXTENSION_PATHS = [
+extension_paths = [
     str(Path.home()) + '/.vscode/extensions',
     str(Path.home()) + '/.vscode-oss/extensions',
     '/usr/lib/code/extensions',
@@ -104,7 +104,7 @@ class Vscode(Plugin):
         if not self.available:
             return themes_dict
 
-        for path in filter(isdir, EXTENSION_PATHS):
+        for path in filter(isdir, extension_paths):
             with os.scandir(path) as entries:
                 for d in entries:
                     # filter for a dir that doesn't seem to be an extension
@@ -124,7 +124,7 @@ class Vscode(Plugin):
 
     @property
     def available(self) -> bool:
-        for path in EXTENSION_PATHS:
+        for path in extension_paths:
             if isdir(path):
                 return True
         return False
