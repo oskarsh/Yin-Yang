@@ -1,10 +1,9 @@
-import json
 import unittest
 from datetime import time
 from pathlib import Path
 from typing import Optional
 
-from src.config import config, ConfigWatcher
+from src.config import config, ConfigWatcher, update_config
 from src.meta import Desktop, Modes, PluginKey, ConfigEvent
 
 config_path = f"{Path.home()}/.config/yin_yang/yin_yang_dev.json"
@@ -86,25 +85,23 @@ old_configs = {
 }
 
 
-def downgrade_config(old_config):
-    with open(config_path, "w+") as file:
-        json.dump(old_config, file)
-
-    config.load()
-
-
 def use_all_versions(func):
     def inner(self):
         for version in old_configs:
             with self.subTest('Testing update from old version', version=version):
                 old_config = old_configs[version]
-                downgrade_config(old_config)
+                config.update(update_config(old_config.copy(), config.defaults))
                 func(self, version, old_config)
 
     return inner
 
 
 class ConfigTest(unittest.TestCase):
+    def setUp(self) -> None:
+        super().setUp()
+        config.reset()
+        config.save()
+
     @use_all_versions
     def test_update_old_configs(self, version, old_config):
         match version:
@@ -141,8 +138,6 @@ class ConfigTest(unittest.TestCase):
                                  config.get_plugin_key('wallpaper', PluginKey.THEME_LIGHT))
 
     def test_notifies_on_change(self):
-        config.reset()
-
         class Watcher(ConfigWatcher):
             def __init__(self):
                 self.updates: [dict] = []
@@ -194,9 +189,6 @@ class ConfigTest(unittest.TestCase):
         self.assertTrue(len(watcher.updates) == 0)
 
     def test_removes_listener(self):
-        config.reset()
-        config.save()
-
         class Watcher(ConfigWatcher):
             def __init__(self):
                 self.notified = 0
@@ -212,9 +204,6 @@ class ConfigTest(unittest.TestCase):
         self.assertEqual(1, watcher.notified)
 
     def test_notify_when_saved(self):
-        config.reset()
-        config.save()
-
         class Watcher(ConfigWatcher):
             def __init__(self):
                 self.saved = False
@@ -230,8 +219,6 @@ class ConfigTest(unittest.TestCase):
         self.assertTrue(watcher.saved)
 
     def test_write_when_changed(self):
-        config.reset()
-        config.save()
         self.assertFalse(config.save())
 
         config.mode = Modes.SCHEDULED
@@ -243,7 +230,6 @@ class ConfigTest(unittest.TestCase):
         self.assertFalse(config.save())
 
     def test_position(self):
-        config.reset()
         config.mode = Modes.FOLLOW_SUN
         config.update_location = True
 
@@ -252,8 +238,6 @@ class ConfigTest(unittest.TestCase):
         self.assertIsInstance(long, float)
 
     def test_follow_sun(self):
-        config.reset()
-
         config.mode = Modes.SCHEDULED
         time_light_man = time(5, 9)
         time_dark_man = time(20, 0)
