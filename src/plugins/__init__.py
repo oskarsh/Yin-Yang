@@ -1,5 +1,5 @@
 from src.meta import Desktop
-from src.plugins import system, gtk, kvantum, wallpaper, custom
+from src.plugins import system, colors, gtk, kvantum, wallpaper, custom
 from src.plugins import firefox, brave, gedit, only_office
 from src.plugins import vscode, atom, konsole
 from src.plugins import sound, notify
@@ -12,6 +12,7 @@ from src.plugins._plugin import Plugin, ExternalPlugin
 def get_plugins(desktop: Desktop) -> [Plugin]:
     return [
         system.System(desktop),
+        colors.Colors(desktop),
         gtk.Gtk(desktop),
         kvantum.Kvantum(),
         wallpaper.Wallpaper(desktop),
