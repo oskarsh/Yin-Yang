@@ -129,7 +129,7 @@ class _Mate(PluginCommandline):
     theme_directories = ['/usr/share/themes', f'{Path.home()}/.themes']
 
     def __init__(self):
-        super().__init__(['dconf', 'write', '/org/mate/marco/general/theme', '"\'{theme}\'"'])
+        super().__init__(['dconf', 'write', '/org/mate/marco/general/theme', '\'{theme}\''])
         self.theme_light = 'Yaru'
         self.theme_dark = 'Yaru-dark'
 
@@ -143,7 +143,7 @@ class _Mate(PluginCommandline):
 
             with os.scandir(directory) as entries:
                 for d in entries:
-                    index = d.name + '/index.theme'
+                    index = d.path + '/index.theme'
                     if not os.path.isfile(index):
                         continue
 
@@ -155,7 +155,8 @@ class _Mate(PluginCommandline):
                     except KeyError:
                         continue
 
-        return {}
+        return {t: t for t in themes}
 
+    @property
     def available(self):
         return self.check_command(['dconf', 'help'])
