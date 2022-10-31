@@ -16,3 +16,7 @@ class _Mate(PluginCommandline):
         super().__init__(['dconf', 'write', '/org/mate/desktop/interface/icon-theme', '"\'{theme}\'"'])
         self.theme_light = 'Yaru'
         self.theme_dark = 'Yaru-dark'
+
+    @property
+    def available(self):
+        return self.check_command(['dconf', 'help'])
