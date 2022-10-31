@@ -15,19 +15,9 @@ logger = logging.getLogger(__name__)
 
 
 def test_gnome_availability(command) -> bool:
-    # Runs the first entry in the command list with --help
-    try:
-        # if not available, you might want to run https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0
-        # or you have to install that extension
-        process = subprocess.run(
-            [command[0], 'get', command[2], command[3]],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
-        return process.returncode == 0
-    except FileNotFoundError:
-        # if no such command is available, the plugin is not available
-        return False
+    return PluginCommandline.check_command(
+        [command[0], 'get', command[2], command[3]]
+    )
 
 
 class System(PluginDesktopDependent):
@@ -166,3 +156,6 @@ class _Mate(PluginCommandline):
                         continue
 
         return {}
+
+    def available(self):
+        return self.check_command(['dconf', 'help'])
