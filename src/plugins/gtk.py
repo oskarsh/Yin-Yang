@@ -26,6 +26,8 @@ class Gtk(PluginDesktopDependent):
                 if not self.strategy.available:
                     print('You need to install an extension for gnome to use it. \n'
                           'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
+            case Desktop.MATE:
+                super().__init__(_Mate())
             case Desktop.XFCE:
                 super().__init__(_Xfce())
             case _:
@@ -83,3 +85,10 @@ class _Xfce(PluginCommandline):
         super(_Xfce, self).__init__(['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName', '-s', '{theme}'])
         self.theme_light = 'Adwaita'
         self.theme_dark = 'Adwaita-dark'
+
+
+class _Mate(PluginCommandline):
+    def __init__(self):
+        super().__init__(['dconf write', '/org/mate/desktop/interface/gtk-theme', '"\'{theme}\'"'])
+        self.theme_light = 'Yaru'
+        self.theme_dark = 'Yaru-dark'

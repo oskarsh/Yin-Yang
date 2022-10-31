@@ -14,6 +14,7 @@ class Desktop(Enum):
     GNOME = 'gnome'
     XFCE = 'xfce'
     UNKNOWN = 'unknown'
+    MATE = 'mate'
 
 
 class PluginKey(Enum):
