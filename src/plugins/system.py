@@ -3,6 +3,8 @@ import logging
 import subprocess
 import pwd
 import os
+from configparser import ConfigParser
+from pathlib import Path
 
 from PySide6.QtCore import QLocale
 
@@ -35,6 +37,8 @@ class System(PluginDesktopDependent):
                 super().__init__(_Kde())
             case Desktop.GNOME:
                 super().__init__(_Gnome())
+            case Desktop.MATE:
+                super().__init__(_Mate())
             case _:
                 super().__init__(None)
 
@@ -129,3 +133,36 @@ class _Kde(PluginCommandline):
                         self.translations[long_name] = long_name
 
         return self.translations
+
+
+class _Mate(PluginCommandline):
+    theme_directories = ['/usr/share/themes', f'{Path.home()}/.themes']
+
+    def __init__(self):
+        super().__init__(['dconf', 'write', '/org/mate/marco/general/theme', '"\'{theme}\'"'])
+        self.theme_light = 'Yaru'
+        self.theme_dark = 'Yaru-dark'
+
+    @property
+    def available_themes(self) -> dict:
+        themes = []
+
+        for directory in self.theme_directories:
+            if not os.path.isdir(directory):
+                continue
+
+            with os.scandir(directory) as entries:
+                for d in entries:
+                    index = d.name + '/index.theme'
+                    if not os.path.isfile(index):
+                        continue
+
+                    config = ConfigParser()
+                    config.read(index)
+                    try:
+                        theme = config['X-GNOME-Metatheme']['MetacityTheme']
+                        themes.append(theme)
+                    except KeyError:
+                        continue
+
+        return {}
