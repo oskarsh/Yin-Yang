@@ -153,6 +153,8 @@ def get_desktop() -> Desktop:
             return Desktop.KDE
         case 'xfce':
             return Desktop.XFCE
+        case 'mate':
+            return Desktop.MATE
         case 'sway' | 'hyprland':
             return Desktop.GNOME
         case _:
