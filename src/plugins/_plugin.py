@@ -144,14 +144,22 @@ class PluginCommandline(Plugin):
 
         return command
 
-    @property
-    def available(self) -> bool:
-        # Runs the first entry in the command list with --help
+    @staticmethod
+    def check_command(command) -> bool:
+        # Returns true if command execution succeeds
         try:
-            return subprocess.run([self.command[0], '--help'], stdout=subprocess.DEVNULL).returncode == 0
+            subprocess.check_call(command, stdout=subprocess.DEVNULL)
+            return True
         except FileNotFoundError:
             # if no such command is available, the plugin is not available
             return False
+        except subprocess.CalledProcessError:
+            # command execution failed
+            return False
+
+    @property
+    def available(self):
+        return self.check_command([self.command[0], '--help'])
 
 
 class PluginDesktopDependent(Plugin):
