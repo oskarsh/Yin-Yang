@@ -3,8 +3,8 @@ import subprocess
 from enum import Enum, auto
 from pathlib import Path
 
-from src.config import ConfigWatcher
-from src.enums import ConfigEvent, Modes
+from src.config import ConfigWatcher, config
+from src.meta import ConfigEvent, Modes
 
 logger = logging.getLogger(__name__)
 TIMER_PATH = str(Path.home()) + '/.local/share/systemd/user/yin_yang.timer'
@@ -14,8 +14,8 @@ def run_command(command, **kwargs):
     return subprocess.run(['systemctl', '--user', command, 'yin_yang.timer'], **kwargs)
 
 
-def update_times(saved_config):
-    if saved_config['mode'] == Modes.MANUAL.value:
+def update_times():
+    if config.mode == Modes.MANUAL:
         run_command('stop')
         logger.debug('Stopping systemd timer')
         return
@@ -25,7 +25,7 @@ def update_times(saved_config):
     with open(TIMER_PATH, 'r') as file:
         lines = file.readlines()
 
-    time_light, time_dark = saved_config['times']
+    time_light, time_dark = config.times
     lines[4] = f'OnCalendar={time_light}\n'
     lines[5] = f'OnCalendar={time_dark}\n'
 
@@ -56,24 +56,26 @@ class SaveWatcher(ConfigWatcher):
                     self._next_timer_update = SaveWatcher._UpdateTimerStatus.START
                 elif change_values['new_value'] == Modes.MANUAL.value:
                     self._next_timer_update = SaveWatcher._UpdateTimerStatus.STOP
+                else:
+                    self._next_timer_update = SaveWatcher._UpdateTimerStatus.UPDATE_TIMES
             case 'times' | 'coordinates':
                 self._next_timer_update = SaveWatcher._UpdateTimerStatus.UPDATE_TIMES
 
-    def _update_timer(self, values):
+    def _update_timer(self):
         match self._next_timer_update:
             case SaveWatcher._UpdateTimerStatus.STOP:
                 run_command('stop')
             case SaveWatcher._UpdateTimerStatus.UPDATE_TIMES | SaveWatcher._UpdateTimerStatus.START:
-                update_times(values)
+                update_times()
 
         self._next_timer_update = SaveWatcher._UpdateTimerStatus.NO_UPDATE
 
     def notify(self, event: ConfigEvent, values):
-        match event.value:
-            case ConfigEvent.CHANGE.value:
+        match event:
+            case ConfigEvent.CHANGE:
                 self._set_needed_updates(values)
-            case ConfigEvent.SAVE.value:
-                self._update_timer(values)
+            case ConfigEvent.SAVE:
+                self._update_timer()
 
 
 watcher = SaveWatcher()

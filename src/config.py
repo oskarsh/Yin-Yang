@@ -14,7 +14,7 @@ from typing import Union, Optional
 
 from suntime import Sun, SunTimeException
 from src.plugins import get_plugins
-from src.enums import Modes, Desktop, PluginKey, ConfigEvent
+from src.meta import Modes, Desktop, PluginKey, ConfigEvent
 
 logger = logging.getLogger(__name__)
 
@@ -150,6 +150,8 @@ def get_desktop() -> Desktop:
             return Desktop.GNOME
         case 'kde' | 'plasma' | 'plasma5':
             return Desktop.KDE
+        case 'xfce':
+            return Desktop.XFCE
         case _:
             return Desktop.UNKNOWN
 
@@ -283,34 +285,49 @@ class ConfigManager(dict):
 
         return self['plugins'][plugin][key]
 
-    def update_plugin_key(self, plugin: str, key: PluginKey, value: Union[bool, str]) -> Union[bool, str]:
+    def update_plugin_key(self, plugin_name: str, key: PluginKey, value: Union[bool, str]) -> Union[bool, str]:
         """Update the value of a key in configuration
         :param key: The setting to change
         :param value: The value to set the setting to
-        :param plugin: Name of the plugin you may want to change
+        :param plugin_name: Name of the plugin you may want to change
 
         :returns: new value
         """
 
-        plugin = plugin.casefold()
-        key_str = key.value.casefold()
+        plugin_name_lower = plugin_name.casefold()
+        key_value = key.value.casefold()
 
         try:
-            old_value = self['plugins'][plugin][key_str]
-            if value != old_value:
-                self['plugins'][plugin][key_str] = value
-                self._changed = True
-                if ConfigEvent.CHANGE in self._listeners:
-                    for listener in self._listeners[ConfigEvent.CHANGE]:
-                        listener.notify(ConfigEvent.CHANGE, {
-                            'key': key_str,
-                            'old_value': old_value,
-                            'new_value': value,
-                            'plugin': plugin
-                        })
-            return self.get_plugin_key(plugin, key)
+            old_value = self['plugins'][plugin_name_lower][key_value]
+            if value == old_value:
+                return value
+
+            self['plugins'][plugin_name_lower][key_value] = value
+            self._changed = True
+            if ConfigEvent.CHANGE in self._listeners:
+                for listener in self._listeners[ConfigEvent.CHANGE]:
+                    listener.notify(ConfigEvent.CHANGE, {
+                        'key': key_value,
+                        'old_value': old_value,
+                        'new_value': value,
+                        'plugin': plugin_name_lower
+                    })
+
+            # change value in the plugin
+            plugin = next(p for p in plugins if p.name.casefold() == plugin_name_lower)
+            match key:
+                case PluginKey.ENABLED:
+                    plugin.enabled = value
+                case PluginKey.THEME_LIGHT:
+                    plugin.theme_light = value
+                case PluginKey.THEME_DARK:
+                    plugin.theme_dark = value
+                case _:
+                    raise KeyError
+
+            return self.get_plugin_key(plugin_name_lower, key)
         except KeyError as e:
-            logger.error(f'Error while updating {plugin}.{key_str}')
+            logger.error(f'Error while updating {plugin_name_lower}.{key_value}')
             raise e
 
     @property
@@ -319,7 +336,7 @@ class ConfigManager(dict):
 
         # NOTE: if you change or add new values here, make sure to update the version number and update_config() method
         conf_default = {
-            'version': 3.1,
+            'version': 3.2,
             'running': False,
             'dark_mode': False,
             'mode': Modes.MANUAL.value,

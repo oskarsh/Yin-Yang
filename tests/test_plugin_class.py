@@ -1,6 +1,8 @@
 import unittest
 
-from src.plugins._plugin import PluginCommandline, Plugin
+from PySide6.QtGui import QColor
+
+from src.plugins._plugin import PluginCommandline, Plugin, get_qcolor_from_int, get_int_from_qcolor
 
 
 class MinimalPlugin(Plugin):
@@ -112,6 +114,21 @@ class CommandlineTest(unittest.TestCase):
         self.assertEqual(['command', 'arguthemement'],
                          plugin.insert_theme('theme'),
                          'insert_theme should replace %t with the theme name, even if it is inside of an argument')
+
+
+class UtilityTest(unittest.TestCase):
+    def test_color_conversion(self):
+        # white
+        color_int = -1
+        color = get_qcolor_from_int(color_int)
+        self.assertEqual(QColor.fromRgb(255, 255, 255), color)
+        self.assertEqual(get_int_from_qcolor(color), color_int)
+
+        # black
+        color_int = -16777216
+        color = get_qcolor_from_int(color_int)
+        self.assertEqual(QColor.fromRgb(0, 0, 0), color)
+        self.assertEqual(get_int_from_qcolor(color), color_int)
 
 
 if __name__ == '__main__':

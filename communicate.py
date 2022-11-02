@@ -12,7 +12,7 @@ import time
 from datetime import datetime, time as dt_time
 from pathlib import Path
 
-from src.enums import PluginKey
+from src.meta import PluginKey
 from src.config import config
 
 logging.basicConfig(filename=str(Path.home()) + '/.local/share/yin_yang.log', level=logging.DEBUG,

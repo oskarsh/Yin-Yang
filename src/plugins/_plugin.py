@@ -1,11 +1,12 @@
 import logging
 import subprocess
 from abc import ABC, abstractmethod
-from os import listdir
-from os.path import isdir, join, isfile
 from typing import Optional
 
+from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
+
+from src.meta import UnsupportedDesktopError
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,8 @@ class Plugin(ABC):
         widget = QGroupBox(area)
         widget.setTitle(self.name)
         widget.setCheckable(True)
+        widget.setChecked(self.enabled)
+        widget.setVisible(self.available)
         widget.setObjectName('group' + self.name)
 
         horizontal_layout = QHBoxLayout(widget)
@@ -84,19 +87,29 @@ class Plugin(ABC):
             inputs = [QComboBox(widget), QComboBox(widget)]
 
             # add all theme names
-            for inp in inputs:
+            for i, inp in enumerate(inputs):
+                inp: QComboBox
                 themes = list(self.available_themes.values())
                 themes.sort()
-                for theme in themes:
-                    inp.addItem(theme)
+                inp.addItems(themes)
+                # set index
+                is_dark = i == 1
+                theme: str = self.theme_dark if is_dark else self.theme_light
+                if theme == '':
+                    logger.warning(f'Used theme is unknown for plugin {self.name}')
+                    inp.setCurrentIndex(0)
+                else:
+                    inp.setCurrentIndex(themes.index(self.available_themes[theme]))
 
             return inputs
 
-        for theme in ['Light', 'Dark']:
+        for is_dark in [False, True]:
+            theme = 'Dark' if is_dark else 'Light'
             # provide a line edit, if the possible themes are unknown
-            inp = QLineEdit(widget)
+            inp: QLineEdit = QLineEdit(widget)
             inp.setObjectName(f'inp_{theme}')
             inp.setPlaceholderText(f'{theme} Theme')
+            inp.setText(self.theme_dark if is_dark else self.theme_light)
             inputs.append(inp)
 
         return inputs
@@ -122,10 +135,7 @@ class PluginCommandline(Plugin):
 
         # insert theme in command and run it
         command = self.insert_theme(theme)
-        result = subprocess.run(command)
-
-        if result.returncode != 0:
-            raise ValueError('Command execution failed:', result.stderr)
+        subprocess.check_call(command)
 
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
@@ -154,7 +164,7 @@ class PluginDesktopDependent(Plugin):
         self._strategy_instance = strategy_instance
 
         if strategy_instance is None:
-            logger.warning('Unsupported desktop environment!')
+            logger.warning(f'Plugin {self.name} has no support for your desktop environment yet!')
 
     @property
     def strategy(self) -> Plugin:
@@ -162,12 +172,12 @@ class PluginDesktopDependent(Plugin):
 
     @property
     def enabled(self):
-        return self._strategy_instance.enabled if self._strategy_instance is not None else False
+        return self.strategy.enabled if self.strategy is not None else False
 
     @enabled.setter
     def enabled(self, value):
-        if self._strategy_instance is not None:
-            self._strategy_instance.enabled = value
+        if self.strategy is not None:
+            self.strategy.enabled = value
 
     @property
     def available(self) -> bool:
@@ -180,33 +190,38 @@ class PluginDesktopDependent(Plugin):
         if not (self.available and self.enabled):
             return
 
+        if self.strategy is None:
+            raise UnsupportedDesktopError
+
         self.strategy.set_theme(theme)
 
     @property
     def available_themes(self) -> dict:
-        return self.strategy.available_themes
+        if self.strategy is not None:
+            return self.strategy.available_themes
+        return {}
 
     @property
     def theme_light(self):
-        if self._strategy_instance is not None:
-            return self._strategy_instance.theme_light
+        if self.strategy is not None:
+            return self.strategy.theme_light
         return ''
 
     @theme_light.setter
     def theme_light(self, value):
-        if self._strategy_instance is not None:
-            self._strategy_instance.theme_light = value
+        if self.strategy is not None:
+            self.strategy.theme_light = value
 
     @property
     def theme_dark(self):
-        if self._strategy_instance is not None:
-            return self._strategy_instance.theme_dark
+        if self.strategy is not None:
+            return self.strategy.theme_dark
         return ''
 
     @theme_dark.setter
     def theme_dark(self, value):
-        if self._strategy_instance is not None:
-            self._strategy_instance.theme_dark = value
+        if self.strategy is not None:
+            self.strategy.theme_dark = value
 
 
 class ExternalPlugin(Plugin):
@@ -244,16 +259,13 @@ def inplace_change(filename: str, old_string: str, new_string: str):
         file.write(file_content)
 
 
-def get_stuff_in_dir(path: str, search_type: str) -> [str]:
-    """Returns all files or directories in the path
-    :param path: The path where to search
-    :param search_type: The type. Either dir (a directory) or file
-    """
-    # source: https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
-    # TODO replace with generator
-    if search_type == 'dir':
-        return [f for f in listdir(path) if isdir(join(path, f))]
-    elif search_type == 'file':
-        return [f for f in listdir(path) if isfile(join(path, f))]
-    else:
-        raise ValueError('Unknown type! Use dir or file')
+def get_qcolor_from_int(color_int: int) -> QColor:
+    # ... + 2^32 converts int to uint
+    color = QColor(QRgba64.fromArgb32(color_int + 2 ** 32))
+    return color
+
+
+def get_int_from_qcolor(color: QColor) -> int:
+    # ... - 2^32 converts uint to int
+    color_int = color.rgba64().toArgb32() - 2 ** 32
+    return color_int

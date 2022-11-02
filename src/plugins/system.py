@@ -6,7 +6,7 @@ import os
 
 from PySide6.QtCore import QLocale
 
-from src.enums import Desktop
+from src.meta import Desktop
 from src.plugins._plugin import PluginDesktopDependent, PluginCommandline
 
 logger = logging.getLogger(__name__)
@@ -21,7 +21,7 @@ def test_gnome_availability(command) -> bool:
             [command[0], 'get', command[2], command[3]],
             stdout=subprocess.DEVNULL
         )
-        return process.stdout == 0
+        return process.returncode == 0
     except FileNotFoundError:
         # if no such command is available, the plugin is not available
         return False
@@ -86,11 +86,6 @@ class _Kde(PluginCommandline):
         super().__init__(['lookandfeeltool', '-a', '{theme}'])
         self.theme_light = 'org.kde.breeze.desktop'
         self.theme_dark = 'org.kde.breezedark.desktop'
-
-    def set_theme(self, theme: str):
-        # TODO remove this once https://bugs.kde.org/show_bug.cgi?id=446074 is fixed
-        super().set_theme(theme)
-        super().set_theme(theme)
 
     @property
     def available_themes(self) -> dict:

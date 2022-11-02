@@ -4,11 +4,11 @@ import logging
 from os.path import isdir, isfile
 from pathlib import Path
 
-from ._plugin import Plugin, get_stuff_in_dir
+from ._plugin import Plugin
 
 logger = logging.getLogger(__name__)
 
-EXTENSION_PATHS = [
+extension_paths = [
     str(Path.home()) + '/.vscode/extensions',
     str(Path.home()) + '/.vscode-oss/extensions',
     '/usr/lib/code/extensions',
@@ -104,16 +104,16 @@ class Vscode(Plugin):
         if not self.available:
             return themes_dict
 
-        for path in filter(isdir, EXTENSION_PATHS):
-            extension_dirs = get_stuff_in_dir(path, search_type='dir')
-            # filter for a dir that doesn't seem to be an extension
-            # since it has no manifest
-            if 'node_modules' in extension_dirs:
-                extension_dirs.pop(extension_dirs.index('node_modules'))
+        for path in filter(isdir, extension_paths):
+            with os.scandir(path) as entries:
+                for d in entries:
+                    # filter for a dir that doesn't seem to be an extension
+                    # since it has no manifest
+                    if not d.is_dir() or d.name == 'node_modules':
+                        continue
 
-            for extension_dir in extension_dirs:
-                for theme_name in get_theme_name(f'{path}/{extension_dir}/package.json'):
-                    themes_dict[theme_name] = theme_name
+                    for theme_name in get_theme_name(f'{d.path}/package.json'):
+                        themes_dict[theme_name] = theme_name
 
         assert themes_dict != {}, 'No themes found'
         return themes_dict
@@ -124,7 +124,7 @@ class Vscode(Plugin):
 
     @property
     def available(self) -> bool:
-        for path in EXTENSION_PATHS:
+        for path in extension_paths:
             if isdir(path):
                 return True
         return False

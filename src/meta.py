@@ -12,6 +12,7 @@ class Modes(Enum):
 class Desktop(Enum):
     KDE = 'kde'
     GNOME = 'gnome'
+    XFCE = 'xfce'
     UNKNOWN = 'unknown'
 
 
@@ -24,3 +25,7 @@ class PluginKey(Enum):
 class ConfigEvent(Enum):
     CHANGE = auto()
     SAVE = auto()
+
+
+class UnsupportedDesktopError(NotImplementedError):
+    pass

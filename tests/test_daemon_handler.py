@@ -7,7 +7,7 @@ from os.path import isfile
 
 from src import daemon_handler
 from src.config import config
-from src.enums import Modes, ConfigEvent
+from src.meta import Modes, ConfigEvent
 
 
 class DaemonTest(unittest.TestCase):
@@ -59,12 +59,24 @@ class DaemonTest(unittest.TestCase):
         config.times = time_light, time_dark
         config.save()
 
+        light, dark = self.read_times()
+        self.assertEqual(f'OnCalendar={time_light.isoformat()}\n', light)
+        self.assertEqual(f'OnCalendar={time_dark.isoformat()}\n', dark)
+
+        config.mode = Modes.FOLLOW_SUN
+        time_light, time_dark = config.times
+        config.save()
+
+        light, dark = self.read_times()
+        self.assertEqual(f'OnCalendar={time_light.isoformat()}\n', light)
+        self.assertEqual(f'OnCalendar={time_dark.isoformat()}\n', dark)
+
+    @staticmethod
+    def read_times():
         with open(daemon_handler.TIMER_PATH, 'r') as file:
             lines = file.readlines()
             light, dark = lines[4:6]
-
-        self.assertEqual(f'OnCalendar={time_light.isoformat()}\n', light)
-        self.assertEqual(f'OnCalendar={time_dark.isoformat()}\n', dark)
+        return light, dark
 
     def test_updates_timer(self):
         config.mode = Modes.SCHEDULED

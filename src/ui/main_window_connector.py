@@ -2,14 +2,14 @@ import logging
 
 from PySide6 import QtWidgets
 from PySide6.QtCore import QStandardPaths
-from PySide6.QtGui import QScreen
-from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox
+from PySide6.QtGui import QScreen, QColor
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog
 
 from src.ui.main_window import Ui_main_window
 
 from src.yin_yang import set_desired_theme
-from src.enums import ConfigEvent
-from src.enums import PluginKey
+from src.meta import ConfigEvent
+from src.meta import PluginKey
 from src.config import config, Modes, plugins, ConfigWatcher
 
 logger = logging.getLogger(__name__)
@@ -122,38 +122,23 @@ class MainWindow(QtWidgets.QMainWindow):
 
             assert widget is not None, f'No widget for plugin {plugin.name} found'
 
-            widget.setChecked(plugin.enabled)
             widget.toggled.connect(
                 lambda enabled, p=plugin:
-                    config.update_plugin_key(p.name, PluginKey.ENABLED, enabled))
-            widget.setVisible(plugin.available)
+                config.update_plugin_key(p.name, PluginKey.ENABLED, enabled))
 
             if plugin.available_themes:
                 # uses combobox instead of line edit
-                # set the index
                 for child in widget.findChildren(QtWidgets.QComboBox):
-                    is_dark_checkbox: bool = widget.findChildren(QtWidgets.QComboBox).index(child) == 1
-                    used_theme: str = plugin.theme_dark if is_dark_checkbox else plugin.theme_light
-                    index: int
-                    if used_theme == '':
-                        logger.debug(f'Used theme is unknown for plugin {plugin.name}')
-                        index = 0
-                    else:
-                        index = child.findText(
-                            plugin.available_themes[used_theme]
-                        )
-                    child.setCurrentIndex(index)
+                    is_dark: bool = widget.findChildren(QtWidgets.QComboBox).index(child) == 1
                     child.currentTextChanged.connect(
-                        lambda text, p=plugin: config.update_plugin_key(
+                        lambda text, p=plugin, dark=is_dark: config.update_plugin_key(
                             p.name,
-                            PluginKey.THEME_DARK if is_dark_checkbox else PluginKey.THEME_LIGHT,
+                            PluginKey.THEME_DARK if dark else PluginKey.THEME_LIGHT,
                             reverse_dict_search(p.available_themes, text)))
             else:
                 children: [QtWidgets.QLineEdit] = widget.findChildren(QtWidgets.QLineEdit)
-                children[0].setText(plugin.theme_light)
                 children[0].textChanged.connect(
                     lambda text, p=plugin: config.update_plugin_key(p.name, PluginKey.THEME_LIGHT, text))
-                children[1].setText(plugin.theme_dark)
                 children[1].textChanged.connect(
                     lambda text, p=plugin: config.update_plugin_key(p.name, PluginKey.THEME_DARK, text))
 
@@ -161,6 +146,16 @@ class MainWindow(QtWidgets.QMainWindow):
                     children: [QtWidgets.QPushButton] = widget.findChildren(QtWidgets.QDialogButtonBox)
                     children[0].clicked.connect(lambda: self.select_wallpaper(False))
                     children[1].clicked.connect(lambda: self.select_wallpaper(True))
+                elif plugin.name == 'Brave':
+                    buttons: [QtWidgets.QPushButton] = widget.findChildren(QtWidgets.QPushButton)
+                    # this could be a loop, but it didn't work somehow
+                    color_str_0 = config.get_plugin_key(plugin.name, PluginKey.THEME_LIGHT)
+                    color_0 = QColor(color_str_0)
+                    buttons[0].clicked.connect(lambda: self.select_color(False, color_0))
+
+                    color_str_1 = config.get_plugin_key(plugin.name, PluginKey.THEME_DARK)
+                    color_1 = QColor(color_str_1)
+                    buttons[1].clicked.connect(lambda: self.select_color(True, color_1))
         plugin = None
 
     def update_label_enabled(self):
@@ -168,7 +163,7 @@ class MainWindow(QtWidgets.QMainWindow):
         time_dark = self.ui.inp_time_dark.time().toPython()
         self.ui.label_active.setText(
             self.tr('Dark mode will be active between {} and {}.')
-                .format(time_dark.strftime("%H:%M"), time_light.strftime("%H:%M")))
+            .format(time_dark.strftime("%H:%M"), time_light.strftime("%H:%M")))
 
     def setup_config_sync(self):
         # set sunrise and sunset times if mode is set to followSun or coordinates changed
@@ -243,21 +238,33 @@ class MainWindow(QtWidgets.QMainWindow):
         i = 1 if dark else 0
         inputs_wallpaper[i].setText(file_name)
 
+    def select_color(self, dark: bool, initial_color: QColor):
+        selected_color = QColorDialog.getColor(initial_color)
+        group_brave = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'groupBrave')
+        inputs_brave = group_brave.findChildren(QtWidgets.QLineEdit)
+        i = 1 if dark else 0
+        inputs_brave[i].setText(selected_color.name())
+        inputs_brave[i].setStyleSheet(f'background-color: {selected_color.name()};'
+                                      f' color: {"white" if selected_color.lightness() <= 128 else "black"}')
+
     def save_config_to_file(self, button):
         """Saves the config to the file or restores values"""
 
-        button = QDialogButtonBox.standardButton(self.ui.btn_box, button)
-        if button == QDialogButtonBox.Apply:
-            success = config.save()
-            set_desired_theme(True)
-            return success
-        elif button == QDialogButtonBox.RestoreDefaults:
-            config.reset()
-            self.load()
-        elif button == QDialogButtonBox.Cancel:
-            self.close()
-        else:
-            raise ValueError(f'Unknown button {button}')
+        match button:
+            case QDialogButtonBox.Apply:
+                success = config.save()
+                set_desired_theme(True)
+                return success
+            case QDialogButtonBox.RestoreDefaults:
+                config.reset()
+                self.load()
+            case QDialogButtonBox.Cancel:
+                self.close()
+            case QDialogButtonBox.NoButton:
+                raise ValueError(f'Unknown button {button}')
+            case _:
+                button = QDialogButtonBox.standardButton(self.ui.btn_box, button)
+                return self.save_config_to_file(button)
 
     def should_close(self) -> bool:
         """Returns true if the user wants to close the application"""
