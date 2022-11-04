@@ -12,6 +12,7 @@ extension_paths = [
     str(Path.home()) + '/.vscode/extensions',
     str(Path.home()) + '/.vscode-oss/extensions',
     '/usr/lib/code/extensions',
+    '/usr/share/code/resources/app/extensions',
     '/opt/visual-studio-code/resources/app/extensions/',
     '/var/lib/snapd/snap/code/current/usr/share/code/resources/app/extensions/'
 ]
