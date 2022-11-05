@@ -45,6 +45,7 @@ cp ./resources/Yin-Yang.desktop "$USER_HOME/.local/share/applications/Yin-Yang.d
 # copy icon
 cp ./resources/logo.svg /usr/share/icons/hicolor/scalable/apps/yin_yang.svg
 # systemd unit files
+mkdir -p "$USER_HOME/.local/share/systemd/user/"
 cp ./resources/yin_yang.service "$USER_HOME/.local/share/systemd/user/yin_yang.service"
 cp ./resources/yin_yang.timer "$USER_HOME/.local/share/systemd/user/yin_yang.timer"
 
