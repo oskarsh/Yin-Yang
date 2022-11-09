@@ -13,6 +13,7 @@ import logging
 import time
 from threading import Thread
 
+from daemon_handler import update_times
 from src.meta import PluginKey
 from src.config import config, plugins
 
@@ -44,6 +45,7 @@ def set_mode(dark: bool, force=False):
             except Exception as e:
                 logger.error('Error while changing theme in ' + p.name, exc_info=e)
 
+    update_times()
     config.dark_mode = dark
 
 
