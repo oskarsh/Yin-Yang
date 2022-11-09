@@ -32,6 +32,7 @@ def should_be_dark(time_current: time, time_light: time, time_dark: time) -> boo
 def set_mode(dark: bool, force=False):
     """Activates light or dark theme"""
 
+    update_times()
     if not force and dark == config.dark_mode:
         return
 
@@ -45,7 +46,6 @@ def set_mode(dark: bool, force=False):
             except Exception as e:
                 logger.error('Error while changing theme in ' + p.name, exc_info=e)
 
-    update_times()
     config.dark_mode = dark
 
 
