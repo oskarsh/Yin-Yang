@@ -91,6 +91,7 @@ class Plugin(ABC):
                 themes = list(self.available_themes.values())
                 themes.sort()
                 curComboBox.addItems(themes)
+                curComboBox.setMinimumContentsLength(4)
                 # set index
                 is_dark = i == 1
                 theme: str = self.theme_dark if is_dark else self.theme_light
