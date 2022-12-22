@@ -46,7 +46,7 @@ sudo dnf install gcc systemd-devel
 For Debian, Ubuntu, etc.
 ```bash
 sudo apt update
-sudo apt install libsystemd-{journal,daemon,login,id128}-dev gcc
+sudo apt install libsystemd-dev gcc
 ```
 
 ### Yin-Yang
