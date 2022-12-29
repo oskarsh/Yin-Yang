@@ -2,11 +2,25 @@
 <ui version="4.0">
  <class>main_window</class>
  <widget class="QMainWindow" name="main_window">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>550</width>
+    <height>800</height>
+   </rect>
+  </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+   <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>400</width>
+    <height>600</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string notr="true">Yin &amp; Yang</string>
@@ -29,7 +43,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="settings">
        <attribute name="title">
@@ -316,11 +330,48 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>348</width>
-             <height>451</height>
+             <width>523</width>
+             <height>663</height>
             </rect>
            </property>
-           <layout class="QVBoxLayout" name="plugins_scroll_content_layout"/>
+           <layout class="QVBoxLayout" name="plugins_scroll_content_layout">
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout">
+              <item>
+               <widget class="QGroupBox" name="samplePluginGroupBox">
+                <property name="title">
+                 <string>Sample Plugin</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_2">
+                 <item>
+                  <widget class="QComboBox" name="comboBox">
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                   </property>
+                   <property name="placeholderText">
+                    <string>firefox-compact-light@mozilla.org</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QComboBox" name="comboBox_2">
+                   <property name="currentText">
+                    <string notr="true"/>
+                   </property>
+                   <property name="sizeAdjustPolicy">
+                    <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+                   </property>
+                   <property name="placeholderText">
+                    <string>firefox-compact-dark@mozilla.org</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>

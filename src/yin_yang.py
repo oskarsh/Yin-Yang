@@ -13,7 +13,7 @@ import logging
 import time
 from threading import Thread
 
-from daemon_handler import update_times
+from src.daemon_handler import update_times
 from src.meta import PluginKey
 from src.config import config, plugins
 

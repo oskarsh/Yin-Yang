@@ -35,11 +35,30 @@ and also themes your favourite editors like VSCode or Atom.
 
 ## Installation
 
-To install Yin-Yang:
-1. Install the dependencies: `systemd`, `python-systemd` and optionally `pyside6` (from your system package manager) for native widget style
-2. Copy and run the command below and follow the instructions:
+### Dependencies:
+Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager.
+
+For CentOS, RHEL, and Fedora:
 ```bash
-git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang && ./scripts/install.sh
+sudo dnf install gcc systemd-devel
+``` 
+
+For Debian, Ubuntu, etc.
+```bash
+sudo apt update
+sudo apt install libsystemd-dev gcc
+```
+
+### Yin-Yang
+```bash
+git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang
+## Create virtual environment for pypi packages
+python3 -m venv .venv
+source .venv/bin/activate
+# Install pip requirements
+pip3 install -r requirements.txt
+# Install Yin-Yang
+./scripts/install.sh
 ```
 
 ## Documentation

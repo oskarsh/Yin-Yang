@@ -1,11 +1,14 @@
 import json
 from configparser import ConfigParser
+import logging
 from os.path import isdir
 from pathlib import Path
 
 from PySide6.QtWidgets import QGroupBox
 
 from ._plugin import ExternalPlugin
+
+logger = logging.getLogger(__name__)
 
 
 def get_default_profile_path() -> str:
@@ -33,11 +36,15 @@ class Firefox(ExternalPlugin):
         path = get_default_profile_path() + '/extensions.json'
         themes: dict[str, str] = {}
 
-        with open(path, 'r') as file:
-            content = json.load(file)
-            for addon in content['addons']:
-                if addon['type'] == 'theme':
-                    themes[addon['id']] = addon['defaultLocale']['name']
+        try:
+            with open(path, 'r') as file:
+                    content = json.load(file)
+                    for addon in content['addons']:
+                        if addon['type'] == 'theme':
+                            themes[addon['id']] = addon['defaultLocale']['name']
+        except FileNotFoundError as e:
+            logger.error(f'Error: {e}.')
+            return {}
 
         assert themes != {}, 'No themes found!'
         return themes
