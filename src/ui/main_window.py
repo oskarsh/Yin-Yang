@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.3.1
+## Created by: Qt User Interface Compiler version 6.4.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -15,22 +15,25 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QDialogButtonBox,
-    QDoubleSpinBox, QFormLayout, QFrame, QLabel,
-    QMainWindow, QRadioButton, QScrollArea, QSizePolicy,
-    QSpacerItem, QStatusBar, QTabWidget, QTimeEdit,
-    QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QComboBox,
+    QDialogButtonBox, QDoubleSpinBox, QFormLayout, QFrame,
+    QGroupBox, QHBoxLayout, QLabel, QMainWindow,
+    QRadioButton, QScrollArea, QSizePolicy, QSpacerItem,
+    QStatusBar, QTabWidget, QTimeEdit, QVBoxLayout,
+    QWidget)
 import resources_rc
 
 class Ui_main_window(object):
     def setupUi(self, main_window):
         if not main_window.objectName():
             main_window.setObjectName(u"main_window")
-        sizePolicy = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.MinimumExpanding)
+        main_window.resize(550, 800)
+        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(main_window.sizePolicy().hasHeightForWidth())
         main_window.setSizePolicy(sizePolicy)
+        main_window.setMinimumSize(QSize(400, 600))
         main_window.setWindowTitle(u"Yin & Yang")
         icon = QIcon()
         iconThemeName = u"yin_yang"
@@ -38,7 +41,7 @@ class Ui_main_window(object):
             icon = QIcon.fromTheme(iconThemeName)
         else:
             icon.addFile(u":/icons/logo", QSize(), QIcon.Normal, QIcon.Off)
-        
+
         main_window.setWindowIcon(icon)
         main_window.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
         self.central_widget = QWidget(main_window)
@@ -240,11 +243,39 @@ class Ui_main_window(object):
         self.plugins_scroll.setWidgetResizable(True)
         self.plugins_scroll_content = QWidget()
         self.plugins_scroll_content.setObjectName(u"plugins_scroll_content")
-        self.plugins_scroll_content.setGeometry(QRect(0, 0, 348, 451))
+        self.plugins_scroll_content.setGeometry(QRect(0, 0, 523, 663))
         self.plugins_scroll_content_layout = QVBoxLayout(self.plugins_scroll_content)
         self.plugins_scroll_content_layout.setSpacing(6)
         self.plugins_scroll_content_layout.setContentsMargins(11, 11, 11, 11)
         self.plugins_scroll_content_layout.setObjectName(u"plugins_scroll_content_layout")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setSpacing(6)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.samplePluginGroupBox = QGroupBox(self.plugins_scroll_content)
+        self.samplePluginGroupBox.setObjectName(u"samplePluginGroupBox")
+        self.horizontalLayout_2 = QHBoxLayout(self.samplePluginGroupBox)
+        self.horizontalLayout_2.setSpacing(6)
+        self.horizontalLayout_2.setContentsMargins(11, 11, 11, 11)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.comboBox = QComboBox(self.samplePluginGroupBox)
+        self.comboBox.setObjectName(u"comboBox")
+        self.comboBox.setSizeAdjustPolicy(QComboBox.AdjustToContentsOnFirstShow)
+
+        self.horizontalLayout_2.addWidget(self.comboBox)
+
+        self.comboBox_2 = QComboBox(self.samplePluginGroupBox)
+        self.comboBox_2.setObjectName(u"comboBox_2")
+        self.comboBox_2.setCurrentText(u"")
+        self.comboBox_2.setSizeAdjustPolicy(QComboBox.AdjustToContentsOnFirstShow)
+
+        self.horizontalLayout_2.addWidget(self.comboBox_2)
+
+
+        self.horizontalLayout.addWidget(self.samplePluginGroupBox)
+
+
+        self.plugins_scroll_content_layout.addLayout(self.horizontalLayout)
+
         self.plugins_scroll.setWidget(self.plugins_scroll_content)
 
         self.plugins_layout.addWidget(self.plugins_scroll)
@@ -287,6 +318,9 @@ class Ui_main_window(object):
         self.toggle_sound.setText(QCoreApplication.translate("main_window", u"Make a sound when switching the theme", None))
         self.toggle_notification.setText(QCoreApplication.translate("main_window", u"Send a notification", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.settings), QCoreApplication.translate("main_window", u"Settings", None))
+        self.samplePluginGroupBox.setTitle(QCoreApplication.translate("main_window", u"Sample Plugin", None))
+        self.comboBox.setPlaceholderText(QCoreApplication.translate("main_window", u"firefox-compact-light@mozilla.org", None))
+        self.comboBox_2.setPlaceholderText(QCoreApplication.translate("main_window", u"firefox-compact-dark@mozilla.org", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.plugins), QCoreApplication.translate("main_window", u"Plugins", None))
         pass
     # retranslateUi

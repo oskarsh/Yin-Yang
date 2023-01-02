@@ -87,32 +87,31 @@ class Plugin(ABC):
             inputs = [QComboBox(widget), QComboBox(widget)]
 
             # add all theme names
-            for i, inp in enumerate(inputs):
-                inp: QComboBox
+            for i, curComboBox in enumerate(inputs):
                 themes = list(self.available_themes.values())
                 themes.sort()
-                inp.addItems(themes)
+                curComboBox.addItems(themes)
+                curComboBox.setMinimumContentsLength(4)
                 # set index
                 is_dark = i == 1
                 theme: str = self.theme_dark if is_dark else self.theme_light
-                if theme == '':
-                    logger.warning(f'Used theme is unknown for plugin {self.name}')
-                    inp.setCurrentIndex(0)
-                else:
-                    inp.setCurrentIndex(themes.index(self.available_themes[theme]))
+                try:
+                    curComboBox.setCurrentIndex(themes.index(self.available_themes[theme]))
+                except (KeyError, ValueError):
+                    logger.warning(f'Couldn\'t find theme {theme} in plugin {self.name}')
+                    curComboBox.setCurrentIndex(0)
+            return inputs
+        else:
+            for is_dark in [False, True]:
+                theme = 'Dark' if is_dark else 'Light'
+                # provide a line edit, if the possible themes are unknown
+                inp: QLineEdit = QLineEdit(widget)
+                inp.setObjectName(f'inp_{theme}')
+                inp.setPlaceholderText(f'{theme} Theme')
+                inp.setText(self.theme_dark if is_dark else self.theme_light)
+                inputs.append(inp)
 
             return inputs
-
-        for is_dark in [False, True]:
-            theme = 'Dark' if is_dark else 'Light'
-            # provide a line edit, if the possible themes are unknown
-            inp: QLineEdit = QLineEdit(widget)
-            inp.setObjectName(f'inp_{theme}')
-            inp.setPlaceholderText(f'{theme} Theme')
-            inp.setText(self.theme_dark if is_dark else self.theme_light)
-            inputs.append(inp)
-
-        return inputs
 
     def __str__(self):
         return self.name.lower()
