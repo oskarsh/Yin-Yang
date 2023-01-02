@@ -95,11 +95,11 @@ class Plugin(ABC):
                 # set index
                 is_dark = i == 1
                 theme: str = self.theme_dark if is_dark else self.theme_light
-                if theme == '':
-                    logger.warning(f'Used theme is unknown for plugin {self.name}')
-                    curComboBox.setCurrentIndex(0)
-                else:
+                try:
                     curComboBox.setCurrentIndex(themes.index(self.available_themes[theme]))
+                except (KeyError, ValueError):
+                    logger.warning(f'Couldn\'t find theme {theme} in plugin {self.name}')
+                    curComboBox.setCurrentIndex(0)
             return inputs
         else:
             for is_dark in [False, True]:
