@@ -12,11 +12,10 @@ and also themes your favourite editors like VSCode or Atom.
 ![](https://img.shields.io/badge/Build%20with-Python-yellow)
 ![](https://img.shields.io/github/license/oskarsh/yin-yang)
 
-![](.github/images/header.png)
+![Visualization](.github/images/header.png)
+![App configuration](.github/images/settings.png)
 
 ## Features
-<img src=".github/images/settings1.png" alt="Settings page" width="250">
-<img src=".github/images/settings1.png" alt="Plugins page" width="250">
 
 * Changes your themes at certain times or sunrise and sunset
 * Supported Desktops:
