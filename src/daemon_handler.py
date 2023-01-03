@@ -10,7 +10,7 @@ from src.meta import ConfigEvent, Modes
 
 logger = logging.getLogger(__name__)
 SYSTEMD_PATH = str(Path.home()) + '/.local/share/systemd/user/'
-TIMER_PATH = SYSTEMD_PATH + "yin-yang.timer"
+TIMER_PATH = SYSTEMD_PATH + "yin_yang.timer"
 
 
 def create_files():
