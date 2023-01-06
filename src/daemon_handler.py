@@ -15,7 +15,7 @@ SERVICE_PATH = SYSTEMD_PATH / 'yin_yang.service'
 
 def create_files():
     logger.debug('Creating systemd files')
-    if not SYSTEMD_PATH.is_file():
+    if not SYSTEMD_PATH.is_dir():
         SYSTEMD_PATH.mkdir(parents=True, exist_ok=True)
     if not TIMER_PATH.is_file():
         shutil.copy('./resources/yin_yang.timer', TIMER_PATH)
