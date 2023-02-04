@@ -1,7 +1,8 @@
 import logging
-from configparser import ConfigParser
 from os import scandir, path
 from pathlib import Path
+
+from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
 from src.meta import Desktop
 from src.plugins._plugin import PluginDesktopDependent, Plugin, PluginCommandline
@@ -66,16 +67,15 @@ class _Kde(Plugin):
         self.theme_dark = 'Breeze'
 
     def set_theme(self, theme: str):
-        conf = ConfigParser()
-
-        for version in ['gtk-3.0', 'gtk-4.0']:
-            config_file = str(Path.home()) + f"/.config/{version}/settings.ini"
-            conf.read(config_file)
-
-            conf['Settings']['gtk-theme-name'] = theme
-
-            with open(config_file, "w") as file:
-                conf.write(file)
+        connection = QDBusConnection.sessionBus()
+        message = QDBusMessage.createMethodCall(
+            'org.kde.GtkConfig',
+            '/GtkConfig',
+            'org.kde.GtkConfig',
+            'setGtkTheme'
+        )
+        message.setArguments([theme])
+        connection.call(message)
 
 
 class _Xfce(PluginCommandline):
