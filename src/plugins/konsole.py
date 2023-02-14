@@ -65,7 +65,7 @@ class Konsole(Plugin):
             return {}
 
         themes = sorted([
-            p.with_suffix('')
+            p.with_suffix('').name
             for p in chain(self.global_path.iterdir(), self.user_path.iterdir())
             if p.is_file() and f.suffix == '.colorscheme'
         ])
