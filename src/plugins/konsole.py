@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class Konsole(Plugin):
-    global_path = '/usr/share/konsole'
+    global_path = Path('/usr/share/konsole')
 
     @property
     @staticmethod
