@@ -27,7 +27,7 @@ class Konsole(Plugin):
         config.optionxform = str
         config_paths = [
             p for p in self.user_path.iterdir()
-            if f.is_file() and f.suffix == '.profile'
+            if p.is_file() and p.suffix == '.profile'
         ]
 
         assert len(config_paths) > 0, 'No profiles found!'
@@ -67,7 +67,7 @@ class Konsole(Plugin):
         themes = sorted([
             p.with_suffix('').name
             for p in chain(self.global_path.iterdir(), self.user_path.iterdir())
-            if p.is_file() and f.suffix == '.colorscheme'
+            if p.is_file() and p.suffix == '.colorscheme'
         ])
 
         themes_dict = {}
