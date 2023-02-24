@@ -34,7 +34,7 @@ class DaemonTest(unittest.TestCase):
     @classmethod
     def tearDownClass(cls) -> None:
         super().tearDownClass()
-        shutil.move(daemon_handler.TIMER_PATH.with_ext('.timer_backup')), daemon_handler.TIMER_PATH)
+        shutil.move(daemon_handler.TIMER_PATH.with_ext('.timer_backup'), daemon_handler.TIMER_PATH)
 
     def test_starts_stops(self):
         config.mode = Modes.SCHEDULED
