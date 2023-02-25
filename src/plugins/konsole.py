@@ -12,8 +12,7 @@ class Konsole(Plugin):
     global_path = Path('/usr/share/konsole')
 
     @property
-    @staticmethod
-    def user_path() -> Path:
+    def user_path(self) -> Path:
         return Path.home() / '.local/share/konsole'
 
     def __init__(self):
@@ -64,17 +63,17 @@ class Konsole(Plugin):
         if not self.available:
             return {}
 
-        themes = sorted([
-            p.with_suffix('').name
+        themes = dict(sorted([
+            (p.with_suffix('').name, p)
             for p in chain(self.global_path.iterdir(), self.user_path.iterdir())
             if p.is_file() and p.suffix == '.colorscheme'
-        ])
+        ]))
 
         themes_dict = {}
         config_parser = ConfigParser()
 
-        for theme in themes:
-            config_parser.read(self.global_path / f'{theme}.colorscheme')
+        for theme, theme_path in themes.items():
+            config_parser.read(theme_path)
             theme_name = config_parser['General']['Description']
             themes_dict[theme] = theme_name
 
