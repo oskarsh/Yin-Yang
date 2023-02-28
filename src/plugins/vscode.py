@@ -10,11 +10,16 @@ logger = logging.getLogger(__name__)
 
 extension_paths = [
     str(Path.home()) + '/.vscode/extensions',
+    str(Path.home()) + '/.vscode-insiders/extensions',
     str(Path.home()) + '/.vscode-oss/extensions',
     '/usr/lib/code/extensions',
+    '/usr/lib/code-insiders/extensions',
     '/usr/share/code/resources/app/extensions',
+    '/usr/share/code-insiders/resources/app/extensions',
     '/opt/visual-studio-code/resources/app/extensions/',
-    '/var/lib/snapd/snap/code/current/usr/share/code/resources/app/extensions/'
+    '/opt/visual-studio-code-insiders/resources/app/extensions/',
+    '/var/lib/snapd/snap/code/current/usr/share/code/resources/app/extensions/',
+    '/var/lib/snapd/snap/code-insiders/current/usr/share/code-insiders/resources/app/extensions/'
 ]
 
 
