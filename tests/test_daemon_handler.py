@@ -28,13 +28,13 @@ class DaemonTest(unittest.TestCase):
         if not isfile(daemon_handler.TIMER_PATH):
             pathlib.Path(daemon_handler.SYSTEMD_PATH).mkdir(parents=True, exist_ok=True)
             shutil.copyfile('./resources/yin_yang.timer', daemon_handler.TIMER_PATH)
-            shutil.copyfile('./resources/yin_yang.service', daemon_handler.TIMER_PATH.replace('timer', 'service'))
-        shutil.copyfile(daemon_handler.TIMER_PATH, daemon_handler.TIMER_PATH + '_backup')
+            shutil.copyfile('./resources/yin_yang.service', daemon_handler.SERVICE_PATH)
+        shutil.copyfile(daemon_handler.TIMER_PATH, daemon_handler.TIMER_PATH.with_suffix('.timer_backup'))
 
     @classmethod
     def tearDownClass(cls) -> None:
         super().tearDownClass()
-        shutil.move(daemon_handler.TIMER_PATH + '_backup', daemon_handler.TIMER_PATH)
+        shutil.move(daemon_handler.TIMER_PATH.with_suffix('.timer_backup'), daemon_handler.TIMER_PATH)
 
     def test_starts_stops(self):
         config.mode = Modes.SCHEDULED

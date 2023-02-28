@@ -1,5 +1,4 @@
 import logging
-import os
 import shutil
 import subprocess
 from enum import Enum, auto
@@ -9,17 +8,19 @@ from src.config import ConfigWatcher, config
 from src.meta import ConfigEvent, Modes
 
 logger = logging.getLogger(__name__)
-SYSTEMD_PATH = str(Path.home()) + '/.local/share/systemd/user/'
-TIMER_PATH = SYSTEMD_PATH + "yin_yang.timer"
+SYSTEMD_PATH = Path.home() / '.local/share/systemd/user'
+TIMER_PATH = SYSTEMD_PATH / 'yin_yang.timer'
+SERVICE_PATH = SYSTEMD_PATH / 'yin_yang.service'
 
 
 def create_files():
     logger.debug('Creating systemd files')
-    if not os.path.exists(SYSTEMD_PATH):
-        os.makedirs(SYSTEMD_PATH)
-        
-    shutil.copy('./resources/yin_yang.timer', TIMER_PATH)
-    shutil.copy('./resources/yin_yang.service', TIMER_PATH.replace('timer', 'service'))
+    if not SYSTEMD_PATH.is_dir():
+        SYSTEMD_PATH.mkdir(parents=True, exist_ok=True)
+    if not TIMER_PATH.is_file():
+        shutil.copy('./resources/yin_yang.timer', TIMER_PATH)
+    if not SERVICE_PATH.is_file():
+        shutil.copy('./resources/yin_yang.service', SERVICE_PATH)
 
 
 def run_command(command, **kwargs):
@@ -27,8 +28,7 @@ def run_command(command, **kwargs):
 
 
 def update_times():
-    if not Path(TIMER_PATH).is_file():
-        create_files()
+    create_files()
 
     if config.mode == Modes.MANUAL:
         run_command('stop')
@@ -37,14 +37,14 @@ def update_times():
 
     logger.debug('Updating systemd timer')
     # update timer times
-    with open(TIMER_PATH, 'r') as file:
+    with TIMER_PATH.open('r') as file:
         lines = file.readlines()
 
     time_light, time_dark = config.times
     lines[4] = f'OnCalendar={time_light}\n'
     lines[5] = f'OnCalendar={time_dark}\n'
 
-    with open(TIMER_PATH, 'w') as file:
+    with TIMER_PATH.open('w') as file:
         file.writelines(lines)
 
     subprocess.run(['systemctl', '--user', 'daemon-reload'])
