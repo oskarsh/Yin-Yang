@@ -12,11 +12,10 @@ and also themes your favourite editors like VSCode or Atom.
 ![](https://img.shields.io/badge/Build%20with-Python-yellow)
 ![](https://img.shields.io/github/license/oskarsh/yin-yang)
 
-![](.github/images/header.png)
+![Visualization](.github/images/header.png)
+![App configuration](.github/images/settings.png)
 
 ## Features
-
-![](.github/images/settings.png)
 
 * Changes your themes at certain times or sunrise and sunset
 * Supported Desktops:
@@ -24,18 +23,27 @@ and also themes your favourite editors like VSCode or Atom.
   * Budgie
   * KDE Plasma
 * Supported applications:
-  * VSCode
-  * Atom
+  * VSCode, Atom, gedit
+  * Firefox & Brave
+  * Kvantum
+  * Konsole
+  * OnlyOffice
+  * and more...
 * Miscellaneous:
   * Wallpaper change
   * Notifications on theme change
   * Play a sound
+  * Ability to run custom scripts
 
 > To see planned features and the development status, visit the [project status page](https://github.com/oskarsh/Yin-Yang/projects?type=classic).
 
 ## Installation
 
-### Dependencies:
+### Arch-based distributions
+Yin-Yang can be downloaded from AUR as [yin-yang](https://aur.archlinux.org/packages/yin-yang) package.
+
+
+### Source
 Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager.
 
 For CentOS, RHEL, and Fedora:
@@ -49,7 +57,7 @@ sudo apt update
 sudo apt install libsystemd-dev gcc
 ```
 
-### Yin-Yang
+Then you can install Yin-Yang in a python virtual environemnt:
 ```bash
 git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang
 ## Create virtual environment for pypi packages
