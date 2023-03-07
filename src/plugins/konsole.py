@@ -31,9 +31,6 @@ class Konsole(Plugin):
     def set_theme(self, theme: str):
         # Set Konsole profile for all sessions
 
-        # connect to the session bus
-        connection = QDBusConnection.sessionBus()
-
         # Get the process IDs of all running Konsole instances owned by the current user
         process_ids = [
             proc.pid for proc in psutil.process_iter(['name', 'username'])
@@ -42,23 +39,10 @@ class Konsole(Plugin):
 
         # loop: console processes
         for proc_id in process_ids:
-            # maybe it's possible with pyside6 dbus packages, but this was simpler and worked
-            sessions = subprocess.check_output(f'qdbus org.kde.konsole-{proc_id} | grep "Sessions/"', shell=True)
-            sessions = sessions.decode('utf-8').split('\n')
+            set_profile(f'org.kde.konsole-{proc_id}', theme)
 
-            # loop: process sessions
-            for session in sessions:
-                if session == '':
-                    continue
-                # set profile
-                message = QDBusMessage.createMethodCall(
-                    f'org.kde.konsole-{proc_id}',
-                    session,
-                    'org.kde.konsole.Session',
-                    'setProfile'
-                )
-                message.setArguments([theme])
-                connection.call(message)
+        set_profile('org.kde.yakuake', theme)
+
 
     @property
     def available_themes(self) -> dict:
@@ -85,3 +69,24 @@ class Konsole(Plugin):
     @property
     def available(self) -> bool:
         return self.global_path.is_dir()
+
+
+def set_profile(service: str, profile: str):
+    # connect to the session bus
+    connection = QDBusConnection.sessionBus()
+
+    # maybe it's possible with pyside6 dbus packages, but this was simpler and worked
+    sessions = subprocess.check_output(f'qdbus {service} | grep "Sessions/"', shell=True)
+    sessions = sessions.decode('utf-8').removesuffix('\n').split('\n')
+
+    # loop: process sessions
+    for session in sessions:
+        # set profile
+        message = QDBusMessage.createMethodCall(
+            service,
+            session,
+            'org.kde.konsole.Session',
+            'setProfile'
+        )
+        message.setArguments([profile])
+        connection.call(message)
