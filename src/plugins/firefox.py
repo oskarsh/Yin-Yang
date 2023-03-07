@@ -11,13 +11,14 @@ from ._plugin import ExternalPlugin
 logger = logging.getLogger(__name__)
 
 
-def get_default_profile_path() -> str:
+def get_profile_paths() -> str:
     path = str(Path.home()) + '/.mozilla/firefox/'
     config_parser = ConfigParser()
     config_parser.read(path + '/profiles.ini')
-    path += config_parser['Profile0']['Path']
-
-    return path
+    for section in config_parser:
+        if not section.startswith('Profile'):
+            continue
+        yield path + config_parser[section]['Path']
 
 
 class Firefox(ExternalPlugin):
@@ -33,18 +34,19 @@ class Firefox(ExternalPlugin):
         if not self.available:
             return {}
 
-        path = get_default_profile_path() + '/extensions.json'
+        paths = (p + '/extensions.json' for p in get_profile_paths())
         themes: dict[str, str] = {}
 
-        try:
-            with open(path, 'r') as file:
+        for path in paths:
+            try:
+                with open(path, 'r') as file:
                     content = json.load(file)
                     for addon in content['addons']:
                         if addon['type'] == 'theme':
                             themes[addon['id']] = addon['defaultLocale']['name']
-        except FileNotFoundError as e:
-            logger.error(f'Error: {e}.')
-            return {}
+            except FileNotFoundError as e:
+                logger.warning(f'Firefox profile has no extensions installed: {path}')
+                continue
 
         assert themes != {}, 'No themes found!'
         return themes
