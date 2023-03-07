@@ -43,7 +43,6 @@ class Konsole(Plugin):
 
         set_profile('org.kde.yakuake', theme)
 
-
     @property
     def available_themes(self) -> dict:
         if not self.available:
