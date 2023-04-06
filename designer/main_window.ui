@@ -259,7 +259,7 @@
               <item>
                <widget class="QCheckBox" name="btn_location">
                 <property name="text">
-                 <string>update automatically</string>
+                 <string>update location automatically</string>
                 </property>
                </widget>
               </item>

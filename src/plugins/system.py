@@ -19,7 +19,8 @@ def test_gnome_availability(command) -> bool:
         # or you have to install that extension
         process = subprocess.run(
             [command[0], 'get', command[2], command[3]],
-            stdout=subprocess.DEVNULL
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
         )
         return process.returncode == 0
     except FileNotFoundError:

@@ -1,7 +1,10 @@
 import logging
-from configparser import ConfigParser
+import os
+import subprocess
 from pathlib import Path
-from itertools import chain
+
+import psutil
+from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
 from src.plugins._plugin import Plugin
 
@@ -9,6 +12,11 @@ logger = logging.getLogger(__name__)
 
 
 class Konsole(Plugin):
+    """
+    Themes are profiles. To use a color scheme,
+    create a new profile or edit one to use the desired color scheme.
+    This is necessary to allow live theme changes.
+    """
     global_path = Path('/usr/share/konsole')
 
     @property
@@ -21,65 +29,63 @@ class Konsole(Plugin):
         self.theme_dark = 'Breeze'
 
     def set_theme(self, theme: str):
-        config = ConfigParser()
-        # leave casing as is
-        config.optionxform = str
-        config_paths = [
-            p for p in self.user_path.iterdir()
-            if p.is_file() and p.suffix == '.profile'
+        # Set Konsole profile for all sessions
+
+        # Get the process IDs of all running Konsole instances owned by the current user
+        process_ids = [
+            proc.pid for proc in psutil.process_iter(['name', 'username'])
+            if proc.info['name'] == 'konsole' and proc.info['username'] == os.getlogin()
         ]
 
-        assert len(config_paths) > 0, 'No profiles found!'
+        # loop: console processes
+        for proc_id in process_ids:
+            set_profile(f'org.kde.konsole-{proc_id}', theme)
 
-        for config_path in config_paths:
-            config.read(config_path)
-
-            try:
-                config['Appearance']['ColorScheme'] = theme
-            except KeyError as e:
-                logger.warning(
-                    f"""
-                    No key {str(e)} found. Trying to add one. 
-                    If this doesnt work, try to change the theme manually once.
-                    """)
-
-                if str(e) == '\'Appearance\'':
-                    config.add_section('Appearance')
-                else:
-                    raise e
-
-                with config_path.open('w+') as file:
-                    config.write(file)
-
-                self.set_theme(theme)
-                logger.info('Success!')
-                return
-
-            with config_path.open('w') as file:
-                config.write(file)
+        set_profile('org.kde.yakuake', theme)
 
     @property
     def available_themes(self) -> dict:
         if not self.available:
             return {}
 
-        themes = dict(sorted([
-            (p.with_suffix('').name, p)
-            for p in chain(self.global_path.iterdir(), self.user_path.iterdir())
-            if p.is_file() and p.suffix == '.colorscheme'
-        ]))
+        profile_paths = [
+            p.name.removesuffix('.profile') for p in self.user_path.iterdir()
+            if p.is_file() and p.suffix == '.profile'
+        ]
 
-        themes_dict = {}
-        config_parser = ConfigParser()
+        return {profile: profile for profile in profile_paths}
 
-        for theme, theme_path in themes.items():
-            config_parser.read(theme_path)
-            theme_name = config_parser['General']['Description']
-            themes_dict[theme] = theme_name
+    def get_input(self, widget):
+        input_widgets = super().get_input(widget)
+        for widget in input_widgets:
+            widget.setToolTip(
+                'Select a profile. '
+                'Create new profiles or edit existing ones within Konsole to change the color scheme.'
+            )
 
-        assert themes_dict != {}, 'No themes found!'
-        return themes_dict
+        return input_widgets
 
     @property
     def available(self) -> bool:
         return self.global_path.is_dir()
+
+
+def set_profile(service: str, profile: str):
+    # connect to the session bus
+    connection = QDBusConnection.sessionBus()
+
+    # maybe it's possible with pyside6 dbus packages, but this was simpler and worked
+    sessions = subprocess.check_output(f'qdbus {service} | grep "Sessions/"', shell=True)
+    sessions = sessions.decode('utf-8').removesuffix('\n').split('\n')
+
+    # loop: process sessions
+    for session in sessions:
+        # set profile
+        message = QDBusMessage.createMethodCall(
+            service,
+            session,
+            'org.kde.konsole.Session',
+            'setProfile'
+        )
+        message.setArguments([profile])
+        connection.call(message)
