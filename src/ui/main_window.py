@@ -300,7 +300,7 @@ class Ui_main_window(object):
         self.btn_schedule.toggled.connect(self.time.setVisible)
         self.btn_enable.toggled.connect(self.schedule_settings.setVisible)
 
-        self.tab_widget.setCurrentIndex(0)
+        self.tab_widget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(main_window)
@@ -314,7 +314,7 @@ class Ui_main_window(object):
         self.btn_sun.setText(QCoreApplication.translate("main_window", u"Sunset to Sunrise", None))
         self.label_longitude.setText(QCoreApplication.translate("main_window", u"Longitude:", None))
         self.label_latitude.setText(QCoreApplication.translate("main_window", u"Latitude:", None))
-        self.btn_location.setText(QCoreApplication.translate("main_window", u"update automatically", None))
+        self.btn_location.setText(QCoreApplication.translate("main_window", u"update location automatically", None))
         self.toggle_sound.setText(QCoreApplication.translate("main_window", u"Make a sound when switching the theme", None))
         self.toggle_notification.setText(QCoreApplication.translate("main_window", u"Send a notification", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.settings), QCoreApplication.translate("main_window", u"Settings", None))

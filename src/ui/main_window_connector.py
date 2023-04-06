@@ -217,10 +217,11 @@ class MainWindow(QtWidgets.QMainWindow):
         if config.mode != Modes.FOLLOW_SUN:
             return
 
+        old_value = config.update_location
         config.update_location = self.ui.btn_location.isChecked()
-        if config.update_location:
+        if config.update_location != old_value:
             self.load_location()
-        else:
+        elif not config.update_location:
             self.ui.location_input.setEnabled(True)
 
             coordinates = [

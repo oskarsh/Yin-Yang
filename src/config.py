@@ -407,7 +407,7 @@ class ConfigManager(dict):
 
     @property
     def location(self) -> tuple[float, float]:
-        if self['update_location']:
+        if self.update_location:
             coordinate = get_current_location()
             return coordinate.latitude(), coordinate.longitude()
 
@@ -415,7 +415,7 @@ class ConfigManager(dict):
 
     @location.setter
     def location(self, coordinates: tuple[float, float]):
-        if self['update_location']:
+        if self.update_location:
             raise ValueError('Location is updated automatically!')
         elif self.mode != Modes.FOLLOW_SUN:
             raise ValueError('Updating location while not in mode follow sun is forbidden')

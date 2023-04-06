@@ -1,4 +1,4 @@
-import re
+import subprocess
 
 from PySide6.QtWidgets import QLineEdit
 
@@ -10,10 +10,7 @@ class Custom(PluginCommandline):
         super().__init__([])
 
     def insert_theme(self, theme: str) -> list:
-        # splits at every non-escaped space
-        # src: https://stackoverflow.com/questions/18092354/python-split-string-without-splitting-escaped-character
-        command = re.split(r'(?<!\\) ', theme)
-        return command
+        return [theme]
 
     @property
     def available(self) -> bool:
@@ -24,3 +21,15 @@ class Custom(PluginCommandline):
         inputs[0].setPlaceholderText('Light script')
         inputs[1].setPlaceholderText('Dark script')
         return inputs
+
+    def set_theme(self, theme: str):
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
+        if not (self.available and self.enabled):
+            return
+
+        # insert theme in command and run it
+        command = self.insert_theme(theme)
+        # set shell=True to avoid having to separate between arguments
+        subprocess.check_call(command, shell=True)
