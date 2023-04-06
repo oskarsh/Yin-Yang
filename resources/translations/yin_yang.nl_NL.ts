@@ -14,22 +14,22 @@
         <translation>Het donkere thema wordt ingeschakeld van {} tot {}.</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="236"/>
+        <location filename="../../src/ui/main_window_connector.py" line="237"/>
         <source>Open light wallpaper</source>
         <translation>Lichte achtergrond kiezen</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="237"/>
+        <location filename="../../src/ui/main_window_connector.py" line="238"/>
         <source>Open dark wallpaper</source>
         <translation>Donkere achtergrond kiezen</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="281"/>
+        <location filename="../../src/ui/main_window_connector.py" line="282"/>
         <source>The settings have been modified. Do you want to save them?</source>
         <translation>De instellingen zijn gewijzigd. Wilt u ze opslaan?</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="281"/>
+        <location filename="../../src/ui/main_window_connector.py" line="282"/>
         <source>Unsaved changes</source>
         <translation>Niet-opgeslagen wijzigingen</translation>
     </message>
@@ -78,8 +78,8 @@
     </message>
     <message>
         <location filename="../../designer/main_window.ui" line="262"/>
-        <source>update automatically</source>
-        <translation>Automatisch bijwerken</translation>
+        <source>update location automatically</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../designer/main_window.ui" line="282"/>

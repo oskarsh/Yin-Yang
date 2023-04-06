@@ -14,22 +14,22 @@
         <translation>Dunkler Modus wird zwischen {} und {} aktiv sein.</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="236"/>
+        <location filename="../../src/ui/main_window_connector.py" line="237"/>
         <source>Open light wallpaper</source>
         <translation>Öffne helles Hintergrundbild</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="237"/>
+        <location filename="../../src/ui/main_window_connector.py" line="238"/>
         <source>Open dark wallpaper</source>
         <translation>Öffne dunkles Hintergrundbild</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="281"/>
+        <location filename="../../src/ui/main_window_connector.py" line="282"/>
         <source>The settings have been modified. Do you want to save them?</source>
         <translation>Die Einstellungen wurden geändert. Möchten Sie sie speichern?</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="281"/>
+        <location filename="../../src/ui/main_window_connector.py" line="282"/>
         <source>Unsaved changes</source>
         <translation>Ungespeicherte Änderungen</translation>
     </message>
@@ -78,8 +78,8 @@
     </message>
     <message>
         <location filename="../../designer/main_window.ui" line="262"/>
-        <source>update automatically</source>
-        <translation>Automatisch aktualisieren</translation>
+        <source>update location automatically</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../designer/main_window.ui" line="282"/>
