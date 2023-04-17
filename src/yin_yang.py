@@ -39,8 +39,10 @@ def set_mode(dark: bool, force=False):
 
     logger.info(f'Switching to {"dark" if dark else "light"} mode.')
     for p in plugins:
-        if config.get_plugin_key(p.name, PluginKey.ENABLED) and \
-                (force and (isinstance(p, Sound) or isinstance(p, Notification))):  # skip sound and notify on apply settings
+        if config.get_plugin_key(p.name, PluginKey.ENABLED):
+            if force and (isinstance(p, Sound) or isinstance(p, Notification)):
+                # skip sound and notify on apply settings
+                continue
             try:
                 logger.info(f'Changing theme in plugin {p.name}')
                 p_thread = Thread(target=p.set_mode, args=[dark], name=p.name)
