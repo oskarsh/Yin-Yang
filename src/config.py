@@ -2,12 +2,9 @@ import json
 import logging
 import os
 import pathlib
-import re
 from abc import ABC, abstractmethod
-from configparser import ConfigParser
 from datetime import time
 from functools import cache
-from shutil import copy2
 from time import sleep
 from typing import Union, Optional
 
@@ -74,43 +71,6 @@ def update_config(config_old: dict, defaults: dict):
         plugin_settings: dict = defaults['plugins']
         for plugin_name, plugin_config in plugin_settings.items():
             update_plugin_config(config_old, plugin_config, plugin_name)
-    if config_old['version'] <= 3.2:
-        # migrate konsole settings by creating a profile and setting the desired theme
-
-        # copy current profile to create a dark theme profile
-        # cant use config parser because of weird file structure
-        with open(pathlib.Path.home() / '.config/konsolerc', 'r') as file:
-            for line in file:
-                # Search for the pattern "DefaultProfile=*"
-                match = re.search(r'DefaultProfile=(.*)', line)
-
-                # If a match is found, return the content of the wildcard '*'
-                if match:
-                    default_profile = match.group(1)
-                    break
-
-        dark_profile = default_profile.replace('.profile', ' dark.profile')
-
-        konsole_path = pathlib.Path.home() / '.local/share/konsole'
-        # there is a parent profile section in the profile file, maybe we can use that (in a later version)?
-        copy2(konsole_path / default_profile,
-              konsole_path / dark_profile)
-
-        # Change name in file
-        profile_config = ConfigParser()
-        profile_config.optionxform = str
-        profile_config.read(konsole_path / dark_profile)
-        profile_config['General']['Name'] = dark_profile.removesuffix('.profile')
-
-        # set theme in both copies
-        profile_config['Appearance']['ColorScheme'] = config_old['plugins']['konsole']['dark_theme']
-        with open(konsole_path / dark_profile, 'w') as file:
-            profile_config.write(file)
-
-        profile_config.read(konsole_path / default_profile)
-        profile_config['Appearance']['ColorScheme'] = config_old['plugins']['konsole']['light_theme']
-        with open(konsole_path / default_profile, 'w') as file:
-            profile_config.write(file)
 
     return config_new
 
@@ -377,7 +337,7 @@ class ConfigManager(dict):
 
         # NOTE: if you change or add new values here, make sure to update the version number and update_config() method
         conf_default = {
-            'version': 3.2,
+            'version': 3.3,
             'running': False,
             'dark_mode': False,
             'mode': Modes.MANUAL.value,
