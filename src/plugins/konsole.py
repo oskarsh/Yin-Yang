@@ -145,6 +145,9 @@ class Konsole(Plugin):
             file.writelines(lines)
 
     def update_profile(self, dark: bool, theme: str):
+        if not self.available:
+            return
+
         # update the color scheme setting in either dark or light profile
         logger.debug('Updating konsole profile')
 
@@ -172,13 +175,13 @@ class Konsole(Plugin):
         profile_config = ConfigParser()
         profile_config.optionxform = str
 
-        profile_config.read(self.user_path / light_profile)
+        profile_config.read(light_profile)
         profile_config['General']['Name'] = light_profile.stem
 
         with open(light_profile, 'w') as file:
             profile_config.write(file)
 
-        profile_config.read(self.user_path / dark_profile)
+        profile_config.read(dark_profile)
         profile_config['General']['Name'] = dark_profile.stem
 
         with open(dark_profile, 'w') as file:
