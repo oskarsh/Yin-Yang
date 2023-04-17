@@ -75,6 +75,16 @@ class Konsole(Plugin):
 
         set_profile('org.kde.yakuake', profile)
 
+        process_ids = [
+            proc.pid for proc in psutil.process_iter(['name', 'username'])
+            if proc.info['name'] == 'dolphin' and proc.info['username'] == os.getlogin()
+        ]
+
+        # loop: console processes
+        for proc_id in process_ids:
+            logger.debug(f'Changing profile in dolphin session {proc_id}')
+            set_profile(f'org.kde.dolphin-{proc_id}', profile)
+
         return result
 
     def set_theme(self, theme: str):
