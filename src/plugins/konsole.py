@@ -53,7 +53,8 @@ class Konsole(Plugin):
 
     def set_mode(self, dark: bool) -> bool:
         # run checks
-        result = super().set_mode(dark)
+        if not super().set_mode(dark):
+            return False
 
         profile = 'Dark' if dark else 'Light'
 
@@ -85,7 +86,7 @@ class Konsole(Plugin):
             logger.debug(f'Changing profile in dolphin session {proc_id}')
             set_profile(f'org.kde.dolphin-{proc_id}', profile)
 
-        return result
+        return True
 
     def set_theme(self, theme: str):
         # everything is done in set_mode (above)
