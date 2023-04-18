@@ -5,7 +5,7 @@ import subprocess
 from configparser import ConfigParser
 from itertools import chain
 from pathlib import Path
-from shutil import copy2, copyfile
+from shutil import copyfile
 
 import psutil
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
@@ -59,7 +59,7 @@ class Konsole(Plugin):
         profile = 'Dark' if dark else 'Light'
 
         # update default profile, if application is started afterward
-        self.default_profile = profile
+        self.default_profile = profile + '.profile'
 
         # Set Konsole profile for all sessions
 
