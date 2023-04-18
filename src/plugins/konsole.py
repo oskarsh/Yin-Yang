@@ -81,7 +81,7 @@ class Konsole(Plugin):
             if proc.info['name'] == 'dolphin' and proc.info['username'] == os.getlogin()
         ]
 
-        # loop: console processes
+        # loop: dolphin processes
         for proc_id in process_ids:
             logger.debug(f'Changing profile in dolphin session {proc_id}')
             set_profile(f'org.kde.dolphin-{proc_id}', profile)
