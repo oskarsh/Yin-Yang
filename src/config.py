@@ -337,7 +337,7 @@ class ConfigManager(dict):
 
         # NOTE: if you change or add new values here, make sure to update the version number and update_config() method
         conf_default = {
-            'version': 3.3,
+            'version': 3.2,
             'running': False,
             'dark_mode': False,
             'mode': Modes.MANUAL.value,
