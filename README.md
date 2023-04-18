@@ -75,6 +75,14 @@ Want to help out? Check out the wiki to learn how to contribute translations, pl
 
 [![Generic badge](https://img.shields.io/badge/Visit-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
 
+## Related or similar projects
+
+- Auto dark mode for Windows: https://github.com/AutoDarkMode/Windows-Auto-Night-Mode
+- Auto dark mode extension for Gnome: https://extensions.gnome.org/extension/2236/night-theme-switcher/
+- Auto dark mode for Jetbrains IDEs: https://github.com/weisJ/auto-dark-mode
+- darkman: https://gitlab.com/WhyNotHugo/darkman
+- In Firefox, you can use the system theme to sync Firefox itself and supported applications with the theme of the system. When you use [dark reader](https://darkreader.org/), you can enable the system color automation.
+
 ## Thanks to all Contributors
 
 ### Code Contributors
