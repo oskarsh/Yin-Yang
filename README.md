@@ -54,7 +54,7 @@ sudo dnf install gcc systemd-devel
 For Debian, Ubuntu, etc.
 ```bash
 sudo apt update
-sudo apt install libsystemd-dev gcc
+sudo apt install libsystemd-dev gcc pkg-config python3-dev
 ```
 
 Then you can install Yin-Yang in a python virtual environemnt:
