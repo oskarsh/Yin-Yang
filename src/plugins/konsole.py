@@ -146,7 +146,8 @@ class Konsole(Plugin):
             file.writelines(lines)
 
     def update_profile(self, dark: bool, theme: str):
-        if not self.available:
+        if not self.available or theme == '':
+            # theme is empty string on super init
             return
 
         # update the color scheme setting in either dark or light profile
