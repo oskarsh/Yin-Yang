@@ -120,6 +120,7 @@ class Konsole(Plugin):
 
     @property
     def default_profile(self):
+        value = None
         # cant use config parser because of weird file structure
         with self.config_path.open('r') as file:
             for line in file:
@@ -128,7 +129,20 @@ class Konsole(Plugin):
 
                 # If a match is found, return the content of the wildcard '*'
                 if match:
-                    return match.group(1)
+                    value = match.group(1)
+
+        if value is None:
+            # use the first found profile
+            for file in self.user_path.iterdir():
+                if file.suffix == '.profile':
+                    value = file.name
+                    break
+            if value is not None:
+                logger.warning(f'No default profile found, using {value} instead.')
+            else:
+                raise ValueError('No Konsole profile found.')
+
+        return value
 
     @default_profile.setter
     def default_profile(self, value):
