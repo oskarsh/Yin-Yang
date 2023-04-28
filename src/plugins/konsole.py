@@ -145,7 +145,9 @@ class Konsole(Plugin):
         return value
 
     @default_profile.setter
-    def default_profile(self, value):
+    def default_profile(self, value: str):
+        assert value.endswith('.profile')
+
         with self.config_path.open('r') as file:
             lines = file.readlines()
             for i, line in enumerate(lines):
@@ -209,7 +211,12 @@ def set_profile(service: str, profile: str):
     connection = QDBusConnection.sessionBus()
 
     # maybe it's possible with pyside6 dbus packages, but this was simpler and worked
-    sessions = subprocess.check_output(f'qdbus {service} | grep "Sessions/"', shell=True)
+    try:
+        sessions = subprocess.check_output(f'qdbus {service} | grep "Sessions/"', shell=True)
+    except subprocess.CalledProcessError:
+        # happens when dolphins konsole is not opened
+        logger.debug(f'No Konsole sessions available in service {service}, skipping')
+        return
     sessions = sessions.decode('utf-8').removesuffix('\n').split('\n')
 
     # loop: process sessions
@@ -223,4 +230,4 @@ def set_profile(service: str, profile: str):
             'setProfile'
         )
         message.setArguments([profile])
-        response = connection.call(message)
+        connection.call(message)
