@@ -23,5 +23,9 @@ rm -rf /opt/yin-yang /usr/bin/yin-yang
 echo "Removing manifest"
 rm -f /usr/lib/mozilla/native-messaging-hosts/yin_yang.json
 
+echo "Removing systemd units"
+rm -f "$HOME/.local/share/systemd/user/yin_yang.timer"
+rm -f "$HOME/.local/share/systemd/user/yin_yang.service"
+
 echo Yin-Yang uninstalled succesfully
 echo have a nice day ...

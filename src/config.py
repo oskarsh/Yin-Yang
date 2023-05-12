@@ -3,18 +3,18 @@ import logging
 import os
 import pathlib
 from abc import ABC, abstractmethod
+from datetime import time
 from functools import cache
 from time import sleep
+from typing import Union, Optional
 
 from PySide6.QtCore import QObject
 from PySide6.QtPositioning import QGeoPositionInfoSource, QGeoPositionInfo, QGeoCoordinate
 from psutil import process_iter, NoSuchProcess
-from datetime import time
-from typing import Union, Optional
-
 from suntime import Sun, SunTimeException
-from src.plugins import get_plugins
+
 from src.meta import Modes, Desktop, PluginKey, ConfigEvent
+from src.plugins import get_plugins
 
 logger = logging.getLogger(__name__)
 
@@ -71,6 +71,7 @@ def update_config(config_old: dict, defaults: dict):
         plugin_settings: dict = defaults['plugins']
         for plugin_name, plugin_config in plugin_settings.items():
             update_plugin_config(config_old, plugin_config, plugin_name)
+
     return config_new
 
 
