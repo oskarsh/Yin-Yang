@@ -1,6 +1,6 @@
 from src.meta import Desktop
 from src.plugins import system, colors, gtk, icons, kvantum, wallpaper, custom
-from src.plugins import firefox, brave, gedit, only_office
+from src.plugins import firefox, brave, gedit, only_office, okular
 from src.plugins import vscode, atom, konsole
 from src.plugins import sound, notify
 
@@ -23,6 +23,7 @@ def get_plugins(desktop: Desktop) -> [Plugin]:
         atom.Atom(),
         gedit.Gedit(),
         only_office.OnlyOffice(),
+        okular.Okular(),
         konsole.Konsole(),
         custom.Custom(),
         sound.Sound(),
