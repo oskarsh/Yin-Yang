@@ -65,8 +65,8 @@ class Konsole(Plugin):
 
         # Get the process IDs of all running Konsole instances owned by the current user
         process_ids = [
-            proc.pid for proc in psutil.process_iter(['name', 'username'])
-            if proc.info['name'] == 'konsole' and proc.info['username'] == os.getlogin()
+            proc.pid for proc in psutil.process_iter()
+            if proc.name() == 'konsole' and proc.username() == os.getlogin()
         ]
 
         # loop: console processes
@@ -77,8 +77,8 @@ class Konsole(Plugin):
         set_profile('org.kde.yakuake', profile)
 
         process_ids = [
-            proc.pid for proc in psutil.process_iter(['name', 'username'])
-            if proc.info['name'] == 'dolphin' and proc.info['username'] == os.getlogin()
+            proc.pid for proc in psutil.process_iter()
+            if proc.name() == 'dolphin' and proc.username() == os.getlogin()
         ]
 
         # loop: dolphin processes
