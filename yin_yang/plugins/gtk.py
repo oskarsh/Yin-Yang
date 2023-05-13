@@ -4,9 +4,9 @@ from pathlib import Path
 
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
-from src.meta import Desktop
-from src.plugins._plugin import PluginDesktopDependent, Plugin, PluginCommandline
-from src.plugins.system import test_gnome_availability
+from yin_yang.meta import Desktop
+from yin_yang.plugins._plugin import PluginDesktopDependent, Plugin, PluginCommandline
+from yin_yang.plugins.system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
 

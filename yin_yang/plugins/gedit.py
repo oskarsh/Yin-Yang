@@ -2,8 +2,8 @@ import os
 from os.path import isdir
 from xml.etree import ElementTree
 
-from src.plugins._plugin import PluginCommandline
-from src.plugins.system import test_gnome_availability
+from yin_yang.plugins._plugin import PluginCommandline
+from yin_yang.plugins.system import test_gnome_availability
 
 path = '/usr/share/gtksourceview-4/styles/'
 

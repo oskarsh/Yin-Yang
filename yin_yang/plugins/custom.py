@@ -2,7 +2,7 @@ import subprocess
 
 from PySide6.QtWidgets import QLineEdit
 
-from src.plugins._plugin import PluginCommandline
+from yin_yang.plugins._plugin import PluginCommandline
 
 
 class Custom(PluginCommandline):

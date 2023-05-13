@@ -3,7 +3,7 @@ __pycache__
 build-test*
 build-ui-*
 .vscode
-src/build.py
+yin_yang/build.py
 setup.py
 
 .idea/

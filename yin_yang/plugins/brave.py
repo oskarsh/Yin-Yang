@@ -5,7 +5,7 @@ from pathlib import Path
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QPushButton
 
-from src.plugins._plugin import Plugin, get_int_from_qcolor
+from yin_yang.plugins._plugin import Plugin, get_int_from_qcolor
 
 path = f'{Path.home()}/.config/BraveSoftware/Brave-Browser/Default/Preferences'
 

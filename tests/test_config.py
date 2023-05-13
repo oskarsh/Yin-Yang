@@ -3,8 +3,8 @@ from datetime import time
 from pathlib import Path
 from typing import Optional
 
-from src.config import config, ConfigWatcher, update_config
-from src.meta import Desktop, Modes, PluginKey, ConfigEvent
+from yin_yang.config import config, ConfigWatcher, update_config
+from yin_yang.meta import Desktop, Modes, PluginKey, ConfigEvent
 
 config_path = f"{Path.home()}/.config/yin_yang/yin_yang_dev.json"
 
