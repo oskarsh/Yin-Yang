@@ -155,7 +155,7 @@ def get_desktop() -> Desktop:
             return Desktop.XFCE
         case 'mate':
             return Desktop.MATE
-        case 'X-Cinnamon':
+        case 'x-cinnamon':
             return Desktop.CINNAMON
         case _:
             return Desktop.UNKNOWN
