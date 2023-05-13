@@ -7,6 +7,8 @@ class Icons(PluginDesktopDependent):
         match desktop:
             case Desktop.MATE:
                 super().__init__(_Mate())
+            case Desktop.CINNAMON:
+                super().__init__(_Cinnamon())
             case _:
                 super().__init__(None)
 
@@ -20,3 +22,10 @@ class _Mate(PluginCommandline):
     @property
     def available(self):
         return self.check_command(['dconf', 'help'])
+
+
+class _Cinnamon(PluginCommandline):
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.interface', 'icon-theme', '\"{theme}\"'])
+        self.theme_light = 'Mint-X'
+        self.theme_dark = 'gnome'

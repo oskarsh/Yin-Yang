@@ -155,6 +155,8 @@ def get_desktop() -> Desktop:
             return Desktop.XFCE
         case 'mate':
             return Desktop.MATE
+        case 'X-Cinnamon':
+            return Desktop.CINNAMON
         case 'sway' | 'hyprland':
             return Desktop.GNOME
         case _:

@@ -29,6 +29,8 @@ class System(PluginDesktopDependent):
                 super().__init__(_Gnome())
             case Desktop.MATE:
                 super().__init__(_Mate())
+            case Desktop.CINNAMON:
+                super().__init__(_Cinnamon())
             case _:
                 super().__init__(None)
 
@@ -159,3 +161,10 @@ class _Mate(PluginCommandline):
     @property
     def available(self):
         return self.check_command(['dconf', 'help'])
+
+
+class _Cinnamon(PluginCommandline):
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.cinnamon.theme', 'name', '\"{theme}\"'])
+        self.theme_light = 'Mint-X-Teal'
+        self.theme_dark = 'Mint-Y-Dark-Brown'
