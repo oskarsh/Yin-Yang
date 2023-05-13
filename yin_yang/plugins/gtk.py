@@ -30,6 +30,8 @@ class Gtk(PluginDesktopDependent):
                 super().__init__(_Mate())
             case Desktop.XFCE:
                 super().__init__(_Xfce())
+            case Desktop.CINNAMON:
+                super().__init__(_Cinnamon())
             case _:
                 super().__init__(None)
 
@@ -96,3 +98,10 @@ class _Mate(PluginCommandline):
     @property
     def available(self) -> bool:
         return self.check_command(['dconf', 'help'])
+
+
+class _Cinnamon(PluginCommandline):
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.interface', 'gtk-theme', '\"{theme}\"'])
+        self.theme_light = 'Adwaita'
+        self.theme_dark = 'Adwaita-dark'

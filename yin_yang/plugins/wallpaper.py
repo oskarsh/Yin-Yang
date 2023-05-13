@@ -22,6 +22,8 @@ class Wallpaper(PluginDesktopDependent):
                 super().__init__(_Gnome())
             case Desktop.XFCE:
                 super().__init__(_Xfce())
+            case Desktop.CINNAMON:
+                super().__init__(_Cinnamon())
             case _:
                 super().__init__(None)
 
@@ -97,3 +99,8 @@ class _Xfce(PluginCommandline):
         monitor = next(p for p in properties.split('\\n') if p.endswith('/workspace0/last-image'))
 
         super().__init__(['xfconf-query', '-c', 'xfce4-desktop', '-p', monitor, '-s', '{theme}'])
+
+
+class _Cinnamon(PluginCommandline):
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.cinnamon.background', 'picture-ui', 'file://\"{theme}\"'])
