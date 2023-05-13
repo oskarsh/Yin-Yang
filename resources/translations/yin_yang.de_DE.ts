@@ -4,32 +4,32 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="71"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="69"/>
         <source>You are using version {}</source>
         <translation>Sie verwenden Version {}</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="172"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="171"/>
         <source>Dark mode will be active between {} and {}.</source>
         <translation>Dunkler Modus wird zwischen {} und {} aktiv sein.</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="237"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="240"/>
         <source>Open light wallpaper</source>
         <translation>Öffne helles Hintergrundbild</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="238"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="241"/>
         <source>Open dark wallpaper</source>
         <translation>Öffne dunkles Hintergrundbild</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="282"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="285"/>
         <source>The settings have been modified. Do you want to save them?</source>
         <translation>Die Einstellungen wurden geändert. Möchten Sie sie speichern?</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="282"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="285"/>
         <source>Unsaved changes</source>
         <translation>Ungespeicherte Änderungen</translation>
     </message>
@@ -79,37 +79,32 @@
     <message>
         <location filename="../../designer/main_window.ui" line="262"/>
         <source>update location automatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Position automatisch bestimmen</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="282"/>
+        <location filename="../../designer/main_window.ui" line="285"/>
+        <source>Light</source>
+        <translation>Hell</translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="292"/>
+        <source>Dark</source>
+        <translation>Dunkel</translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="302"/>
         <source>Make a sound when switching the theme</source>
         <translation>Mache ein Geräusch, wenn das Thema geändert wird</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="289"/>
+        <location filename="../../designer/main_window.ui" line="309"/>
         <source>Send a notification</source>
         <translation>Sende eine Benachrichtigung</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="317"/>
+        <location filename="../../designer/main_window.ui" line="337"/>
         <source>Plugins</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../../designer/main_window.ui" line="343"/>
-        <source>Sample Plugin</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../designer/main_window.ui" line="352"/>
-        <source>firefox-compact-light@mozilla.org</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../designer/main_window.ui" line="365"/>
-        <source>firefox-compact-dark@mozilla.org</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

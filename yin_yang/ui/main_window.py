@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.4.1
+## Created by: Qt User Interface Compiler version 6.5.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -18,9 +18,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QComboBox,
     QDialogButtonBox, QDoubleSpinBox, QFormLayout, QFrame,
     QGroupBox, QHBoxLayout, QLabel, QMainWindow,
-    QRadioButton, QScrollArea, QSizePolicy, QSpacerItem,
-    QStatusBar, QTabWidget, QTimeEdit, QVBoxLayout,
-    QWidget)
+    QPushButton, QRadioButton, QScrollArea, QSizePolicy,
+    QSpacerItem, QStatusBar, QTabWidget, QTimeEdit,
+    QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_main_window(object):
@@ -210,6 +210,25 @@ class Ui_main_window(object):
 
         self.settings_layout.addWidget(self.schedule_settings)
 
+        self.manual_buttons = QWidget(self.settings)
+        self.manual_buttons.setObjectName(u"manual_buttons")
+        self.horizontalLayout_3 = QHBoxLayout(self.manual_buttons)
+        self.horizontalLayout_3.setSpacing(6)
+        self.horizontalLayout_3.setContentsMargins(11, 11, 11, 11)
+        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        self.button_light = QPushButton(self.manual_buttons)
+        self.button_light.setObjectName(u"button_light")
+
+        self.horizontalLayout_3.addWidget(self.button_light)
+
+        self.button_dark = QPushButton(self.manual_buttons)
+        self.button_dark.setObjectName(u"button_dark")
+
+        self.horizontalLayout_3.addWidget(self.button_dark)
+
+
+        self.settings_layout.addWidget(self.manual_buttons)
+
         self.toggle_sound = QCheckBox(self.settings)
         self.toggle_sound.setObjectName(u"toggle_sound")
 
@@ -243,7 +262,7 @@ class Ui_main_window(object):
         self.plugins_scroll.setWidgetResizable(True)
         self.plugins_scroll_content = QWidget()
         self.plugins_scroll_content.setObjectName(u"plugins_scroll_content")
-        self.plugins_scroll_content.setGeometry(QRect(0, 0, 523, 663))
+        self.plugins_scroll_content.setGeometry(QRect(0, 0, 518, 676))
         self.plugins_scroll_content_layout = QVBoxLayout(self.plugins_scroll_content)
         self.plugins_scroll_content_layout.setSpacing(6)
         self.plugins_scroll_content_layout.setContentsMargins(11, 11, 11, 11)
@@ -253,13 +272,16 @@ class Ui_main_window(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.samplePluginGroupBox = QGroupBox(self.plugins_scroll_content)
         self.samplePluginGroupBox.setObjectName(u"samplePluginGroupBox")
+        self.samplePluginGroupBox.setTitle(u"Sample Plugin")
         self.horizontalLayout_2 = QHBoxLayout(self.samplePluginGroupBox)
         self.horizontalLayout_2.setSpacing(6)
         self.horizontalLayout_2.setContentsMargins(11, 11, 11, 11)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.comboBox = QComboBox(self.samplePluginGroupBox)
         self.comboBox.setObjectName(u"comboBox")
+        self.comboBox.setCurrentText(u"")
         self.comboBox.setSizeAdjustPolicy(QComboBox.AdjustToContentsOnFirstShow)
+        self.comboBox.setPlaceholderText(u"firefox-compact-light@mozilla.org")
 
         self.horizontalLayout_2.addWidget(self.comboBox)
 
@@ -267,6 +289,7 @@ class Ui_main_window(object):
         self.comboBox_2.setObjectName(u"comboBox_2")
         self.comboBox_2.setCurrentText(u"")
         self.comboBox_2.setSizeAdjustPolicy(QComboBox.AdjustToContentsOnFirstShow)
+        self.comboBox_2.setPlaceholderText(u"firefox-compact-dark@mozilla.org")
 
         self.horizontalLayout_2.addWidget(self.comboBox_2)
 
@@ -299,6 +322,7 @@ class Ui_main_window(object):
         self.btn_sun.toggled.connect(self.location.setVisible)
         self.btn_schedule.toggled.connect(self.time.setVisible)
         self.btn_enable.toggled.connect(self.schedule_settings.setVisible)
+        self.btn_enable.toggled.connect(self.manual_buttons.setHidden)
 
         self.tab_widget.setCurrentIndex(1)
 
@@ -315,12 +339,11 @@ class Ui_main_window(object):
         self.label_longitude.setText(QCoreApplication.translate("main_window", u"Longitude:", None))
         self.label_latitude.setText(QCoreApplication.translate("main_window", u"Latitude:", None))
         self.btn_location.setText(QCoreApplication.translate("main_window", u"update location automatically", None))
+        self.button_light.setText(QCoreApplication.translate("main_window", u"Light", None))
+        self.button_dark.setText(QCoreApplication.translate("main_window", u"Dark", None))
         self.toggle_sound.setText(QCoreApplication.translate("main_window", u"Make a sound when switching the theme", None))
         self.toggle_notification.setText(QCoreApplication.translate("main_window", u"Send a notification", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.settings), QCoreApplication.translate("main_window", u"Settings", None))
-        self.samplePluginGroupBox.setTitle(QCoreApplication.translate("main_window", u"Sample Plugin", None))
-        self.comboBox.setPlaceholderText(QCoreApplication.translate("main_window", u"firefox-compact-light@mozilla.org", None))
-        self.comboBox_2.setPlaceholderText(QCoreApplication.translate("main_window", u"firefox-compact-dark@mozilla.org", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.plugins), QCoreApplication.translate("main_window", u"Plugins", None))
         pass
     # retranslateUi
