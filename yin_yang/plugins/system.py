@@ -8,8 +8,8 @@ from pathlib import Path
 
 from PySide6.QtCore import QLocale
 
-from yin_yang.meta import Desktop
-from yin_yang.plugins._plugin import PluginDesktopDependent, PluginCommandline
+from ..meta import Desktop
+from ._plugin import PluginDesktopDependent, PluginCommandline
 
 logger = logging.getLogger(__name__)
 

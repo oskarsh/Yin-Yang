@@ -1,8 +1,8 @@
 import subprocess
 import re
 
-from yin_yang.meta import Desktop
-from yin_yang.plugins._plugin import Plugin, PluginDesktopDependent, PluginCommandline
+from ..meta import Desktop
+from ._plugin import Plugin, PluginDesktopDependent, PluginCommandline
 
 
 class Colors(PluginDesktopDependent):

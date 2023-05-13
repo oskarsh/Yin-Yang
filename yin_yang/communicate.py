@@ -12,8 +12,8 @@ import time
 from datetime import datetime, time as dt_time
 from pathlib import Path
 
-from yin_yang.meta import PluginKey
-from yin_yang.config import config
+from .meta import PluginKey
+from .config import config
 
 logging.basicConfig(filename=str(Path.home()) + '/.local/share/yin_yang.log', level=logging.DEBUG,
                     format='%(asctime)s %(levelname)s - %(name)s: %(message)s')

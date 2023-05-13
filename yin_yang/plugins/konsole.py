@@ -10,7 +10,7 @@ from shutil import copyfile
 import psutil
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
-from yin_yang.plugins._plugin import Plugin
+from ._plugin import Plugin
 
 logger = logging.getLogger(__name__)
 
