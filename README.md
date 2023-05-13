@@ -1,16 +1,17 @@
 # ![Yin & Yang logo](resources/logo.svg) Yin-Yang
 
-
-Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie 
-and also themes your favourite editors like VSCode or Atom.
-
-> Translations: [🇨🇳](README_zh.md)
-
 ![](https://img.shields.io/github/v/release/oskarsh/yin-yang)
 ![](https://img.shields.io/github/v/release/oskarsh/yin-yang?include_prereleases)
 ![](https://img.shields.io/github/downloads/oskarsh/yin-yang/total)
 ![](https://img.shields.io/badge/Build%20with-Python-yellow)
 ![](https://img.shields.io/github/license/oskarsh/yin-yang)
+
+Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie 
+and also themes your favourite editors like VSCode or Atom.
+
+You might also want to take a look at our [**discussions page**](https://github.com/oskarsh/Yin-Yang/discussions), where we talk about the future of the app and other cool stuff!
+
+> Translations: [🇨🇳](README_zh.md)
 
 ![Visualization](.github/images/header.png)
 ![App configuration](.github/images/settings.png)
