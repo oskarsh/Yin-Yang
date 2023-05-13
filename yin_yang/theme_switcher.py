@@ -12,11 +12,11 @@ import logging
 import time
 from threading import Thread
 
-from yin_yang.plugins.notify import Notification
-from yin_yang.plugins.sound import Sound
-from yin_yang.daemon_handler import update_times
-from yin_yang.meta import PluginKey
-from yin_yang.config import config, plugins
+from .plugins.notify import Notification
+from .plugins.sound import Sound
+from .daemon_handler import update_times
+from .meta import PluginKey
+from .config import config, plugins
 
 logger = logging.getLogger(__name__)
 

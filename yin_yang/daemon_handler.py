@@ -4,8 +4,8 @@ import subprocess
 from enum import Enum, auto
 from pathlib import Path
 
-from yin_yang.config import ConfigWatcher, config
-from yin_yang.meta import ConfigEvent, Modes
+from .config import ConfigWatcher, config
+from .meta import ConfigEvent, Modes
 
 logger = logging.getLogger(__name__)
 SYSTEMD_PATH = Path.home() / '.local/share/systemd/user'

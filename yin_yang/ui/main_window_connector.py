@@ -6,12 +6,10 @@ from PySide6.QtCore import QStandardPaths
 from PySide6.QtGui import QScreen, QColor
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog,QGroupBox
 
-from yin_yang.ui.main_window import Ui_main_window
-
-from yin_yang.theme_switcher import set_desired_theme
-from yin_yang.meta import ConfigEvent
-from yin_yang.meta import PluginKey
-from yin_yang.config import config, Modes, plugins, ConfigWatcher
+from .main_window import Ui_main_window
+from ..theme_switcher import set_desired_theme
+from ..meta import ConfigEvent, PluginKey
+from ..config import config, Modes, plugins, ConfigWatcher
 
 logger = logging.getLogger(__name__)
 
