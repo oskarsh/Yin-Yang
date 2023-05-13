@@ -5,7 +5,7 @@ import unittest
 from datetime import datetime, time
 from subprocess import Popen, PIPE
 
-import communicate
+from yin_yang import communicate
 from yin_yang.meta import PluginKey
 from yin_yang.config import config
 from yin_yang.theme_switcher import should_be_dark
