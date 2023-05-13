@@ -4,32 +4,32 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="71"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="69"/>
         <source>You are using version {}</source>
         <translation>U maakt gebruik van versie {}</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="172"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="171"/>
         <source>Dark mode will be active between {} and {}.</source>
         <translation>Het donkere thema wordt ingeschakeld van {} tot {}.</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="237"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="240"/>
         <source>Open light wallpaper</source>
         <translation>Lichte achtergrond kiezen</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="238"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="241"/>
         <source>Open dark wallpaper</source>
         <translation>Donkere achtergrond kiezen</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="282"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="285"/>
         <source>The settings have been modified. Do you want to save them?</source>
         <translation>De instellingen zijn gewijzigd. Wilt u ze opslaan?</translation>
     </message>
     <message>
-        <location filename="../../src/ui/main_window_connector.py" line="282"/>
+        <location filename="../../yin_yang/ui/main_window_connector.py" line="285"/>
         <source>Unsaved changes</source>
         <translation>Niet-opgeslagen wijzigingen</translation>
     </message>
@@ -82,34 +82,29 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="282"/>
+        <location filename="../../designer/main_window.ui" line="285"/>
+        <source>Light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="292"/>
+        <source>Dark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="302"/>
         <source>Make a sound when switching the theme</source>
         <translation>Geluid afspelen na instellen van ander thema</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="289"/>
+        <location filename="../../designer/main_window.ui" line="309"/>
         <source>Send a notification</source>
         <translation>Melding tonen</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="317"/>
+        <location filename="../../designer/main_window.ui" line="337"/>
         <source>Plugins</source>
         <translation>Plug-ins</translation>
-    </message>
-    <message>
-        <location filename="../../designer/main_window.ui" line="343"/>
-        <source>Sample Plugin</source>
-        <translation>Voorbeeldplug-in</translation>
-    </message>
-    <message>
-        <location filename="../../designer/main_window.ui" line="352"/>
-        <source>firefox-compact-light@mozilla.org</source>
-        <translation>firefox-compact-licht@mozilla.org</translation>
-    </message>
-    <message>
-        <location filename="../../designer/main_window.ui" line="365"/>
-        <source>firefox-compact-dark@mozilla.org</source>
-        <translation>firefox-compact-donker@mozilla.org</translation>
     </message>
 </context>
 </TS>

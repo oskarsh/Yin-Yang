@@ -2,12 +2,12 @@ import logging
 from typing import cast
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import QStandardPaths
+from PySide6.QtCore import QStandardPaths, Slot
 from PySide6.QtGui import QScreen, QColor
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog,QGroupBox
 
 from .main_window import Ui_main_window
-from ..theme_switcher import set_desired_theme
+from ..theme_switcher import set_desired_theme, set_mode
 from ..meta import ConfigEvent, PluginKey
 from ..config import config, Modes, plugins, ConfigWatcher
 
@@ -71,6 +71,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # set the correct mode
         mode = config.mode
         self.ui.btn_enable.setChecked(mode != Modes.MANUAL)
+        self.ui.manual_buttons.setVisible(mode == Modes.MANUAL)
 
         if mode == Modes.FOLLOW_SUN:
             self.ui.time.setVisible(False)
@@ -189,6 +190,10 @@ class MainWindow(QtWidgets.QMainWindow):
             lambda enabled: config.update_plugin_key('sound', PluginKey.ENABLED, enabled))
         self.ui.toggle_notification.toggled.connect(
             lambda enabled: config.update_plugin_key('notification', PluginKey.ENABLED, enabled))
+
+        # connect manual theme buttons
+        self.ui.button_light.clicked.connect(lambda: set_mode(False))
+        self.ui.button_dark.clicked.connect(lambda: set_mode(True))
 
     def save_mode(self):
         if not self.ui.btn_enable.isChecked():
