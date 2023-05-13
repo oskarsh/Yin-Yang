@@ -6,7 +6,7 @@ from typing import Optional
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
-from src.meta import UnsupportedDesktopError
+from yin_yang.meta import UnsupportedDesktopError
 
 logger = logging.getLogger(__name__)
 

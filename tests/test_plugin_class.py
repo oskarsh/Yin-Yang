@@ -2,7 +2,7 @@ import unittest
 
 from PySide6.QtGui import QColor
 
-from src.plugins._plugin import PluginCommandline, Plugin, get_qcolor_from_int, get_int_from_qcolor
+from yin_yang.plugins._plugin import PluginCommandline, Plugin, get_qcolor_from_int, get_int_from_qcolor
 
 
 class MinimalPlugin(Plugin):

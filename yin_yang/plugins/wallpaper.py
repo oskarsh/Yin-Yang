@@ -4,7 +4,7 @@ import subprocess
 from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
-from src.meta import Desktop
+from yin_yang.meta import Desktop
 from ._plugin import PluginDesktopDependent, PluginCommandline, Plugin
 from .system import test_gnome_availability
 

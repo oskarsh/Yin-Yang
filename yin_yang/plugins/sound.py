@@ -1,6 +1,6 @@
 import subprocess
 
-from src.plugins._plugin import PluginCommandline
+from yin_yang.plugins._plugin import PluginCommandline
 
 
 class Sound(PluginCommandline):

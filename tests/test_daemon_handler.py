@@ -5,9 +5,9 @@ import unittest
 from datetime import time
 from os.path import isfile
 
-from src import daemon_handler
-from src.config import config
-from src.meta import Modes, ConfigEvent
+from yin_yang import daemon_handler
+from yin_yang.config import config
+from yin_yang.meta import Modes, ConfigEvent
 
 
 class DaemonTest(unittest.TestCase):

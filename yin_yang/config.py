@@ -13,8 +13,8 @@ from PySide6.QtPositioning import QGeoPositionInfoSource, QGeoPositionInfo, QGeo
 from psutil import process_iter, NoSuchProcess
 from suntime import Sun, SunTimeException
 
-from src.meta import Modes, Desktop, PluginKey, ConfigEvent
-from src.plugins import get_plugins
+from yin_yang.meta import Modes, Desktop, PluginKey, ConfigEvent
+from yin_yang.plugins import get_plugins
 
 logger = logging.getLogger(__name__)
 

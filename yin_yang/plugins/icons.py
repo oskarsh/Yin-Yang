@@ -1,5 +1,5 @@
-from src.meta import Desktop
-from src.plugins._plugin import PluginDesktopDependent, PluginCommandline
+from yin_yang.meta import Desktop
+from yin_yang.plugins._plugin import PluginDesktopDependent, PluginCommandline
 
 
 class Icons(PluginDesktopDependent):

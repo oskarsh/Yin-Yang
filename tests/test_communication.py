@@ -6,9 +6,9 @@ from datetime import datetime, time
 from subprocess import Popen, PIPE
 
 import communicate
-from src.meta import PluginKey
-from src.config import config
-from src.yin_yang import should_be_dark
+from yin_yang.meta import PluginKey
+from yin_yang.config import config
+from yin_yang.theme_switcher import should_be_dark
 
 
 def should_be_dark_extensions(time_current: int, time_dark: int):
