@@ -1,8 +1,8 @@
-from yin_yang.meta import Desktop
-from yin_yang.plugins import system, colors, gtk, icons, kvantum, wallpaper, custom
-from yin_yang.plugins import firefox, brave, gedit, only_office, okular
-from yin_yang.plugins import vscode, atom, konsole
-from yin_yang.plugins import sound, notify
+from ..meta import Desktop
+from . import system, colors, gtk, icons, kvantum, wallpaper, custom
+from . import firefox, brave, gedit, only_office, okular
+from . import vscode, atom, konsole
+from . import sound, notify
 
 # NOTE initialize your plugin over here:
 # The order in the list specifies the order in the config gui

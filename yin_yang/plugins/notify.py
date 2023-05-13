@@ -1,4 +1,4 @@
-from yin_yang.plugins._plugin import PluginCommandline
+from ._plugin import PluginCommandline
 
 
 class Notification(PluginCommandline):
