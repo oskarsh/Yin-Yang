@@ -1,12 +1,12 @@
-from src.meta import Desktop
-from src.plugins import system, colors, gtk, icons, kvantum, wallpaper, custom
-from src.plugins import firefox, brave, gedit, only_office, okular
-from src.plugins import vscode, atom, konsole
-from src.plugins import sound, notify
+from yin_yang.meta import Desktop
+from yin_yang.plugins import system, colors, gtk, icons, kvantum, wallpaper, custom
+from yin_yang.plugins import firefox, brave, gedit, only_office, okular
+from yin_yang.plugins import vscode, atom, konsole
+from yin_yang.plugins import sound, notify
 
 # NOTE initialize your plugin over here:
 # The order in the list specifies the order in the config gui
-from src.plugins._plugin import Plugin, ExternalPlugin
+from yin_yang.plugins._plugin import Plugin, ExternalPlugin
 
 
 def get_plugins(desktop: Desktop) -> [Plugin]:
@@ -31,5 +31,5 @@ def get_plugins(desktop: Desktop) -> [Plugin]:
     ]
 
 
-# this lets us skip all external plugins in yin_yang.py while keeping _plugin "private"
+# this lets us skip all external plugins in theme_switcher.py while keeping _plugin "private"
 ExternalPlugin = ExternalPlugin

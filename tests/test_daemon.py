@@ -1,7 +1,7 @@
 import unittest
 from datetime import time
 
-from src.yin_yang import should_be_dark
+from yin_yang.theme_switcher import should_be_dark
 
 
 class DaemonTest(unittest.TestCase):
