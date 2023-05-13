@@ -16,6 +16,12 @@ from src import yin_yang
 from src.config import config, Modes
 from src.ui import main_window_connector
 
+import sys
+from pathlib import Path
+
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtQml import QQmlApplicationEngine
+
 logger = logging.getLogger()
 
 
@@ -49,6 +55,17 @@ def setup_logger(use_systemd_journal: bool):
 
 
 def main(arguments):
+    if __name__ == "__main__":
+        app = QGuiApplication(sys.argv)
+        engine = QQmlApplicationEngine()
+        qml_file = Path(__file__).resolve().parent / "src/ui/main.qml"
+        engine.load(qml_file)
+        if not engine.rootObjects():
+            sys.exit(-1)
+        sys.exit(app.exec())
+
+    return
+
     # checks whether $ yin-yang is run without args
     if len(sys.argv) == 1:
         config.add_event_listener(ConfigEvent.SAVE, daemon_handler.watcher)
