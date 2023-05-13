@@ -126,7 +126,7 @@ class _Kde(PluginCommandline):
 
 
 class _Mate(PluginCommandline):
-    theme_directories = ['/usr/share/themes', f'{Path.home()}/.themes']
+    theme_directories = [Path('/usr/share/themes'), Path.home() / '.themes']
 
     def __init__(self):
         super().__init__(['dconf', 'write', '/org/mate/marco/general/theme', '\'{theme}\''])
@@ -138,22 +138,21 @@ class _Mate(PluginCommandline):
         themes = []
 
         for directory in self.theme_directories:
-            if not os.path.isdir(directory):
+            if not directory.is_dir():
                 continue
 
-            with os.scandir(directory) as entries:
-                for d in entries:
-                    index = d.path + '/index.theme'
-                    if not os.path.isfile(index):
-                        continue
+            for d in directory.iterdir():
+                index = d / 'index.theme'
+                if not index.is_file():
+                    continue
 
-                    config = ConfigParser()
-                    config.read(index)
-                    try:
-                        theme = config['X-GNOME-Metatheme']['MetacityTheme']
-                        themes.append(theme)
-                    except KeyError:
-                        continue
+                config = ConfigParser()
+                config.read(index)
+                try:
+                    theme = config['X-GNOME-Metatheme']['MetacityTheme']
+                    themes.append(theme)
+                except KeyError:
+                    continue
 
         return {t: t for t in themes}
 
