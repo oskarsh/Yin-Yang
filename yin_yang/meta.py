@@ -15,6 +15,7 @@ class Desktop(Enum):
     XFCE = 'xfce'
     UNKNOWN = 'unknown'
     MATE = 'mate'
+    CINNAMON = 'cinnamon'
 
 
 class PluginKey(Enum):
