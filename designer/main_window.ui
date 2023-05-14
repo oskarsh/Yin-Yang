@@ -43,7 +43,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="settings">
        <attribute name="title">
@@ -311,6 +311,30 @@
          </widget>
         </item>
         <item>
+         <layout class="QFormLayout" name="bootOffsetSettings">
+          <item row="0" column="0">
+           <widget class="QLabel" name="bootOffsetLabel">
+            <property name="toolTip">
+             <string>Time to wait until the system finished booting. Default value is 10 seconds.</string>
+            </property>
+            <property name="text">
+             <string>Delay after boot:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="bootOffset">
+            <property name="suffix">
+             <string>s</string>
+            </property>
+            <property name="value">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QLabel" name="label_active">
           <property name="text">
            <string notr="true">Darkmode will be active between</string>
@@ -351,7 +375,7 @@
              <x>0</x>
              <y>0</y>
              <width>518</width>
-             <height>676</height>
+             <height>88</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="plugins_scroll_content_layout">

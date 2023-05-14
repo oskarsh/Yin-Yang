@@ -69,7 +69,22 @@
         <translation>Melding tonen</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="337"/>
+        <location filename="../../designer/main_window.ui" line="318"/>
+        <source>Time to wait until the system finished booting. Default value is 10 seconds.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="321"/>
+        <source>Delay after boot:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="328"/>
+        <source>s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="361"/>
         <source>Plugins</source>
         <translation>Plug-ins</translation>
     </message>
@@ -77,13 +92,13 @@
 <context>
     <name>systray</name>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="117"/>
+        <location filename="../../yin_yang/__main__.py" line="118"/>
         <source>Open Yin Yang</source>
         <comment>Context menu action in the systray</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="118"/>
+        <location filename="../../yin_yang/__main__.py" line="119"/>
         <source>Quit</source>
         <comment>Context menu action in the systray</comment>
         <translation type="unfinished"></translation>
