@@ -7,7 +7,9 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
+from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale, QObject
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 from systemd import journal
 
 from yin_yang import daemon_handler
@@ -47,21 +49,36 @@ def setup_logger(use_systemd_journal: bool):
         )
         logging.root.addHandler(file_handler)
 
+def systray_icon_clicked(reason: QSystemTrayIcon.ActivationReason):
+    match reason:
+        case QSystemTrayIcon.ActivationReason.MiddleClick:
+            theme_switcher.set_mode(not config.dark_mode)
+        case QSystemTrayIcon.ActivationReason.Trigger:
+            window.show()
+
 
 # using ArgumentParser for parsing arguments
 parser = ArgumentParser()
-parser.add_argument("-t", "--toggle",
-                    help="toggles Yin-Yang",
-                    action="store_true")
-parser.add_argument("--systemd", help="uses systemd journal handler and applies desired theme", action='store_true')
+parser.add_argument('-t', '--toggle',
+                    help='toggles Yin-Yang',
+                    action='store_true')
+parser.add_argument('--systemd', help='uses systemd journal handler and applies desired theme', action='store_true')
 arguments = parser.parse_args()
 setup_logger(arguments.systemd)
 
-# checks whether $ yin-yang is run without args
-if len(sys.argv) == 1:
+if arguments.toggle:
+    # terminate any running instances
+    config.running = False
+    config.mode = Modes.MANUAL
+    theme_switcher.set_mode(not config.dark_mode)
+
+elif arguments.systemd:
+    theme_switcher.set_desired_theme()
+
+else:
+    # load GUI
     config.add_event_listener(ConfigEvent.SAVE, daemon_handler.watcher)
     config.add_event_listener(ConfigEvent.CHANGE, daemon_handler.watcher)
-    # load GUI
     app = QtWidgets.QApplication(sys.argv)
 
     # load translation
@@ -89,15 +106,23 @@ if len(sys.argv) == 1:
         logger.error(str(e))
         print('Error while loading translation. Using default language.')
 
+    # show systray icon
+    if QSystemTrayIcon.isSystemTrayAvailable():
+        app.setQuitOnLastWindowClosed(False)
+
+        icon = QSystemTrayIcon(QIcon(u':icons/logo'), app)
+        icon.activated.connect(systray_icon_clicked)
+        icon.setToolTip('Yin & Yang')
+
+        menu = QMenu('Yin & Yang')
+        menu.addAction(app.translate('systray', 'Open Yin Yang', 'Context menu action in the systray'), lambda: window.show())
+        menu.addAction(QIcon.fromTheme('application-exit'), app.translate('systray', 'Quit', 'Context menu action in the systray'), app.quit)
+
+        icon.setContextMenu(menu)
+        icon.show()
+    else:
+        logger.debug('System tray is unsupported')
+
     window = main_window_connector.MainWindow()
     window.show()
     sys.exit(app.exec())
-
-if arguments.toggle:
-    # terminate any running instances
-    config.running = False
-    config.mode = Modes.MANUAL
-    theme_switcher.set_mode(not config.dark_mode)
-
-if arguments.systemd:
-    theme_switcher.set_desired_theme()
