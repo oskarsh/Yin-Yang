@@ -2,39 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE" sourcelanguage="en_GB">
 <context>
-    <name>MainWindow</name>
-    <message>
-        <location filename="../../yin_yang/ui/main_window_connector.py" line="69"/>
-        <source>You are using version {}</source>
-        <translation>Sie verwenden Version {}</translation>
-    </message>
-    <message>
-        <location filename="../../yin_yang/ui/main_window_connector.py" line="171"/>
-        <source>Dark mode will be active between {} and {}.</source>
-        <translation>Dunkler Modus wird zwischen {} und {} aktiv sein.</translation>
-    </message>
-    <message>
-        <location filename="../../yin_yang/ui/main_window_connector.py" line="240"/>
-        <source>Open light wallpaper</source>
-        <translation>Öffne helles Hintergrundbild</translation>
-    </message>
-    <message>
-        <location filename="../../yin_yang/ui/main_window_connector.py" line="241"/>
-        <source>Open dark wallpaper</source>
-        <translation>Öffne dunkles Hintergrundbild</translation>
-    </message>
-    <message>
-        <location filename="../../yin_yang/ui/main_window_connector.py" line="285"/>
-        <source>The settings have been modified. Do you want to save them?</source>
-        <translation>Die Einstellungen wurden geändert. Möchten Sie sie speichern?</translation>
-    </message>
-    <message>
-        <location filename="../../yin_yang/ui/main_window_connector.py" line="285"/>
-        <source>Unsaved changes</source>
-        <translation>Ungespeicherte Änderungen</translation>
-    </message>
-</context>
-<context>
     <name>main_window</name>
     <message>
         <location filename="../../designer/main_window.ui" line="50"/>
@@ -105,6 +72,21 @@
         <location filename="../../designer/main_window.ui" line="337"/>
         <source>Plugins</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>systray</name>
+    <message>
+        <location filename="../../yin_yang/__main__.py" line="117"/>
+        <source>Open Yin Yang</source>
+        <comment>Context menu action in the systray</comment>
+        <translation>Yin Yang öffnen</translation>
+    </message>
+    <message>
+        <location filename="../../yin_yang/__main__.py" line="118"/>
+        <source>Quit</source>
+        <comment>Context menu action in the systray</comment>
+        <translation>Beenden</translation>
     </message>
 </context>
 </TS>

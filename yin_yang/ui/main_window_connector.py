@@ -2,7 +2,7 @@ import logging
 from typing import cast
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import QStandardPaths, Slot
+from PySide6.QtCore import QStandardPaths
 from PySide6.QtGui import QScreen, QColor
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog,QGroupBox
 
