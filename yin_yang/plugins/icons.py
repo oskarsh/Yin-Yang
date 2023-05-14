@@ -1,3 +1,4 @@
+from .system import test_gnome_availability
 from ..meta import Desktop
 from ._plugin import PluginDesktopDependent, PluginCommandline
 
@@ -29,3 +30,7 @@ class _Cinnamon(PluginCommandline):
         super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.interface', 'icon-theme', '\"{theme}\"'])
         self.theme_light = 'Mint-X'
         self.theme_dark = 'gnome'
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
