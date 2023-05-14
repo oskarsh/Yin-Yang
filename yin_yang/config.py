@@ -349,6 +349,7 @@ class ConfigManager(dict):
             'update_location': False,
             'update_interval': 60,
             'times': ('07:00', '20:00'),
+            'boot_offset': 10,
             'plugins': {}
         }
 
@@ -467,10 +468,14 @@ class ConfigManager(dict):
         return get_desktop()
 
     @property
-    def update_interval(self) -> int:
+    def boot_offset(self) -> int:
         """Seconds that should pass until next check"""
 
-        return self['update_interval']
+        return self['boot_offset']
+
+    @boot_offset.setter
+    def boot_offset(self, value: int):
+        self['boot_offset'] = value
 
 
 # create global object with current version

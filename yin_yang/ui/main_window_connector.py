@@ -83,6 +83,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui.toggle_sound.setChecked(config.get_plugin_key('sound', PluginKey.ENABLED))
         self.ui.toggle_notification.setChecked(config.get_plugin_key('notification', PluginKey.ENABLED))
+        self.ui.bootOffset.setValue(config.boot_offset)
 
         # sets the correct time based on config
         self.load_times()
@@ -191,9 +192,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.toggle_notification.toggled.connect(
             lambda enabled: config.update_plugin_key('notification', PluginKey.ENABLED, enabled))
 
+        self.ui.bootOffset.valueChanged.connect(self.update_boot_offset)
+
         # connect manual theme buttons
         self.ui.button_light.clicked.connect(lambda: set_mode(False))
         self.ui.button_dark.clicked.connect(lambda: set_mode(True))
+
+    @staticmethod
+    def update_boot_offset(value: int):
+        config.boot_offset = value
 
     def save_mode(self):
         if not self.ui.btn_enable.isChecked():
