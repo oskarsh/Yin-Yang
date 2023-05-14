@@ -19,8 +19,8 @@ from PySide6.QtWidgets import (QAbstractButton, QApplication, QCheckBox, QComboB
     QDialogButtonBox, QDoubleSpinBox, QFormLayout, QFrame,
     QGroupBox, QHBoxLayout, QLabel, QMainWindow,
     QPushButton, QRadioButton, QScrollArea, QSizePolicy,
-    QSpacerItem, QStatusBar, QTabWidget, QTimeEdit,
-    QVBoxLayout, QWidget)
+    QSpacerItem, QSpinBox, QStatusBar, QTabWidget,
+    QTimeEdit, QVBoxLayout, QWidget)
 import resources_rc
 
 class Ui_main_window(object):
@@ -239,6 +239,23 @@ class Ui_main_window(object):
 
         self.settings_layout.addWidget(self.toggle_notification)
 
+        self.bootOffsetSettings = QFormLayout()
+        self.bootOffsetSettings.setSpacing(6)
+        self.bootOffsetSettings.setObjectName(u"bootOffsetSettings")
+        self.bootOffsetLabel = QLabel(self.settings)
+        self.bootOffsetLabel.setObjectName(u"bootOffsetLabel")
+
+        self.bootOffsetSettings.setWidget(0, QFormLayout.LabelRole, self.bootOffsetLabel)
+
+        self.bootOffset = QSpinBox(self.settings)
+        self.bootOffset.setObjectName(u"bootOffset")
+        self.bootOffset.setValue(10)
+
+        self.bootOffsetSettings.setWidget(0, QFormLayout.FieldRole, self.bootOffset)
+
+
+        self.settings_layout.addLayout(self.bootOffsetSettings)
+
         self.label_active = QLabel(self.settings)
         self.label_active.setObjectName(u"label_active")
         self.label_active.setText(u"Darkmode will be active between")
@@ -262,7 +279,7 @@ class Ui_main_window(object):
         self.plugins_scroll.setWidgetResizable(True)
         self.plugins_scroll_content = QWidget()
         self.plugins_scroll_content.setObjectName(u"plugins_scroll_content")
-        self.plugins_scroll_content.setGeometry(QRect(0, 0, 518, 676))
+        self.plugins_scroll_content.setGeometry(QRect(0, 0, 518, 88))
         self.plugins_scroll_content_layout = QVBoxLayout(self.plugins_scroll_content)
         self.plugins_scroll_content_layout.setSpacing(6)
         self.plugins_scroll_content_layout.setContentsMargins(11, 11, 11, 11)
@@ -324,7 +341,7 @@ class Ui_main_window(object):
         self.btn_enable.toggled.connect(self.schedule_settings.setVisible)
         self.btn_enable.toggled.connect(self.manual_buttons.setHidden)
 
-        self.tab_widget.setCurrentIndex(1)
+        self.tab_widget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(main_window)
@@ -343,6 +360,11 @@ class Ui_main_window(object):
         self.button_dark.setText(QCoreApplication.translate("main_window", u"Dark", None))
         self.toggle_sound.setText(QCoreApplication.translate("main_window", u"Make a sound when switching the theme", None))
         self.toggle_notification.setText(QCoreApplication.translate("main_window", u"Send a notification", None))
+#if QT_CONFIG(tooltip)
+        self.bootOffsetLabel.setToolTip(QCoreApplication.translate("main_window", u"Time to wait until the system finished booting. Default value is 10 seconds.", None))
+#endif // QT_CONFIG(tooltip)
+        self.bootOffsetLabel.setText(QCoreApplication.translate("main_window", u"Delay after boot:", None))
+        self.bootOffset.setSuffix(QCoreApplication.translate("main_window", u"s", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.settings), QCoreApplication.translate("main_window", u"Settings", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.plugins), QCoreApplication.translate("main_window", u"Plugins", None))
         pass

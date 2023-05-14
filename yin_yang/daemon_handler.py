@@ -43,6 +43,7 @@ def update_times():
     time_light, time_dark = config.times
     lines[4] = f'OnCalendar={time_light}\n'
     lines[5] = f'OnCalendar={time_dark}\n'
+    lines[6] = f'OnStartupSec={config.boot_offset}\n'
 
     with TIMER_PATH.open('w') as file:
         file.writelines(lines)
@@ -73,7 +74,7 @@ class SaveWatcher(ConfigWatcher):
                     self._next_timer_update = SaveWatcher._UpdateTimerStatus.STOP
                 else:
                     self._next_timer_update = SaveWatcher._UpdateTimerStatus.UPDATE_TIMES
-            case 'times' | 'coordinates':
+            case 'times' | 'coordinates' | 'boot_offset':
                 self._next_timer_update = SaveWatcher._UpdateTimerStatus.UPDATE_TIMES
 
     def _update_timer(self):
