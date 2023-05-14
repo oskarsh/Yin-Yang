@@ -105,3 +105,7 @@ class _Cinnamon(PluginCommandline):
         super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.interface', 'gtk-theme', '\"{theme}\"'])
         self.theme_light = 'Adwaita'
         self.theme_dark = 'Adwaita-dark'
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)

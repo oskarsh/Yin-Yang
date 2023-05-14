@@ -168,3 +168,7 @@ class _Cinnamon(PluginCommandline):
         super().__init__(['gsettings', 'set', 'org.cinnamon.theme', 'name', '\"{theme}\"'])
         self.theme_light = 'Mint-X-Teal'
         self.theme_dark = 'Mint-Y-Dark-Brown'
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)

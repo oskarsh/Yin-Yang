@@ -27,10 +27,6 @@ class Wallpaper(PluginDesktopDependent):
             case _:
                 super().__init__(None)
 
-    @property
-    def available(self) -> bool:
-        return self.strategy is not None
-
     def get_input(self, widget):
         widgets = []
 
@@ -103,4 +99,8 @@ class _Xfce(PluginCommandline):
 
 class _Cinnamon(PluginCommandline):
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.cinnamon.background', 'picture-ui', 'file://\"{theme}\"'])
+        super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.background', 'picture-uri', 'file://\"{theme}\"'])
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
