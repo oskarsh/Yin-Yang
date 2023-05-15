@@ -92,13 +92,13 @@
 <context>
     <name>systray</name>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="118"/>
+        <location filename="../../yin_yang/__main__.py" line="119"/>
         <source>Open Yin Yang</source>
         <comment>Context menu action in the systray</comment>
         <translation>Yin Yang öffnen</translation>
     </message>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="119"/>
+        <location filename="../../yin_yang/__main__.py" line="120"/>
         <source>Quit</source>
         <comment>Context menu action in the systray</comment>
         <translation>Beenden</translation>

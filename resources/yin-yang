@@ -1,3 +1,3 @@
 #!/bin/bash
 cd /opt/yin-yang/ || exit
-python3 -Om /opt/yin-yang/yin_yang "$@"
+python3 -Om yin_yang "$@"
