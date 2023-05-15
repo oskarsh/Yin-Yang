@@ -80,6 +80,8 @@ else:
     config.add_event_listener(ConfigEvent.SAVE, daemon_handler.watcher)
     config.add_event_listener(ConfigEvent.CHANGE, daemon_handler.watcher)
     app = QtWidgets.QApplication(sys.argv)
+    # fixes icon on wayland
+    app.setDesktopFileName('Yin-Yang')
 
     # load translation
     try:
