@@ -8,6 +8,7 @@ from functools import cache
 from time import sleep
 from typing import Union, Optional
 
+import requests
 from PySide6.QtCore import QObject
 from PySide6.QtPositioning import QGeoPositionInfoSource, QGeoPositionInfo, QGeoCoordinate
 from psutil import process_iter, NoSuchProcess
@@ -119,6 +120,7 @@ parent = QObject()
 locationSource = QGeoPositionInfoSource.createDefaultSource(parent)
 
 
+@cache
 def get_current_location() -> QGeoCoordinate:
     if locationSource is None:
         logger.error("No location source is available")
@@ -134,8 +136,13 @@ def get_current_location() -> QGeoCoordinate:
         sleep(1)
     coordinate = pos.coordinate()
     if not coordinate.isValid():
-        logger.error('Location could not be determined')
-        return QGeoCoordinate(0, 0)
+        logger.warning('Location could not be determined. Using ipinfo.io to get location')
+        # use the old method as a fallback
+        loc_response = requests.get('https://www.ipinfo.io/loc').text.split(',')
+        loc: [float] = [float(coordinate) for coordinate in loc_response]
+        assert len(loc) == 2, 'The returned location should have exactly 2 values.'
+        coordinate = QGeoCoordinate(loc[0], loc[1])
+        assert coordinate.isValid()
     return coordinate
 
 
