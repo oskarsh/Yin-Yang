@@ -118,6 +118,7 @@ else:
 
         menu = QMenu('Yin & Yang')
         menu.addAction(app.translate('systray', 'Open Yin Yang', 'Context menu action in the systray'), lambda: window.show())
+        menu.addAction(app.translate('systray', 'Toggle theme', 'Context menu action in the systray'), lambda: theme_switcher.set_mode(not config.dark_mode))
         menu.addAction(QIcon.fromTheme('application-exit'), app.translate('systray', 'Quit', 'Context menu action in the systray'), app.quit)
 
         icon.setContextMenu(menu)
