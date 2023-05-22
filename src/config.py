@@ -154,7 +154,7 @@ def get_desktop() -> Desktop:
         case 'xfce':
             return Desktop.XFCE
         case 'sway' | 'hyprland':
-            return Desktop.WAYLAND
+            return Desktop.GNOME
         case _:
             return Desktop.UNKNOWN
 

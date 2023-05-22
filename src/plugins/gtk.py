@@ -28,8 +28,6 @@ class Gtk(PluginDesktopDependent):
                           'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
             case Desktop.XFCE:
                 super().__init__(_Xfce())
-            case Desktop.WAYLAND:
-                super().__init__(_Wayland())
             case _:
                 super().__init__(None)
 
@@ -85,14 +83,3 @@ class _Xfce(PluginCommandline):
         super(_Xfce, self).__init__(['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName', '-s', '{theme}'])
         self.theme_light = 'Adwaita'
         self.theme_dark = 'Adwaita-dark'
-
-class _Wayland(PluginCommandline):
-    def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
-        self.theme_light = 'Default'
-        self.theme_dark = 'Default'
-
-    @property
-    def available(self) -> bool:
-        return test_gnome_availability(self.command)
-
