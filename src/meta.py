@@ -13,6 +13,7 @@ class Desktop(Enum):
     KDE = 'kde'
     GNOME = 'gnome'
     XFCE = 'xfce'
+    WAYLAND = 'wayland'
     UNKNOWN = 'unknown'
 
 
