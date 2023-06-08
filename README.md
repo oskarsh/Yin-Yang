@@ -58,7 +58,7 @@ sudo apt update
 sudo apt install libsystemd-dev gcc pkg-config python3-dev
 ```
 
-Then you can install Yin-Yang in a python virtual environemnt:
+Then you can install Yin-Yang in a python virtual environment:
 ```bash
 git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang
 ## Create virtual environment for pypi packages
