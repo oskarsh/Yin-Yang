@@ -71,7 +71,7 @@ bash
 # Removes any already present Yin-Yang code
 rm -rf Yin-Yang
 # Clones the code to your local machine
-git clone https://github.com/oskarsh/Yin-Yang
+git clone https://github.com/oskarsh/Yin-Yang.git
 # Enters the directory containing Yin-Yang's code
 if pwd != "Yin-Yang"; then cd Yin-Yang; fi
 ## Creates a virtual environment for pypi (pip) packages
