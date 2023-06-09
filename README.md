@@ -62,7 +62,7 @@ Then you can install Yin-Yang in a python virtual environment:
 ```bash
 bash
 rm -rf Yin-Yang
-git clone https://github.com/oskarsh/Yin-Yang && cd Yin-Yang
+git clone https://github.com/oskarsh/Yin-Yang
 if pwd != "Yin-Yang"; then cd Yin-Yang; fi
 ## Create virtual environment for pypi packages
 python3 -m venv .venv
