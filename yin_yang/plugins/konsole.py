@@ -143,7 +143,22 @@ class Konsole(Plugin):
                 logger.warning(f'No default profile found, using {value} instead.')
 
         if value is None:
-            raise ValueError('No Konsole profile found.')
+            # create a custom profile manually
+            file_content = """[Appearance]
+ColorScheme=Breeze
+
+[General]
+Command=/bin/bash
+Name=Fish
+Parent=FALLBACK/
+"""
+
+            with (self.user_path / 'Default.profile').open('w') as file:
+                file.writelines(file_content)
+
+            self.default_profile = 'Default.profile'
+
+            return 'Default.profile'
 
         return value
 
@@ -190,9 +205,6 @@ class Konsole(Plugin):
             profile_config.write(file)
 
     def create_profiles(self):
-        if not self.default_profile:
-            raise ValueError('No default profile found.')
-
         logger.debug('Creating new profiles for live-switching between light and dark themes.')
         # copy default profile to create theme profiles
         light_profile = self.user_path / 'Light.profile'
