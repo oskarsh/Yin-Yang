@@ -130,6 +130,8 @@ class Konsole(Plugin):
                 # If a match is found, return the content of the wildcard '*'
                 if match:
                     value = match.group(1)
+                    if not os.path.isfile(self.user_path / value):
+                        value = None
 
         if value is None:
             # use the first found profile
@@ -139,8 +141,9 @@ class Konsole(Plugin):
                     break
             if value is not None:
                 logger.warning(f'No default profile found, using {value} instead.')
-            else:
-                raise ValueError('No Konsole profile found.')
+
+        if value is None:
+            raise ValueError('No Konsole profile found.')
 
         return value
 
@@ -176,11 +179,20 @@ class Konsole(Plugin):
         profile_config = ConfigParser()
         profile_config.optionxform = str
         profile_config.read(file_path)
-        profile_config['Appearance']['ColorScheme'] = theme
+
+        try:
+            profile_config['Appearance']['ColorScheme'] = theme
+        except KeyError:
+            profile_config.add_section('Appearance')
+            profile_config['Appearance']['ColorScheme'] = theme
+
         with open(file_path, 'w') as file:
             profile_config.write(file)
 
     def create_profiles(self):
+        if not self.default_profile:
+            raise ValueError('No default profile found.')
+
         logger.debug('Creating new profiles for live-switching between light and dark themes.')
         # copy default profile to create theme profiles
         light_profile = self.user_path / 'Light.profile'
