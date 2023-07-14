@@ -45,7 +45,7 @@ Yin-Yang can be downloaded from AUR as [yin-yang](https://aur.archlinux.org/pack
 
 
 ### Source
-Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager.
+Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager. You also need python development headers (e.g. `python3-devel`).
 
 For CentOS, RHEL, and Fedora:
 ```bash
