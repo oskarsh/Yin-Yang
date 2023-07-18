@@ -1,5 +1,6 @@
 import logging
 import subprocess
+from pathlib import Path
 
 from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
@@ -64,6 +65,10 @@ class _Kde(Plugin):
         super().__init__()
 
     def set_theme(self, theme: str):
+        filename = Path(theme).name
+        if "#" in filename:
+            logger.error("Image files that contain a # will not work.")
+
         connection = QDBusConnection.sessionBus()
         message = QDBusMessage.createMethodCall(
             'org.kde.plasmashell',
