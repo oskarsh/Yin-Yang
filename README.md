@@ -49,7 +49,7 @@ Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` r
 
 For CentOS, RHEL, and Fedora:
 ```bash
-sudo dnf install gcc systemd-devel
+sudo dnf install gcc systemd-devel python3-devel
 ``` 
 
 For Debian, Ubuntu, etc.
