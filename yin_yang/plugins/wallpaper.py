@@ -58,17 +58,45 @@ class _Gnome(PluginCommandline):
         return test_gnome_availability(self.command)
 
 
+def check_theme(theme: str) -> bool:
+    file = Path(theme)
+    if "#" in file.name:
+        logger.error('Image files that contain a \'#\' will not work.')
+        return False
+    if not file.exists():
+        logger.error(f'Image {theme} does not exist!')
+        return False
+
+    return True
+
+
 class _Kde(Plugin):
     name = 'Wallpaper'
 
     def __init__(self):
         super().__init__()
+        self._theme_light = None
+        self._theme_dark = None
+
+    @property
+    def theme_light(self) -> str:
+        return self._theme_light
+
+    @theme_light.setter
+    def theme_light(self, value: str):
+        check_theme(value)
+        self._theme_light = value
+
+    @property
+    def theme_dark(self) -> str:
+        return self._theme_dark
+
+    @theme_dark.setter
+    def theme_dark(self, value: str):
+        check_theme(value)
+        self._theme_dark = value
 
     def set_theme(self, theme: str):
-        filename = Path(theme).name
-        if "#" in filename:
-            logger.error("Image files that contain a # will not work.")
-
         connection = QDBusConnection.sessionBus()
         message = QDBusMessage.createMethodCall(
             'org.kde.plasmashell',
