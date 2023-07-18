@@ -12,6 +12,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 from systemd import journal
 
+from NotificationHandler import NotificationHandler
 from yin_yang import daemon_handler
 from yin_yang.meta import ConfigEvent
 from yin_yang import theme_switcher
@@ -22,6 +23,10 @@ logger = logging.getLogger()
 
 
 def setup_logger(use_systemd_journal: bool):
+    notification_handler = NotificationHandler()
+    notification_handler.addFilter(lambda record: record.levelno > logging.WARNING)
+    logger.addHandler(notification_handler)
+
     if use_systemd_journal:
         logger.addHandler(journal.JournalHandler(SYSLOG_IDENTIFIER='yin_yang'))
 
