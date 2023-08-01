@@ -59,6 +59,8 @@ class _Gnome(PluginCommandline):
 
 
 def check_theme(theme: str) -> bool:
+    if not theme:
+        return False
     file = Path(theme)
     if "#" in file.name:
         logger.error('Image files that contain a \'#\' will not work.')
