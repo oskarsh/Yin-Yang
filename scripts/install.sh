@@ -17,7 +17,8 @@ echo "Installing dependencies …"
 # create virtual environment
 python3 -m venv /opt/yin-yang/.venv
 source .venv/bin/activate
-pip3 install -r requirements.txt
+/opt/yin-yang/.venv/bin/pip3 install --upgrade setuptools pip wheel
+/opt/yin-yang/.venv/bin/pip3 install -r requirements.txt
 
 echo "Installing yin yang"
 #check if /opt/ directory exists else create
