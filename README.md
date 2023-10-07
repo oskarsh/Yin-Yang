@@ -68,13 +68,10 @@ Then you can install Yin-Yang in a python virtual environment:
 ```bash
 # bash is necessary to run the source command
 bash
-# Removes any already present Yin-Yang code
-rm -rf Yin-Yang
 # Clones the code to your local machine
 git clone https://github.com/oskarsh/Yin-Yang.git
-# Enters the directory containing Yin-Yang's code
-if pwd != "Yin-Yang"; then cd Yin-Yang; fi
-## Creates a virtual environment for pypi (pip) packages
+cd Yin-Yang
+## Creates virtual environment for pypi packages
 python3 -m venv .venv
 source .venv/bin/activate
 # Installs pip requirements specified in repository
