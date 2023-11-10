@@ -1,4 +1,4 @@
-psutil==5.9.5
+psutil==5.9.6
 PySide6==6.5.3
 PySide6-Addons==6.5.3
 suntime==1.2.5
