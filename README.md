@@ -49,19 +49,19 @@ Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` r
 
 For CentOS, RHEL, and Fedora:
 ```bash
-sudo dnf install gcc systemd-devel python3-devel
+sudo dnf install gcc systemd-devel python3-devel libnotify
 ``` 
 
 For OpenSUSE:
 ```bash
 sudo zypper refresh
-sudo zypper install gcc systemd-devel
+sudo zypper install gcc systemd-devel libnotify
 ```
 
 For Debian, Ubuntu, etc.
 ```bash
 sudo apt update
-sudo apt install libsystemd-dev gcc pkg-config python3-dev
+sudo apt install libsystemd-dev gcc pkg-config python3-dev libnotify-bin
 ```
 
 Then you can install Yin-Yang in a python virtual environment:
