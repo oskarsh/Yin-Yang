@@ -71,13 +71,15 @@ bash
 # Clones the code to your local machine
 git clone https://github.com/oskarsh/Yin-Yang.git
 cd Yin-Yang
-## Creates virtual environment for pypi packages
-python3 -m venv .venv
-source .venv/bin/activate
-# Installs pip requirements specified in repository
-pip3 install -r requirements.txt
 # Installs Yin-Yang
 ./scripts/install.sh
+```
+
+For development, skip the install and instead create a venv in your home directory:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # this is for bash, there are similar scripts in the that directory for other shells like fish
+pip install -r requirements.txt
 ```
 
 ## Documentation
