@@ -14,7 +14,12 @@ echo "Uninstalling old version, if it exists"
 ./scripts/uninstall.sh
 
 echo "Installing dependencies …"
-pip3 install -r requirements.txt
+# create virtual environment
+python3 -m venv /opt/yin-yang/.venv
+source .venv/bin/activate
+/opt/yin-yang/.venv/bin/pip3 install --upgrade setuptools pip wheel
+/opt/yin-yang/.venv/bin/pip3 install -r requirements.txt
+
 echo "Installing yin yang"
 #check if /opt/ directory exists else create
 if [ ! -d /opt/ ]; then

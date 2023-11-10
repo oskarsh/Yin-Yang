@@ -1,8 +1,8 @@
 import unittest
 
-from src.config import config
-from src.config import plugins
-from src.plugins._plugin import Plugin, ExternalPlugin
+from yin_yang.config import config
+from yin_yang.config import plugins
+from yin_yang.plugins._plugin import Plugin, ExternalPlugin
 
 
 class PluginsTest(unittest.TestCase):

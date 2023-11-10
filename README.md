@@ -45,7 +45,7 @@ Yin-Yang can be downloaded from AUR as [yin-yang](https://aur.archlinux.org/pack
 
 
 ### Source
-Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager.
+Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager. You also need python development headers (e.g. `python3-devel`).
 
 For CentOS, RHEL, and Fedora:
 ```bash
@@ -68,19 +68,18 @@ Then you can install Yin-Yang in a python virtual environment:
 ```bash
 # bash is necessary to run the source command
 bash
-# Removes any already present Yin-Yang code
-rm -rf Yin-Yang
 # Clones the code to your local machine
 git clone https://github.com/oskarsh/Yin-Yang.git
-# Enters the directory containing Yin-Yang's code
-if pwd != "Yin-Yang"; then cd Yin-Yang; fi
-## Creates a virtual environment for pypi (pip) packages
-python3 -m venv .venv
-source .venv/bin/activate
-# Installs pip requirements specified in repository
-pip3 install -r requirements.txt
+cd Yin-Yang
 # Installs Yin-Yang
 ./scripts/install.sh
+```
+
+For development, skip the install and instead create a venv in your home directory:
+```bash
+python -m venv .venv
+source .venv/bin/activate  # this is for bash, there are similar scripts in the that directory for other shells like fish
+pip install -r requirements.txt
 ```
 
 ## Documentation

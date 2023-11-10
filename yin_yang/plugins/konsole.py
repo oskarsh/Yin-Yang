@@ -10,7 +10,7 @@ from shutil import copyfile
 import psutil
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
-from src.plugins._plugin import Plugin
+from ._plugin import Plugin
 
 logger = logging.getLogger(__name__)
 
@@ -65,8 +65,8 @@ class Konsole(Plugin):
 
         # Get the process IDs of all running Konsole instances owned by the current user
         process_ids = [
-            proc.pid for proc in psutil.process_iter(['name', 'username'])
-            if proc.info['name'] == 'konsole' and proc.info['username'] == os.getlogin()
+            proc.pid for proc in psutil.process_iter()
+            if proc.name() == 'konsole' and proc.username() == os.getlogin()
         ]
 
         # loop: console processes
@@ -77,8 +77,8 @@ class Konsole(Plugin):
         set_profile('org.kde.yakuake', profile)
 
         process_ids = [
-            proc.pid for proc in psutil.process_iter(['name', 'username'])
-            if proc.info['name'] == 'dolphin' and proc.info['username'] == os.getlogin()
+            proc.pid for proc in psutil.process_iter()
+            if proc.name() == 'dolphin' and proc.username() == os.getlogin()
         ]
 
         # loop: dolphin processes
@@ -130,6 +130,8 @@ class Konsole(Plugin):
                 # If a match is found, return the content of the wildcard '*'
                 if match:
                     value = match.group(1)
+                    if not os.path.isfile(self.user_path / value):
+                        value = None
 
         if value is None:
             # use the first found profile
@@ -139,8 +141,24 @@ class Konsole(Plugin):
                     break
             if value is not None:
                 logger.warning(f'No default profile found, using {value} instead.')
-            else:
-                raise ValueError('No Konsole profile found.')
+
+        if value is None:
+            # create a custom profile manually
+            file_content = """[Appearance]
+ColorScheme=Breeze
+
+[General]
+Command=/bin/bash
+Name=Fish
+Parent=FALLBACK/
+"""
+
+            with (self.user_path / 'Default.profile').open('w') as file:
+                file.writelines(file_content)
+
+            self.default_profile = 'Default.profile'
+
+            return 'Default.profile'
 
         return value
 
@@ -176,7 +194,13 @@ class Konsole(Plugin):
         profile_config = ConfigParser()
         profile_config.optionxform = str
         profile_config.read(file_path)
-        profile_config['Appearance']['ColorScheme'] = theme
+
+        try:
+            profile_config['Appearance']['ColorScheme'] = theme
+        except KeyError:
+            profile_config.add_section('Appearance')
+            profile_config['Appearance']['ColorScheme'] = theme
+
         with open(file_path, 'w') as file:
             profile_config.write(file)
 

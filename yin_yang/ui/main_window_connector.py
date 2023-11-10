@@ -6,12 +6,10 @@ from PySide6.QtCore import QStandardPaths
 from PySide6.QtGui import QScreen, QColor
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog,QGroupBox
 
-from src.ui.main_window import Ui_main_window
-
-from src.yin_yang import set_desired_theme
-from src.meta import ConfigEvent
-from src.meta import PluginKey
-from src.config import config, Modes, plugins, ConfigWatcher
+from .main_window import Ui_main_window
+from ..theme_switcher import set_desired_theme, set_mode
+from ..meta import ConfigEvent, PluginKey
+from ..config import config, Modes, plugins, ConfigWatcher
 
 logger = logging.getLogger(__name__)
 
@@ -73,6 +71,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # set the correct mode
         mode = config.mode
         self.ui.btn_enable.setChecked(mode != Modes.MANUAL)
+        self.ui.manual_buttons.setVisible(mode == Modes.MANUAL)
 
         if mode == Modes.FOLLOW_SUN:
             self.ui.time.setVisible(False)
@@ -84,6 +83,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.ui.toggle_sound.setChecked(config.get_plugin_key('sound', PluginKey.ENABLED))
         self.ui.toggle_notification.setChecked(config.get_plugin_key('notification', PluginKey.ENABLED))
+        self.ui.bootOffset.setValue(config.boot_offset)
 
         # sets the correct time based on config
         self.load_times()
@@ -191,6 +191,16 @@ class MainWindow(QtWidgets.QMainWindow):
             lambda enabled: config.update_plugin_key('sound', PluginKey.ENABLED, enabled))
         self.ui.toggle_notification.toggled.connect(
             lambda enabled: config.update_plugin_key('notification', PluginKey.ENABLED, enabled))
+
+        self.ui.bootOffset.valueChanged.connect(self.update_boot_offset)
+
+        # connect manual theme buttons
+        self.ui.button_light.clicked.connect(lambda: set_mode(False))
+        self.ui.button_dark.clicked.connect(lambda: set_mode(True))
+
+    @staticmethod
+    def update_boot_offset(value: int):
+        config.boot_offset = value
 
     def save_mode(self):
         if not self.ui.btn_enable.isChecked():

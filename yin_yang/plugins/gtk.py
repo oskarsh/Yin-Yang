@@ -4,9 +4,9 @@ from pathlib import Path
 
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
-from src.meta import Desktop
-from src.plugins._plugin import PluginDesktopDependent, Plugin, PluginCommandline
-from src.plugins.system import test_gnome_availability
+from ..meta import Desktop
+from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
+from .system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +26,12 @@ class Gtk(PluginDesktopDependent):
                 if not self.strategy.available:
                     print('You need to install an extension for gnome to use it. \n'
                           'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
+            case Desktop.MATE:
+                super().__init__(_Mate())
             case Desktop.XFCE:
                 super().__init__(_Xfce())
+            case Desktop.CINNAMON:
+                super().__init__(_Cinnamon())
             case _:
                 super().__init__(None)
 
@@ -83,3 +87,25 @@ class _Xfce(PluginCommandline):
         super(_Xfce, self).__init__(['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName', '-s', '{theme}'])
         self.theme_light = 'Adwaita'
         self.theme_dark = 'Adwaita-dark'
+
+
+class _Mate(PluginCommandline):
+    def __init__(self):
+        super().__init__(['dconf', 'write', '/org/mate/desktop/interface/gtk-theme', '\'{theme}\''])
+        self.theme_light = 'Yaru'
+        self.theme_dark = 'Yaru-dark'
+
+    @property
+    def available(self) -> bool:
+        return self.check_command(['dconf', 'help'])
+
+
+class _Cinnamon(PluginCommandline):
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.interface', 'gtk-theme', '\"{theme}\"'])
+        self.theme_light = 'Adwaita'
+        self.theme_dark = 'Adwaita-dark'
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)

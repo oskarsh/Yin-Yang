@@ -2,39 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE" sourcelanguage="en_GB">
 <context>
-    <name>MainWindow</name>
-    <message>
-        <location filename="../../src/ui/main_window_connector.py" line="71"/>
-        <source>You are using version {}</source>
-        <translation>Sie verwenden Version {}</translation>
-    </message>
-    <message>
-        <location filename="../../src/ui/main_window_connector.py" line="172"/>
-        <source>Dark mode will be active between {} and {}.</source>
-        <translation>Dunkler Modus wird zwischen {} und {} aktiv sein.</translation>
-    </message>
-    <message>
-        <location filename="../../src/ui/main_window_connector.py" line="237"/>
-        <source>Open light wallpaper</source>
-        <translation>Öffne helles Hintergrundbild</translation>
-    </message>
-    <message>
-        <location filename="../../src/ui/main_window_connector.py" line="238"/>
-        <source>Open dark wallpaper</source>
-        <translation>Öffne dunkles Hintergrundbild</translation>
-    </message>
-    <message>
-        <location filename="../../src/ui/main_window_connector.py" line="282"/>
-        <source>The settings have been modified. Do you want to save them?</source>
-        <translation>Die Einstellungen wurden geändert. Möchten Sie sie speichern?</translation>
-    </message>
-    <message>
-        <location filename="../../src/ui/main_window_connector.py" line="282"/>
-        <source>Unsaved changes</source>
-        <translation>Ungespeicherte Änderungen</translation>
-    </message>
-</context>
-<context>
     <name>main_window</name>
     <message>
         <location filename="../../designer/main_window.ui" line="50"/>
@@ -79,37 +46,68 @@
     <message>
         <location filename="../../designer/main_window.ui" line="262"/>
         <source>update location automatically</source>
-        <translation type="unfinished"></translation>
+        <translation>Position automatisch bestimmen</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="282"/>
+        <location filename="../../designer/main_window.ui" line="285"/>
+        <source>Light</source>
+        <translation>Hell</translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="292"/>
+        <source>Dark</source>
+        <translation>Dunkel</translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="302"/>
         <source>Make a sound when switching the theme</source>
         <translation>Mache ein Geräusch, wenn das Thema geändert wird</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="289"/>
+        <location filename="../../designer/main_window.ui" line="309"/>
         <source>Send a notification</source>
         <translation>Sende eine Benachrichtigung</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="317"/>
+        <location filename="../../designer/main_window.ui" line="318"/>
+        <source>Time to wait until the system finished booting. Default value is 10 seconds.</source>
+        <translation>Zeit die gewartet werden soll während das System startet. Standardwert ist 10 Sekunden.</translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="321"/>
+        <source>Delay after boot:</source>
+        <translation>Verzögerung nach Start</translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="328"/>
+        <source>s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../designer/main_window.ui" line="361"/>
         <source>Plugins</source>
         <translation></translation>
     </message>
+</context>
+<context>
+    <name>systray</name>
     <message>
-        <location filename="../../designer/main_window.ui" line="343"/>
-        <source>Sample Plugin</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../yin_yang/__main__.py" line="120"/>
+        <source>Open Yin Yang</source>
+        <comment>Context menu action in the systray</comment>
+        <translation>Yin Yang öffnen</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="352"/>
-        <source>firefox-compact-light@mozilla.org</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../yin_yang/__main__.py" line="121"/>
+        <source>Toggle theme</source>
+        <comment>Context menu action in the systray</comment>
+        <translation type="unfinished">Farbschema wechseln</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="365"/>
-        <source>firefox-compact-dark@mozilla.org</source>
-        <translation type="unfinished"></translation>
+        <location filename="../../yin_yang/__main__.py" line="122"/>
+        <source>Quit</source>
+        <comment>Context menu action in the systray</comment>
+        <translation>Beenden</translation>
     </message>
 </context>
 </TS>

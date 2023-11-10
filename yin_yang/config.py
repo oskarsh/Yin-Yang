@@ -8,13 +8,14 @@ from functools import cache
 from time import sleep
 from typing import Union, Optional
 
+import requests
 from PySide6.QtCore import QObject
 from PySide6.QtPositioning import QGeoPositionInfoSource, QGeoPositionInfo, QGeoCoordinate
 from psutil import process_iter, NoSuchProcess
 from suntime import Sun, SunTimeException
 
-from src.meta import Modes, Desktop, PluginKey, ConfigEvent
-from src.plugins import get_plugins
+from .meta import Modes, Desktop, PluginKey, ConfigEvent
+from .plugins import get_plugins
 
 logger = logging.getLogger(__name__)
 
@@ -119,6 +120,7 @@ parent = QObject()
 locationSource = QGeoPositionInfoSource.createDefaultSource(parent)
 
 
+@cache
 def get_current_location() -> QGeoCoordinate:
     if locationSource is None:
         logger.error("No location source is available")
@@ -134,8 +136,13 @@ def get_current_location() -> QGeoCoordinate:
         sleep(1)
     coordinate = pos.coordinate()
     if not coordinate.isValid():
-        logger.error('Location could not be determined')
-        return QGeoCoordinate(0, 0)
+        logger.warning('Location could not be determined. Using ipinfo.io to get location')
+        # use the old method as a fallback
+        loc_response = requests.get('https://www.ipinfo.io/loc').text.split(',')
+        loc: [float] = [float(coordinate) for coordinate in loc_response]
+        assert len(loc) == 2, 'The returned location should have exactly 2 values.'
+        coordinate = QGeoCoordinate(loc[0], loc[1])
+        assert coordinate.isValid()
     return coordinate
 
 
@@ -153,6 +160,10 @@ def get_desktop() -> Desktop:
             return Desktop.KDE
         case 'xfce':
             return Desktop.XFCE
+        case 'mate':
+            return Desktop.MATE
+        case 'x-cinnamon':
+            return Desktop.CINNAMON
         case 'sway' | 'hyprland':
             return Desktop.GNOME
         case _:
@@ -339,7 +350,7 @@ class ConfigManager(dict):
 
         # NOTE: if you change or add new values here, make sure to update the version number and update_config() method
         conf_default = {
-            'version': 3.2,
+            'version': 3.3,
             'running': False,
             'dark_mode': False,
             'mode': Modes.MANUAL.value,
@@ -347,6 +358,7 @@ class ConfigManager(dict):
             'update_location': False,
             'update_interval': 60,
             'times': ('07:00', '20:00'),
+            'boot_offset': 10,
             'plugins': {}
         }
 
@@ -465,10 +477,14 @@ class ConfigManager(dict):
         return get_desktop()
 
     @property
-    def update_interval(self) -> int:
+    def boot_offset(self) -> int:
         """Seconds that should pass until next check"""
 
-        return self['update_interval']
+        return self['boot_offset']
+
+    @boot_offset.setter
+    def boot_offset(self, value: int):
+        self['boot_offset'] = value
 
 
 # create global object with current version

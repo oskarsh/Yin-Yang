@@ -2,7 +2,7 @@ from configparser import ConfigParser
 from os.path import isfile
 from pathlib import Path
 
-from src.plugins._plugin import Plugin
+from ._plugin import Plugin
 
 config_path = f'{Path.home()}/.config/onlyoffice/DesktopEditors.conf'
 

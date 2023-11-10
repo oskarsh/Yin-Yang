@@ -3,29 +3,21 @@ import logging
 import subprocess
 import pwd
 import os
+from configparser import ConfigParser
+from pathlib import Path
 
 from PySide6.QtCore import QLocale
 
-from src.meta import Desktop
-from src.plugins._plugin import PluginDesktopDependent, PluginCommandline
+from ..meta import Desktop
+from ._plugin import PluginDesktopDependent, PluginCommandline
 
 logger = logging.getLogger(__name__)
 
 
 def test_gnome_availability(command) -> bool:
-    # Runs the first entry in the command list with --help
-    try:
-        # if not available, you might want to run https://gist.github.com/atiensivu/fcc3183e9a6fd74ec1a283e3b9ad05f0
-        # or you have to install that extension
-        process = subprocess.run(
-            [command[0], 'get', command[2], command[3]],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
-        return process.returncode == 0
-    except FileNotFoundError:
-        # if no such command is available, the plugin is not available
-        return False
+    return PluginCommandline.check_command(
+        [command[0], 'get', command[2], command[3]]
+    )
 
 
 class System(PluginDesktopDependent):
@@ -35,6 +27,10 @@ class System(PluginDesktopDependent):
                 super().__init__(_Kde())
             case Desktop.GNOME:
                 super().__init__(_Gnome())
+            case Desktop.MATE:
+                super().__init__(_Mate())
+            case Desktop.CINNAMON:
+                super().__init__(_Cinnamon())
             case _:
                 super().__init__(None)
 
@@ -129,3 +125,50 @@ class _Kde(PluginCommandline):
                         self.translations[long_name] = long_name
 
         return self.translations
+
+
+class _Mate(PluginCommandline):
+    theme_directories = [Path('/usr/share/themes'), Path.home() / '.themes']
+
+    def __init__(self):
+        super().__init__(['dconf', 'write', '/org/mate/marco/general/theme', '\'{theme}\''])
+        self.theme_light = 'Yaru'
+        self.theme_dark = 'Yaru-dark'
+
+    @property
+    def available_themes(self) -> dict:
+        themes = []
+
+        for directory in self.theme_directories:
+            if not directory.is_dir():
+                continue
+
+            for d in directory.iterdir():
+                index = d / 'index.theme'
+                if not index.is_file():
+                    continue
+
+                config = ConfigParser()
+                config.read(index)
+                try:
+                    theme = config['X-GNOME-Metatheme']['MetacityTheme']
+                    themes.append(theme)
+                except KeyError:
+                    continue
+
+        return {t: t for t in themes}
+
+    @property
+    def available(self):
+        return self.check_command(['dconf', 'help'])
+
+
+class _Cinnamon(PluginCommandline):
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.cinnamon.theme', 'name', '\"{theme}\"'])
+        self.theme_light = 'Mint-X-Teal'
+        self.theme_dark = 'Mint-Y-Dark-Brown'
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)

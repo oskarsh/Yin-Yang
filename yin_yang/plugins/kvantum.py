@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-from src.plugins._plugin import PluginCommandline
+from ._plugin import PluginCommandline
 
 
 class Kvantum(PluginCommandline):

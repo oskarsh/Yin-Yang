@@ -1,10 +1,6 @@
-numpy==1.23.5
-psutil==5.9.4
-PySide6==6.4.1
-PySide6-Addons==6.4.1
-PySide6-Essentials==6.4.1
-python-dateutil==2.8.2
-shiboken6==6.4.1
-six==1.16.0
+psutil==5.9.5
+PySide6==6.5.3
+PySide6-Addons==6.5.3
 suntime==1.2.5
-systemd-python==234
+systemd-python==235
+requests~=2.28.2

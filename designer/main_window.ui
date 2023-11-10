@@ -43,7 +43,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="settings">
        <attribute name="title">
@@ -277,6 +277,26 @@
          </widget>
         </item>
         <item>
+         <widget class="QWidget" name="manual_buttons" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QPushButton" name="button_light">
+             <property name="text">
+              <string>Light</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="button_dark">
+             <property name="text">
+              <string>Dark</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <widget class="QCheckBox" name="toggle_sound">
           <property name="text">
            <string>Make a sound when switching the theme</string>
@@ -289,6 +309,30 @@
            <string>Send a notification</string>
           </property>
          </widget>
+        </item>
+        <item>
+         <layout class="QFormLayout" name="bootOffsetSettings">
+          <item row="0" column="0">
+           <widget class="QLabel" name="bootOffsetLabel">
+            <property name="toolTip">
+             <string>Time to wait until the system finished booting. Default value is 10 seconds.</string>
+            </property>
+            <property name="text">
+             <string>Delay after boot:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="bootOffset">
+            <property name="suffix">
+             <string>s</string>
+            </property>
+            <property name="value">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QLabel" name="label_active">
@@ -330,8 +374,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>523</width>
-             <height>663</height>
+             <width>518</width>
+             <height>88</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="plugins_scroll_content_layout">
@@ -340,16 +384,19 @@
               <item>
                <widget class="QGroupBox" name="samplePluginGroupBox">
                 <property name="title">
-                 <string>Sample Plugin</string>
+                 <string notr="true">Sample Plugin</string>
                 </property>
                 <layout class="QHBoxLayout" name="horizontalLayout_2">
                  <item>
                   <widget class="QComboBox" name="comboBox">
+                   <property name="currentText">
+                    <string notr="true"/>
+                   </property>
                    <property name="sizeAdjustPolicy">
                     <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
                    </property>
                    <property name="placeholderText">
-                    <string>firefox-compact-light@mozilla.org</string>
+                    <string notr="true">firefox-compact-light@mozilla.org</string>
                    </property>
                   </widget>
                  </item>
@@ -362,7 +409,7 @@
                     <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
                    </property>
                    <property name="placeholderText">
-                    <string>firefox-compact-dark@mozilla.org</string>
+                    <string notr="true">firefox-compact-dark@mozilla.org</string>
                    </property>
                   </widget>
                  </item>
@@ -402,12 +449,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>273</x>
-     <y>308</y>
+     <x>289</x>
+     <y>225</y>
     </hint>
     <hint type="destinationlabel">
-     <x>254</x>
-     <y>379</y>
+     <x>270</x>
+     <y>353</y>
     </hint>
    </hints>
   </connection>
@@ -418,12 +465,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>114</x>
-     <y>192</y>
+     <x>130</x>
+     <y>109</y>
     </hint>
     <hint type="destinationlabel">
-     <x>219</x>
-     <y>280</y>
+     <x>235</x>
+     <y>197</y>
     </hint>
    </hints>
   </connection>
@@ -434,12 +481,28 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>188</x>
-     <y>153</y>
+     <x>198</x>
+     <y>66</y>
     </hint>
     <hint type="destinationlabel">
      <x>188</x>
      <y>318</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btn_enable</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>manual_buttons</receiver>
+   <slot>setHidden(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>109</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>274</x>
+     <y>398</y>
     </hint>
    </hints>
   </connection>
