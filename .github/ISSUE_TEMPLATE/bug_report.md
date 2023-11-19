@@ -1,6 +1,6 @@
 ---
 name: Bug report
-description: Report if something doesn't work as expected
+about: Report if something doesn't work as expected
 title: ''
 labels: bug
 assignees: ''
