@@ -29,6 +29,13 @@ def check_call(command, stdout=None) -> int:
         return subprocess.check_call(flatpak_args, stdout=stdout)
 
 
+def is_flatpak() -> bool:
+    try:
+        subprocess.run('lookandfeeltool')
+        return False
+    except FileNotFoundError:
+        return True
+
 def run(command: list[str], kwargs: list[str] = []) -> subprocess.CompletedProcess[str]:
     try:
         if len(kwargs) == 0:
