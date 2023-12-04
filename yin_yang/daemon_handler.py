@@ -3,6 +3,7 @@ import shutil
 import subprocess
 from enum import Enum, auto
 from pathlib import Path
+import re
 
 from yin_yang import helpers
 from .config import ConfigWatcher, config
@@ -14,6 +15,7 @@ TIMER_PATH = SYSTEMD_PATH / 'yin_yang.timer'
 SERVICE_PATH = SYSTEMD_PATH / 'yin_yang.service'
 
 
+
 def create_files():
     logger.debug('Creating systemd files')
     if not SYSTEMD_PATH.is_dir():
@@ -22,6 +24,13 @@ def create_files():
         shutil.copy('./resources/yin_yang.timer', TIMER_PATH)
     if not SERVICE_PATH.is_file():
         shutil.copy('./resources/yin_yang.service', SERVICE_PATH)
+    # TODO: Will this cause an issue switching back from flatpak?
+    if (helpers.is_flatpak()):
+        with open(SERVICE_PATH, 'r') as service:
+            lines = service.readlines()
+        with open(SERVICE_PATH, 'w') as service:
+            for line in lines:
+                service.write(re.sub('ExecStart=\/usr\/bin\/yin-yang --systemd', 'ExecStart='+str(Path.home())+'/.local/share/flatpak/exports/bin/sh.oskar.yin-yang --systemd', line))
 
 
 def run_command(command, **kwargs):

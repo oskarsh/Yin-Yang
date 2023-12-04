@@ -1,8 +1,22 @@
 {
-  "python.linting.pylintEnabled": true,
-  "python.linting.enabled": true,
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
-  },
-  "python.formatting.provider": "none"
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.exclude": [
+    ".git",
+    "**/__pycache__",
+    "**/node_modules",
+    "build",
+    ".flatpak-builder"
+  ],
+  "python.analysis.ignore": [
+    ".flatpak-builder",
+    "build",
+    "**/__pycache__",
+    ".git"
+  ],
+  "pylint.ignorePatterns": [
+    "**/__pycache__",
+    ".git",
+    "build",
+    ".flatpak-builder"
+  ]
 }

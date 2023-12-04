@@ -4,7 +4,7 @@ import subprocess
 """Check output of a command.
 
 This is a helper method which will change how we check output depending on if
-The application is running in a flatpak or not.
+The application is running in a Flatpak or not.
 """
 
 
