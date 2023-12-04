@@ -1,2 +1,2 @@
 #!/bin/sh
-python3 -m yin_yang
+python3 -m yin_yang $@
