@@ -10,6 +10,7 @@ from shutil import copyfile
 import psutil
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
+from yin_yang import helpers
 from ._plugin import Plugin
 
 logger = logging.getLogger(__name__)
@@ -236,7 +237,7 @@ def set_profile(service: str, profile: str):
 
     # maybe it's possible with pyside6 dbus packages, but this was simpler and worked
     try:
-        sessions = subprocess.check_output(f'qdbus {service} | grep "Sessions/"', shell=True)
+        sessions = helpers.check_output(f'qdbus {service} | grep "Sessions/"')
     except subprocess.CalledProcessError:
         # happens when dolphins konsole is not opened
         logger.debug(f'No Konsole sessions available in service {service}, skipping')

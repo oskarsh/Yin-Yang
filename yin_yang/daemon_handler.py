@@ -4,6 +4,7 @@ import subprocess
 from enum import Enum, auto
 from pathlib import Path
 
+from yin_yang import helpers
 from .config import ConfigWatcher, config
 from .meta import ConfigEvent, Modes
 
@@ -24,7 +25,7 @@ def create_files():
 
 
 def run_command(command, **kwargs):
-    return subprocess.run(['systemctl', '--user', command, 'yin_yang.timer'], **kwargs)
+    return helpers.run(['systemctl', '--user', command, 'yin_yang.timer'], **kwargs)
 
 
 def update_times():
@@ -48,7 +49,7 @@ def update_times():
     with TIMER_PATH.open('w') as file:
         file.writelines(lines)
 
-    subprocess.run(['systemctl', '--user', 'daemon-reload'])
+    helpers.run(['systemctl', '--user', 'daemon-reload'])
     run_command('start')
 
 

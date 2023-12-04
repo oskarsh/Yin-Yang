@@ -6,6 +6,7 @@ from typing import Optional
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
+from yin_yang import helpers
 from ..meta import UnsupportedDesktopError
 
 logger = logging.getLogger(__name__)
@@ -134,7 +135,7 @@ class PluginCommandline(Plugin):
 
         # insert theme in command and run it
         command = self.insert_theme(theme)
-        subprocess.check_call(command)
+        helpers.check_call(command)
 
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
@@ -148,7 +149,7 @@ class PluginCommandline(Plugin):
     def check_command(command) -> bool:
         # Returns true if command execution succeeds
         try:
-            subprocess.check_call(command, stdout=subprocess.DEVNULL)
+            helpers.check_call(command, stdout=subprocess.DEVNULL)
             return True
         except FileNotFoundError:
             # if no such command is available, the plugin is not available
