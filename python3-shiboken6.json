@@ -1,0 +1,14 @@
+{
+  "name": "python3-shiboken6",
+  "buildsystem": "simple",
+  "build-commands": [
+    "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"shiboken6==6.4.1\" --no-build-isolation"
+  ],
+  "sources": [
+    {
+      "type": "file",
+      "url": "https://files.pythonhosted.org/packages/72/ec/6bef61f5b07be13fd8255fdc5c66d8a097581cc58163457cc219ea3afe7b/shiboken6-6.4.1-cp37-abi3-manylinux_2_28_x86_64.whl",
+      "sha256": "41e67b67f65626bdd909f9c5fd5f80231ee6ae43418b331590ba225b3cfabd5b"
+    }
+  ]
+}

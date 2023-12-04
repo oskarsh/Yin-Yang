@@ -1,0 +1,45 @@
+{
+  "id": "sh.oskar.yin-yang",
+  "runtime": "org.kde.Platform",
+  "runtime-version": "5.15-22.08",
+  "sdk": "org.kde.Sdk",
+  "command": "runner.sh",
+  "finish-args": [
+    "--share=network",
+    "--socket=x11",
+    "--socket=wayland",
+    "--socket=system-bus",
+    "--socket=session-bus",
+    "--share=ipc",
+    "--device=dri",
+    "--filesystem=host:rw",
+    "--filesystem=~/.mozilla:rw"
+  ],
+  "modules": [
+    "python3-numpy.json",
+    "python3-psutil.json",
+    "python3-python-dateutil.json",
+    "python3-suntime.json",
+    "python3-PySide6-Essentials.json",
+    "python3-PySide6-Addons.json",
+    "python3-systemd-python.json",
+    "python3-requests.json",
+    {
+      "name": "yin-yang",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -D yin_yang/__main__.py /app/__main__.py",
+        "cp -r yin_yang /app/yin_yang",
+        "cp -r resources /app/resources",
+        "install -D runner.sh /app/bin/runner.sh",
+        "sed -i 's|/bin/env python3|/app/bin/python3|' /app/__main__.py"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "."
+        }
+      ]
+    }
+  ]
+}

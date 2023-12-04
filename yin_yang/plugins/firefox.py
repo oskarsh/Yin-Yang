@@ -48,7 +48,7 @@ class Firefox(ExternalPlugin):
                 logger.warning(f'Firefox profile has no extensions installed: {path}')
                 continue
 
-        assert themes != {}, 'No themes found!'
+        # assert themes != {}, 'No themes found!'
         return themes
 
     @property

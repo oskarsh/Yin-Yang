@@ -1,5 +1,5 @@
-import subprocess
 import re
+from yin_yang import helpers
 
 from ..meta import Desktop
 from ._plugin import Plugin, PluginDesktopDependent, PluginCommandline
@@ -30,9 +30,9 @@ class _KDEColors(PluginCommandline):
         if self.translations:
             return self.translations
 
-        colors = subprocess.check_output(['plasma-apply-colorscheme', '--list-schemes'],
-                                         universal_newlines=True)
-
+        colors = str(helpers.check_output(['plasma-apply-colorscheme', '--list-schemes'],
+                                         universal_newlines=True))
+        print(colors)
         colors = colors.splitlines()
         del colors[0]
 
