@@ -6,106 +6,106 @@
 ![](https://img.shields.io/badge/Build%20with-Python-yellow)
 ![](https://img.shields.io/github/license/oskarsh/yin-yang)
 
-Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie 
-and also themes your favourite editors like VSCode or Atom.
+Linux 的自動化主題管理員，支援 KDE、Gnome、Budgie 等桌面環境 
+還可以自動設定 VSCode、Atom 等應用程式的主題。
 
-You might also want to take a look at our [**discussions page**](https://github.com/oskarsh/Yin-Yang/discussions), where we talk about the future of the app and other cool stuff!
+安裝後可以查看我們的[**論壇**](https://github.com/oskarsh/Yin-Yang/discussions)，會有好康的！
 
-> Translations:[🇹🇼](README_zh_TW.md) [🇨🇳](README_zh_CN.md)
+> 翻譯：[ 🇺🇸](README.md) [🇨🇳](README_zh_CN.md)
 
 ![Visualization](.github/images/header.png)
 ![App configuration](.github/images/settings.png)
 
-## Features
+## 功能
 
-* Changes your themes at certain times or sunrise and sunset
-* Supported Desktops:
+* 在自訂時間或是依照日出日落自動切換主題
+* 支援的桌面環境：
   * Gnome
   * Budgie
   * KDE Plasma
-* Supported applications:
-  * VSCode, Atom, gedit
-  * Firefox & Brave
+* 支援的應用程式：
+  * VSCode、Atom、gedit
+  * Firefox、Brave
   * Kvantum
   * Konsole
   * OnlyOffice
-  * and more...
-* Miscellaneous:
-  * Wallpaper change
-  * Notifications on theme change
-  * Play a sound
-  * Ability to run custom scripts
+  * 等等...
+* 其他
+  * 自動更換桌布
+  * 自動推送通知
+  * 切換主題時播放聲音
+  * 自動執行腳本
 
-> To see planned features and the development status, visit the [project status page](https://github.com/oskarsh/Yin-Yang/projects?type=classic).
+> 想看 ETA 的人可以查看[進度](https://github.com/oskarsh/Yin-Yang/projects?type=classic).
 
 ## Installation
 
-### Arch-based distributions
-Yin-Yang can be downloaded from AUR as [yin-yang](https://aur.archlinux.org/packages/yin-yang) package.
+### Arch（BTW）系列
+Yin-Yang 可從 AUR 套件 [`yin-yang`](https://aur.archlinux.org/packages/yin-yang) 安裝
 
 
-### Source
-Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager. You also need python development headers (e.g. `python3-devel`).
+### 自行編譯
+Yin-Yang 依賴 `python-systemd` 以及 `pyside6` 等 Pypi。`python-systemd` 依賴 systemd-headers 以及 `python3-devel` 等。
 
-For CentOS, RHEL, and Fedora:
+CentOS、RHEL、Fedora：
 ```bash
 sudo dnf install gcc systemd-devel python3-devel libnotify
 ``` 
 
-For OpenSUSE:
+OpenSUSE：
 ```bash
 sudo zypper refresh
 sudo zypper install gcc systemd-devel libnotify
 ```
 
-For Debian, Ubuntu, etc.
+Debian 系列：
 ```bash
 sudo apt update
 sudo apt install libsystemd-dev gcc pkg-config python3-dev libnotify-bin
 ```
 
-Then you can install Yin-Yang in a python virtual environment:
+接下來請安裝 Yin-Yang 至虛擬 python 環境：
 ```bash
-# bash is necessary to run the source command
+# bash 是建議的 shell
 bash
-# Clones the code to your local machine
+# 克隆原始碼
 git clone https://github.com/oskarsh/Yin-Yang.git
 cd Yin-Yang
-# Installs Yin-Yang
+# 安裝 Yin-Yang
 ./scripts/install.sh
 ```
 
-For development, skip the install and instead create a venv in your home directory:
+開發者請略過安裝並且在家目錄中建立 vnev 資料夾
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # this is for bash, there are similar scripts in the that directory for other shells like fish
+source .venv/bin/activate  # 此腳本是為了 bash 設計，若使用其他殼層，請在同個資料夾中尋找相容的腳本
 pip install -r requirements.txt
 ```
 
-## Documentation
+## 說明
 
-Want to help out? Check out the wiki to learn how to contribute translations, plugins and more!
+想要為此軟體貢獻？請查看維基尋找如何翻譯此軟體、或擴充功能等等！
 
 [![Generic badge](https://img.shields.io/badge/Visit-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
 
-## Related or similar projects
+## 其他相似軟體
 
-- Auto dark mode for Windows: https://github.com/AutoDarkMode/Windows-Auto-Night-Mode
-- Auto dark mode extension for Gnome: https://extensions.gnome.org/extension/2236/night-theme-switcher/
-- Auto dark mode for Jetbrains IDEs: https://github.com/weisJ/auto-dark-mode
-- Sync dark mode with KDEs night color: https://github.com/adrium/knightadjuster
-- darkman: https://gitlab.com/WhyNotHugo/darkman
-- In Firefox, you can use the system theme to sync Firefox itself and supported applications with the theme of the system. When you use [dark reader](https://darkreader.org/), you can enable the system color automation.
+- Windows 的自動暗黑模式[Windows Auto Night Mode](https://github.com/AutoDarkMode/Windows-Auto-Night-Mode)
+- Gnome 的自動暗黑模式[Night Theme Switcher](https://extensions.gnome.org/extension/2236/night-theme-switcher/)
+- Jetbrains IDE 自動暗黑模式 [Auto Dark Mode](https://github.com/weisJ/auto-dark-mode)
+- 自動化 KDE 藍光濾鏡 [Knight Adjuster](https://github.com/adrium/knightadjuster)
+- [darkman](https://gitlab.com/WhyNotHugo/darkman)
+- Firefox 的自動暗黑模式 [dark reader](https://darkreader.org/)
 
-## Thanks to all Contributors
+## 感謝所有貢獻者！
 
-### Code Contributors
+### 軟體貢獻者
 
-This project exists thanks to all the people who contribute. [[Contribute](https://github.com/oskarsh/Yin-Yang/wiki/Contributing)].
+感謝你們！因為有這些貢獻者才有這個軟體的出現！[[貢獻](https://github.com/oskarsh/Yin-Yang/wiki/Contributing)].
 
 [![](https://opencollective.com/Yin-Yang/contributors.svg?button=false)](https://github.com/oskarsh/Yin-Yang/graphs/contributors)
 
-### Donate
+### 捐獻
 
 <a href="https://opencollective.com/Yin-Yang/organization/0/website"><img src="https://opencollective.com/Yin-Yang/organization/0/avatar.svg"></a>
 <a href="https://opencollective.com/Yin-Yang/organization/1/website"><img src="https://opencollective.com/Yin-Yang/organization/1/avatar.svg"></a>
