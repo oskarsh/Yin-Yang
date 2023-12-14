@@ -38,7 +38,7 @@ Linux 的自動化主題管理員，支援 KDE、Gnome、Budgie 等桌面環境
 
 > 想看 ETA 的人可以查看[進度](https://github.com/oskarsh/Yin-Yang/projects?type=classic).
 
-## Installation
+## 安裝
 
 ### Arch（BTW）系列
 Yin-Yang 可從 AUR 套件 [`yin-yang`](https://aur.archlinux.org/packages/yin-yang) 安裝
