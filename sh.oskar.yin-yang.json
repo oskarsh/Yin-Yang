@@ -28,12 +28,12 @@
       "name": "yin-yang",
       "buildsystem": "simple",
       "build-commands": [
-        "install -D yin_yang/__main__.py /app/__main__.py",
+        "python3 -m pip install --no-deps --no-use-pep517 --prefix=/app .",
         "cp -r yin_yang /app/yin_yang",
         "cp -r resources /app/resources",
         "sed -i 's|/ExecStart=/usr/bin/yin-yang --systemd|ExecStart=$HOME/.local/share/flatpak/exports/bin/sh.oskar.yin-yang --systemd|' /app/resources/yin_yang.service",
         "install -D runner.sh /app/bin/runner.sh",
-        "sed -i 's|/bin/env python3|/app/bin/python3|' /app/__main__.py"
+        "sed -i 's|/bin/env python3|/app/bin/python3|' /app/yin_yang/__main__.py"
       ],
       "sources": [
         {
@@ -47,7 +47,7 @@
       "buildsystem": "simple",
       "build-commands": [
         "install -Dm644 Yin-Yang.desktop /app/share/applications/sh.oskar.yin-yang.desktop",
-        "sed -i 's|Path=/opt/yin-yang|Path=$HOME/.local/share/flatpak/app/sh.oskar.yin-yang/current/active/files|' /app/share/applications/sh.oskar.yin-yang.desktop",
+        "sed -i 's|Path=/opt/yin-yang||' /app/share/applications/sh.oskar.yin-yang.desktop",
         "sed -i 's|Icon=yin_yang|Icon=sh.oskar.yin-yang|' /app/share/applications/sh.oskar.yin-yang.desktop",
         "sed -i 's|Exec=yin-yang|Exec=runner.sh|' /app/share/applications/sh.oskar.yin-yang.desktop",
         "install -Dm664 logo.svg /app/share/icons/hicolor/256x256/apps/sh.oskar.yin-yang.svg"

@@ -3,6 +3,9 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+package_name = 'yin_yang'
+filename = 'yin_yang/__init__.py'
+
 setup(
   name='yin-yang',
   version='3.3.0',
@@ -19,7 +22,8 @@ setup(
   python_requires='>=3.6',
   install_requires=[
     'psutil==5.9.5',
-    'PySide6==6.6.1',
+    'PySide6-Essentials==6.6.1',
+    'shiboken6==6.6.1',
     'PySide6-Addons==6.6.1',
     'suntime==1.2.5',
     'systemd-python==235',
