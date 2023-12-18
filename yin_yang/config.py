@@ -138,11 +138,14 @@ def get_current_location() -> QGeoCoordinate:
     if not coordinate.isValid():
         logger.warning('Location could not be determined. Using ipinfo.io to get location')
         # use the old method as a fallback
-        loc_response = requests.get('https://www.ipinfo.io/loc').text.split(',')
-        loc: [float] = [float(coordinate) for coordinate in loc_response]
-        assert len(loc) == 2, 'The returned location should have exactly 2 values.'
-        coordinate = QGeoCoordinate(loc[0], loc[1])
-        assert coordinate.isValid()
+        loc_response = requests.get('https://www.ipinfo.io/loc')
+        if loc_response.status_code is not requests.codes.ok:
+            return QGeoCoordinate(0,0)
+        else:
+            loc: [float] = [float(coordinate) for coordinate in loc_response]
+            assert len(loc) == 2, 'The returned location should have exactly 2 values.'
+            coordinate = QGeoCoordinate(loc[0], loc[1])
+            assert coordinate.isValid()
     return coordinate
 
 
