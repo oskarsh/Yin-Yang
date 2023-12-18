@@ -2,7 +2,7 @@
   "name": "pyside6-addons",
   "buildsystem": "simple",
   "build-commands": [
-    "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} pyside6_addons --no-build-isolation"
+    "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} pyside6_addons"
   ],
   "only-arches": [
     "x86_64"
@@ -10,8 +10,8 @@
   "sources": [
     {
       "type": "file",
-      "url": "https://files.pythonhosted.org/packages/b1/c5/85ddc6e502ab88727ec3316c38f65830f82bfc66175f00349488a6431258/PySide6_Addons-6.5.3-cp37-abi3-manylinux_2_28_x86_64.whl",
-      "sha256": "e5bc1fa95351182dc2c003e07320d5509218ccc0840d10197d7d452aa5de5d2e"
+      "url": "https://files.pythonhosted.org/packages/ec/b8/1f5335580241c3863584173308c842ffc74e05074f3f72b49e5b54ca18e3/PySide6_Addons-6.6.1-cp38-abi3-manylinux_2_28_x86_64.whl",
+      "sha256": "a0982da4033319667f9df5ed6fa8eff300a88216aec103a1fff6751a172b19a0"
     }
   ]
 }

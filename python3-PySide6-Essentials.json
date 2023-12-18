@@ -10,8 +10,8 @@
   "sources": [
     {
       "type": "file",
-      "url": "https://files.pythonhosted.org/packages/e5/93/98f660dde373e2fba01caea8bbb2c986f94f02e32afab7b577df03ef744f/PySide6_Essentials-6.5.3-cp37-abi3-manylinux_2_28_x86_64.whl",
-      "sha256": "45580138be91f5fdcefb4d28dadb56d3640eb658575af97b49057e10c22a024d"
+      "url": "https://files.pythonhosted.org/packages/56/65/50d0ced768b717f709a5ab224b648eb533a862efd0cde67d19c2727200b0/PySide6_Essentials-6.6.1-cp38-abi3-manylinux_2_28_x86_64.whl",
+      "sha256": "c7185616083eab6f42eaed598d97d49fac4f60ae2e7415194140d54f58c2b42c"
     }
   ],
   "modules": [
@@ -24,8 +24,8 @@
       "sources": [
         {
           "type": "file",
-          "url": "https://files.pythonhosted.org/packages/55/b4/370f7a1dd3c02150b60073f7a46418fa2932f8d3b864bc58883154c6a423/shiboken6-6.5.3-cp37-abi3-manylinux_2_28_x86_64.whl",
-          "sha256": "4cdda98df511243c40f1dd4d9eac25a7191c2583ac673147ecdae0ffa3b9223f"
+          "url": "https://files.pythonhosted.org/packages/bb/72/e54f758e49e8da0dcd9490d006c41a814b0e56898ce4ca054d60cdba97bd/shiboken6-6.6.1-cp38-abi3-manylinux_2_28_x86_64.whl",
+          "sha256": "fb102e4bc210006f0cdd0ce38e1aaaaf792bd871f02a2b3f01d07922c5cf4c59"
         }
       ]
     }
