@@ -74,6 +74,7 @@ class Konsole(Plugin):
             logger.debug(f'Changing profile in konsole session {proc_id}')
             set_profile(f'org.kde.konsole-{proc_id}', profile)
 
+        set_profile('org.kde.konsole', profile) # konsole may don't have session dbus like above
         set_profile('org.kde.yakuake', profile)
 
         process_ids = [
@@ -174,8 +175,11 @@ Parent=FALLBACK/
 
                 # If a match is found, return the content of the wildcard '*'
                 if match:
+                    logger.debug(f'Changing default profile to {value}')
                     lines[i] = f'DefaultProfile={value}\n'
                     break
+                else:
+                    logger.debug('No default profile found')
         with self.config_path.open('w') as file:
             file.writelines(lines)
 
