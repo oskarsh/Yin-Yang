@@ -14,6 +14,7 @@ from PySide6.QtPositioning import QGeoPositionInfoSource, QGeoPositionInfo, QGeo
 from psutil import process_iter, NoSuchProcess
 from suntime import Sun, SunTimeException
 
+from position import get_current_location
 from .meta import Modes, Desktop, PluginKey, ConfigEvent
 from .plugins import get_plugins
 
@@ -114,36 +115,6 @@ def get_sun_time(latitude, longitude) -> tuple[time, time]:
 
     except SunTimeException as e:
         logger.error(f'Error: {e}.')
-
-
-parent = QObject()
-locationSource = QGeoPositionInfoSource.createDefaultSource(parent)
-
-
-@cache
-def get_current_location() -> QGeoCoordinate:
-    if locationSource is None:
-        logger.error("No location source is available")
-        return QGeoCoordinate(0, 0)
-
-    pos: QGeoPositionInfo = locationSource.lastKnownPosition()
-    if pos is None:
-        locationSource.requestUpdate(10)
-    tries = 0
-    while pos is None and tries < 10:
-        pos = locationSource.lastKnownPosition()
-        tries += 1
-        sleep(1)
-    coordinate = pos.coordinate()
-    if not coordinate.isValid():
-        logger.warning('Location could not be determined. Using ipinfo.io to get location')
-        # use the old method as a fallback
-        loc_response = requests.get('https://www.ipinfo.io/loc').text.split(',')
-        loc: [float] = [float(coordinate) for coordinate in loc_response]
-        assert len(loc) == 2, 'The returned location should have exactly 2 values.'
-        coordinate = QGeoCoordinate(loc[0], loc[1])
-        assert coordinate.isValid()
-    return coordinate
 
 
 def get_desktop() -> Desktop:
@@ -423,8 +394,12 @@ class ConfigManager(dict):
     @property
     def location(self) -> tuple[float, float]:
         if self.update_location:
-            coordinate = get_current_location()
-            return coordinate.latitude(), coordinate.longitude()
+            try:
+                coordinate = get_current_location()
+                return coordinate.latitude(), coordinate.longitude()
+            except TypeError as e:
+                logger.error('Unable to update position. Using config values as fallback.')
+                pass
 
         return self['coordinates']
 
