@@ -23,6 +23,16 @@ body:
     validations:
       required: true
   - type: dropdown
+    id: source
+    attributes:
+      label: How did you install Yin & Yang?
+      options:
+        - Git clone + running install script
+        - AUR
+        - Flatpak
+    validations:
+      required: true
+  - type: dropdown
     id: desktop
     attributes:
       label: What desktop environments are you seeing the problem on?
