@@ -54,6 +54,7 @@ class _Gnome(PluginCommandline):
     def __init__(self):
         super().__init__(['gsettings', 'set', 'org.gnome.desktop.background', 'picture-uri', 'file://{theme}'])
 
+    @property
     def available(self) -> bool:
         return test_gnome_availability(self.command)
 
