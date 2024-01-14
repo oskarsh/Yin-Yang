@@ -55,7 +55,7 @@ def get_ipinfo_position() -> QGeoCoordinate:
     if not response.ok:
         logger.error('Failed to get location from ipinfo.io')
 
-    loc_response = response.text.split(',')
+    loc_response = response.text.removesuffix('\n').split(',')
     loc: [float] = [float(coordinate) for coordinate in loc_response]
     assert len(loc) == 2, 'The returned location should have exactly 2 values.'
     coordinate = QGeoCoordinate(loc[0], loc[1])

@@ -400,6 +400,9 @@ class ConfigManager(dict):
             except TypeError as e:
                 logger.error('Unable to update position. Using config values as fallback.')
                 pass
+            except ValueError as e:
+                logger.error('Unable to update position. Using config values as fallback.')
+                pass
 
         return self['coordinates']
 
