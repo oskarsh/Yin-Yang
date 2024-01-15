@@ -1,7 +1,5 @@
-from operator import sub
 import os
 from pathlib import Path
-import subprocess
 
 from ._plugin import PluginCommandline
 
@@ -11,20 +9,6 @@ class Kvantum(PluginCommandline):
         super().__init__(['kvantummanager', '--set', '{theme}'])
         self.theme_light = 'KvFlatLight'
         self.theme_dark = 'KvFlat'
-
-    def set_theme(self, theme: str):
-        if not theme:
-            raise ValueError(f'Theme \"{theme}\" is invalid')
-        if not (self.available and self.enabled):
-            return
-        # insert theme in command and run it
-        command = self.insert_theme(theme)
-        subprocess.check_call(command)
-        subprocess.check_call(
-            ['dbus-send', '--session', '--type=signal', 
-             '/KGlobalSettings', 'org.kde.KGlobalSettings.notifyChange', 
-             'int32:2', 'int32:0']
-        )
 
     @classmethod
     def get_kvantum_theme_from_dir(cls, dir):

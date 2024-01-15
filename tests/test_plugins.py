@@ -1,9 +1,5 @@
 import unittest
 
-# import os
-# import sys
-# sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
 from yin_yang.config import config
 from yin_yang.config import plugins
 from yin_yang.plugins._plugin import Plugin, ExternalPlugin
@@ -45,7 +41,7 @@ class PluginsTest(unittest.TestCase):
                                  'set_theme() should not be successful if the plugin is disabled')
 
     # NOTE if you want to test that your theme changes, set this value to true
-    @unittest.skipUnless(True, 'test_theme_changes is disabled')
+    @unittest.skipUnless(False, 'test_theme_changes is disabled')
     def test_set_theme_works(self):
         for pl in filter(lambda p: not isinstance(p, ExternalPlugin) and p.enabled, plugins):
             with self.subTest('Changing the theme should be successful', plugin=pl.name):
