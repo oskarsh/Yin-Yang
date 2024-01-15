@@ -242,9 +242,16 @@ def set_profile(service: str, profile: str):
     try:
         sessions = subprocess.check_output(f'qdbus {service} | grep "Sessions/"', shell=True)
     except subprocess.CalledProcessError:
-        # happens when dolphins konsole is not opened
-        logger.debug(f'No Konsole sessions available in service {service}, skipping')
-        return
+        try:
+            sessions = subprocess.check_output(
+                f'qdbus org.kde.konsole | grep "Sessions/"', shell=True
+            )
+            logger.debug(f'Found org.kde.konsole, use that instead')
+            service = "org.kde.konsole"
+        except subprocess.CalledProcessError:
+            # happens when dolphins konsole is not opened
+            logger.debug(f'No Konsole sessions available in service {service}, skipping')
+            return
     sessions = sessions.decode('utf-8').removesuffix('\n').split('\n')
 
     # loop: process sessions
