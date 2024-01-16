@@ -5,12 +5,8 @@ import pathlib
 from abc import ABC, abstractmethod
 from datetime import time
 from functools import cache
-from time import sleep
 from typing import Union, Optional
 
-import requests
-from PySide6.QtCore import QObject
-from PySide6.QtPositioning import QGeoPositionInfoSource, QGeoPositionInfo, QGeoCoordinate
 from psutil import process_iter, NoSuchProcess
 from suntime import Sun, SunTimeException
 
@@ -224,7 +220,12 @@ class ConfigManager(dict):
         # check if config needs an update
         # if the default values are set, the version number is below 0
         if config_loaded['version'] < self.defaults['version']:
-            config_loaded = update_config(config_loaded, self.defaults)
+            try:
+                config_loaded = update_config(config_loaded, self.defaults)
+            except Exception as e:
+                logger.error('An error ocurred while trying to update the config. Using defaults instead.')
+                logger.error(e)
+                config_loaded = self.defaults
 
         for pl in plugins:
             pl.theme_light = config_loaded['plugins'][pl.name.lower()]['light_theme']
