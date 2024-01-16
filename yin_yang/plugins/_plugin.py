@@ -89,7 +89,7 @@ class Plugin(ABC):
             # add all theme names
             for i, curComboBox in enumerate(inputs):
                 themes = list(self.available_themes.values())
-                themes.sort()
+                themes.sort(key=lambda s: s.casefold())
                 curComboBox.addItems(themes)
                 curComboBox.setMinimumContentsLength(4)
                 # set index
