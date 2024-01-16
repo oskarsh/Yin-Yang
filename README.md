@@ -11,7 +11,7 @@ and also themes your favourite editors like VSCode or Atom.
 
 You might also want to take a look at our [**discussions page**](https://github.com/oskarsh/Yin-Yang/discussions), where we talk about the future of the app and other cool stuff!
 
-> Translations: [🇨🇳](README_zh.md)
+> Translations:[🇹🇼](README_zh_TW.md) [🇨🇳](README_zh_CN.md)
 
 ![Visualization](.github/images/header.png)
 ![App configuration](.github/images/settings.png)
