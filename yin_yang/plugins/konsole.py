@@ -74,7 +74,7 @@ class Konsole(Plugin):
             logger.debug(f'Changing profile in konsole session {proc_id}')
             set_profile(f'org.kde.konsole-{proc_id}', profile)
 
-        set_profile('org.kde.konsole', profile) # konsole may don't have session dbus like above
+        set_profile('org.kde.konsole', profile)  # konsole may don't have session dbus like above
         set_profile('org.kde.yakuake', profile)
 
         process_ids = [

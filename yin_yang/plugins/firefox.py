@@ -44,7 +44,7 @@ class Firefox(ExternalPlugin):
                     for addon in content['addons']:
                         if addon['type'] == 'theme':
                             themes[addon['id']] = addon['defaultLocale']['name']
-            except FileNotFoundError as e:
+            except FileNotFoundError as _:
                 logger.warning(f'Firefox profile has no extensions installed: {path}')
                 continue
 

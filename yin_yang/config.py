@@ -227,10 +227,10 @@ class ConfigManager(dict):
                 logger.error(e)
                 config_loaded = self.defaults
 
-        for pl in plugins:
-            pl.theme_light = config_loaded['plugins'][pl.name.lower()]['light_theme']
-            pl.theme_dark = config_loaded['plugins'][pl.name.lower()]['dark_theme']
-            pl.enabled = config_loaded['plugins'][pl.name.lower()]['enabled']
+        for p in plugins:
+            p.theme_light = config_loaded['plugins'][p.name.lower()]['light_theme']
+            p.theme_dark = config_loaded['plugins'][p.name.lower()]['dark_theme']
+            p.enabled = config_loaded['plugins'][p.name.lower()]['enabled']
 
         self.update(config_loaded)
 
@@ -400,9 +400,11 @@ class ConfigManager(dict):
                 return coordinate.latitude(), coordinate.longitude()
             except TypeError as e:
                 logger.error('Unable to update position. Using config values as fallback.')
+                logger.error(e)
                 pass
             except ValueError as e:
                 logger.error('Unable to update position. Using config values as fallback.')
+                logger.error(e)
                 pass
 
         return self['coordinates']
@@ -473,7 +475,7 @@ config = ConfigManager()
 logger.info('Detected desktop:', config.desktop)
 
 # set plugin themes
-for p in filter(lambda pl: pl.available, plugins):
-    p.enabled = config.get_plugin_key(p.name, PluginKey.ENABLED)
-    p.theme_bright = config.get_plugin_key(p.name, PluginKey.THEME_LIGHT)
-    p.theme_dark = config.get_plugin_key(p.name, PluginKey.THEME_DARK)
+for pl in filter(lambda pl: pl.available, plugins):
+    pl.enabled = config.get_plugin_key(pl.name, PluginKey.ENABLED)
+    pl.theme_bright = config.get_plugin_key(pl.name, PluginKey.THEME_LIGHT)
+    pl.theme_dark = config.get_plugin_key(pl.name, PluginKey.THEME_DARK)

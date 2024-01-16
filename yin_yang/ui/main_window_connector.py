@@ -4,7 +4,7 @@ from typing import cast
 from PySide6 import QtWidgets
 from PySide6.QtCore import QStandardPaths
 from PySide6.QtGui import QScreen, QColor
-from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog,QGroupBox
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog, QGroupBox
 
 from .main_window import Ui_main_window
 from ..theme_switcher import set_desired_theme, set_mode
@@ -111,9 +111,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def load_plugins(self):
         # First, remove sample plugin
-        samplePlugin = cast(QGroupBox,self.ui.plugins_scroll_content.findChild(QGroupBox, 'samplePluginGroupBox'))
-        samplePlugin.hide()
-
+        sample_plugin = cast(QGroupBox, self.ui.plugins_scroll_content.findChild(QGroupBox, 'samplePluginGroupBox'))
+        sample_plugin.hide()
 
         widget: QGroupBox
         for plugin in plugins:
@@ -121,7 +120,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if plugin.name.casefold() in ['notification', 'sound']:
                 continue
 
-            widget = cast(QGroupBox,self.ui.plugins_scroll_content.findChild(QGroupBox, 'group' + plugin.name))
+            widget = cast(QGroupBox, self.ui.plugins_scroll_content.findChild(QGroupBox, 'group' + plugin.name))
             if widget is None:
                 widget = plugin.get_widget(self.ui.plugins_scroll_content)
                 self.ui.plugins_scroll_content_layout.addWidget(widget)

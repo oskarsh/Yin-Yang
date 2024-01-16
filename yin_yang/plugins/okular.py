@@ -9,7 +9,9 @@ from ._plugin import Plugin
 
 
 class Okular(Plugin):
-    """Inspired by: https://gitlab.com/LADlSLAV/yabotss/-/blob/main/darkman_examples_kde_plasma/dark-mode.d/10_set_theme_okular_dark.sh"""
+    """Inspired by:
+    https://gitlab.com/LADlSLAV/yabotss/-/blob/main/darkman_examples_kde_plasma/dark-mode.d/10_set_theme_okular_dark.sh
+    """
 
     def __init__(self):
         super().__init__()
