@@ -118,7 +118,7 @@ class Plugin(ABC):
 
 
 class PluginCommandline(Plugin):
-    def __init__(self, command: [str]):
+    def __init__(self, command: list[str]):
         """
         :param command: list of arguments as passed to @subprocess.run, with the theme being inserted as {theme}
         """
@@ -174,7 +174,7 @@ class PluginDesktopDependent(Plugin):
             logger.warning(f'Plugin {self.name} has no support for your desktop environment yet!')
 
     @property
-    def strategy(self) -> Plugin:
+    def strategy(self) -> Plugin | None:
         return self._strategy_instance
 
     @property

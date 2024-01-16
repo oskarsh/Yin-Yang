@@ -1,6 +1,7 @@
 import logging
 from os import scandir, path
 from pathlib import Path
+import subprocess
 
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
@@ -79,7 +80,23 @@ class _Kde(Plugin):
             'setGtkTheme'
         )
         message.setArguments([theme])
-        connection.call(message)
+        response = connection.call(message)
+        if response.type() == QDBusMessage.MessageType.ErrorMessage:
+            logger.warning('kde-gtk-config not available, try xsettingsd')
+            xsettingsd_conf_path = Path.home() / '.config' / 'xsettingsd' / 'xsettingsd.conf'
+            if not xsettingsd_conf_path.exists():
+                logger.warning('xsettingsd not available')
+            with open(xsettingsd_conf_path, 'r') as f:
+                lines = f.readlines()
+                for i, line in enumerate(lines):
+                    if line.startswith('Net/ThemeName'):
+                        lines[i] = f'Net/ThemeName "{theme}"\n'
+                        break
+            with open(xsettingsd_conf_path, 'w') as f:
+                f.writelines(lines)
+            subprocess.run(['killall', '-HUP', 'xsettingsd'])
+        else:
+            logger.debug('Success by kde-gtk-config')
 
 
 class _Xfce(PluginCommandline):
