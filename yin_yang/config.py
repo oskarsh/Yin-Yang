@@ -326,7 +326,7 @@ class ConfigManager(dict):
             'running': False,
             'dark_mode': False,
             'mode': Modes.MANUAL.value,
-            'coordinates': (0, 0),
+            'coordinates': (0.0, 0.0),
             'update_location': False,
             'update_interval': 60,
             'times': ('07:00', '20:00'),

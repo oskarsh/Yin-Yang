@@ -51,9 +51,14 @@ def get_qt_position() -> QGeoCoordinate:
 
 def get_ipinfo_position() -> QGeoCoordinate:
     # use the old method as a fallback
-    response = requests.get('https://www.ipinfo.io/loc')
+    try:
+        response = requests.get('https://www.ipinfo.io/loc')
+    except Exception as e:
+        logger.error(e)
+        raise TypeError('Error while sending a request to get location')
+
     if not response.ok:
-        logger.error('Failed to get location from ipinfo.io')
+        raise TypeError('Failed to get location from ipinfo.io')
 
     loc_response = response.text.removesuffix('\n').split(',')
     loc: [float] = [float(coordinate) for coordinate in loc_response]
