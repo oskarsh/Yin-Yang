@@ -10,7 +10,7 @@ from typing import Union, Optional
 from psutil import process_iter, NoSuchProcess
 from suntime import Sun, SunTimeException
 
-from position import get_current_location
+from .position import get_current_location
 from .meta import Modes, Desktop, PluginKey, ConfigEvent
 from .plugins import get_plugins
 
