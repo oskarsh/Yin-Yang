@@ -1,6 +1,7 @@
 import os
 import json
 import logging
+from itertools import chain
 from os.path import isdir, isfile
 from pathlib import Path
 
@@ -9,9 +10,9 @@ from ._plugin import Plugin
 logger = logging.getLogger(__name__)
 
 extension_paths = [
-    str(Path.home()) + '/.vscode/extensions',
-    str(Path.home()) + '/.vscode-insiders/extensions',
-    str(Path.home()) + '/.vscode-oss/extensions',
+    str(Path.home() / '.vscode/extensions'),
+    str(Path.home() / '.vscode-insiders/extensions'),
+    str(Path.home() / '.vscode-oss/extensions'),
     '/usr/lib/code/extensions',
     '/usr/lib/code-insiders/extensions',
     '/usr/share/code/resources/app/extensions',
@@ -19,7 +20,11 @@ extension_paths = [
     '/opt/visual-studio-code/resources/app/extensions/',
     '/opt/visual-studio-code-insiders/resources/app/extensions/',
     '/var/lib/snapd/snap/code/current/usr/share/code/resources/app/extensions/',
-    '/var/lib/snapd/snap/code-insiders/current/usr/share/code-insiders/resources/app/extensions/'
+    '/var/lib/snapd/snap/code-insiders/current/usr/share/code-insiders/resources/app/extensions/',
+    str(Path.home() / '.var/app/com.visualstudio.code/data/vscode/extensions/'),
+    str(Path.home() / '.var/app/com.visualstudio.code-oss/data/vscode/extensions/'),
+    str(Path.home() / '.var/app/com.vscodium.codium/data/codium/extensions/'),
+    '/var/lib/flatpak/app/com.visualstudio.code/current/active/files/extra/vscode/resources/app/extensions/'
 ]
 
 
@@ -75,11 +80,19 @@ class Vscode(Plugin):
             "Code",
             "Code - Insiders",
         ]
+        config_path = str(Path.home() / '.config/{name}/User/settings.json')
+        native_settings = (config_path.format(name=name) for name in possible_editors)
+
+        flatpak_settings = [
+            str(Path.home() / '.var/app/com.visualstudio.code/config/Code/User/settings.json'),
+            str(Path.home() / '.var/app/com.visualstudio.code-oss/config/Code - OSS/User/settings.json'),
+            str(Path.home() / '.var/app/com.vscodium.codium/config/VSCodium/User/settings.json')
+        ]
 
         try:
             for editor in filter(
                     os.path.isfile,
-                    (f'{str(Path.home())}/.config/{name}/User/settings.json' for name in possible_editors)):
+                    chain(native_settings, flatpak_settings)):
                 # load the settings
                 with open(editor, "r") as sett:
                     try:
