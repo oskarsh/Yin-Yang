@@ -333,3 +333,15 @@ def get_int_from_qcolor(color: QColor) -> int:
     # ... - 2^32 converts uint to int
     color_int = color.rgba64().toArgb32() - 2 ** 32
     return color_int
+
+
+def flatpak_system(app_id: str) -> Path:
+    return Path(f'/var/lib/flatpak/app/{app_id}/current/active')
+
+
+def flatpak_user(app_id: str) -> Path:
+    return Path.home() / f'.var/app/{app_id}'
+
+
+def snap_path(app: str) -> Path:
+    return Path(f'/var/lib/snapd/snap/{app}/current')

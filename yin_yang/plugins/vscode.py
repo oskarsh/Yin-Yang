@@ -5,7 +5,7 @@ from itertools import chain
 from os.path import isdir, isfile
 from pathlib import Path
 
-from ._plugin import Plugin
+from ._plugin import Plugin, flatpak_system, flatpak_user, snap_path
 
 logger = logging.getLogger(__name__)
 
@@ -19,12 +19,14 @@ extension_paths = [
     '/usr/share/code-insiders/resources/app/extensions',
     '/opt/visual-studio-code/resources/app/extensions/',
     '/opt/visual-studio-code-insiders/resources/app/extensions/',
-    '/var/lib/snapd/snap/code/current/usr/share/code/resources/app/extensions/',
-    '/var/lib/snapd/snap/code-insiders/current/usr/share/code-insiders/resources/app/extensions/',
-    str(Path.home() / '.var/app/com.visualstudio.code/data/vscode/extensions/'),
-    str(Path.home() / '.var/app/com.visualstudio.code-oss/data/vscode/extensions/'),
-    str(Path.home() / '.var/app/com.vscodium.codium/data/codium/extensions/'),
-    '/var/lib/flatpak/app/com.visualstudio.code/current/active/files/extra/vscode/resources/app/extensions/'
+    str(snap_path('code') / 'usr/share/code/resources/app/extensions/'),
+    str(snap_path('code-insiders') / 'usr/share/code-insiders/resources/app/extensions/'),
+    str(flatpak_user('com.visualstudio.code') / 'data/vscode/extensions/'),
+    str(flatpak_user('com.visualstudio.code-oss') / 'data/vscode/extensions/'),
+    str(flatpak_user('com.vscodium.codium') / 'data/codium/extensions/'),
+    str(flatpak_system('com.visualstudio.code') / 'files/extra/vscode/resources/app/extensions/'),
+    str(flatpak_system('com.visualstudio.code-oss') / 'files/main/resources/app/extensions/'),
+    str(flatpak_system('com.vscodium.codium') / 'files/share/codium/resources/app/extensions/')
 ]
 
 
@@ -84,9 +86,9 @@ class Vscode(Plugin):
         native_settings = (config_path.format(name=name) for name in possible_editors)
 
         flatpak_settings = [
-            str(Path.home() / '.var/app/com.visualstudio.code/config/Code/User/settings.json'),
-            str(Path.home() / '.var/app/com.visualstudio.code-oss/config/Code - OSS/User/settings.json'),
-            str(Path.home() / '.var/app/com.vscodium.codium/config/VSCodium/User/settings.json')
+            str(flatpak_user('com.visualstudio.code') / 'config/Code/User/settings.json'),
+            str(flatpak_user('com.visualstudio.code-oss') / 'config/Code - OSS/User/settings.json'),
+            str(flatpak_user('com.vscodium.codium') / 'config/VSCodium/User/settings.json')
         ]
 
         try:
