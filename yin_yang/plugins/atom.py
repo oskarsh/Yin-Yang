@@ -10,7 +10,7 @@ class Atom(ConfigFilePlugin):
         self.theme_light = 'one-light'
         self.theme_dark = 'one-dark'
 
-    def update_config(self, config, theme: str):
+    def update_config(self, config: str, theme: str) -> str:
         current_theme = self.current_theme
         if not current_theme:
             raise ValueError("Current theme could not be determined."

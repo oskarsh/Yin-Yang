@@ -294,23 +294,24 @@ class ConfigFilePlugin(Plugin):
 
     def open_config(self, path: Path):
         with open(path) as file:
-            pass
-
-        match self.file_format:
-            case FileFormat.JSON:
-                return json.load(file)
-            case FileFormat.CONFIG:
-                config = ConfigParser()
-                config.optionxform = str
-                config.read_file(file)
-                return config
-            case _:
-                return file.read()
+            match self.file_format.value:
+                case FileFormat.JSON.value:
+                    try:
+                        return json.load(file)
+                    except json.decoder.JSONDecodeError as e:
+                        return self.default_config
+                case FileFormat.CONFIG.value:
+                    config = ConfigParser()
+                    config.optionxform = str
+                    config.read_file(file)
+                    return config
+                case _:
+                    return file.read()
 
     @staticmethod
-    def write_config(value, path: Path):
+    def write_config(value: str, path: Path):
         with open(path, 'w') as file:
-            file.write(str(value))
+            file.write(value)
 
     def set_theme(self, theme: str):
         if not (self.available and self.enabled):
@@ -319,14 +320,28 @@ class ConfigFilePlugin(Plugin):
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
-        for config_path in self.config_paths:
-            config = self.open_config(config_path)
-            new_config = self.update_config(config, theme)
-            self.write_config(new_config, config_path)
+        try:
+            for config_path in self.config_paths:
+                if not config_path.exists():
+                    continue
+
+                config = self.open_config(config_path)
+                new_config = self.update_config(config, theme)
+                self.write_config(new_config, config_path)
+        except StopIteration:
+            raise FileNotFoundError(
+                'No config file found. '
+                'If you see this error, try to set a custom theme manually once and try again.')
 
     @abstractmethod
-    def update_config(self, config, theme: str):
+    def update_config(self, config, theme: str) -> str:
+        """Set the theme in the config."""
         raise NotImplementedError
+
+    @property
+    def default_config(self):
+        """Fallback config file if active file should be empty."""
+        raise FileNotFoundError('Config file is empty. Try to set a theme manually once and try again.')
 
 
 def get_qcolor_from_int(color_int: int) -> QColor:
