@@ -54,6 +54,7 @@ def setup_logger(use_systemd_journal: bool):
         )
         logging.root.addHandler(file_handler)
 
+
 def systray_icon_clicked(reason: QSystemTrayIcon.ActivationReason):
     match reason:
         case QSystemTrayIcon.ActivationReason.MiddleClick:
@@ -122,9 +123,15 @@ else:
         icon.setToolTip('Yin & Yang')
 
         menu = QMenu('Yin & Yang')
-        menu.addAction(app.translate('systray', 'Open Yin Yang', 'Context menu action in the systray'), lambda: window.show())
-        menu.addAction(app.translate('systray', 'Toggle theme', 'Context menu action in the systray'), lambda: theme_switcher.set_mode(not config.dark_mode))
-        menu.addAction(QIcon.fromTheme('application-exit'), app.translate('systray', 'Quit', 'Context menu action in the systray'), app.quit)
+        menu.addAction(
+            app.translate('systray', 'Open Yin Yang', 'Context menu action in the systray'),
+            lambda: window.show())
+        menu.addAction(
+            app.translate('systray', 'Toggle theme', 'Context menu action in the systray'),
+            lambda: theme_switcher.set_mode(not config.dark_mode))
+        menu.addAction(QIcon.fromTheme('application-exit'),
+                       app.translate('systray', 'Quit', 'Context menu action in the systray'),
+                       app.quit)
 
         icon.setContextMenu(menu)
         icon.show()

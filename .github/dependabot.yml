@@ -1,0 +1,17 @@
+# Basic `dependabot.yml` file
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    target-branch: "beta"
+    labels:
+      - "update"
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    labels:
+      - "update"
+    target-branch: "beta"

@@ -16,7 +16,7 @@ echo "Uninstalling old version, if it exists"
 echo "Installing dependencies …"
 # create virtual environment
 python3 -m venv /opt/yin-yang/.venv
-source .venv/bin/activate
+source /opt/yin-yang/.venv/bin/activate
 /opt/yin-yang/.venv/bin/pip3 install --upgrade setuptools pip wheel
 /opt/yin-yang/.venv/bin/pip3 install -r requirements.txt
 

@@ -1,30 +1,22 @@
 from configparser import ConfigParser
-from os.path import isfile
 from pathlib import Path
 
-from ._plugin import Plugin
+from ..meta import FileFormat
+from ._plugin import ConfigFilePlugin, flatpak_user
 
-config_path = f'{Path.home()}/.config/onlyoffice/DesktopEditors.conf'
 
-
-class OnlyOffice(Plugin):
+class OnlyOffice(ConfigFilePlugin):
     def __init__(self):
-        super().__init__()
+        super().__init__([
+            Path.home() / '.config/onlyoffice/DesktopEditors.conf',
+            flatpak_user('org.onlyoffice.desktopeditors') / 'config/onlyoffice/DesktopEditors.conf'
+        ], file_format=FileFormat.CONFIG)
         self.theme_light = 'theme-light'
         self.theme_dark = 'theme-dark'
 
-    def set_theme(self, theme: str):
-        config = ConfigParser()
-        config.optionxform = str
-        config.read(config_path)
-        config['General']['UITheme2'] = theme
-
-        with open(config_path, 'w') as file:
-            config.write(file)
-
-    @property
-    def available(self) -> bool:
-        return isfile(config_path)
+    def update_config(self, config: ConfigParser, theme: str):
+        config['General']['UITheme'] = theme
+        return config
 
     @property
     def available_themes(self) -> dict:

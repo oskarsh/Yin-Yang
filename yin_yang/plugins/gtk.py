@@ -1,12 +1,13 @@
 import logging
+import subprocess
 from os import scandir, path
 from pathlib import Path
 
-from PySide6.QtDBus import QDBusConnection, QDBusMessage
+from PySide6.QtDBus import QDBusMessage
 
-from ..meta import Desktop
-from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline
+from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
 from .system import test_gnome_availability
+from ..meta import Desktop
 
 logger = logging.getLogger(__name__)
 
@@ -62,24 +63,44 @@ class _Gnome(PluginCommandline):
         return test_gnome_availability(self.command)
 
 
-class _Kde(Plugin):
+class _Kde(DBusPlugin):
     name = 'GTK'
 
     def __init__(self):
-        super().__init__()
-        self.theme_light = 'Breeze'
-        self.theme_dark = 'Breeze'
-
-    def set_theme(self, theme: str):
-        connection = QDBusConnection.sessionBus()
         message = QDBusMessage.createMethodCall(
             'org.kde.GtkConfig',
             '/GtkConfig',
             'org.kde.GtkConfig',
             'setGtkTheme'
         )
-        message.setArguments([theme])
-        connection.call(message)
+        super().__init__(message)
+        self.theme_light = 'Breeze'
+        self.theme_dark = 'Breeze'
+
+    def set_theme(self, theme: str):
+        response = self.call(self.create_message(theme))
+
+        if response.type() != QDBusMessage.MessageType.ErrorMessage:
+            return
+
+        logger.warning('kde-gtk-config not available, trying xsettingsd')
+        xsettingsd_conf_path = Path.home() / '.config/xsettingsd/xsettingsd.conf'
+        if not xsettingsd_conf_path.exists():
+            logger.warning('xsettingsd not available')
+            return
+
+        with open(xsettingsd_conf_path, 'r') as f:
+            lines = f.readlines()
+            for i, line in enumerate(lines):
+                if line.startswith('Net/ThemeName'):
+                    lines[i] = f'Net/ThemeName "{theme}"\n'
+                    break
+
+        with open(xsettingsd_conf_path, 'w') as f:
+            f.writelines(lines)
+
+        # send signal to read new config
+        subprocess.run(['killall', '-HUP', 'xsettingsd'])
 
 
 class _Xfce(PluginCommandline):

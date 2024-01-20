@@ -13,7 +13,6 @@ import time
 from threading import Thread
 
 from .plugins.notify import Notification
-from .plugins.sound import Sound
 from .daemon_handler import update_times
 from .meta import PluginKey
 from .config import config, plugins
@@ -40,7 +39,7 @@ def set_mode(dark: bool, force=False):
     logger.info(f'Switching to {"dark" if dark else "light"} mode.')
     for p in plugins:
         if config.get_plugin_key(p.name, PluginKey.ENABLED):
-            if force and (isinstance(p, Sound) or isinstance(p, Notification)):
+            if force and isinstance(p, Notification):
                 # skip sound and notify on apply settings
                 continue
             try:

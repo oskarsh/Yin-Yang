@@ -20,7 +20,7 @@ logging.basicConfig(filename=str(Path.home()) + '/.local/share/yin_yang.log', le
 logger = logging.getLogger(__name__)
 
 
-def _move_times(time_now: datetime, time_light: dt_time, time_dark: dt_time) -> list[int, int]:
+def _move_times(time_now: datetime, time_light: dt_time, time_dark: dt_time) -> list[int]:
     """
     Converts a time string to seconds since the epoch
     :param time_now: the current time
