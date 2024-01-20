@@ -8,7 +8,7 @@ class NotificationHandler(Handler):
     """Shows logs as notifications"""
     def emit(self, record):
         try:
-            subprocess.call(['notify-', record.levelname, record.msg,
-                            '-a', 'Yisendn & Yang', '-u', 'low', '--icon', 'yin_yang'])
+            subprocess.call(['notify-send', record.levelname, record.msg,
+                            '-a', 'Yin & Yang', '-u', 'low', '--icon', 'yin_yang'])
         except FileNotFoundError:
-            logger.warn('notify- not found. Notifications will not work!')
+            logger.warn('notify-send not found. Notifications will not work!')
