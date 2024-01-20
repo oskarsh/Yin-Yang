@@ -1,9 +1,10 @@
 import logging
-import subprocess
 from os import scandir, path
 from pathlib import Path
 
 from PySide6.QtDBus import QDBusMessage
+
+from yin_yang import helpers
 
 from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
 from .system import test_gnome_availability
@@ -119,7 +120,7 @@ class _Kde(DBusPlugin):
             f.writelines(lines)
 
         # send signal to read new config
-        subprocess.run(['killall', '-HUP', 'xsettingsd'])
+        helpers.run(['killall', '-HUP', 'xsettingsd'])
 
 
 class _Xfce(PluginCommandline):
