@@ -140,6 +140,7 @@ def get_current_location() -> QGeoCoordinate:
         # use the old method as a fallback
         loc_response = requests.get('https://www.ipinfo.io/loc')
         if loc_response.status_code is not requests.codes.ok:
+            logger.warning('Unable to determine location. Reason is {loc_response.reason}.')
             return QGeoCoordinate(0,0)
         else:
             loc: [float] = [float(coordinate) for coordinate in loc_response]
