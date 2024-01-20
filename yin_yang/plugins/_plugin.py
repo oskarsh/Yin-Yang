@@ -308,10 +308,12 @@ class ConfigFilePlugin(Plugin):
                 case _:
                     return file.read()
 
-    @staticmethod
-    def write_config(value: str, path: Path):
+    def write_config(self, value: str | ConfigParser, path: Path):
         with open(path, 'w') as file:
-            file.write(value)
+            if self.file_format.value == FileFormat.CONFIG.value:
+                value.write(file)
+            else:
+                file.write(value)
 
     def set_theme(self, theme: str):
         if not (self.available and self.enabled):
