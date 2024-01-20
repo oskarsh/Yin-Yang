@@ -1,7 +1,9 @@
 import copy
+import json
 import logging
 import subprocess
 from abc import ABC, abstractmethod
+from configparser import ConfigParser
 from pathlib import Path
 from typing import Optional
 
@@ -9,7 +11,7 @@ from PySide6.QtDBus import QDBusConnection, QDBusMessage
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
-from ..meta import UnsupportedDesktopError
+from ..meta import UnsupportedDesktopError, FileFormat
 
 logger = logging.getLogger(__name__)
 
@@ -258,6 +260,12 @@ class DBusPlugin(Plugin):
         self.base_message = base_message
 
     def set_theme(self, theme: str):
+        if not (self.available and self.enabled):
+            return
+
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
         self.call(self.create_message(theme))
 
     def create_message(self, theme: str) -> QDBusMessage:
@@ -269,22 +277,50 @@ class DBusPlugin(Plugin):
         return self.connection.call(message)
 
 
-def inplace_change(filename: str | Path, old_string: str, new_string: str):
-    """Replaces a given string by a new string in a specific file
-    :param filename: the full path to the file that should be changed
-    :param old_string: the old string that should be found in the file
-    :param new_string: the string that should replace the old string
-    """
-    # Safely read the input filename using 'with'
-    with open(filename, 'r') as file:
-        file_content = file.read()
-        if old_string not in file_content:
-            raise ValueError(f'{old_string} could not be found in {filename}')
+class ConfigFilePlugin(Plugin):
+    def __init__(self, config_path: Path, file_format=FileFormat.PLAIN):
+        super().__init__()
+        self.config_path: Path = config_path
+        self.file_format = file_format
 
-    # Safely write the changed content, if found in the file
-    with open(filename, 'w') as file:
-        file_content = file_content.replace(old_string, new_string)
-        file.write(file_content)
+    @property
+    def available(self) -> bool:
+        return self.config_path.is_file()
+
+    @property
+    def config(self):
+        with open(self.config_path) as file:
+            pass
+
+        match self.file_format:
+            case FileFormat.JSON:
+                return json.load(file)
+            case FileFormat.CONFIG:
+                config = ConfigParser()
+                config.optionxform = str
+                config.read_file(file)
+                return config
+            case _:
+                with open(self.config_path) as file:
+                    return file.read()
+
+    @config.setter
+    def config(self, value):
+        with open(self.config_path, 'w') as file:
+            file.write(str(value))
+
+    def set_theme(self, theme: str):
+        if not (self.available and self.enabled):
+            return
+
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
+        self.config = self.update_config(theme)
+
+    @abstractmethod
+    def update_config(self, theme: str):
+        raise NotImplementedError
 
 
 def get_qcolor_from_int(color_int: int) -> QColor:
