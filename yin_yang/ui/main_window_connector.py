@@ -81,7 +81,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.btn_schedule.setChecked(True)
             self.ui.location.setVisible(False)
 
-        self.ui.toggle_sound.setChecked(config.get_plugin_key('sound', PluginKey.ENABLED))
         self.ui.toggle_notification.setChecked(config.get_plugin_key('notification', PluginKey.ENABLED))
         self.ui.bootOffset.setValue(config.boot_offset)
 
@@ -117,7 +116,7 @@ class MainWindow(QtWidgets.QMainWindow):
         widget: QGroupBox
         for plugin in plugins:
             # filter out plugins for application
-            if plugin.name.casefold() in ['notification', 'sound']:
+            if plugin.name.casefold() == 'notification':
                 continue
 
             widget = cast(QGroupBox, self.ui.plugins_scroll_content.findChild(QGroupBox, 'group' + plugin.name))
@@ -186,8 +185,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # connect dialog buttons
         self.ui.btn_box.clicked.connect(self.save_config_to_file)
 
-        self.ui.toggle_sound.toggled.connect(
-            lambda enabled: config.update_plugin_key('sound', PluginKey.ENABLED, enabled))
         self.ui.toggle_notification.toggled.connect(
             lambda enabled: config.update_plugin_key('notification', PluginKey.ENABLED, enabled))
 

@@ -60,31 +60,26 @@
     </message>
     <message>
         <location filename="../../designer/main_window.ui" line="302"/>
-        <source>Make a sound when switching the theme</source>
-        <translation>Mache ein Geräusch, wenn das Thema geändert wird</translation>
-    </message>
-    <message>
-        <location filename="../../designer/main_window.ui" line="309"/>
         <source>Send a notification</source>
         <translation>Sende eine Benachrichtigung</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="318"/>
+        <location filename="../../designer/main_window.ui" line="311"/>
         <source>Time to wait until the system finished booting. Default value is 10 seconds.</source>
         <translation>Zeit die gewartet werden soll während das System startet. Standardwert ist 10 Sekunden.</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="321"/>
+        <location filename="../../designer/main_window.ui" line="314"/>
         <source>Delay after boot:</source>
         <translation>Verzögerung nach Start</translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="328"/>
+        <location filename="../../designer/main_window.ui" line="321"/>
         <source>s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../designer/main_window.ui" line="361"/>
+        <location filename="../../designer/main_window.ui" line="354"/>
         <source>Plugins</source>
         <translation></translation>
     </message>
@@ -92,19 +87,19 @@
 <context>
     <name>systray</name>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="125"/>
+        <location filename="../../yin_yang/__main__.py" line="127"/>
         <source>Open Yin Yang</source>
         <comment>Context menu action in the systray</comment>
         <translation>Yin Yang öffnen</translation>
     </message>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="126"/>
+        <location filename="../../yin_yang/__main__.py" line="130"/>
         <source>Toggle theme</source>
         <comment>Context menu action in the systray</comment>
         <translation type="unfinished">Farbschema wechseln</translation>
     </message>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="127"/>
+        <location filename="../../yin_yang/__main__.py" line="133"/>
         <source>Quit</source>
         <comment>Context menu action in the systray</comment>
         <translation>Beenden</translation>

@@ -297,13 +297,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QCheckBox" name="toggle_sound">
-          <property name="text">
-           <string>Make a sound when switching the theme</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QCheckBox" name="toggle_notification">
           <property name="text">
            <string>Send a notification</string>
@@ -374,8 +367,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>518</width>
-             <height>88</height>
+             <width>501</width>
+             <height>86</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="plugins_scroll_content_layout">

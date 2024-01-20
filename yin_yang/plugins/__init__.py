@@ -2,7 +2,7 @@ from ..meta import Desktop
 from . import system, colors, gtk, icons, kvantum, wallpaper, custom
 from . import firefox, only_office, okular
 from . import vscode, konsole
-from . import sound, notify
+from . import notify
 
 # NOTE initialize your plugin over here:
 # The order in the list specifies the order in the config gui
@@ -23,7 +23,6 @@ def get_plugins(desktop: Desktop) -> [Plugin]:
         okular.Okular(),
         konsole.Konsole(),
         custom.Custom(),
-        sound.Sound(),
         notify.Notification()
     ]
 

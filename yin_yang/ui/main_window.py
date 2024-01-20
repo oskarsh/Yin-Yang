@@ -229,11 +229,6 @@ class Ui_main_window(object):
 
         self.settings_layout.addWidget(self.manual_buttons)
 
-        self.toggle_sound = QCheckBox(self.settings)
-        self.toggle_sound.setObjectName(u"toggle_sound")
-
-        self.settings_layout.addWidget(self.toggle_sound)
-
         self.toggle_notification = QCheckBox(self.settings)
         self.toggle_notification.setObjectName(u"toggle_notification")
 
@@ -279,7 +274,7 @@ class Ui_main_window(object):
         self.plugins_scroll.setWidgetResizable(True)
         self.plugins_scroll_content = QWidget()
         self.plugins_scroll_content.setObjectName(u"plugins_scroll_content")
-        self.plugins_scroll_content.setGeometry(QRect(0, 0, 518, 88))
+        self.plugins_scroll_content.setGeometry(QRect(0, 0, 501, 86))
         self.plugins_scroll_content_layout = QVBoxLayout(self.plugins_scroll_content)
         self.plugins_scroll_content_layout.setSpacing(6)
         self.plugins_scroll_content_layout.setContentsMargins(11, 11, 11, 11)
@@ -358,7 +353,6 @@ class Ui_main_window(object):
         self.btn_location.setText(QCoreApplication.translate("main_window", u"update location automatically", None))
         self.button_light.setText(QCoreApplication.translate("main_window", u"Light", None))
         self.button_dark.setText(QCoreApplication.translate("main_window", u"Dark", None))
-        self.toggle_sound.setText(QCoreApplication.translate("main_window", u"Make a sound when switching the theme", None))
         self.toggle_notification.setText(QCoreApplication.translate("main_window", u"Send a notification", None))
 #if QT_CONFIG(tooltip)
         self.bootOffsetLabel.setToolTip(QCoreApplication.translate("main_window", u"Time to wait until the system finished booting. Default value is 10 seconds.", None))
