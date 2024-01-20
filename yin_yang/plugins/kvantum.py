@@ -1,3 +1,4 @@
+from os import walk
 from pathlib import Path
 
 from ._plugin import PluginCommandline
@@ -12,7 +13,7 @@ class Kvantum(PluginCommandline):
     @classmethod
     def get_kvantum_theme_from_dir(cls, directory: Path):
         result = set()
-        for _, _, filenames in directory.walk():
+        for _, _, filenames in walk(directory):
             for filename in filenames:
                 if filename.endswith('.kvconfig'):
                     result.add(filename[:-9])
