@@ -1,8 +1,11 @@
+import copy
 import logging
 import subprocess
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import Optional
 
+from PySide6.QtDBus import QDBusConnection, QDBusMessage
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
@@ -248,7 +251,25 @@ class ExternalPlugin(Plugin):
         assert False, 'This is an external plugin, the mode can only be changed externally.'
 
 
-def inplace_change(filename: str, old_string: str, new_string: str):
+class DBusPlugin(Plugin):
+    def __init__(self, base_message: QDBusMessage):
+        super().__init__()
+        self.connection = QDBusConnection.sessionBus()
+        self.base_message = base_message
+
+    def set_theme(self, theme: str):
+        self.call(self.create_message(theme))
+
+    def create_message(self, theme: str) -> QDBusMessage:
+        message = copy.deepcopy(self.base_message)
+        message.setArguments([theme])
+        return message
+
+    def call(self, message) -> QDBusMessage:
+        return self.connection.call(message)
+
+
+def inplace_change(filename: str | Path, old_string: str, new_string: str):
     """Replaces a given string by a new string in a specific file
     :param filename: the full path to the file that should be changed
     :param old_string: the old string that should be found in the file
