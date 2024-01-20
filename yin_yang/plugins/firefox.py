@@ -11,14 +11,14 @@ from ._plugin import ExternalPlugin
 logger = logging.getLogger(__name__)
 
 
-def get_profile_paths() -> str:
-    path = str(Path.home()) + '/.mozilla/firefox/'
+def get_profile_paths() -> Path:
+    path = Path.home() / '.mozilla/firefox/'
     config_parser = ConfigParser()
-    config_parser.read(path + '/profiles.ini')
+    config_parser.read(path / 'profiles.ini')
     for section in config_parser:
         if not section.startswith('Profile'):
             continue
-        yield path + config_parser[section]['Path']
+        yield path / config_parser[section]['Path']
 
 
 class Firefox(ExternalPlugin):
@@ -34,7 +34,7 @@ class Firefox(ExternalPlugin):
         if not self.available:
             return {}
 
-        paths = (p + '/extensions.json' for p in get_profile_paths())
+        paths = (p / 'extensions.json' for p in get_profile_paths())
         themes: dict[str, str] = {}
 
         for path in paths:

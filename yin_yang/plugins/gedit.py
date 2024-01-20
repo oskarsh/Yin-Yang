@@ -1,11 +1,10 @@
-import os
-from os.path import isdir
+from pathlib import Path
 from xml.etree import ElementTree
 
 from ._plugin import PluginCommandline
 from .system import test_gnome_availability
 
-path = '/usr/share/gtksourceview-4/styles/'
+path = Path('/usr/share/gtksourceview-4/styles/')
 
 
 class Gedit(PluginCommandline):
@@ -18,11 +17,11 @@ class Gedit(PluginCommandline):
 
     @property
     def available_themes(self) -> dict:
-        if not isdir(path):
+        if not path.is_dir():
             return {}
 
         themes = {}
-        with os.scandir(path) as entries:
+        with path.iterdir() as entries:
             for file in (f.path for f in entries if f.is_file() and not f.name.endswith('.rng')):
                 config = ElementTree.parse(file)
                 attributes = config.getroot().attrib

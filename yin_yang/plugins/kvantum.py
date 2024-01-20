@@ -1,4 +1,3 @@
-import os
 from pathlib import Path
 
 from ._plugin import PluginCommandline
@@ -11,9 +10,9 @@ class Kvantum(PluginCommandline):
         self.theme_dark = 'KvFlat'
 
     @classmethod
-    def get_kvantum_theme_from_dir(cls, directory):
+    def get_kvantum_theme_from_dir(cls, directory: Path):
         result = set()
-        for _, _, filenames in os.walk(directory):
+        for _, _, filenames in directory.walk():
             for filename in filenames:
                 if filename.endswith('.kvconfig'):
                     result.add(filename[:-9])
@@ -24,7 +23,7 @@ class Kvantum(PluginCommandline):
         if not self.available:
             return {}
 
-        paths = ['/usr/share/Kvantum', str(Path.home()) + '/.config/Kvantum']
+        paths = [Path('/usr/share/Kvantum'), Path.home() / '.config/Kvantum']
         themes = list()
         for path in paths:
             themes = themes + self.get_kvantum_theme_from_dir(path)

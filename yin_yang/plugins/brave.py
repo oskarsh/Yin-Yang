@@ -1,5 +1,4 @@
 import json
-from os.path import isfile
 from pathlib import Path
 
 from PySide6.QtGui import QColor
@@ -7,7 +6,7 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout, QLineEdit, QPushButton
 
 from ._plugin import Plugin, get_int_from_qcolor
 
-path = f'{Path.home()}/.config/BraveSoftware/Brave-Browser/Default/Preferences'
+path = Path.home() / '.config/BraveSoftware/Brave-Browser/Default/Preferences'
 
 
 class Brave(Plugin):
@@ -48,4 +47,4 @@ class Brave(Plugin):
 
     @property
     def available(self) -> bool:
-        return isfile(path)
+        return path.is_file()

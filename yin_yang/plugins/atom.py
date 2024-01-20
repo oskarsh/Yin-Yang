@@ -1,11 +1,10 @@
 import re
-from os.path import isfile
 from pathlib import Path
 
 from ._plugin import Plugin, inplace_change
 
 
-def get_old_theme(settings):
+def get_old_theme(settings: Path):
     """
     Returns the theme that is currently used.
     Uses regex to find the currently used theme, I expect that themes follow this pattern:
@@ -22,7 +21,7 @@ def get_old_theme(settings):
 
 class Atom(Plugin):
     # noinspection SpellCheckingInspection
-    config_path = str(Path.home()) + "/.atom/config.cson"
+    config_path = Path.home() / '.atom/config.cson'
 
     def __init__(self):
         super().__init__()
@@ -48,4 +47,4 @@ class Atom(Plugin):
 
     @property
     def available(self) -> bool:
-        return isfile(self.config_path)
+        return self.config_path.is_file()

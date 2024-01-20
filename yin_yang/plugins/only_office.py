@@ -4,7 +4,7 @@ from pathlib import Path
 
 from ._plugin import Plugin
 
-config_path = f'{Path.home()}/.config/onlyoffice/DesktopEditors.conf'
+config_path = Path.home() / '.config/onlyoffice/DesktopEditors.conf'
 
 
 class OnlyOffice(Plugin):
