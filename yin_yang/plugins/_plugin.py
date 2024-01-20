@@ -278,18 +278,22 @@ class DBusPlugin(Plugin):
 
 
 class ConfigFilePlugin(Plugin):
-    def __init__(self, config_path: Path, file_format=FileFormat.PLAIN):
+    def __init__(self, config_paths: list[Path], file_format=FileFormat.PLAIN):
         super().__init__()
-        self.config_path: Path = config_path
+        self.config_paths: list[Path] = config_paths
         self.file_format = file_format
 
     @property
     def available(self) -> bool:
-        return self.config_path.is_file()
+        # check if any config file exists
+        for config in self.config_paths:
+            if config.is_file():
+                return True
 
-    @property
-    def config(self):
-        with open(self.config_path) as file:
+        return False
+
+    def open_config(self, path: Path):
+        with open(path) as file:
             pass
 
         match self.file_format:
@@ -301,12 +305,11 @@ class ConfigFilePlugin(Plugin):
                 config.read_file(file)
                 return config
             case _:
-                with open(self.config_path) as file:
-                    return file.read()
+                return file.read()
 
-    @config.setter
-    def config(self, value):
-        with open(self.config_path, 'w') as file:
+    @staticmethod
+    def write_config(value, path: Path):
+        with open(path, 'w') as file:
             file.write(str(value))
 
     def set_theme(self, theme: str):
@@ -316,10 +319,13 @@ class ConfigFilePlugin(Plugin):
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
-        self.config = self.update_config(theme)
+        for config_path in self.config_paths:
+            config = self.open_config(config_path)
+            new_config = self.update_config(config, theme)
+            self.write_config(new_config, config_path)
 
     @abstractmethod
-    def update_config(self, theme: str):
+    def update_config(self, config, theme: str):
         raise NotImplementedError
 
 

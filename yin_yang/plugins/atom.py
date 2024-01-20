@@ -6,18 +6,18 @@ from ._plugin import ConfigFilePlugin
 
 class Atom(ConfigFilePlugin):
     def __init__(self):
-        super().__init__(Path.home() / '.atom/config.cson')
+        super().__init__([Path.home() / '.atom/config.cson'])
         self.theme_light = 'one-light'
         self.theme_dark = 'one-dark'
 
-    def update_config(self, theme: str):
+    def update_config(self, config, theme: str):
         current_theme = self.current_theme
         if not current_theme:
             raise ValueError("Current theme could not be determined."
                              "If you see this error, try to set a custom theme once and then try again")
 
         # updating the old theme with theme specified in config
-        return self.config.replace(current_theme, theme)
+        return config.replace(current_theme, theme)
 
     @property
     def current_theme(self):
