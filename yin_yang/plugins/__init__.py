@@ -1,7 +1,7 @@
 from ..meta import Desktop
 from . import system, colors, gtk, icons, kvantum, wallpaper, custom
-from . import firefox, brave, gedit, only_office, okular
-from . import vscode, atom, konsole
+from . import firefox, only_office, okular
+from . import vscode, konsole
 from . import sound, notify
 
 # NOTE initialize your plugin over here:
@@ -18,10 +18,7 @@ def get_plugins(desktop: Desktop) -> [Plugin]:
         kvantum.Kvantum(),
         wallpaper.Wallpaper(desktop),
         firefox.Firefox(),
-        brave.Brave(),
         vscode.Vscode(),
-        atom.Atom(),
-        gedit.Gedit(),
         only_office.OnlyOffice(),
         okular.Okular(),
         konsole.Konsole(),
