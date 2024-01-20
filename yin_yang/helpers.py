@@ -1,4 +1,4 @@
-import subprocess
+import subprocess, os
 
 
 """Check output of a command.
@@ -30,11 +30,7 @@ def check_call(command, stdout=None) -> int:
 
 
 def is_flatpak() -> bool:
-    try:
-        subprocess.run('lookandfeeltool')
-        return False
-    except FileNotFoundError:
-        return True
+    return os.path.isfile('/.flatpak-info')
 
 def run(command: list[str], kwargs: list[str] = []) -> subprocess.CompletedProcess[str]:
     try:
