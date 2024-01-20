@@ -7,6 +7,13 @@ This is a helper method which will change how we check output depending on if
 The application is running in a Flatpak or not.
 """
 
+"""Base Flatpak Arguments
+
+These are the base arguments we use to execute commands when running in 
+a flatpak environment.
+"""
+base_flatpak_args = ["flatpak-spawn", "--host"]
+
 
 def check_output(args, universal_newlines=False) -> bytes:
     try:
@@ -15,7 +22,7 @@ def check_output(args, universal_newlines=False) -> bytes:
         )
         return output
     except FileNotFoundError:
-        flatpak_args = ["flatpak-spawn", "--host"] + args
+        flatpak_args = base_flatpak_args + args
         return subprocess.check_output(
             args=flatpak_args, universal_newlines=universal_newlines
         )
@@ -25,7 +32,7 @@ def check_call(command, stdout=None) -> int:
     try:
         return subprocess.check_call(command, stdout=stdout)
     except FileNotFoundError:
-        flatpak_args = ["flatpak-spawn", "--host"] + command
+        flatpak_args = base_flatpak_args + command
         return subprocess.check_call(flatpak_args, stdout=stdout)
 
 
@@ -39,7 +46,7 @@ def run(command: list[str], kwargs: list[str] = []) -> subprocess.CompletedProce
         else:
             return subprocess.run(command, **kwargs)
     except FileNotFoundError:
-        flatpak_args = ["flatpak-spawn", "--host"] + command
+        flatpak_args = base_flatpak_args + command
         if len(kwargs) == 0:
             return subprocess.run(flatpak_args)
         else:
