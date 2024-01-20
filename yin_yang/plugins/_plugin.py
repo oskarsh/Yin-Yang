@@ -279,9 +279,9 @@ class DBusPlugin(Plugin):
 
 class ConfigFilePlugin(Plugin):
     def __init__(self, config_paths: list[Path], file_format=FileFormat.PLAIN):
-        super().__init__()
         self.config_paths: list[Path] = config_paths
         self.file_format = file_format
+        super().__init__()
 
     @property
     def available(self) -> bool:
@@ -308,18 +308,18 @@ class ConfigFilePlugin(Plugin):
                 case _:
                     return file.read()
 
-    def write_config(self, value: str | ConfigParser, path: Path):
+    def write_config(self, value: str | ConfigParser, path: Path, **kwargs):
         with open(path, 'w') as file:
             if self.file_format.value == FileFormat.CONFIG.value:
-                value.write(file)
+                value.write(file, **kwargs)
             else:
                 file.write(value)
 
-    def set_theme(self, theme: str):
+    def set_theme(self, theme: str, ignore_theme_check=False):
         if not (self.available and self.enabled):
             return
 
-        if not theme:
+        if not ignore_theme_check and not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
         try:
