@@ -244,7 +244,7 @@ def set_profile(service: str, profile: str):
         sessions = helpers.check_output(f'qdbus {service} | grep "Sessions/"')
     except subprocess.CalledProcessError:
         try:
-            sessions = subprocess.check_output(
+            sessions = helpers.check_output(
                 f'qdbus org.kde.konsole | grep "Sessions/"', shell=True
             )
             logger.debug(f'Found org.kde.konsole, use that instead')
