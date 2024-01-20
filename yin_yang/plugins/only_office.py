@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 from pathlib import Path
 
-from meta import FileFormat
+from ..meta import FileFormat
 from ._plugin import ConfigFilePlugin, flatpak_user
 
 

@@ -1,13 +1,13 @@
 import logging
+import subprocess
 from os import scandir, path
 from pathlib import Path
-import subprocess
 
-from PySide6.QtDBus import QDBusConnection, QDBusMessage
+from PySide6.QtDBus import QDBusMessage
 
-from ..meta import Desktop
-from ._plugin import PluginDesktopDependent, Plugin, PluginCommandline, DBusPlugin
+from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
 from .system import test_gnome_availability
+from ..meta import Desktop
 
 logger = logging.getLogger(__name__)
 

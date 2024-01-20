@@ -4,7 +4,7 @@ import os
 from os.path import isdir, isfile
 from pathlib import Path
 
-from meta import FileFormat
+from ..meta import FileFormat
 from ._plugin import flatpak_system, flatpak_user, snap_path, ConfigFilePlugin
 
 logger = logging.getLogger(__name__)
