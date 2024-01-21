@@ -16,7 +16,7 @@ setup(
       "License :: OSI Approved :: MIT License",
       "Operating System :: OS Independent",
   ],
-  python_requires='>=3.6',
+  python_requires='>=3.10',
   install_requires=[
     'psutil==5.9.5',
     'PySide6==6.6.1',

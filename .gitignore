@@ -2,6 +2,7 @@ __pycache__
 build-test*
 build-ui-*
 yin_yang/build.py
+c_cpp_properties.json
 
 # Taken from https://github.com/github/gitignore/blob/main/Python.gitignore
 # 12/18/2023
