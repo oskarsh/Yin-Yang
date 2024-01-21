@@ -29,5 +29,11 @@ class ConfigEvent(Enum):
     SAVE = auto()
 
 
+class FileFormat(Enum):
+    PLAIN = auto()
+    JSON = auto()
+    CONFIG = auto()
+
+
 class UnsupportedDesktopError(NotImplementedError):
     pass

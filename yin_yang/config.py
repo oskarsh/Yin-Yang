@@ -5,15 +5,12 @@ import pathlib
 from abc import ABC, abstractmethod
 from datetime import time
 from functools import cache
-from time import sleep
 from typing import Union, Optional
 
-import requests
-from PySide6.QtCore import QObject
-from PySide6.QtPositioning import QGeoPositionInfoSource, QGeoPositionInfo, QGeoCoordinate
 from psutil import process_iter, NoSuchProcess
 from suntime import Sun, SunTimeException
 
+from .position import get_current_location
 from .meta import Modes, Desktop, PluginKey, ConfigEvent
 from .plugins import get_plugins
 
@@ -114,36 +111,6 @@ def get_sun_time(latitude, longitude) -> tuple[time, time]:
 
     except SunTimeException as e:
         logger.error(f'Error: {e}.')
-
-
-parent = QObject()
-locationSource = QGeoPositionInfoSource.createDefaultSource(parent)
-
-
-@cache
-def get_current_location() -> QGeoCoordinate:
-    if locationSource is None:
-        logger.error("No location source is available")
-        return QGeoCoordinate(0, 0)
-
-    pos: QGeoPositionInfo = locationSource.lastKnownPosition()
-    if pos is None:
-        locationSource.requestUpdate(10)
-    tries = 0
-    while pos is None and tries < 10:
-        pos = locationSource.lastKnownPosition()
-        tries += 1
-        sleep(1)
-    coordinate = pos.coordinate()
-    if not coordinate.isValid():
-        logger.warning('Location could not be determined. Using ipinfo.io to get location')
-        # use the old method as a fallback
-        loc_response = requests.get('https://www.ipinfo.io/loc').text.split(',')
-        loc: [float] = [float(coordinate) for coordinate in loc_response]
-        assert len(loc) == 2, 'The returned location should have exactly 2 values.'
-        coordinate = QGeoCoordinate(loc[0], loc[1])
-        assert coordinate.isValid()
-    return coordinate
 
 
 def get_desktop() -> Desktop:
@@ -253,12 +220,17 @@ class ConfigManager(dict):
         # check if config needs an update
         # if the default values are set, the version number is below 0
         if config_loaded['version'] < self.defaults['version']:
-            config_loaded = update_config(config_loaded, self.defaults)
+            try:
+                config_loaded = update_config(config_loaded, self.defaults)
+            except Exception as e:
+                logger.error('An error ocurred while trying to update the config. Using defaults instead.')
+                logger.error(e)
+                config_loaded = self.defaults
 
-        for pl in plugins:
-            pl.theme_light = config_loaded['plugins'][pl.name.lower()]['light_theme']
-            pl.theme_dark = config_loaded['plugins'][pl.name.lower()]['dark_theme']
-            pl.enabled = config_loaded['plugins'][pl.name.lower()]['enabled']
+        for p in plugins:
+            p.theme_light = config_loaded['plugins'][p.name.lower()]['light_theme']
+            p.theme_dark = config_loaded['plugins'][p.name.lower()]['dark_theme']
+            p.enabled = config_loaded['plugins'][p.name.lower()]['enabled']
 
         self.update(config_loaded)
 
@@ -354,7 +326,7 @@ class ConfigManager(dict):
             'running': False,
             'dark_mode': False,
             'mode': Modes.MANUAL.value,
-            'coordinates': (0, 0),
+            'coordinates': (0.0, 0.0),
             'update_location': False,
             'update_interval': 60,
             'times': ('07:00', '20:00'),
@@ -423,8 +395,17 @@ class ConfigManager(dict):
     @property
     def location(self) -> tuple[float, float]:
         if self.update_location:
-            coordinate = get_current_location()
-            return coordinate.latitude(), coordinate.longitude()
+            try:
+                coordinate = get_current_location()
+                return coordinate.latitude(), coordinate.longitude()
+            except TypeError as e:
+                logger.error('Unable to update position. Using config values as fallback.')
+                logger.error(e)
+                pass
+            except ValueError as e:
+                logger.error('Unable to update position. Using config values as fallback.')
+                logger.error(e)
+                pass
 
         return self['coordinates']
 
@@ -494,7 +475,7 @@ config = ConfigManager()
 logger.info('Detected desktop:', config.desktop)
 
 # set plugin themes
-for p in filter(lambda pl: pl.available, plugins):
-    p.enabled = config.get_plugin_key(p.name, PluginKey.ENABLED)
-    p.theme_bright = config.get_plugin_key(p.name, PluginKey.THEME_LIGHT)
-    p.theme_dark = config.get_plugin_key(p.name, PluginKey.THEME_DARK)
+for pl in filter(lambda pl: pl.available, plugins):
+    pl.enabled = config.get_plugin_key(pl.name, PluginKey.ENABLED)
+    pl.theme_bright = config.get_plugin_key(pl.name, PluginKey.THEME_LIGHT)
+    pl.theme_dark = config.get_plugin_key(pl.name, PluginKey.THEME_DARK)

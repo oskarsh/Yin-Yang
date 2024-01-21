@@ -11,7 +11,7 @@ and also themes your favourite editors like VSCode or Atom.
 
 You might also want to take a look at our [**discussions page**](https://github.com/oskarsh/Yin-Yang/discussions), where we talk about the future of the app and other cool stuff!
 
-> Translations: [🇨🇳](README_zh.md)
+> Translations:[🇹🇼](README_zh_TW.md) [🇨🇳](README_zh_CN.md)
 
 ![Visualization](.github/images/header.png)
 ![App configuration](.github/images/settings.png)
@@ -49,19 +49,19 @@ Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` r
 
 For CentOS, RHEL, and Fedora:
 ```bash
-sudo dnf install gcc systemd-devel python3-devel
+sudo dnf install gcc systemd-devel python3-devel libnotify
 ``` 
 
 For OpenSUSE:
 ```bash
 sudo zypper refresh
-sudo zypper install gcc systemd-devel
+sudo zypper install gcc systemd-devel libnotify
 ```
 
 For Debian, Ubuntu, etc.
 ```bash
 sudo apt update
-sudo apt install libsystemd-dev gcc pkg-config python3-dev
+sudo apt install libsystemd-dev gcc pkg-config python3-dev libnotify-bin
 ```
 
 Then you can install Yin-Yang in a python virtual environment:

@@ -1,12 +1,17 @@
+import copy
+import json
 import logging
 import subprocess
 from abc import ABC, abstractmethod
+from configparser import ConfigParser
+from pathlib import Path
 from typing import Optional
 
+from PySide6.QtDBus import QDBusConnection, QDBusMessage
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
-from ..meta import UnsupportedDesktopError
+from ..meta import UnsupportedDesktopError, FileFormat
 
 logger = logging.getLogger(__name__)
 
@@ -89,7 +94,7 @@ class Plugin(ABC):
             # add all theme names
             for i, curComboBox in enumerate(inputs):
                 themes = list(self.available_themes.values())
-                themes.sort()
+                themes.sort(key=lambda s: s.casefold())
                 curComboBox.addItems(themes)
                 curComboBox.setMinimumContentsLength(4)
                 # set index
@@ -118,7 +123,7 @@ class Plugin(ABC):
 
 
 class PluginCommandline(Plugin):
-    def __init__(self, command: [str]):
+    def __init__(self, command: list[str]):
         """
         :param command: list of arguments as passed to @subprocess.run, with the theme being inserted as {theme}
         """
@@ -174,7 +179,7 @@ class PluginDesktopDependent(Plugin):
             logger.warning(f'Plugin {self.name} has no support for your desktop environment yet!')
 
     @property
-    def strategy(self) -> Plugin:
+    def strategy(self) -> Plugin | None:
         return self._strategy_instance
 
     @property
@@ -248,22 +253,97 @@ class ExternalPlugin(Plugin):
         assert False, 'This is an external plugin, the mode can only be changed externally.'
 
 
-def inplace_change(filename: str, old_string: str, new_string: str):
-    """Replaces a given string by a new string in a specific file
-    :param filename: the full path to the file that should be changed
-    :param old_string: the old string that should be found in the file
-    :param new_string: the string that should replace the old string
-    """
-    # Safely read the input filename using 'with'
-    with open(filename, 'r') as file:
-        file_content = file.read()
-        if old_string not in file_content:
-            raise ValueError(f'{old_string} could not be found in {filename}')
+class DBusPlugin(Plugin):
+    def __init__(self, base_message: QDBusMessage):
+        super().__init__()
+        self.connection = QDBusConnection.sessionBus()
+        self.base_message = base_message
 
-    # Safely write the changed content, if found in the file
-    with open(filename, 'w') as file:
-        file_content = file_content.replace(old_string, new_string)
-        file.write(file_content)
+    def set_theme(self, theme: str):
+        if not (self.available and self.enabled):
+            return
+
+        if not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
+        self.call(self.create_message(theme))
+
+    def create_message(self, theme: str) -> QDBusMessage:
+        message = copy.deepcopy(self.base_message)
+        message.setArguments([theme])
+        return message
+
+    def call(self, message) -> QDBusMessage:
+        return self.connection.call(message)
+
+
+class ConfigFilePlugin(Plugin):
+    def __init__(self, config_paths: list[Path], file_format=FileFormat.PLAIN):
+        self.config_paths: list[Path] = config_paths
+        self.file_format = file_format
+        super().__init__()
+
+    @property
+    def available(self) -> bool:
+        # check if any config file exists
+        for config in self.config_paths:
+            if config.is_file():
+                return True
+
+        return False
+
+    def open_config(self, path: Path):
+        with open(path) as file:
+            match self.file_format.value:
+                case FileFormat.JSON.value:
+                    try:
+                        return json.load(file)
+                    except json.decoder.JSONDecodeError as e:
+                        return self.default_config
+                case FileFormat.CONFIG.value:
+                    config = ConfigParser()
+                    config.optionxform = str
+                    config.read_file(file)
+                    return config
+                case _:
+                    return file.read()
+
+    def write_config(self, value: str | ConfigParser, path: Path, **kwargs):
+        with open(path, 'w') as file:
+            if self.file_format.value == FileFormat.CONFIG.value:
+                value.write(file, **kwargs)
+            else:
+                file.write(value)
+
+    def set_theme(self, theme: str, ignore_theme_check=False):
+        if not (self.available and self.enabled):
+            return
+
+        if not ignore_theme_check and not theme:
+            raise ValueError(f'Theme \"{theme}\" is invalid')
+
+        try:
+            for config_path in self.config_paths:
+                if not config_path.exists():
+                    continue
+
+                config = self.open_config(config_path)
+                new_config = self.update_config(config, theme)
+                self.write_config(new_config, config_path)
+        except StopIteration:
+            raise FileNotFoundError(
+                'No config file found. '
+                'If you see this error, try to set a custom theme manually once and try again.')
+
+    @abstractmethod
+    def update_config(self, config, theme: str) -> str:
+        """Set the theme in the config."""
+        raise NotImplementedError
+
+    @property
+    def default_config(self):
+        """Fallback config file if active file should be empty."""
+        raise FileNotFoundError('Config file is empty. Try to set a theme manually once and try again.')
 
 
 def get_qcolor_from_int(color_int: int) -> QColor:
@@ -276,3 +356,15 @@ def get_int_from_qcolor(color: QColor) -> int:
     # ... - 2^32 converts uint to int
     color_int = color.rgba64().toArgb32() - 2 ** 32
     return color_int
+
+
+def flatpak_system(app_id: str) -> Path:
+    return Path(f'/var/lib/flatpak/app/{app_id}/current/active')
+
+
+def flatpak_user(app_id: str) -> Path:
+    return Path.home() / f'.var/app/{app_id}'
+
+
+def snap_path(app: str) -> Path:
+    return Path(f'/var/lib/snapd/snap/{app}/current')
