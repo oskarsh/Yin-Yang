@@ -16,6 +16,7 @@ class Desktop(Enum):
     UNKNOWN = 'unknown'
     MATE = 'mate'
     CINNAMON = 'cinnamon'
+    BUDGIE = 'budgie'
 
 
 class PluginKey(Enum):

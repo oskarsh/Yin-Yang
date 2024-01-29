@@ -26,6 +26,8 @@ class Wallpaper(PluginDesktopDependent):
                 super().__init__(_Xfce())
             case Desktop.CINNAMON:
                 super().__init__(_Cinnamon())
+            case Desktop.BUDGIE:
+                super().__init__(_Budgie())
             case _:
                 super().__init__(None)
 
@@ -50,6 +52,17 @@ class Wallpaper(PluginDesktopDependent):
 
 
 class _Gnome(PluginCommandline):
+    name = 'Wallpaper'
+
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.gnome.desktop.background', 'picture-uri', 'file://{theme}'])
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
+
+
+class _Budgie(PluginCommandline):
     name = 'Wallpaper'
 
     def __init__(self):

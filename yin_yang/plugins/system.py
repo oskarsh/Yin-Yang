@@ -31,6 +31,8 @@ class System(PluginDesktopDependent):
                 super().__init__(_Mate())
             case Desktop.CINNAMON:
                 super().__init__(_Cinnamon())
+            case Desktop.BUDGIE:
+                super().__init__(_Budgie())
             case _:
                 super().__init__(None)
 
@@ -46,6 +48,41 @@ class _Gnome(PluginCommandline):
     @property
     def available(self) -> bool:
         return test_gnome_availability(self.command)
+
+
+class _Budgie(PluginCommandline):
+    name = 'System'
+
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'com.solus-project.budgie-panel', 'dark-theme', '{theme}'])
+        self.theme_light = 'light'
+        self.theme_dark = 'dark'
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
+
+    '''Override because budgie uses a switch for dark/light mode'''
+    def insert_theme(self, theme: str) -> list:
+        command = self.command.copy()
+        match theme.lower():
+            case 'dark':
+                theme_bool = 'true'
+            case 'light':
+                theme_bool = 'false'
+            case _:
+                raise NotImplementedError
+
+        for i, arg in enumerate(command):
+            command[i] = arg.format(theme=theme_bool)
+
+        return command
+
+    @property
+    def available_themes(self) -> dict:
+        themes: dict[str, str] = {'dark': 'Dark', 'light': 'Light'}
+
+        return themes
 
 
 def get_readable_kde_theme_name(file) -> str:
