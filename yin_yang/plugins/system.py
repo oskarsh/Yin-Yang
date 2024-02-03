@@ -62,7 +62,7 @@ class _Budgie(PluginCommandline):
     def available(self) -> bool:
         return test_gnome_availability(self.command)
 
-    '''Override because budgie uses a switch for dark/light mode'''
+    # Override because budgie uses a switch for dark/light mode
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
         match theme.lower():
