@@ -140,9 +140,9 @@ else:
     else:
         logger.debug('System tray is unsupported')
 
-    window = main_window_connector.MainWindow()
     if arguments.minimized:
-        window.close()
+        sys.exit(app.exec())
     else:
+        window = main_window_connector.MainWindow()
         window.show()
-    sys.exit(app.exec())
+        sys.exit(app.exec())
