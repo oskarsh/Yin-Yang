@@ -133,7 +133,7 @@ def get_desktop() -> Desktop:
             return Desktop.CINNAMON
         case 'sway' | 'hyprland':
             return Desktop.GNOME
-        case 'budgie:gnome' | 'budgie-desktop':
+        case 'budgie:gnome' | 'budgie-desktop' | 'budgie':
             return Desktop.BUDGIE
         case _:
             return Desktop.UNKNOWN
