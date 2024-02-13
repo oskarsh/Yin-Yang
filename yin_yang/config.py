@@ -121,7 +121,7 @@ def get_desktop() -> Desktop:
         desktop = ''
 
     match desktop.lower():
-        case 'gnome' | 'budgie':
+        case 'gnome':
             return Desktop.GNOME
         case 'kde' | 'plasma' | 'plasma5':
             return Desktop.KDE
@@ -133,6 +133,8 @@ def get_desktop() -> Desktop:
             return Desktop.CINNAMON
         case 'sway' | 'hyprland':
             return Desktop.GNOME
+        case 'budgie:gnome' | 'budgie-desktop' | 'budgie':
+            return Desktop.BUDGIE
         case _:
             return Desktop.UNKNOWN
 

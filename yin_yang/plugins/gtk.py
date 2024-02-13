@@ -33,6 +33,8 @@ class Gtk(PluginDesktopDependent):
                 super().__init__(_Xfce())
             case Desktop.CINNAMON:
                 super().__init__(_Cinnamon())
+            case Desktop.BUDGIE:
+                super().__init__(_Budgie())
             case _:
                 super().__init__(None)
 
@@ -51,6 +53,19 @@ class Gtk(PluginDesktopDependent):
 
 
 class _Gnome(PluginCommandline):
+    name = 'GTK'
+
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
+        self.theme_light = 'Default'
+        self.theme_dark = 'Default'
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
+    
+    
+class _Budgie(PluginCommandline):
     name = 'GTK'
 
     def __init__(self):
