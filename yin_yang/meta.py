@@ -16,6 +16,7 @@ class Desktop(Enum):
     UNKNOWN = 'unknown'
     MATE = 'mate'
     CINNAMON = 'cinnamon'
+    BUDGIE = 'budgie'
 
 
 class PluginKey(Enum):
@@ -27,6 +28,12 @@ class PluginKey(Enum):
 class ConfigEvent(Enum):
     CHANGE = auto()
     SAVE = auto()
+
+
+class FileFormat(Enum):
+    PLAIN = auto()
+    JSON = auto()
+    CONFIG = auto()
 
 
 class UnsupportedDesktopError(NotImplementedError):

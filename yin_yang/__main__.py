@@ -54,6 +54,7 @@ def setup_logger(use_systemd_journal: bool):
         )
         logging.root.addHandler(file_handler)
 
+
 def systray_icon_clicked(reason: QSystemTrayIcon.ActivationReason):
     match reason:
         case QSystemTrayIcon.ActivationReason.MiddleClick:
@@ -68,6 +69,7 @@ parser.add_argument('-t', '--toggle',
                     help='toggles Yin-Yang',
                     action='store_true')
 parser.add_argument('--systemd', help='uses systemd journal handler and applies desired theme', action='store_true')
+parser.add_argument('--minimized', help='starts the program to tray bar', action='store_true')
 arguments = parser.parse_args()
 setup_logger(arguments.systemd)
 
@@ -79,6 +81,7 @@ if arguments.toggle:
 
 elif arguments.systemd:
     theme_switcher.set_desired_theme()
+
 
 else:
     # load GUI
@@ -122,15 +125,24 @@ else:
         icon.setToolTip('Yin & Yang')
 
         menu = QMenu('Yin & Yang')
-        menu.addAction(app.translate('systray', 'Open Yin Yang', 'Context menu action in the systray'), lambda: window.show())
-        menu.addAction(app.translate('systray', 'Toggle theme', 'Context menu action in the systray'), lambda: theme_switcher.set_mode(not config.dark_mode))
-        menu.addAction(QIcon.fromTheme('application-exit'), app.translate('systray', 'Quit', 'Context menu action in the systray'), app.quit)
+        menu.addAction(
+            app.translate('systray', 'Open Yin Yang', 'Context menu action in the systray'),
+            lambda: window.show())
+        menu.addAction(
+            app.translate('systray', 'Toggle theme', 'Context menu action in the systray'),
+            lambda: theme_switcher.set_mode(not config.dark_mode))
+        menu.addAction(QIcon.fromTheme('application-exit'),
+                       app.translate('systray', 'Quit', 'Context menu action in the systray'),
+                       app.quit)
 
         icon.setContextMenu(menu)
         icon.show()
     else:
         logger.debug('System tray is unsupported')
 
-    window = main_window_connector.MainWindow()
-    window.show()
-    sys.exit(app.exec())
+    if arguments.minimized:
+        sys.exit(app.exec())
+    else:
+        window = main_window_connector.MainWindow()
+        window.show()
+        sys.exit(app.exec())

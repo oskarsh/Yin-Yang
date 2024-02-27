@@ -1,40 +1,25 @@
 import os
-from configparser import ConfigParser
 from pathlib import Path
 
 import psutil
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
-from ._plugin import Plugin
+from ..meta import FileFormat
+from ._plugin import flatpak_user, ConfigFilePlugin
 
 
-class Okular(Plugin):
-    """Inspired by: https://gitlab.com/LADlSLAV/yabotss/-/blob/main/darkman_examples_kde_plasma/dark-mode.d/10_set_theme_okular_dark.sh"""
+class Okular(ConfigFilePlugin):
+    """Inspired by:
+    https://gitlab.com/LADlSLAV/yabotss/-/blob/main/darkman_examples_kde_plasma/dark-mode.d/10_set_theme_okular_dark.sh
+    """
 
     def __init__(self):
-        super().__init__()
+        super().__init__([
+            Path.home() / '.config/okularpartrc',
+            flatpak_user('org.kde.okular') / 'config/okularpartrc'
+        ], file_format=FileFormat.CONFIG)
         self._theme_light = ''
-        self._theme_dark = ''
-
-    @property
-    def user_paths(self) -> [Path]:
-        path = Path.home() / '.config/okularpartrc'
-        if path.is_file():
-            yield path
-
-        path = Path.home() / '.var/app/org.kde.okular/config/okularpartrc'
-        if path.is_file():
-            yield path
-
-        return
-
-    @property
-    def available(self) -> bool:
-        try:
-            next(self.user_paths)
-            return True
-        except StopIteration:
-            return False
+        self._theme_dark = 'InvertLightness'
 
     def set_mode(self, dark: bool):
         if not self.enabled:
@@ -59,25 +44,18 @@ class Okular(Plugin):
             connection.call(message)
 
         # now change the config for future starts of the app
-        for path in self.user_paths:
-            config = ConfigParser()
-            config.optionxform = str
-            config.read(path)
+        self.set_theme(self.theme_dark if dark else self.theme_light, ignore_theme_check=True)
 
-            if dark:
-                if not config.has_section('Document'):
-                    config.add_section('Document')
-                config['Document']['ChangeColors'] = 'true'
-            else:
-                config.remove_option('Document', 'ChangeColors')
-                if len(config.options('Document')) == 0:
-                    config.remove_section('Document')
-
-            with open(path, 'w') as file:
-                config.write(file, space_around_delimiters=False)
-
-    def set_theme(self, theme: str):
-        pass
+    def update_config(self, config, theme: str) -> str:
+        if theme == self.theme_dark:
+            if not config.has_section('Document'):
+                config.add_section('Document')
+            config['Document']['ChangeColors'] = 'true'
+        else:
+            config.remove_option('Document', 'ChangeColors')
+            if len(config.options('Document')) == 0:
+                config.remove_section('Document')
+        return config
 
     @property
     def available_themes(self) -> dict:
@@ -108,11 +86,13 @@ class Okular(Plugin):
     def theme_dark(self, value):
         self._theme_dark = value
 
-        for path in self.user_paths:
-            config = ConfigParser()
-            config.optionxform = str
-            config.read(path)
+        for config_path in self.config_paths:
+            if not config_path.exists():
+                continue
 
+            config = self.open_config(config_path)
+
+            # update rendering mode
             if value == '':
                 if config.has_section('Document'):
                     config.remove_option('Document', 'RenderMode')
@@ -123,5 +103,4 @@ class Okular(Plugin):
                     config.add_section('Document')
                 config['Document']['RenderMode'] = value
 
-            with open(path, 'w') as file:
-                config.write(file, space_around_delimiters=False)
+            self.write_config(config, config_path, space_around_delimiters=False)

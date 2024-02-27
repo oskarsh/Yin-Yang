@@ -4,7 +4,7 @@ from typing import cast
 from PySide6 import QtWidgets
 from PySide6.QtCore import QStandardPaths
 from PySide6.QtGui import QScreen, QColor
-from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog,QGroupBox
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QDialogButtonBox, QColorDialog, QGroupBox
 
 from .main_window import Ui_main_window
 from ..theme_switcher import set_desired_theme, set_mode
@@ -81,7 +81,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.btn_schedule.setChecked(True)
             self.ui.location.setVisible(False)
 
-        self.ui.toggle_sound.setChecked(config.get_plugin_key('sound', PluginKey.ENABLED))
         self.ui.toggle_notification.setChecked(config.get_plugin_key('notification', PluginKey.ENABLED))
         self.ui.bootOffset.setValue(config.boot_offset)
 
@@ -111,17 +110,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def load_plugins(self):
         # First, remove sample plugin
-        samplePlugin = cast(QGroupBox,self.ui.plugins_scroll_content.findChild(QGroupBox, 'samplePluginGroupBox'))
-        samplePlugin.hide()
-
+        sample_plugin = cast(QGroupBox, self.ui.plugins_scroll_content.findChild(QGroupBox, 'samplePluginGroupBox'))
+        sample_plugin.hide()
 
         widget: QGroupBox
         for plugin in plugins:
             # filter out plugins for application
-            if plugin.name.casefold() in ['notification', 'sound']:
+            if plugin.name.casefold() == 'notification':
                 continue
 
-            widget = cast(QGroupBox,self.ui.plugins_scroll_content.findChild(QGroupBox, 'group' + plugin.name))
+            widget = cast(QGroupBox, self.ui.plugins_scroll_content.findChild(QGroupBox, 'group' + plugin.name))
             if widget is None:
                 widget = plugin.get_widget(self.ui.plugins_scroll_content)
                 self.ui.plugins_scroll_content_layout.addWidget(widget)
@@ -187,8 +185,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # connect dialog buttons
         self.ui.btn_box.clicked.connect(self.save_config_to_file)
 
-        self.ui.toggle_sound.toggled.connect(
-            lambda enabled: config.update_plugin_key('sound', PluginKey.ENABLED, enabled))
         self.ui.toggle_notification.toggled.connect(
             lambda enabled: config.update_plugin_key('notification', PluginKey.ENABLED, enabled))
 

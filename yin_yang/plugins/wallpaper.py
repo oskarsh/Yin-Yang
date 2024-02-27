@@ -1,3 +1,4 @@
+import copy
 import logging
 import subprocess
 from pathlib import Path
@@ -6,7 +7,7 @@ from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
 from ..meta import Desktop
-from ._plugin import PluginDesktopDependent, PluginCommandline, Plugin
+from ._plugin import PluginDesktopDependent, PluginCommandline, Plugin, DBusPlugin
 from .system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,8 @@ class Wallpaper(PluginDesktopDependent):
                 super().__init__(_Xfce())
             case Desktop.CINNAMON:
                 super().__init__(_Cinnamon())
+            case Desktop.BUDGIE:
+                super().__init__(_Budgie())
             case _:
                 super().__init__(None)
 
@@ -54,6 +57,18 @@ class _Gnome(PluginCommandline):
     def __init__(self):
         super().__init__(['gsettings', 'set', 'org.gnome.desktop.background', 'picture-uri', 'file://{theme}'])
 
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
+
+
+class _Budgie(PluginCommandline):
+    name = 'Wallpaper'
+
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.gnome.desktop.background', 'picture-uri', 'file://{theme}'])
+
+    @property
     def available(self) -> bool:
         return test_gnome_availability(self.command)
 
@@ -72,11 +87,17 @@ def check_theme(theme: str) -> bool:
     return True
 
 
-class _Kde(Plugin):
+class _Kde(DBusPlugin):
     name = 'Wallpaper'
 
     def __init__(self):
-        super().__init__()
+        message = QDBusMessage.createMethodCall(
+            'org.kde.plasmashell',
+            '/PlasmaShell',
+            'org.kde.PlasmaShell',
+            'evaluateScript',
+        )
+        super().__init__(message)
         self._theme_light = None
         self._theme_dark = None
 
@@ -98,14 +119,12 @@ class _Kde(Plugin):
         check_theme(value)
         self._theme_dark = value
 
-    def set_theme(self, theme: str):
-        connection = QDBusConnection.sessionBus()
-        message = QDBusMessage.createMethodCall(
-            'org.kde.plasmashell',
-            '/PlasmaShell',
-            'org.kde.PlasmaShell',
-            'evaluateScript',
-        )
+    @property
+    def available(self) -> bool:
+        return True
+
+    def create_message(self, theme: str) -> QDBusMessage:
+        message = copy.deepcopy(self.base_message)
         message.setArguments([
             'string:'
             'var Desktops = desktops();'
@@ -116,11 +135,7 @@ class _Kde(Plugin):
             f'    d.writeConfig("Image", "file:{theme}");'
             '}'
         ])
-        connection.call(message)
-
-    @property
-    def available(self) -> bool:
-        return True
+        return message
 
 
 class _Xfce(PluginCommandline):
