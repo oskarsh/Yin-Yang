@@ -80,6 +80,10 @@ source .venv/bin/activate  # this is for bash, there are similar scripts in the 
 pip install -r requirements.txt
 ```
 
+### Uninstall
+
+Run `scripts/uninstall.sh` from a terminal and fill out the password.
+
 ## Documentation
 
 Want to help out? Check out the wiki to learn how to contribute translations, plugins and more!
