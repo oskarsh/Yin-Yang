@@ -1,12 +1,12 @@
 import json
 import logging
-import subprocess
 import pwd
 import os
 from configparser import ConfigParser
 from pathlib import Path
 
 from PySide6.QtCore import QLocale
+from yin_yang import helpers
 
 from ..meta import Desktop
 from ._plugin import PluginDesktopDependent, PluginCommandline
@@ -132,7 +132,7 @@ class _Kde(PluginCommandline):
 
         # asks the system what themes are available
         # noinspection SpellCheckingInspection
-        long_names = subprocess.check_output(["lookandfeeltool", "-l"], universal_newlines=True)
+        long_names = helpers.check_output(["lookandfeeltool", "-l"], universal_newlines=True)
         long_names = long_names.splitlines()
         long_names.sort()
 

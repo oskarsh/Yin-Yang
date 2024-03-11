@@ -1,0 +1,63 @@
+{
+  "id": "sh.oskar.yin-yang",
+  "runtime": "org.kde.Platform",
+  "runtime-version": "5.15-22.08",
+  "sdk": "org.kde.Sdk",
+  "command": "runner.sh",
+  "finish-args": [
+    "--share=network",
+    "--socket=x11",
+    "--socket=wayland",
+    "--socket=system-bus",
+    "--socket=session-bus",
+    "--share=ipc",
+    "--device=dri",
+    "--filesystem=host:rw",
+    "--filesystem=~/.mozilla:rw"
+  ],
+  "modules": [
+    "python3-numpy.json",
+    "python3-psutil.json",
+    "python3-python-dateutil.json",
+    "python3-suntime.json",
+    "python3-PySide6-Essentials.json",
+    "python3-PySide6-Addons.json",
+    "python3-systemd-python.json",
+    "python3-requests.json",
+    {
+      "name": "yin-yang",
+      "buildsystem": "simple",
+      "build-commands": [
+        "python3 -m pip install --no-deps --no-use-pep517 --prefix=/app .",
+        "install -D runner.sh /app/bin/runner.sh"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "."
+        }
+      ]
+    },
+    {
+      "name": "yin-yang-metadata",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -Dm644 Yin-Yang.desktop /app/share/applications/sh.oskar.yin-yang.desktop",
+        "sed -i 's|Path=/opt/yin-yang||' /app/share/applications/sh.oskar.yin-yang.desktop",
+        "sed -i 's|Icon=yin_yang|Icon=sh.oskar.yin-yang|' /app/share/applications/sh.oskar.yin-yang.desktop",
+        "sed -i 's|Exec=yin-yang|Exec=runner.sh|' /app/share/applications/sh.oskar.yin-yang.desktop",
+        "install -Dm664 logo.svg /app/share/icons/hicolor/256x256/apps/sh.oskar.yin-yang.svg"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "path": "./resources/Yin-Yang.desktop"
+        },
+        {
+          "type": "file",
+          "path": "./resources/logo.svg"
+        }
+      ]
+    }
+  ]
+}
