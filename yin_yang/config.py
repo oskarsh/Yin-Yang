@@ -4,6 +4,7 @@ import os
 import pathlib
 from abc import ABC, abstractmethod
 from datetime import time
+from dateutil import tz
 from functools import cache
 from typing import Union, Optional
 
@@ -103,9 +104,10 @@ def get_sun_time(latitude, longitude) -> tuple[time, time]:
         logger.debug(f'Calculating sunset and sunrise at location {latitude}, {longitude}.')
 
     sun = Sun(latitude, longitude)
+    local_tz = tz.gettz()
     try:
-        today_sr = sun.get_local_sunrise_time()
-        today_ss = sun.get_local_sunset_time()
+        today_sr = sun.get_sunrise_time(time_zone=local_tz)
+        today_ss = sun.get_sunset_time(time_zone=local_tz)
 
         return today_sr.time(), today_ss.time()
 
