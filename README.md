@@ -6,7 +6,7 @@
 ![](https://img.shields.io/badge/Build%20with-Python-yellow)
 ![](https://img.shields.io/github/license/oskarsh/yin-yang)
 
-Auto Night-mode for Linux, it supports popular Desktops like KDE, Gnome, Budgie 
+Auto Night-mode for Linux, it supports popular Desktops like KDE, GNOME, Budgie 
 and also themes your favourite editors like VSCode or Atom.
 
 You might also want to take a look at our [**discussions page**](https://github.com/oskarsh/Yin-Yang/discussions), where we talk about the future of the app and other cool stuff!
@@ -20,7 +20,7 @@ You might also want to take a look at our [**discussions page**](https://github.
 
 * Changes your themes at certain times or sunrise and sunset
 * Supported Desktops:
-  * Gnome
+  * GNOME
   * Budgie
   * KDE Plasma
 * Supported applications:
@@ -91,7 +91,7 @@ Want to help out? Check out the wiki to learn how to contribute translations, pl
 ## Related or similar projects
 
 - Auto dark mode for Windows: https://github.com/AutoDarkMode/Windows-Auto-Night-Mode
-- Auto dark mode extension for Gnome: https://extensions.gnome.org/extension/2236/night-theme-switcher/
+- Auto dark mode extension for GNOME: https://extensions.gnome.org/extension/2236/night-theme-switcher/
 - Auto dark mode for Jetbrains IDEs: https://github.com/weisJ/auto-dark-mode
 - Sync dark mode with KDEs night color: https://github.com/adrium/knightadjuster
 - darkman: https://gitlab.com/WhyNotHugo/darkman
