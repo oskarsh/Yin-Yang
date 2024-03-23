@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "yin-yang"
+version = "3.3.0"
+description = "Auto Nightmode for KDE, Gnome, Budgie, VSCode, Atom and more"
+readme = "README.md"
+repository = "https://github.com/oskarsh/Yin-Yang"
+platforms = ["python3"]
+include_package_data = "True"
+dependencies = [
+    "psutil==5.9.5",
+    "PySide6==6.6.1",
+    "PySide6-Addons==6.6.1",
+    "suntime==1.2.5",
+    "systemd-python==235",
+    "requests~=2.28.2"
+]
