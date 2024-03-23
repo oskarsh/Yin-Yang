@@ -1,13 +1,12 @@
-import copy
 import logging
 import subprocess
 from pathlib import Path
 
 from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
-from PySide6.QtDBus import QDBusConnection, QDBusMessage
+from PySide6.QtDBus import QDBusMessage
 
 from ..meta import Desktop
-from ._plugin import PluginDesktopDependent, PluginCommandline, Plugin, DBusPlugin
+from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
 from .system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
@@ -91,13 +90,7 @@ class _Kde(DBusPlugin):
     name = 'Wallpaper'
 
     def __init__(self):
-        message = QDBusMessage.createMethodCall(
-            'org.kde.plasmashell',
-            '/PlasmaShell',
-            'org.kde.PlasmaShell',
-            'evaluateScript',
-        )
-        super().__init__(message)
+        super().__init__()
         self._theme_light = None
         self._theme_dark = None
 
@@ -124,7 +117,12 @@ class _Kde(DBusPlugin):
         return True
 
     def create_message(self, theme: str) -> QDBusMessage:
-        message = copy.deepcopy(self.base_message)
+        message = QDBusMessage.createMethodCall(
+            'org.kde.plasmashell',
+            '/PlasmaShell',
+            'org.kde.PlasmaShell',
+            'evaluateScript',
+        )
         message.setArguments([
             'string:'
             'var Desktops = desktops();'

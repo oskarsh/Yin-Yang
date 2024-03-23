@@ -82,15 +82,19 @@ class _Kde(DBusPlugin):
     name = 'GTK'
 
     def __init__(self):
+        super().__init__()
+        self.theme_light = 'Breeze'
+        self.theme_dark = 'Breeze'
+
+    def create_message(self, theme: str) -> QDBusMessage:
         message = QDBusMessage.createMethodCall(
             'org.kde.GtkConfig',
             '/GtkConfig',
             'org.kde.GtkConfig',
             'setGtkTheme'
         )
-        super().__init__(message)
-        self.theme_light = 'Breeze'
-        self.theme_dark = 'Breeze'
+        message.setArguments([theme])
+        return message
 
     def set_theme(self, theme: str):
         response = self.call(self.create_message(theme))
