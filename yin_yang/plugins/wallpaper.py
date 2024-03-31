@@ -124,7 +124,12 @@ class _Kde(DBusPlugin):
         return True
 
     def create_message(self, theme: str) -> QDBusMessage:
-        message = copy.deepcopy(self.base_message)
+        message = QDBusMessage.createMethodCall(
+            self.base_message.service(),
+            self.base_message.path(),
+            self.base_message.interface(),
+            self.base_message.member()
+        )
         message.setArguments([
             'string:'
             'var Desktops = desktops();'
