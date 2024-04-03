@@ -269,7 +269,7 @@ class DBusPlugin(Plugin):
         self.call(self.create_message(theme))
 
     def create_message(self, theme: str) -> QDBusMessage:
-        message = copy.deepcopy(self.base_message)
+        message = copy.copy(self.base_message)
         message.setArguments([theme])
         return message
 
