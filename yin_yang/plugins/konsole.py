@@ -24,7 +24,7 @@ class Konsole(Plugin):
     This is necessary to allow live theme changes.
     """
 
-    global_path = Path("/usr/share/konsole")
+    global_path = Path(helpers.get_usr() + "share/konsole")
     config_path = Path.home() / ".config/konsolerc"
 
     @property

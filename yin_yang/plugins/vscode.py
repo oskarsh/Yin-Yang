@@ -4,6 +4,7 @@ import os
 from os.path import isdir, isfile
 from pathlib import Path
 
+from .. import helpers
 from ..meta import FileFormat
 from ._plugin import flatpak_system, flatpak_user, snap_path, ConfigFilePlugin
 
@@ -13,10 +14,10 @@ extension_paths = [
     str(Path.home() / '.vscode/extensions'),
     str(Path.home() / '.vscode-insiders/extensions'),
     str(Path.home() / '.vscode-oss/extensions'),
-    '/usr/lib/code/extensions',
-    '/usr/lib/code-insiders/extensions',
-    '/usr/share/code/resources/app/extensions',
-    '/usr/share/code-insiders/resources/app/extensions',
+    helpers.get_usr() + 'lib/code/extensions',
+    helpers.get_usr() + 'lib/code-insiders/extensions',
+    helpers.get_usr() + 'share/code/resources/app/extensions',
+    helpers.get_usr() + 'share/code-insiders/resources/app/extensions',
     '/usr/share/vscodium/resources/app/extensions',
     '/usr/share/vscodium-git/resources/app/extensions',
     '/usr/share/vscodium-insiders/resources/app/extensions',

@@ -13,7 +13,7 @@ from ..meta import Desktop
 logger = logging.getLogger(__name__)
 
 
-theme_directories = ['/usr/share/themes', f'{Path.home()}/.themes']
+theme_directories = [helpers.get_usr() + 'share/themes', f'{Path.home()}/.themes']
 
 
 class Gtk(PluginDesktopDependent):

@@ -1,5 +1,5 @@
-import subprocess, os
-
+import os
+import subprocess
 
 """Check output of a command.
 
@@ -38,6 +38,29 @@ def check_call(command, stdout=None) -> int:
 
 def is_flatpak() -> bool:
     return os.path.isfile('/.flatpak-info')
+
+
+def get_usr() -> str:
+    """
+    Returns the proper path to /usr.
+    This is need as the path to /usr is different in a flatpak environment.
+    :return: The path to /usr with a trailing /
+    """
+    if is_flatpak():
+        return '/var/run/host/usr/'
+    return '/usr/'
+
+
+def get_etc() -> str:
+    """
+    Returns the proper path to /etc.
+    This is need as the path to /etc is different in a flatpak environment.
+    :return: The path to /etc with a trailing /
+    """
+    if is_flatpak():
+        return '/var/run/host/etc/'
+    return '/etc/'
+
 
 def run(command: list[str], kwargs: list[str] = []) -> subprocess.CompletedProcess[str]:
     try:

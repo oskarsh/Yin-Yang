@@ -26,10 +26,7 @@ class Kvantum(PluginCommandline):
         if not self.available:
             return {}
 
-        paths = [Path('/usr/share/Kvantum'), Path.home() / '.config/Kvantum']
-        # Flatpak doesn't allow direct access to /usr
-        if (helpers.is_flatpak()):
-            paths[0] = Path('/var/run/host/usr/share/Kvantum')
+        paths = [Path(helpers.get_usr() + 'share/Kvantum'), Path.home() / '.config/Kvantum']
         themes = list()
         for path in paths:
             themes = themes + self.get_kvantum_theme_from_dir(path)

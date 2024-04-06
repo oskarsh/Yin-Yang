@@ -141,14 +141,15 @@ class _Kde(PluginCommandline):
             # trying to get the Desktop file
             try:
                 # json in newer versions
-                with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.json', 'r') as file:
+                with open(f'{helpers.get_usr()}share/plasma/look-and-feel/{long_name}/metadata.json', 'r') as file:
                     meta = json.load(file)
                     key = get_name_key(meta)
                     self.translations[long_name] = meta['KPlugin'][key]
             except OSError:
                 try:
                     # load the name from the metadata.desktop file
-                    with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.desktop', 'r') as file:
+                    with open(f'{helpers.get_usr()}share/plasma/look-and-feel/{long_name}/metadata.desktop',
+                              'r') as file:
                         self.translations[long_name] = get_readable_kde_theme_name(file)
                 except OSError:
                     # check the next path if the themes exist there
@@ -165,7 +166,7 @@ class _Kde(PluginCommandline):
 
 
 class _Mate(PluginCommandline):
-    theme_directories = [Path('/usr/share/themes'), Path.home() / '.themes']
+    theme_directories = [Path(helpers.get_usr() + 'share/themes'), Path.home() / '.themes']
 
     def __init__(self):
         super().__init__(['dconf', 'write', '/org/mate/marco/general/theme', '\'{theme}\''])
