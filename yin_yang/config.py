@@ -4,6 +4,7 @@ import os
 import pathlib
 from abc import ABC, abstractmethod
 from datetime import time
+from dateutil import tz
 from functools import cache
 from typing import Union, Optional
 
@@ -103,9 +104,10 @@ def get_sun_time(latitude, longitude) -> tuple[time, time]:
         logger.debug(f'Calculating sunset and sunrise at location {latitude}, {longitude}.')
 
     sun = Sun(latitude, longitude)
+    local_tz = tz.gettz()
     try:
-        today_sr = sun.get_local_sunrise_time()
-        today_ss = sun.get_local_sunset_time()
+        today_sr = sun.get_sunrise_time(time_zone=local_tz)
+        today_ss = sun.get_sunset_time(time_zone=local_tz)
 
         return today_sr.time(), today_ss.time()
 
@@ -121,7 +123,7 @@ def get_desktop() -> Desktop:
         desktop = ''
 
     match desktop.lower():
-        case 'gnome' | 'budgie':
+        case 'gnome':
             return Desktop.GNOME
         case 'kde' | 'plasma' | 'plasma5':
             return Desktop.KDE
@@ -133,6 +135,8 @@ def get_desktop() -> Desktop:
             return Desktop.CINNAMON
         case 'sway' | 'hyprland':
             return Desktop.GNOME
+        case 'budgie:gnome' | 'budgie-desktop' | 'budgie':
+            return Desktop.BUDGIE
         case _:
             return Desktop.UNKNOWN
 
@@ -322,7 +326,7 @@ class ConfigManager(dict):
 
         # NOTE: if you change or add new values here, make sure to update the version number and update_config() method
         conf_default = {
-            'version': 3.3,
+            'version': 3.4,
             'running': False,
             'dark_mode': False,
             'mode': Modes.MANUAL.value,

@@ -1,4 +1,3 @@
-import copy
 import json
 import logging
 import subprocess
@@ -254,10 +253,9 @@ class ExternalPlugin(Plugin):
 
 
 class DBusPlugin(Plugin):
-    def __init__(self, base_message: QDBusMessage):
+    def __init__(self):
         super().__init__()
         self.connection = QDBusConnection.sessionBus()
-        self.base_message = base_message
 
     def set_theme(self, theme: str):
         if not (self.available and self.enabled):
@@ -268,10 +266,9 @@ class DBusPlugin(Plugin):
 
         self.call(self.create_message(theme))
 
+    @abstractmethod
     def create_message(self, theme: str) -> QDBusMessage:
-        message = copy.deepcopy(self.base_message)
-        message.setArguments([theme])
-        return message
+        raise NotImplementedError(f'Plugin {self.name} did not implement create_message()')
 
     def call(self, message) -> QDBusMessage:
         return self.connection.call(message)

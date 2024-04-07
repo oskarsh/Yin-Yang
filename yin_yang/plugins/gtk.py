@@ -33,6 +33,8 @@ class Gtk(PluginDesktopDependent):
                 super().__init__(_Xfce())
             case Desktop.CINNAMON:
                 super().__init__(_Cinnamon())
+            case Desktop.BUDGIE:
+                super().__init__(_Budgie())
             case _:
                 super().__init__(None)
 
@@ -61,21 +63,38 @@ class _Gnome(PluginCommandline):
     @property
     def available(self) -> bool:
         return test_gnome_availability(self.command)
+    
+    
+class _Budgie(PluginCommandline):
+    name = 'GTK'
+
+    def __init__(self):
+        super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
+        self.theme_light = 'Default'
+        self.theme_dark = 'Default'
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
 
 
 class _Kde(DBusPlugin):
     name = 'GTK'
 
     def __init__(self):
+        super().__init__()
+        self.theme_light = 'Breeze'
+        self.theme_dark = 'Breeze'
+
+    def create_message(self, theme: str) -> QDBusMessage:
         message = QDBusMessage.createMethodCall(
             'org.kde.GtkConfig',
             '/GtkConfig',
             'org.kde.GtkConfig',
             'setGtkTheme'
         )
-        super().__init__(message)
-        self.theme_light = 'Breeze'
-        self.theme_dark = 'Breeze'
+        message.setArguments([theme])
+        return message
 
     def set_theme(self, theme: str):
         response = self.call(self.create_message(theme))

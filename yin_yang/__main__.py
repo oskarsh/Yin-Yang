@@ -69,6 +69,7 @@ parser.add_argument('-t', '--toggle',
                     help='toggles Yin-Yang',
                     action='store_true')
 parser.add_argument('--systemd', help='uses systemd journal handler and applies desired theme', action='store_true')
+parser.add_argument('--minimized', help='starts the program to tray bar', action='store_true')
 arguments = parser.parse_args()
 setup_logger(arguments.systemd)
 
@@ -80,6 +81,7 @@ if arguments.toggle:
 
 elif arguments.systemd:
     theme_switcher.set_desired_theme()
+
 
 else:
     # load GUI
@@ -138,6 +140,9 @@ else:
     else:
         logger.debug('System tray is unsupported')
 
-    window = main_window_connector.MainWindow()
-    window.show()
-    sys.exit(app.exec())
+    if arguments.minimized:
+        sys.exit(app.exec())
+    else:
+        window = main_window_connector.MainWindow()
+        window.show()
+        sys.exit(app.exec())
