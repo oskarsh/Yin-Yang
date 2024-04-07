@@ -1,7 +1,7 @@
 {
   "id": "sh.oskar.yin-yang",
   "runtime": "org.kde.Platform",
-  "runtime-version": "5.15-22.08",
+  "runtime-version": "5.15-23.08",
   "sdk": "org.kde.Sdk",
   "command": "runner.sh",
   "finish-args": [
@@ -28,7 +28,7 @@
       "name": "yin-yang",
       "buildsystem": "simple",
       "build-commands": [
-        "python3 -m pip install --no-deps --no-use-pep517 --prefix=/app .",
+        "python3 -m pip install --no-deps --no-use-pep517 --prefix=/app dist/yin_yang-*-py3-none-any.whl",
         "install -D runner.sh /app/bin/runner.sh"
       ],
       "sources": [

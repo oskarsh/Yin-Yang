@@ -10,8 +10,8 @@
   "sources": [
     {
       "type": "file",
-      "url": "https://files.pythonhosted.org/packages/ec/b8/1f5335580241c3863584173308c842ffc74e05074f3f72b49e5b54ca18e3/PySide6_Addons-6.6.1-cp38-abi3-manylinux_2_28_x86_64.whl",
-      "sha256": "a0982da4033319667f9df5ed6fa8eff300a88216aec103a1fff6751a172b19a0"
+      "url": "https://files.pythonhosted.org/packages/02/fc/e265aa0c338ddd8a4f2c3526aadc58f60980508ac56999ba79cf2ce744a7/PySide6_Addons-6.6.3.1-cp38-abi3-manylinux_2_28_x86_64.whl",
+      "sha256": "7373479565e5bd963b9662857c40c20768bc0b5853334e2076a62cb039e91f74"
     }
   ]
 }
