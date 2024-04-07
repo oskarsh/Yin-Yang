@@ -73,9 +73,13 @@ class Konsole(Plugin):
         for proc_id in process_ids:
             logger.debug(f'Changing profile in konsole session {proc_id}')
             set_profile(f'org.kde.konsole-{proc_id}', profile)
+            set_profile(f'org.kde.konsole-{proc_id}', profile, set_default_profile=True)
 
-        set_profile('org.kde.konsole', profile)  # konsole may don't have session dbus like above
+        # konsole may don't have session dbus like above
+        set_profile('org.kde.konsole', profile)
         set_profile('org.kde.yakuake', profile)
+        set_profile('org.kde.konsole', profile, set_default_profile=True)
+        set_profile('org.kde.yakuake', profile, set_default_profile=True)
 
         process_ids = [
             proc.pid for proc in psutil.process_iter()
@@ -86,6 +90,8 @@ class Konsole(Plugin):
         for proc_id in process_ids:
             logger.debug(f'Changing profile in dolphin session {proc_id}')
             set_profile(f'org.kde.dolphin-{proc_id}', profile)
+            set_profile(f'org.kde.dolphin-{proc_id}',
+                        profile, set_default_profile=True)
 
         return True
 
@@ -234,35 +240,46 @@ Parent=FALLBACK/
             profile_config.write(file)
 
 
-def set_profile(service: str, profile: str):
+def set_profile(service: str, profile: str, set_default_profile: bool = False):
     # connect to the session bus
     connection = QDBusConnection.sessionBus()
+    if set_default_profile:
+        path = 'Sessions/'
+        interface = 'org.kde.konsole.Session'
+        method = 'setProfile'
+    else:
+        path = 'Windows/'
+        interface = 'org.kde.konsole.Window'
+        method = 'setDefaultProfile'
 
     # maybe it's possible with pyside6 dbus packages, but this was simpler and worked
     try:
-        sessions = subprocess.check_output(f'qdbus {service} | grep "Sessions/"', shell=True)
+        sessions = subprocess.check_output(
+            f'qdbus {service} | grep "{path}"', shell=True)
     except subprocess.CalledProcessError:
         try:
             sessions = subprocess.check_output(
-                f'qdbus org.kde.konsole | grep "Sessions/"', shell=True
+                f'qdbus org.kde.konsole | grep "{path}"', shell=True
             )
             logger.debug(f'Found org.kde.konsole, use that instead')
             service = "org.kde.konsole"
         except subprocess.CalledProcessError:
             # happens when dolphins konsole is not opened
-            logger.debug(f'No Konsole sessions available in service {service}, skipping')
+            logger.debug(
+                f'No Konsole sessions available in service {service}, skipping')
             return
     sessions = sessions.decode('utf-8').removesuffix('\n').split('\n')
 
     # loop: process sessions
     for session in sessions:
-        logger.debug(f'Changing profile of session {session} to {profile}')
+        logger.debug(
+            f'Changing {"default" if set_default_profile else ""} profile of session {session} to {profile}')
         # set profile
         message = QDBusMessage.createMethodCall(
             service,
             session,
-            'org.kde.konsole.Session',
-            'setProfile'
+            interface,
+            method
         )
         message.setArguments([profile])
         connection.call(message)
