@@ -1,6 +1,7 @@
 from .system import test_gnome_availability
 from ..meta import Desktop
 from ._plugin import PluginDesktopDependent, PluginCommandline
+import configparser
 from pathlib import Path
 from os import scandir, path
 
@@ -16,6 +17,8 @@ class Icons(PluginDesktopDependent):
                 super().__init__(_Cinnamon())
             case Desktop.BUDGIE:
                 super().__init__(_Budgie())
+            case Desktop.KDE:
+                super().__init__(_Kde())
             case _:
                 super().__init__(None)
 
@@ -64,3 +67,35 @@ class _Budgie(PluginCommandline):
                 themes.extend(d.name for d in entries if d.is_dir() and path.isfile(d.path + '/index.theme'))
 
         return {t: t for t in themes}
+
+class _Kde(PluginCommandline):
+    def __init__(self):
+        super().__init__(["/usr/lib/plasma-changeicons", r"{theme}"])
+        self.theme_light = "breeze"
+        self.theme_dark = "breeze-dark"
+
+    @property
+    def available_themes(self) -> dict:
+        themes = []
+
+        for icon_theme in theme_directories:
+            if not path.isdir(icon_theme):
+                continue
+
+            for icon_theme_folder in scandir(icon_theme):
+                if not all(
+                    (
+                        icon_theme_folder.is_dir(),
+                        path.isfile(icon_theme_folder.path + "/index.theme"),
+                        path.isfile(icon_theme_folder.path + "/icon-theme.cache"),
+                    )
+                ):
+                    continue
+
+                theme_parser = configparser.ConfigParser(strict=False)
+                theme_parser.read(icon_theme_folder.path + "/index.theme")
+                theme_name = theme_parser["Icon Theme"]["Name"]
+
+                themes.append((icon_theme_folder.name, theme_name))
+
+        return dict(themes)
