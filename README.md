@@ -6,7 +6,7 @@
 ![](https://img.shields.io/badge/Build%20with-Python-yellow)
 ![](https://img.shields.io/github/license/oskarsh/yin-yang)
 
-Auto Night-mode for Linux, it supports popular Desktops like KDE, GNOME, Budgie 
+Auto Night-mode for Linux, it supports popular Desktops like KDE, GNOME, Budgie
 and also themes your favourite editors like VSCode or Atom.
 
 You might also want to take a look at our [**discussions page**](https://github.com/oskarsh/Yin-Yang/discussions), where we talk about the future of the app and other cool stuff!
@@ -16,53 +16,58 @@ You might also want to take a look at our [**discussions page**](https://github.
 
 ## Features
 
-* Changes your themes at certain times or sunrise and sunset
-* Supported Desktops:
-  * GNOME
-  * Budgie
-  * KDE Plasma
-* Supported applications:
-  * VSCode, Atom, gedit
-  * Firefox & Brave
-  * Kvantum
-  * Konsole
-  * OnlyOffice
-  * and more...
-* Miscellaneous:
-  * Wallpaper change
-  * Notifications on theme change
-  * Play a sound
-  * Ability to run custom scripts
+- Changes your themes at certain times or sunrise and sunset
+- Supported Desktops:
+  - GNOME
+  - Budgie
+  - KDE Plasma
+- Supported applications:
+  - VSCode, Atom, gedit
+  - Firefox & Brave
+  - Kvantum
+  - Konsole
+  - OnlyOffice
+  - and more...
+- Miscellaneous:
+  - Wallpaper change
+  - Notifications on theme change
+  - Play a sound
+  - Ability to run custom scripts
 
 > To see planned features and the development status, visit the [project status page](https://github.com/oskarsh/Yin-Yang/projects?type=classic).
 
 ## Installation
 
 ### Arch-based distributions
+
 Yin-Yang can be downloaded from AUR as [yin-yang](https://aur.archlinux.org/packages/yin-yang) package.
 
-
 ### Source
-Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager. You also need python development headers (e.g. `python3-devel`).
+
+Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager. You also need python development headers (e.g. `python3-devel`) and the poetry build system for python.
 
 For CentOS, RHEL, and Fedora:
+
 ```bash
-sudo dnf install gcc systemd-devel python3-devel libnotify
-``` 
+sudo dnf install gcc systemd-devel python3-devel libnotify poetry
+```
 
 For OpenSUSE:
+
 ```bash
 sudo zypper refresh
-sudo zypper install gcc systemd-devel libnotify
+sudo zypper install gcc systemd-devel libnotify python311-poetry
 ```
 
 For Debian, Ubuntu, etc.
+
 ```bash
 sudo apt update
-sudo apt install libsystemd-dev gcc pkg-config python3-dev libnotify-bin
+sudo apt install libsystemd-dev gcc pkg-config python3-dev libnotify-bin python3-poetry
 ```
 
 Then you can install Yin-Yang in a python virtual environment:
+
 ```bash
 # bash is necessary to run the source command
 bash
@@ -73,11 +78,15 @@ cd Yin-Yang
 ./scripts/install.sh
 ```
 
-For development, skip the install and instead create a venv in your home directory:
+For development, skip the install and instead build python using Poetry. A virtual environment will be created for you:
+
 ```bash
-python -m venv .venv
-source .venv/bin/activate  # this is for bash, there are similar scripts in the that directory for other shells like fish
-pip install -r requirements.txt
+# Install dependencies
+poetry install --sync
+# Load into virtual environment
+poetry env use python
+# Load Yin-Yang
+poetry run python -m yin_yang
 ```
 
 ### Uninstall
@@ -88,7 +97,7 @@ Run `scripts/uninstall.sh` from a terminal and fill out the password.
 
 Want to help out? Check out the wiki to learn how to contribute translations, plugins and more!
 
-[![Generic badge](https://img.shields.io/badge/Visit-Wiki-BLUE.svg)](<https://github.com/oskarsh/Yin-Yang/wiki>)
+[![Generic badge](https://img.shields.io/badge/Visit-Wiki-BLUE.svg)](https://github.com/oskarsh/Yin-Yang/wiki)
 
 ## Related or similar projects
 
