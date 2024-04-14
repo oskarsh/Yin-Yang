@@ -86,8 +86,6 @@ class Vscode(ConfigFilePlugin):
     @property
     def available_themes(self) -> dict:
         themes_dict = {}
-        if not self.available:
-            return themes_dict
 
         for path in filter(isdir, extension_paths):
             with os.scandir(path) as entries:
@@ -100,8 +98,11 @@ class Vscode(ConfigFilePlugin):
                     for theme_name in get_theme_name(f'{d.path}/package.json'):
                         themes_dict[theme_name] = theme_name
 
-        assert themes_dict != {}, 'No themes found'
         return themes_dict
+
+    @property
+    def available(self) -> bool:
+        return self.available_themes != {}
 
     def __str__(self):
         # for backwards compatibility
