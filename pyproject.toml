@@ -10,7 +10,7 @@ readme = "README.md"
 packages = [{include = "yin_yang"}]
 
 [tool.poetry.dependencies]
-python = "^3.12,<3.13"
+python = "^3.10,<3.13"
 psutil = "5.9.8"
 PySide6-Essentials = "6.6.3.1"
 shiboken6 = "6.6.3.1"
