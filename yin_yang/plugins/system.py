@@ -7,9 +7,10 @@ from configparser import ConfigParser
 from pathlib import Path
 
 from PySide6.QtCore import QLocale
+from PySide6.QtDBus import QDBusMessage, QDBusVariant
 
 from ..meta import Desktop
-from ._plugin import PluginDesktopDependent, PluginCommandline
+from ._plugin import PluginDesktopDependent, PluginCommandline, themes_from_theme_directories, DBusPlugin
 
 logger = logging.getLogger(__name__)
 
@@ -33,6 +34,8 @@ class System(PluginDesktopDependent):
                 super().__init__(_Cinnamon())
             case Desktop.BUDGIE:
                 super().__init__(_Budgie())
+            case Desktop.XFCE:
+                super().__init__(_Xfce())
             case _:
                 super().__init__(None)
 
@@ -209,3 +212,22 @@ class _Cinnamon(PluginCommandline):
     @property
     def available(self) -> bool:
         return test_gnome_availability(self.command)
+
+
+class _Xfce(DBusPlugin):
+    def create_message(self, theme: str) -> QDBusMessage:
+        message = QDBusMessage.createMethodCall(
+            'org.xfce.Xfconf',
+            '/org/xfce/Xfconf',
+            'org.xfce.Xfconf',
+            'SetProperty'
+        )
+        theme_variant = QDBusVariant()
+        theme_variant.setVariant(theme)
+        message.setArguments(['xfwm4', '/general/theme', theme_variant])
+        return message
+
+    @property
+    def available_themes(self) -> dict:
+        themes = themes_from_theme_directories('xfwm4')
+        return {t: t for t in themes}
