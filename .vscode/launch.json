@@ -6,11 +6,20 @@
   "configurations": [
     {
       "name": "Python: Main",
-      "type": "python",
+      "type": "debugpy",
       "request": "launch",
       "console": "integratedTerminal",
       "module": "yin_yang",
       "justMyCode": true
+    },
+    {
+      "name": "Debug Poetry Generator",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "program": "flatpak-poetry-generator.py",
+      "justMyCode": true,
+      "args": ["poetry.lock"]
     }
   ]
 }

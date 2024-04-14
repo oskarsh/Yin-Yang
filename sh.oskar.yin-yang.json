@@ -16,19 +16,12 @@
     "--filesystem=~/.mozilla:rw"
   ],
   "modules": [
-    "python3-numpy.json",
-    "python3-psutil.json",
-    "python3-python-dateutil.json",
-    "python3-suntime.json",
-    "python3-PySide6-Essentials.json",
-    "python3-PySide6-Addons.json",
-    "python3-systemd-python.json",
-    "python3-requests.json",
+    "generated-poetry-sources.json",
     {
       "name": "yin-yang",
       "buildsystem": "simple",
       "build-commands": [
-        "python3 -m pip install --no-deps --no-use-pep517 --prefix=/app dist/yin_yang-*-py3-none-any.whl",
+        "pip install --no-deps --no-build-isolation --prefix=/app dist/yin_yang-*-py3-none-any.whl",
         "install -D runner.sh /app/bin/runner.sh"
       ],
       "sources": [
