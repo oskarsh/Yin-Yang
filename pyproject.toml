@@ -37,3 +37,12 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 yin-yang = "yin_yang:__main__"
+
+[tool.pyright]
+include = ["yin_yang"]
+exclude = ["**/node_modules",
+  "**/__pycache__",
+  "build",
+  "pytest_cache",
+  ".flatpak-builder"
+]
