@@ -2,7 +2,7 @@
     "name": "poetry-deps",
     "buildsystem": "simple",
     "build-commands": [
-        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} certifi charset-normalizer colorama cython flake8 idna iniconfig mccabe packaging pluggy psutil pycodestyle pyflakes pyside6-addons pyside6-essentials pytest python-dateutil pyyaml requests setuptools shiboken6 six suntime systemd-python toml urllib3 wheel"
+        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} certifi charset-normalizer colorama flake8 idna iniconfig mccabe packaging pluggy psutil pycodestyle pyflakes pyside6-addons pyside6-essentials pytest python-dateutil pyyaml requests shiboken6 six suntime systemd-python toml urllib3"
     ],
     "sources": [
         {
@@ -19,11 +19,6 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl",
             "sha256": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6"
-        },
-        {
-            "type": "file",
-            "url": "https://files.pythonhosted.org/packages/7e/26/9d8de10005fedb1eceabe713348d43bae1dbab1786042ca0751a2e2b0f8c/Cython-0.29.37-py2.py3-none-any.whl",
-            "sha256": "95f1d6a83ef2729e67b3fa7318c829ce5b07ac64c084cd6af11c228e0364662c"
         },
         {
             "type": "file",
@@ -102,11 +97,6 @@
         },
         {
             "type": "file",
-            "url": "https://files.pythonhosted.org/packages/f7/29/13965af254e3373bceae8fb9a0e6ea0d0e571171b80d6646932131d6439b/setuptools-69.5.1-py3-none-any.whl",
-            "sha256": "c636ac361bc47580504644275c9ad802c50415c7522212252c033bd15f301f32"
-        },
-        {
-            "type": "file",
             "url": "https://files.pythonhosted.org/packages/77/f1/feb2a8be699f91fb27fbe8758b405fb38a22e3ae5bd5e05258dbef18d462/shiboken6-6.6.3.1-cp38-abi3-manylinux_2_28_x86_64.whl",
             "sha256": "b1aeff0d79d84ddbdc9970144c1bbc3a52fcb45618d1b33d17d57f99f1246d45"
         },
@@ -134,11 +124,6 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/a2/73/a68704750a7679d0b6d3ad7aa8d4da8e14e151ae82e6fee774e6e0d05ec8/urllib3-2.2.1-py3-none-any.whl",
             "sha256": "450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d"
-        },
-        {
-            "type": "file",
-            "url": "https://files.pythonhosted.org/packages/7d/cd/d7460c9a869b16c3dd4e1e403cce337df165368c71d6af229a74699622ce/wheel-0.43.0-py3-none-any.whl",
-            "sha256": "55c570405f142630c6b9f72fe09d9b67cf1477fcf543ae5b8dcb1f5b7377da81"
         }
     ]
 }

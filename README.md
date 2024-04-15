@@ -81,10 +81,10 @@ cd Yin-Yang
 For development, skip the install and instead build python using Poetry. A virtual environment will be created for you:
 
 ```bash
-# Install dependencies
-poetry install --sync
 # Load into virtual environment
 poetry env use python
+# Install dependencies
+poetry install --sync
 # Load Yin-Yang
 poetry run python -m yin_yang
 ```

@@ -21,6 +21,8 @@
       "name": "yin-yang",
       "buildsystem": "simple",
       "build-commands": [
+        "poetry install --sync",
+        "poetry build",
         "find dist -name 'yin_yang-*-py3-none-any.whl' -exec pip install --no-deps --no-build-isolation --prefix=/app {} \\;",
         "install -D runner.sh /app/bin/runner.sh"
       ],
