@@ -37,7 +37,7 @@ def check_call(command, stdout=None) -> int:
 
 
 def is_flatpak() -> bool:
-    return os.path.isfile('/.flatpak-info')
+    return os.path.isfile("/.flatpak-info")
 
 
 def get_usr() -> str:
@@ -47,8 +47,8 @@ def get_usr() -> str:
     :return: The path to /usr with a trailing /
     """
     if is_flatpak():
-        return '/var/run/host/usr/'
-    return '/usr/'
+        return "/var/run/host/usr/"
+    return "/usr/"
 
 
 def get_etc() -> str:
@@ -58,19 +58,21 @@ def get_etc() -> str:
     :return: The path to /etc with a trailing /
     """
     if is_flatpak():
-        return '/var/run/host/etc/'
-    return '/etc/'
+        return "/var/run/host/etc/"
+    return "/etc/"
 
 
-def run(command: list[str], kwargs: list[str] = []) -> subprocess.CompletedProcess[str]:
+def run(
+    command: list[str], kwargs: list[str] = [], stdout=None
+) -> subprocess.CompletedProcess[str]:
     try:
         if len(kwargs) == 0:
-            return subprocess.run(command)
+            return subprocess.run(command, stdout=stdout)
         else:
-            return subprocess.run(command, **kwargs)
+            return subprocess.run(command, **kwargs, stdout=stdout)
     except FileNotFoundError:
         flatpak_args = base_flatpak_args + command
         if len(kwargs) == 0:
-            return subprocess.run(flatpak_args)
+            return subprocess.run(flatpak_args, stdout=stdout)
         else:
-            return subprocess.run(flatpak_args, **kwargs)
+            return subprocess.run(flatpak_args, **kwargs, stdout=stdout)

@@ -46,3 +46,6 @@ exclude = ["**/node_modules",
   "pytest_cache",
   ".flatpak-builder"
 ]
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"

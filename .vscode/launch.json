@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: Main",
+      "name": "Debug Yin-Yang",
       "type": "debugpy",
       "request": "launch",
       "console": "integratedTerminal",
