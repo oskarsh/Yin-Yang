@@ -19,7 +19,7 @@ from yin_yang import theme_switcher
 from yin_yang.config import config, Modes
 from yin_yang.ui import main_window_connector
 
-logger = logging.getLogger()
+logger = logging.getLogger(__name__)
 
 
 def setup_logger(use_systemd_journal: bool):
@@ -97,7 +97,7 @@ else:
         logger.debug(f'Using language {lang}')
 
         # system translations
-        path = QLibraryInfo.path(QLibraryInfo.TranslationsPath)
+        path = QLibraryInfo.path(QLibraryInfo.LibraryPath.TranslationsPath)
         translator = QTranslator(app)
         if translator.load(QLocale.system(), 'qtbase', '_', path):
             app.installTranslator(translator)
