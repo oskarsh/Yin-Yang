@@ -4,13 +4,13 @@ import subprocess
 from abc import ABC, abstractmethod
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 from PySide6.QtGui import QColor, QRgba64
-from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
+from PySide6.QtWidgets import QComboBox, QGroupBox, QHBoxLayout, QLineEdit
 
-from ..meta import UnsupportedDesktopError, FileFormat
+from ..meta import FileFormat, UnsupportedDesktopError
 
 logger = logging.getLogger(__name__)
 
@@ -253,25 +253,30 @@ class ExternalPlugin(Plugin):
 
 
 class DBusPlugin(Plugin):
+    """A class for plugins that mainly switching theme via DBus"""
     def __init__(self):
         super().__init__()
         self.connection = QDBusConnection.sessionBus()
+        self.message = QDBusMessage()
+        self.message_data: List[str] = ['' for _ in range(4)]  # Store DBusMessage data(destination, path, interface, method)
 
     def set_theme(self, theme: str):
+        """Check arguments, create DBus message and then call"""
         if not (self.available and self.enabled):
             return
 
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
-        self.call(self.create_message(theme))
+        self.create_message(theme)
+        self.call()
 
     @abstractmethod
-    def create_message(self, theme: str) -> QDBusMessage:
+    def create_message(self, theme: str) -> None:
         raise NotImplementedError(f'Plugin {self.name} did not implement create_message()')
 
-    def call(self, message) -> QDBusMessage:
-        return self.connection.call(message)
+    def call(self) -> QDBusMessage:
+        return self.connection.call(self.message)
 
 
 class ConfigFilePlugin(Plugin):
