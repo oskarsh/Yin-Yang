@@ -2,10 +2,7 @@ name: Build and Release App
 
 on:
   push:
-    branches: [master, beta]
-  # workflow_dispatch:
-  # release:
-  #   types: [published]
+  pull_request:
 
 jobs:
   build:
@@ -48,17 +45,18 @@ jobs:
       - name: Compile ui, translations and resources
         run: poetry run ./scripts/build_ui.sh
       - name: Build Whl for release
-        run: poetry build -f=wheel -n
+        run: poetry build -f wheel -n -o .
       # Upload build artifacts for later use
       - name: Upload yin-yang whl for flatpak build
         uses: actions/upload-artifact@v4
         with:
-          name: yin-yang-{{GITHUB_REF}}-py3-none-any.whl
-          path: dist/$(ls dist)
+          name: yin-yang-${{ github.sha }}-py3-none-any.whl
+          path: '*.whl'
 
   flatpak:
     name: "Build flatpak file"
     runs-on: ubuntu-22.04
+    needs: build
     container:
       image: bilelmoussaoui/flatpak-github-actions:kde-5.15-23.08
       options: --privileged
@@ -71,7 +69,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         path: dist/
-        name: yin-yang-{{GITHUB_REF}}-py3-none-any.whl
+        name: yin-yang-${{ github.sha }}-py3-none-any.whl
     - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       with:
         bundle: yin-yang.flatpak
