@@ -17,8 +17,8 @@ echo "Installing dependencies …"
 # Tell Poetry not to use a keyring
 export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
 # create virtual environment and install packages
-poetry install --sync
 poetry env use python
+poetry install --sync
 poetry build
 pip install ./dist/yin_yang-*-py3-none-any.whl
 
