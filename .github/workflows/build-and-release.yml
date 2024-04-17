@@ -1,4 +1,4 @@
-name: Build and Release App
+name: Build and Release Yin-Yang
 
 on:
   push:
@@ -36,10 +36,12 @@ jobs:
           path: ./.venv
           key: venv-${{ hashFiles('poetry.lock') }}
       # Install dependencies of cache does not exist
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      - name: Install system dependencies
         run: |
           sudo apt install qt6-base-dev libsystemd-dev gcc
+      - name: Install Poetry dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: |
           poetry install --no-interaction
       # Compile and build Yin-Yang
       - name: Compile ui, translations and resources
