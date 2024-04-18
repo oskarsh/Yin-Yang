@@ -5,14 +5,11 @@ from pathlib import Path
 
 from PySide6.QtDBus import QDBusMessage
 
-from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
+from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin, themes_from_theme_directories
 from .system import test_gnome_availability
 from ..meta import Desktop
 
 logger = logging.getLogger(__name__)
-
-
-theme_directories = ['/usr/share/themes', f'{Path.home()}/.themes']
 
 
 class Gtk(PluginDesktopDependent):
@@ -40,15 +37,7 @@ class Gtk(PluginDesktopDependent):
 
     @property
     def available_themes(self) -> dict:
-        themes = []
-
-        for directory in theme_directories:
-            if not path.isdir(directory):
-                continue
-
-            with scandir(directory) as entries:
-                themes.extend(d.name for d in entries if d.is_dir() and path.isdir(d.path + '/gtk-3.0'))
-
+        themes = themes_from_theme_directories('gtk-3.0')
         return {t: t for t in themes}
 
 
