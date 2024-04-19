@@ -2,7 +2,7 @@
     "name": "poetry-deps",
     "buildsystem": "simple",
     "build-commands": [
-        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} certifi charset-normalizer colorama cython flake8 idna iniconfig mccabe packaging pluggy psutil pycodestyle pyflakes pyside6-addons pyside6-essentials pytest python-dateutil pyyaml requests setuptools shiboken6 six suntime systemd-python toml urllib3 wheel"
+        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} certifi charset-normalizer colorama cython exceptiongroup flake8 idna iniconfig mccabe packaging pluggy psutil pycodestyle pyflakes pyside6-addons pyside6-essentials pytest python-dateutil pyyaml requests setuptools shiboken6 six suntime systemd-python toml tomli urllib3 wheel"
     ],
     "sources": [
         {
@@ -24,6 +24,11 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/7e/26/9d8de10005fedb1eceabe713348d43bae1dbab1786042ca0751a2e2b0f8c/Cython-0.29.37-py2.py3-none-any.whl",
             "sha256": "95f1d6a83ef2729e67b3fa7318c829ce5b07ac64c084cd6af11c228e0364662c"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/01/90/79fe92dd413a9cab314ef5c591b5aa9b9ba787ae4cadab75055b0ae00b33/exceptiongroup-1.2.1-py3-none-any.whl",
+            "sha256": "5258b9ed329c5bbdd31a309f53cbfb0b155341807f6ff7606a1e801a891b29ad"
         },
         {
             "type": "file",
@@ -129,6 +134,11 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl",
             "sha256": "806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/97/75/10a9ebee3fd790d20926a90a2547f0bf78f371b2f13aa822c759680ca7b9/tomli-2.0.1-py3-none-any.whl",
+            "sha256": "939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"
         },
         {
             "type": "file",
