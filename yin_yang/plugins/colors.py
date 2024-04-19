@@ -1,8 +1,9 @@
 import re
+
 from yin_yang import helpers
 
 from ..meta import Desktop
-from ._plugin import Plugin, PluginDesktopDependent, PluginCommandline
+from ._plugin import Plugin, PluginCommandline, PluginDesktopDependent
 
 
 class Colors(PluginDesktopDependent):
@@ -18,7 +19,7 @@ class Colors(PluginDesktopDependent):
 
 
 class _KDEColors(PluginCommandline):
-    name = "Colors"
+    name = 'Colors'
     translations = {}
 
     def __init__(self):
@@ -30,9 +31,12 @@ class _KDEColors(PluginCommandline):
         if self.translations:
             return self.translations
 
-        colors = str(helpers.check_output(['plasma-apply-colorscheme', '--list-schemes'],
-                                         universal_newlines=True))
-        print(colors)
+        colors = str(
+            helpers.check_output(
+                ['plasma-apply-colorscheme', '--list-schemes'], universal_newlines=True
+            )
+        )
+
         colors = colors.splitlines()
         del colors[0]
 
