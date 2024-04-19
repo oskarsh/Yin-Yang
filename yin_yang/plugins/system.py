@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 def test_gnome_availability(command) -> bool:
-    return PluginCommandline.check_command([command[0], "get", command[2], command[3]])
+    return PluginCommandline.check_command([command[0], 'get', command[2], command[3]])
 
 
 class System(PluginDesktopDependent):
@@ -45,18 +45,18 @@ class System(PluginDesktopDependent):
 
 
 class _Gnome(PluginCommandline):
-    name = "System"
+    name = 'System'
 
     # TODO allow using the default themes, not only user themes
 
     def __init__(self):
         super().__init__(
             [
-                "gsettings",
-                "set",
-                "org.gnome.shell.extensions.user-theme",
-                "name",
-                "{theme}",
+                'gsettings',
+                'set',
+                'org.gnome.shell.extensions.user-theme',
+                'name',
+                '{theme}',
             ]
         )
 
@@ -66,20 +66,20 @@ class _Gnome(PluginCommandline):
 
 
 class _Budgie(PluginCommandline):
-    name = "System"
+    name = 'System'
 
     def __init__(self):
         super().__init__(
             [
-                "gsettings",
-                "set",
-                "com.solus-project.budgie-panel",
-                "dark-theme",
-                "{theme}",
+                'gsettings',
+                'set',
+                'com.solus-project.budgie-panel',
+                'dark-theme',
+                '{theme}',
             ]
         )
-        self.theme_light = "light"
-        self.theme_dark = "dark"
+        self.theme_light = 'light'
+        self.theme_dark = 'dark'
 
     @property
     def available(self) -> bool:
@@ -89,10 +89,10 @@ class _Budgie(PluginCommandline):
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
         match theme.lower():
-            case "dark":
-                theme_bool = "true"
-            case "light":
-                theme_bool = "false"
+            case 'dark':
+                theme_bool = 'true'
+            case 'light':
+                theme_bool = 'false'
             case _:
                 raise NotImplementedError
 
@@ -103,44 +103,44 @@ class _Budgie(PluginCommandline):
 
     @property
     def available_themes(self) -> dict:
-        themes: dict[str, str] = {"dark": "Dark", "light": "Light"}
+        themes: dict[str, str] = {'dark': 'Dark', 'light': 'Light'}
 
         return themes
 
 
 def get_readable_kde_theme_name(file) -> str:
-    """Searches for the long_name in the file and maps it to the found short name"""
+    '''Searches for the long_name in the file and maps it to the found short name'''
 
     for line in file:
-        if "Name=" in line:
-            name: str = ""
+        if 'Name=' in line:
+            name: str = ''
             write: bool = False
             for letter in line:
-                if letter == "\n":
+                if letter == '\n':
                     write = False
                 if write:
                     name += letter
-                if letter == "=":
+                if letter == '=':
                     write = True
             return name
 
 
 def get_name_key(meta):
     locale = filter(
-        lambda name: name in meta["KPlugin"],
-        [f"Name[{QLocale().name()}]", f"Name[{QLocale().language()}]", "Name"],
+        lambda name: name in meta['KPlugin'],
+        [f'Name[{QLocale().name()}]', f'Name[{QLocale().language()}]', 'Name'],
     )
     return next(locale)
 
 
 class _Kde(PluginCommandline):
-    name = "System"
+    name = 'System'
     translations = {}
 
     def __init__(self):
-        super().__init__(["lookandfeeltool", "-a", "{theme}"])
-        self.theme_light = "org.kde.breeze.desktop"
-        self.theme_dark = "org.kde.breezedark.desktop"
+        super().__init__(['lookandfeeltool', '-a', '{theme}'])
+        self.theme_light = 'org.kde.breeze.desktop'
+        self.theme_dark = 'org.kde.breezedark.desktop'
 
     @property
     def available_themes(self) -> dict:
@@ -149,12 +149,12 @@ class _Kde(PluginCommandline):
 
         # aliases for path to use later on
         user = pwd.getpwuid(os.getuid())[0]
-        path = "/home/" + user + "/.local/share/plasma/look-and-feel/"
+        path = '/home/' + user + '/.local/share/plasma/look-and-feel/'
 
         # asks the system what themes are available
         # noinspection SpellCheckingInspection
         long_names = helpers.check_output(
-            ["lookandfeeltool", "-l"], universal_newlines=True
+            ['lookandfeeltool', '-l'], universal_newlines=True
         )
         long_names = long_names.splitlines()
         long_names.sort()
@@ -165,25 +165,25 @@ class _Kde(PluginCommandline):
             try:
                 # json in newer versions
                 with open(
-                    f"{helpers.get_usr()}share/plasma/look-and-feel/{long_name}/metadata.json",
-                    "r",
+                    f'{helpers.get_usr()}share/plasma/look-and-feel/{long_name}/metadata.json',
+                    'r',
                 ) as file:
                     meta = json.load(file)
                     key = get_name_key(meta)
-                    self.translations[long_name] = meta["KPlugin"][key]
+                    self.translations[long_name] = meta['KPlugin'][key]
             except OSError:
                 try:
                     # load the name from the metadata.desktop file
                     with open(
-                        f"{helpers.get_usr()}share/plasma/look-and-feel/{long_name}/metadata.desktop",
-                        "r",
+                        f'{helpers.get_usr()}share/plasma/look-and-feel/{long_name}/metadata.desktop',
+                        'r',
                     ) as file:
                         self.translations[long_name] = get_readable_kde_theme_name(file)
                 except OSError:
                     # check the next path if the themes exist there
                     try:
                         # load the name from the metadata.desktop file
-                        with open(f"{path}{long_name}/metadata.desktop", "r") as file:
+                        with open(f'{path}{long_name}/metadata.desktop', 'r') as file:
                             # search for the name
                             self.translations[long_name] = get_readable_kde_theme_name(
                                 file
@@ -197,16 +197,16 @@ class _Kde(PluginCommandline):
 
 class _Mate(PluginCommandline):
     theme_directories = [
-        Path(helpers.get_usr() + "share/themes"),
-        Path.home() / ".themes",
+        Path(helpers.get_usr() + 'share/themes'),
+        Path.home() / '.themes',
     ]
 
     def __init__(self):
         super().__init__(
-            ["dconf", "write", "/org/mate/marco/general/theme", "'{theme}'"]
+            ['dconf', 'write', '/org/mate/marco/general/theme', '"{theme}"']
         )
-        self.theme_light = "Yaru"
-        self.theme_dark = "Yaru-dark"
+        self.theme_light = 'Yaru'
+        self.theme_dark = 'Yaru-dark'
 
     @property
     def available_themes(self) -> dict:
@@ -217,14 +217,14 @@ class _Mate(PluginCommandline):
                 continue
 
             for d in directory.iterdir():
-                index = d / "index.theme"
+                index = d / 'index.theme'
                 if not index.is_file():
                     continue
 
                 config = ConfigParser()
                 config.read(index)
                 try:
-                    theme = config["X-GNOME-Metatheme"]["MetacityTheme"]
+                    theme = config['X-GNOME-Metatheme']['MetacityTheme']
                     themes.append(theme)
                 except KeyError:
                     continue
@@ -233,16 +233,16 @@ class _Mate(PluginCommandline):
 
     @property
     def available(self):
-        return self.check_command(["dconf", "help"])
+        return self.check_command(['dconf', 'help'])
 
 
 class _Cinnamon(PluginCommandline):
     def __init__(self):
         super().__init__(
-            ["gsettings", "set", "org.cinnamon.theme", "name", '"{theme}"']
+            ['gsettings', 'set', 'org.cinnamon.theme', 'name', '"{theme}"']
         )
-        self.theme_light = "Mint-X-Teal"
-        self.theme_dark = "Mint-Y-Dark-Brown"
+        self.theme_light = 'Mint-X-Teal'
+        self.theme_dark = 'Mint-Y-Dark-Brown'
 
     @property
     def available(self) -> bool:
@@ -252,14 +252,14 @@ class _Cinnamon(PluginCommandline):
 class _Xfce(DBusPlugin):
     def create_message(self, theme: str) -> QDBusMessage:
         message = QDBusMessage.createMethodCall(
-            "org.xfce.Xfconf", "/org/xfce/Xfconf", "org.xfce.Xfconf", "SetProperty"
+            'org.xfce.Xfconf', '/org/xfce/Xfconf', 'org.xfce.Xfconf', 'SetProperty'
         )
         theme_variant = QDBusVariant()
         theme_variant.setVariant(theme)
-        message.setArguments(["xfwm4", "/general/theme", theme_variant])
+        message.setArguments(['xfwm4', '/general/theme', theme_variant])
         return message
 
     @property
     def available_themes(self) -> dict:
-        themes = themes_from_theme_directories("xfwm4")
+        themes = themes_from_theme_directories('xfwm4')
         return {t: t for t in themes}

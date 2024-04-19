@@ -5,20 +5,20 @@ from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
 def create_dbus_message(title: str, body: str):
     message = QDBusMessage.createMethodCall(
-        "org.freedesktop.portal.Desktop",
-        "/org/freedesktop/portal/desktop",
-        "org.freedesktop.portal.Notification",
-        "AddNotification",
+        'org.freedesktop.portal.Desktop',
+        '/org/freedesktop/portal/desktop',
+        'org.freedesktop.portal.Notification',
+        'AddNotification',
     )
 
     notification = {
-        "title": title,
-        "body": body,
-        "icon": "yin_yang",
-        "priority": "low",
+        'title': title,
+        'body': body,
+        'icon': 'yin_yang',
+        'priority': 'low',
     }
 
-    message.setArguments(["YingYang.ThemeChanged", notification])
+    message.setArguments(['YingYang.ThemeChanged', notification])
 
     return message
 

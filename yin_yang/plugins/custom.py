@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QLineEdit
 
 from yin_yang import helpers
+
 from ._plugin import PluginCommandline
 
 
@@ -17,8 +18,8 @@ class Custom(PluginCommandline):
 
     def get_input(self, widget):
         inputs: list[QLineEdit | QLineEdit] = super().get_input(widget)
-        inputs[0].setPlaceholderText("Light script")
-        inputs[1].setPlaceholderText("Dark script")
+        inputs[0].setPlaceholderText('Light script')
+        inputs[1].setPlaceholderText('Dark script')
         return inputs
 
     def set_theme(self, theme: str):

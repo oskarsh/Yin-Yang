@@ -12,7 +12,7 @@ The application is running in a Flatpak or not.
 These are the base arguments we use to execute commands when running in 
 a flatpak environment.
 """
-base_flatpak_args = ["flatpak-spawn", "--host"]
+base_flatpak_args = ['flatpak-spawn', '--host']
 
 
 def check_output(args, universal_newlines=False) -> bytes:
@@ -37,7 +37,7 @@ def check_call(command, stdout=None) -> int:
 
 
 def is_flatpak() -> bool:
-    return os.path.isfile("/.flatpak-info")
+    return os.path.isfile('/.flatpak-info')
 
 
 def get_usr() -> str:
@@ -47,8 +47,8 @@ def get_usr() -> str:
     :return: The path to /usr with a trailing /
     """
     if is_flatpak():
-        return "/var/run/host/usr/"
-    return "/usr/"
+        return '/var/run/host/usr/'
+    return '/usr/'
 
 
 def get_etc() -> str:
@@ -58,8 +58,8 @@ def get_etc() -> str:
     :return: The path to /etc with a trailing /
     """
     if is_flatpak():
-        return "/var/run/host/etc/"
-    return "/etc/"
+        return '/var/run/host/etc/'
+    return '/etc/'
 
 
 def run(

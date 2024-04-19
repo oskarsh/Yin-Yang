@@ -1,9 +1,10 @@
-from .system import test_gnome_availability
-from ..meta import Desktop
-from ._plugin import PluginDesktopDependent, PluginCommandline
 import configparser
+from os import path, scandir
 from pathlib import Path
-from os import scandir, path
+
+from ..meta import Desktop
+from ._plugin import PluginCommandline, PluginDesktopDependent
+from .system import test_gnome_availability
 
 theme_directories = ['/usr/share/icons', f'{Path.home()}/.icons']
 
@@ -25,7 +26,9 @@ class Icons(PluginDesktopDependent):
 
 class _Mate(PluginCommandline):
     def __init__(self):
-        super().__init__(['dconf', 'write', '/org/mate/desktop/interface/icon-theme', '\'{theme}\''])
+        super().__init__(
+            ['dconf', 'write', '/org/mate/desktop/interface/icon-theme', '\"{theme}\"']
+        )
         self.theme_light = 'Yaru'
         self.theme_dark = 'Yaru-dark'
 
@@ -36,18 +39,34 @@ class _Mate(PluginCommandline):
 
 class _Cinnamon(PluginCommandline):
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.interface', 'icon-theme', '\"{theme}\"'])
+        super().__init__(
+            [
+                'gsettings',
+                'set',
+                'org.cinnamon.desktop.interface',
+                'icon-theme',
+                '\"{theme}\"',
+            ]
+        )
         self.theme_light = 'Mint-X'
         self.theme_dark = 'gnome'
 
     @property
     def available(self) -> bool:
         return test_gnome_availability(self.command)
-    
+
 
 class _Budgie(PluginCommandline):
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'icon-theme', '\"{theme}\"'])
+        super().__init__(
+            [
+                'gsettings',
+                'set',
+                'org.gnome.desktop.interface',
+                'icon-theme',
+                '\"{theme}\"',
+            ]
+        )
         self.theme_light = 'Default'
         self.theme_dark = 'Default'
 
@@ -64,9 +83,14 @@ class _Budgie(PluginCommandline):
                 continue
 
             with scandir(directory) as entries:
-                themes.extend(d.name for d in entries if d.is_dir() and path.isfile(d.path + '/index.theme'))
+                themes.extend(
+                    d.name
+                    for d in entries
+                    if d.is_dir() and path.isfile(d.path + '/index.theme')
+                )
 
         return {t: t for t in themes}
+
 
 class _Kde(PluginCommandline):
     def __init__(self):
