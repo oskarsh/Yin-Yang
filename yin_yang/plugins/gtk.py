@@ -7,7 +7,12 @@ from PySide6.QtDBus import QDBusMessage
 from yin_yang import helpers
 
 from ..meta import Desktop
-from ._plugin import DBusPlugin, PluginCommandline, PluginDesktopDependent
+from ._plugin import (
+    DBusPlugin,
+    PluginCommandline,
+    PluginDesktopDependent,
+    themes_from_theme_directories,
+)
 from .system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
