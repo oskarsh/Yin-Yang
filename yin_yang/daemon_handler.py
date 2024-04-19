@@ -1,11 +1,11 @@
 import logging
+import re
 import shutil
-import subprocess
 from enum import Enum, auto
 from pathlib import Path
-import re
 
 from yin_yang import helpers
+
 from .config import ConfigWatcher, config
 from .meta import ConfigEvent, Modes
 
@@ -13,7 +13,6 @@ logger = logging.getLogger(__name__)
 SYSTEMD_PATH = Path.home() / '.local/share/systemd/user'
 TIMER_PATH = SYSTEMD_PATH / 'yin_yang.timer'
 SERVICE_PATH = SYSTEMD_PATH / 'yin_yang.service'
-
 
 
 def create_files():
@@ -24,13 +23,20 @@ def create_files():
         shutil.copy('./resources/yin_yang.timer', TIMER_PATH)
     if not SERVICE_PATH.is_file():
         shutil.copy('./resources/yin_yang.service', SERVICE_PATH)
-    # TODO: Will this cause an issue switching back from flatpak?
-    if (helpers.is_flatpak()):
+    if helpers.is_flatpak():
         with open(SERVICE_PATH, 'r') as service:
             lines = service.readlines()
         with open(SERVICE_PATH, 'w') as service:
             for line in lines:
-                service.write(re.sub('ExecStart=\/usr\/bin\/yin-yang --systemd', 'ExecStart='+str(Path.home())+'/.local/share/flatpak/exports/bin/sh.oskar.yin-yang --systemd', line))
+                service.write(
+                    re.sub(
+                        'ExecStart=\/usr\/bin\/yin-yang --systemd',
+                        'ExecStart='
+                        + str(Path.home())
+                        + '/.local/share/flatpak/exports/bin/sh.oskar.yin-yang --systemd',
+                        line,
+                    )
+                )
 
 
 def run_command(command, **kwargs):
@@ -70,7 +76,9 @@ class SaveWatcher(ConfigWatcher):
         STOP = auto()
 
     def __init__(self):
-        self._next_timer_update: SaveWatcher._UpdateTimerStatus = SaveWatcher._UpdateTimerStatus.NO_UPDATE
+        self._next_timer_update: SaveWatcher._UpdateTimerStatus = (
+            SaveWatcher._UpdateTimerStatus.NO_UPDATE
+        )
 
     def _set_needed_updates(self, change_values):
         assert change_values['old_value'] != change_values['new_value'], 'No change!'
@@ -83,7 +91,9 @@ class SaveWatcher(ConfigWatcher):
                 elif change_values['new_value'] == Modes.MANUAL.value:
                     self._next_timer_update = SaveWatcher._UpdateTimerStatus.STOP
                 else:
-                    self._next_timer_update = SaveWatcher._UpdateTimerStatus.UPDATE_TIMES
+                    self._next_timer_update = (
+                        SaveWatcher._UpdateTimerStatus.UPDATE_TIMES
+                    )
             case 'times' | 'coordinates' | 'boot_offset':
                 self._next_timer_update = SaveWatcher._UpdateTimerStatus.UPDATE_TIMES
 
@@ -91,7 +101,10 @@ class SaveWatcher(ConfigWatcher):
         match self._next_timer_update:
             case SaveWatcher._UpdateTimerStatus.STOP:
                 run_command('stop')
-            case SaveWatcher._UpdateTimerStatus.UPDATE_TIMES | SaveWatcher._UpdateTimerStatus.START:
+            case (
+                SaveWatcher._UpdateTimerStatus.UPDATE_TIMES
+                | SaveWatcher._UpdateTimerStatus.START
+            ):
                 update_times()
 
         self._next_timer_update = SaveWatcher._UpdateTimerStatus.NO_UPDATE
