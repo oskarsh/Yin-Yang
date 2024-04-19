@@ -1,14 +1,32 @@
-import logging
-import subprocess
 from logging import Handler
 
-logger = logging.getLogger()
+from PySide6.QtDBus import QDBusConnection, QDBusMessage
+
+
+def create_dbus_message(title: str, body: str):
+    message = QDBusMessage.createMethodCall(
+        "org.freedesktop.portal.Desktop",
+        "/org/freedesktop/portal/desktop",
+        "org.freedesktop.portal.Notification",
+        "AddNotification",
+    )
+
+    notification = {
+        "title": title,
+        "body": body,
+        "icon": "yin_yang",
+        "priority": "low",
+    }
+
+    message.setArguments(["YingYang.ThemeChanged", notification])
+
+    return message
+
 
 class NotificationHandler(Handler):
     """Shows logs as notifications"""
+
     def emit(self, record):
-        try:
-            subprocess.call(['notify-send', record.levelname, str(record.msg),
-                            '-a', 'Yin & Yang', '-u', 'low', '--icon', 'yin_yang'])
-        except FileNotFoundError:
-            logger.warn('notify-send not found. Notifications will not work!')
+        connection = QDBusConnection.sessionBus()
+        message = create_dbus_message(record.levelname, str(record.msg))
+        connection.call(message)

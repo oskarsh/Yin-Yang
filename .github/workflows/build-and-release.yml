@@ -40,9 +40,9 @@ jobs:
         run: |
           sudo apt install qt6-base-dev libsystemd-dev gcc
       - name: Install Poetry dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: |
-          poetry install --no-interaction
+          poetry install --sync --no-interaction
       # Compile and build Yin-Yang
       - name: Compile ui, translations and resources
         run: poetry run ./scripts/build_ui.sh
@@ -77,4 +77,4 @@ jobs:
         bundle: yin-yang.flatpak
         manifest-path: sh.oskar.yin-yang.json
         cache-key: flatpak-builder-${{ github.sha }}
-        arch: ubuntu-22.04
+        arch: x86_64

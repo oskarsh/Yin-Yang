@@ -1,23 +1,20 @@
 import logging
-from os import scandir, path
+from os import path, scandir
 from pathlib import Path
 
 from PySide6.QtDBus import QDBusMessage
 
 from yin_yang import helpers
 
-from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
-from .system import test_gnome_availability
 from ..meta import Desktop
+from ._plugin import DBusPlugin, PluginCommandline, PluginDesktopDependent
+from .system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
 
 
-theme_directories = [helpers.get_usr() + 'share/themes', f'{Path.home()}/.themes']
-
-
 class Gtk(PluginDesktopDependent):
-    name = 'GTK'
+    name = "GTK"
 
     def __init__(self, desktop: Desktop):
         match desktop:
@@ -26,8 +23,10 @@ class Gtk(PluginDesktopDependent):
             case Desktop.GNOME:
                 super().__init__(_Gnome())
                 if not self.strategy.available:
-                    print('You need to install an extension for gnome to use it. \n'
-                          'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
+                    print(
+                        "You need to install an extension for gnome to use it. \n"
+                        "You can get it from here: https://extensions.gnome.org/extension/19/user-themes/"
+                    )
             case Desktop.MATE:
                 super().__init__(_Mate())
             case Desktop.XFCE:
@@ -41,38 +40,34 @@ class Gtk(PluginDesktopDependent):
 
     @property
     def available_themes(self) -> dict:
-        themes = []
-
-        for directory in theme_directories:
-            if not path.isdir(directory):
-                continue
-
-            with scandir(directory) as entries:
-                themes.extend(d.name for d in entries if d.is_dir() and path.isdir(d.path + '/gtk-3.0'))
-
+        themes = themes_from_theme_directories("gtk-3.0")
         return {t: t for t in themes}
 
 
 class _Gnome(PluginCommandline):
-    name = 'GTK'
+    name = "GTK"
 
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
-        self.theme_light = 'Default'
-        self.theme_dark = 'Default'
+        super().__init__(
+            ["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", "{theme}"]
+        )
+        self.theme_light = "Default"
+        self.theme_dark = "Default"
 
     @property
     def available(self) -> bool:
         return test_gnome_availability(self.command)
-    
-    
+
+
 class _Budgie(PluginCommandline):
-    name = 'GTK'
+    name = "GTK"
 
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
-        self.theme_light = 'Default'
-        self.theme_dark = 'Default'
+        super().__init__(
+            ["gsettings", "set", "org.gnome.desktop.interface", "gtk-theme", "{theme}"]
+        )
+        self.theme_light = "Default"
+        self.theme_dark = "Default"
 
     @property
     def available(self) -> bool:
@@ -80,19 +75,16 @@ class _Budgie(PluginCommandline):
 
 
 class _Kde(DBusPlugin):
-    name = 'GTK'
+    name = "GTK"
 
     def __init__(self):
         super().__init__()
-        self.theme_light = 'Breeze'
-        self.theme_dark = 'Breeze'
+        self.theme_light = "Breeze"
+        self.theme_dark = "Breeze"
 
     def create_message(self, theme: str) -> QDBusMessage:
         message = QDBusMessage.createMethodCall(
-            'org.kde.GtkConfig',
-            '/GtkConfig',
-            'org.kde.GtkConfig',
-            'setGtkTheme'
+            "org.kde.GtkConfig", "/GtkConfig", "org.kde.GtkConfig", "setGtkTheme"
         )
         message.setArguments([theme])
         return message
@@ -103,49 +95,61 @@ class _Kde(DBusPlugin):
         if response.type() != QDBusMessage.MessageType.ErrorMessage:
             return
 
-        logger.warning('kde-gtk-config not available, trying xsettingsd')
-        xsettingsd_conf_path = Path.home() / '.config/xsettingsd/xsettingsd.conf'
+        logger.warning("kde-gtk-config not available, trying xsettingsd")
+        xsettingsd_conf_path = Path.home() / ".config/xsettingsd/xsettingsd.conf"
         if not xsettingsd_conf_path.exists():
-            logger.warning('xsettingsd not available')
+            logger.warning("xsettingsd not available")
             return
 
-        with open(xsettingsd_conf_path, 'r') as f:
+        with open(xsettingsd_conf_path, "r") as f:
             lines = f.readlines()
             for i, line in enumerate(lines):
-                if line.startswith('Net/ThemeName'):
+                if line.startswith("Net/ThemeName"):
                     lines[i] = f'Net/ThemeName "{theme}"\n'
                     break
 
-        with open(xsettingsd_conf_path, 'w') as f:
+        with open(xsettingsd_conf_path, "w") as f:
             f.writelines(lines)
 
         # send signal to read new config
-        helpers.run(['killall', '-HUP', 'xsettingsd'])
+        helpers.run(["killall", "-HUP", "xsettingsd"])
 
 
 class _Xfce(PluginCommandline):
     def __init__(self):
-        super(_Xfce, self).__init__(['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName', '-s', '{theme}'])
-        self.theme_light = 'Adwaita'
-        self.theme_dark = 'Adwaita-dark'
+        super(_Xfce, self).__init__(
+            ["xfconf-query", "-c", "xsettings", "-p", "/Net/ThemeName", "-s", "{theme}"]
+        )
+        self.theme_light = "Adwaita"
+        self.theme_dark = "Adwaita-dark"
 
 
 class _Mate(PluginCommandline):
     def __init__(self):
-        super().__init__(['dconf', 'write', '/org/mate/desktop/interface/gtk-theme', '\'{theme}\''])
-        self.theme_light = 'Yaru'
-        self.theme_dark = 'Yaru-dark'
+        super().__init__(
+            ["dconf", "write", "/org/mate/desktop/interface/gtk-theme", "'{theme}'"]
+        )
+        self.theme_light = "Yaru"
+        self.theme_dark = "Yaru-dark"
 
     @property
     def available(self) -> bool:
-        return self.check_command(['dconf', 'help'])
+        return self.check_command(["dconf", "help"])
 
 
 class _Cinnamon(PluginCommandline):
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.interface', 'gtk-theme', '\"{theme}\"'])
-        self.theme_light = 'Adwaita'
-        self.theme_dark = 'Adwaita-dark'
+        super().__init__(
+            [
+                "gsettings",
+                "set",
+                "org.cinnamon.desktop.interface",
+                "gtk-theme",
+                '"{theme}"',
+            ]
+        )
+        self.theme_light = "Adwaita"
+        self.theme_dark = "Adwaita-dark"
 
     @property
     def available(self) -> bool:

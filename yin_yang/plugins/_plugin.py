@@ -4,7 +4,7 @@ import subprocess
 from abc import ABC, abstractmethod
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 from PySide6.QtGui import QColor, QRgba64
@@ -366,3 +366,20 @@ def flatpak_user(app_id: str) -> Path:
 
 def snap_path(app: str) -> Path:
     return Path(f'/var/lib/snapd/snap/{app}/current')
+
+def themes_from_theme_directories(type: str) -> List[Path]:
+    theme_directories = [
+        Path('/usr/share/themes'),
+        Path('/usr/local/share/themes'),
+        Path.home() / '.themes',
+        Path.home() / '.local/share/themes',
+    ]
+
+    themes = []
+    for directory in theme_directories:
+        if not directory.is_dir():
+            continue
+
+        themes.extend(d.name for d in directory.iterdir() if d.is_dir() and (d / type).is_dir())
+
+    return themes
