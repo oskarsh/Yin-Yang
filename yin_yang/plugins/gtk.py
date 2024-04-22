@@ -52,8 +52,8 @@ class _Gnome(PluginCommandline):
     @property
     def available(self) -> bool:
         return test_gnome_availability(self.command)
-    
-    
+
+
 class _Budgie(PluginCommandline):
     name = 'GTK'
 
@@ -83,10 +83,11 @@ class _Kde(DBusPlugin):
         self.message.setArguments([theme])
 
     def set_theme(self, theme: str):
-        """Call DBus interface of kde-ftk-config if installed.
+        """Call DBus interface of kde-gtk-config if installed.
         Otherwise try changing xsettingsd's conf and dconf"""
 
-        if self.connection.interface().isServiceRegistered('org.kde.GtkConfig'):
+        if self.connection.interface().isServiceRegistered('org.kde.GtkConfig').value():
+            logger.debug("Detected kde-gtk-config, use it")
             super().set_theme(theme)
             return
 
@@ -110,7 +111,7 @@ class _Kde(DBusPlugin):
         subprocess.run(['killall', '-HUP', 'xsettingsd'])
 
         # change dconf db. since dconf sending data as GVariant, use gsettings instead
-        subprocess.run(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
+        subprocess.run(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', f'{theme}'])
         color_scheme = 'prefer-dark' if theme == self.theme_dark else 'prefer-light'
         subprocess.run(['gsettings', 'set', 'org.gnome.desktop.interface', 'color-scheme', f'{color_scheme}'])
 
