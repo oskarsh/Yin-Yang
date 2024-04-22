@@ -2,11 +2,11 @@ import logging
 import subprocess
 from pathlib import Path
 
-from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
-from PySide6.QtDBus import QDBusMessage
+from PySide6.QtWidgets import QDialogButtonBox, QLineEdit, QVBoxLayout, QWidget
+
+from yin_yang.plugins._plugin import PluginCommandline, PluginDesktopDependent
 
 from ..meta import Desktop
-from yin_yang.plugins._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
 from .system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
@@ -86,16 +86,15 @@ def check_theme(theme: str) -> bool:
     return True
 
 
-class _Kde(DBusPlugin):
+class _Kde(PluginCommandline):
     @property
     def name(self):
         return 'Wallpaper'
 
     def __init__(self):
-        super().__init__()
+        super().__init__(['/usr/bin/plasma-apply-wallpaperimage', '{theme}'])
         self._theme_light = None
         self._theme_dark = None
-        self.message_data = ['org.kde.plasmashell', '/PlasmaShell', 'org.kde.PlasmaShell', 'evaluateScript']
 
     @property
     def theme_light(self):
@@ -118,19 +117,6 @@ class _Kde(DBusPlugin):
     @property
     def available(self) -> bool:
         return True
-
-    def create_message(self, theme: str):
-        message = QDBusMessage.createMethodCall(*self.message_data)
-        message.setArguments([
-            'string:'
-            'var Desktops = desktops();'
-            'for (let i = 0; i < Desktops.length; i++) {'
-            '    let d = Desktops[i];'
-            '    d.wallpaperPlugin = "org.kde.image";'
-            '    d.currentConfigGroup = Array("Wallpaper", "org.kde.image", "General");'
-            f'    d.writeConfig("Image", "file:{theme}");'
-            '}'
-        ])
 
 
 class _Xfce(PluginCommandline):
