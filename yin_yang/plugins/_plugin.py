@@ -254,11 +254,11 @@ class ExternalPlugin(Plugin):
 
 class DBusPlugin(Plugin):
     """A class for plugins that mainly switching theme via DBus"""
-    def __init__(self):
+    def __init__(self, message_data: List[str]):
         super().__init__()
         self.connection = QDBusConnection.sessionBus()
         self.message = QDBusMessage()
-        self.message_data: List[str] = ['' for _ in range(4)]  # Store DBusMessage data(destination, path, interface, method)
+        self.message_data: List[str] = message_data  # Store DBusMessage data(destination, path, interface, method)
 
     def set_theme(self, theme: str):
         """Check arguments, create DBus message and then call"""

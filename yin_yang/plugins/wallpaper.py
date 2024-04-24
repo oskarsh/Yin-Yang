@@ -92,10 +92,9 @@ class _Kde(DBusPlugin):
         return 'Wallpaper'
 
     def __init__(self):
-        super().__init__()
+        super().__init__(['org.kde.plasmashell', '/PlasmaShell', 'org.kde.PlasmaShell', 'evaluateScript'])
         self._theme_light = None
         self._theme_dark = None
-        self.message_data = ['org.kde.plasmashell', '/PlasmaShell', 'org.kde.PlasmaShell', 'evaluateScript']
 
     @property
     def theme_light(self):
