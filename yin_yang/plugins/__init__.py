@@ -1,3 +1,4 @@
+from typing import List
 from ..meta import Desktop
 from . import system, colors, gtk, icons, kvantum, wallpaper, custom
 from . import firefox, only_office, okular
@@ -9,7 +10,7 @@ from . import notify
 from yin_yang.plugins._plugin import Plugin, ExternalPlugin
 
 
-def get_plugins(desktop: Desktop) -> [Plugin]:
+def get_plugins(desktop: Desktop) -> List[Plugin]:
     return [
         system.System(desktop),
         colors.Colors(desktop),
