@@ -257,7 +257,7 @@ class DBusPlugin(Plugin):
     def __init__(self, message_data: List[str]):
         super().__init__()
         self.connection = QDBusConnection.sessionBus()
-        self.message = QDBusMessage()
+        self.message: QDBusMessage
         self.message_data: List[str] = message_data  # Store DBusMessage data(destination, path, interface, method)
 
     def set_theme(self, theme: str):
