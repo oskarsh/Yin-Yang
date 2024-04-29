@@ -279,7 +279,7 @@ class DBusPlugin(Plugin):
         return self.connection.call(self.message)
 
     def list_paths(self, service: str, path: str) -> List[str]:
-        """ Get all subpath under given pth of service
+        """ Get all subpath under a given pth of service
         :path: should start with / but without / on its end
         """
         assert path.startswith('/') and not path.endswith('/'), "list_paths wrong, :path: should start with / but without / on its end"
