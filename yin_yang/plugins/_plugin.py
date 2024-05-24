@@ -268,11 +268,11 @@ class DBusPlugin(Plugin):
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
-        self.create_message(theme)
+        self.message = self.create_message(theme)
         self.call()
 
     @abstractmethod
-    def create_message(self, theme: str) -> None:
+    def create_message(self, theme: str) -> QDBusMessage:
         raise NotImplementedError(f'Plugin {self.name} did not implement create_message()')
 
     def call(self) -> QDBusMessage:

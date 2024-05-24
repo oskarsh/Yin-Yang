@@ -118,7 +118,7 @@ class _Kde(DBusPlugin):
     def available(self) -> bool:
         return True
 
-    def create_message(self, theme: str):
+    def create_message(self, theme: str) -> QDBusMessage:
         message = QDBusMessage.createMethodCall(*self.message_data)
         message.setArguments([
             'string:'
@@ -130,6 +130,7 @@ class _Kde(DBusPlugin):
             f'    d.writeConfig("Image", "file:{theme}");'
             '}'
         ])
+        return message
 
 
 class _Xfce(PluginCommandline):

@@ -52,9 +52,10 @@ class Konsole(DBusPlugin):
         self.update_profile(True, value)
         self._theme_dark = value
 
-    def create_message(self, theme: str):
+    def create_message(self, theme: str) -> QDBusMessage:
         message = QDBusMessage.createMethodCall(*self.message_data)
         message.setArguments([theme])
+        return message
 
     def set_mode(self, dark: bool) -> bool:
         # run checks

@@ -77,9 +77,10 @@ class _Kde(DBusPlugin):
         self.theme_light = 'Breeze'
         self.theme_dark = 'Breeze'
 
-    def create_message(self, theme: str):
-        self.message = QDBusMessage.createMethodCall(*self.message_data)
-        self.message.setArguments([theme])
+    def create_message(self, theme: str) -> QDBusMessage:
+        message = QDBusMessage.createMethodCall(*self.message_data)
+        message.setArguments([theme])
+        return message
 
     def set_theme(self, theme: str):
         """Call DBus interface of kde-gtk-config if installed.
