@@ -35,13 +35,6 @@ class QTPositionReceiver(QObject):
         """Track the position provided by the service."""
         self._lastPosition = position
 
-        # TODO: Here trigger a refresh.
-        # I tried the following but it seem to not work:
-        ## Trigger a refresh. Ugly but does the job
-        # from yin_yang.config import config
-        # _ = config.location
-        # del config
-
     def lastKnownPosition(self):
         """Return the last known position, if valid."""
         return self._lastPosition
