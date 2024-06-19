@@ -7,8 +7,6 @@
 
     <metadata_license>MIT</metadata_license>
     <project_license>MIT</project_license>
-    <url type="homepage">https://github.com/oskarsh/Yin-Yang</url>
-    <content_rating type="oars-1.1" />
 
     <developer id="sh.oskar">
         <name>Lorenz Hoffmann</name>
@@ -41,6 +39,10 @@
         <color type="primary" schema_preference="light">#e0e0e0</color>
         <color type="primary" schema_preference="dark">#0c0c0c</color>
     </branding>
+
+    <content_rating type="oars-1.1" />
+
+    <url type="homepage">https://github.com/oskarsh/Yin-Yang</url>
 
     <releases>
         <release version="v3.4.0" date="2024-03-17">
