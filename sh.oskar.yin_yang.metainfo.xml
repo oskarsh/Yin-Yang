@@ -46,6 +46,8 @@
     <url type="bugtracker">https://github.com/oskarsh/Yin-Yang/issues</url>
     <url type="donation">https://www.patreon.com/L0drex</url>
 
+    <translation type="qt">yin_yang</translation>
+
     <releases>
         <release version="v3.4.0" date="2024-03-17">
             <url type="details">https://github.com/oskarsh/Yin-Yang/releases/tag/v3.4</url>
