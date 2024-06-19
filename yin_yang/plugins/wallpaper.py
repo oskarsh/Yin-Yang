@@ -6,7 +6,7 @@ from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 from PySide6.QtDBus import QDBusMessage
 
 from ..meta import Desktop
-from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
+from yin_yang.plugins._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
 from .system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
@@ -87,15 +87,17 @@ def check_theme(theme: str) -> bool:
 
 
 class _Kde(DBusPlugin):
-    name = 'Wallpaper'
+    @property
+    def name(self):
+        return 'Wallpaper'
 
     def __init__(self):
-        super().__init__()
+        super().__init__(['org.kde.plasmashell', '/PlasmaShell', 'org.kde.PlasmaShell', 'evaluateScript'])
         self._theme_light = None
         self._theme_dark = None
 
     @property
-    def theme_light(self) -> str:
+    def theme_light(self):
         return self._theme_light
 
     @theme_light.setter
@@ -104,7 +106,7 @@ class _Kde(DBusPlugin):
         self._theme_light = value
 
     @property
-    def theme_dark(self) -> str:
+    def theme_dark(self):
         return self._theme_dark
 
     @theme_dark.setter
@@ -117,12 +119,7 @@ class _Kde(DBusPlugin):
         return True
 
     def create_message(self, theme: str) -> QDBusMessage:
-        message = QDBusMessage.createMethodCall(
-            'org.kde.plasmashell',
-            '/PlasmaShell',
-            'org.kde.PlasmaShell',
-            'evaluateScript',
-        )
+        message = QDBusMessage.createMethodCall(*self.message_data)
         message.setArguments([
             'string:'
             'var Desktops = desktops();'

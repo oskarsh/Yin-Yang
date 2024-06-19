@@ -4,13 +4,13 @@ import subprocess
 from abc import ABC, abstractmethod
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Optional, List
+from typing import List, Optional
 
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 from PySide6.QtGui import QColor, QRgba64
-from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
+from PySide6.QtWidgets import QComboBox, QGroupBox, QHBoxLayout, QLineEdit
 
-from ..meta import UnsupportedDesktopError, FileFormat
+from ..meta import FileFormat, UnsupportedDesktopError
 
 logger = logging.getLogger(__name__)
 
@@ -253,25 +253,45 @@ class ExternalPlugin(Plugin):
 
 
 class DBusPlugin(Plugin):
-    def __init__(self):
+    """A class for plugins that mainly switching theme via DBus"""
+    def __init__(self, message_data: List[str]):
         super().__init__()
         self.connection = QDBusConnection.sessionBus()
+        self.message: QDBusMessage
+        self.message_data: List[str] = message_data  # Store DBusMessage data(destination, path, interface, method)
 
     def set_theme(self, theme: str):
+        """Check arguments, create DBus message and then call"""
         if not (self.available and self.enabled):
             return
 
         if not theme:
             raise ValueError(f'Theme \"{theme}\" is invalid')
 
-        self.call(self.create_message(theme))
+        self.message = self.create_message(theme)
+        self.call()
 
     @abstractmethod
     def create_message(self, theme: str) -> QDBusMessage:
         raise NotImplementedError(f'Plugin {self.name} did not implement create_message()')
 
-    def call(self, message) -> QDBusMessage:
-        return self.connection.call(message)
+    def call(self) -> QDBusMessage:
+        return self.connection.call(self.message)
+
+    def list_paths(self, service: str, path: str) -> List[str]:
+        """ Get all subpath under a given pth of service
+        :path: should start with / but without / on its end
+        """
+        assert path.startswith('/') and not path.endswith('/'), "list_paths wrong, :path: should start with / but without / on its end"
+        msg = QDBusMessage.createMethodCall(service, path, "org.freedesktop.DBus.Introspectable", "Introspect")
+        reply = self.connection.call(msg)
+        if reply.errorName():
+            logger.debug(f"No subpath available under {service} {path}")
+            return []
+
+        xml = reply.arguments()[0]
+        sub_path_names = [line.split('"')[1] for line in xml.split("\n") if line.startswith("  <node name=")]
+        return [path + '/' + sub for sub in sub_path_names]
 
 
 class ConfigFilePlugin(Plugin):
@@ -295,7 +315,7 @@ class ConfigFilePlugin(Plugin):
                 case FileFormat.JSON.value:
                     try:
                         return json.load(file)
-                    except json.decoder.JSONDecodeError as e:
+                    except json.decoder.JSONDecodeError:
                         return self.default_config
                 case FileFormat.CONFIG.value:
                     config = ConfigParser()
@@ -308,8 +328,10 @@ class ConfigFilePlugin(Plugin):
     def write_config(self, value: str | ConfigParser, path: Path, **kwargs):
         with open(path, 'w') as file:
             if self.file_format.value == FileFormat.CONFIG.value:
+                assert type(value) is ConfigParser, "Should passing ConfigParser"
                 value.write(file, **kwargs)
             else:
+                assert type(value) is str, "Should passing str"
                 file.write(value)
 
     def set_theme(self, theme: str, ignore_theme_check=False):
