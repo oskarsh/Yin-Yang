@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
-    <id>sh.oskarsh.yin_yang</id>
+    <id>sh.oskar.yin_yang</id>
 
     <name>Yin &amp; Yang</name>
     <summary>Automatically switch between light and dark themes</summary>
