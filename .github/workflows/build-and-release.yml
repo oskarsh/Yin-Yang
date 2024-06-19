@@ -49,10 +49,10 @@ jobs:
       - name: Build Whl for release
         run: poetry build -f wheel -n -o .
       # Upload build artifacts for later use
-      - name: Upload yin-yang whl for flatpak build
+      - name: Upload yin_yang whl for flatpak build
         uses: actions/upload-artifact@v4
         with:
-          name: yin-yang-${{ github.sha }}-py3-none-any.whl
+          name: yin_yang-${{ github.sha }}-py3-none-any.whl
           path: '*.whl'
 
   flatpak:
@@ -71,10 +71,10 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         path: dist/
-        name: yin-yang-${{ github.sha }}-py3-none-any.whl
+        name: yin_yang-${{ github.sha }}-py3-none-any.whl
     - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
       with:
-        bundle: yin-yang.flatpak
-        manifest-path: sh.oskar.yin-yang.json
+        bundle: yin_yang.flatpak
+        manifest-path: sh.oskar.yin_yang.json
         cache-key: flatpak-builder-${{ github.sha }}
         arch: x86_64

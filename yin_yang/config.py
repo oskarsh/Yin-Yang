@@ -199,7 +199,7 @@ class ConfigManager(dict):
     def load(self) -> None:
         """Load config from file"""
 
-        # generate path for yin-yang if there is none this will be skipped
+        # generate path for yin_yang if there is none this will be skipped
         pathlib.Path(home + '/.config/yin_yang').mkdir(parents=True, exist_ok=True)
 
         config_loaded = {}
@@ -360,7 +360,7 @@ class ConfigManager(dict):
         process_number = 0
         for process in process_iter():
             try:
-                if 'yin-yang' in process.name():
+                if 'yin_yang' in process.name():
                     process_number += 1
             except NoSuchProcess:
                 pass

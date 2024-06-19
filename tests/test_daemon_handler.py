@@ -36,7 +36,7 @@ class DaemonTest(unittest.TestCase):
                 lines = service.readlines()
             with open(daemon_handler.SERVICE_PATH, 'w') as service:
                 for line in lines:
-                    service.write(re.sub('ExecStart=\/usr\/bin\/yin-yang --systemd', 'ExecStart='+str(Path.home())+'\/.local\/share\/flatpak\/exports\/bin\/sh.oskar.yin-yang --systemd', line))
+                    service.write(re.sub('ExecStart=\/usr\/bin\/yin_yang --systemd', 'ExecStart='+str(Path.home())+'\/.local\/share\/flatpak\/exports\/bin\/sh.oskar.yin_yang --systemd', line))
         shutil.copyfile(daemon_handler.TIMER_PATH, daemon_handler.TIMER_PATH.with_suffix('.timer_backup'))
 
     @classmethod

@@ -30,10 +30,10 @@ def create_files():
             for line in lines:
                 service.write(
                     re.sub(
-                        'ExecStart=/usr/bin/yin-yang --systemd',
+                        'ExecStart=/usr/bin/yin_yang --systemd',
                         'ExecStart='
                         + str(Path.home())
-                        + '/.local/share/flatpak/exports/bin/sh.oskar.yin-yang --systemd',
+                        + '/.local/share/flatpak/exports/bin/sh.oskar.yin_yang --systemd',
                         line,
                     )
                 )

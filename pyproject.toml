@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "yin-yang"
+name = "yin_yang"
 version = "3.3.0"
 description = "Auto Nightmode for KDE, Gnome, Budgie, VSCode, Atom and more."
 authors = ["Oskar Schachtschneider"]
@@ -36,7 +36,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-yin-yang = "yin_yang:__main__"
+yin_yang = "yin_yang:__main__"
 
 [tool.pyright]
 include = ["yin_yang"]

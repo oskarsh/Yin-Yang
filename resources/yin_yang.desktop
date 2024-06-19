@@ -10,9 +10,9 @@ GenericName=Theme Switcher
 # A comment which can/will be used as a tooltip
 Comment=Auto Nightmode for KDE and VSCode
 # The path to the folder in which the executable is run
-Path=/opt/yin-yang
+Path=/opt/yin_yang
 # The executable of the application, possibly with arguments.
-Exec=yin-yang
+Exec=yin_yang
 # The name of the icon that will be used to display this entry
 Icon=yin_yang
 # Describes whether this application needs to be run in a terminal or not

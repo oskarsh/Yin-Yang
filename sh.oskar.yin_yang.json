@@ -1,5 +1,5 @@
 {
-  "id": "sh.oskar.yin-yang",
+  "id": "sh.oskar.yin_yang",
   "runtime": "org.kde.Platform",
   "runtime-version": "5.15-23.08",
   "sdk": "org.kde.Sdk",
@@ -18,7 +18,7 @@
   "modules": [
     "generated-poetry-sources.json",
     {
-      "name": "yin-yang",
+      "name": "yin_yang",
       "buildsystem": "simple",
       "build-commands": [
         "find dist -name 'yin_yang-*-py3-none-any.whl' -exec pip install --no-deps --no-build-isolation --prefix=/app {} \\;",
@@ -32,19 +32,19 @@
       ]
     },
     {
-      "name": "yin-yang-metadata",
+      "name": "yin_yang-metadata",
       "buildsystem": "simple",
       "build-commands": [
-        "install -Dm644 Yin-Yang.desktop /app/share/applications/sh.oskar.yin-yang.desktop",
-        "sed -i 's|Path=/opt/yin-yang||' /app/share/applications/sh.oskar.yin-yang.desktop",
-        "sed -i 's|Icon=yin_yang|Icon=sh.oskar.yin-yang|' /app/share/applications/sh.oskar.yin-yang.desktop",
-        "sed -i 's|Exec=yin-yang|Exec=runner.sh|' /app/share/applications/sh.oskar.yin-yang.desktop",
-        "install -Dm664 logo.svg /app/share/icons/hicolor/256x256/apps/sh.oskar.yin-yang.svg"
+        "install -Dm644 yin_yang.desktop /app/share/applications/sh.oskar.yin_yang.desktop",
+        "sed -i 's|Path=/opt/yin_yang||' /app/share/applications/sh.oskar.yin_yang.desktop",
+        "sed -i 's|Icon=yin_yang|Icon=sh.oskar.yin_yang|' /app/share/applications/sh.oskar.yin_yang.desktop",
+        "sed -i 's|Exec=yin_yang|Exec=runner.sh|' /app/share/applications/sh.oskar.yin_yang.desktop",
+        "install -Dm664 logo.svg /app/share/icons/hicolor/256x256/apps/sh.oskar.yin_yang.svg"
       ],
       "sources": [
         {
           "type": "file",
-          "path": "./resources/Yin-Yang.desktop"
+          "path": "./resources/yin_yang.desktop"
         },
         {
           "type": "file",
