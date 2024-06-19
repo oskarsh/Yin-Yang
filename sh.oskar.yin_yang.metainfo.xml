@@ -43,6 +43,8 @@
     <content_rating type="oars-1.1" />
 
     <url type="homepage">https://github.com/oskarsh/Yin-Yang</url>
+    <url type="bugtracker">https://github.com/oskarsh/Yin-Yang/issues</url>
+    <url type="donation">https://www.patreon.com/L0drex</url>
 
     <releases>
         <release version="v3.4.0" date="2024-03-17">
