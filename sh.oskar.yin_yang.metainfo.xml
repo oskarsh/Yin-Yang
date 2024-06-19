@@ -7,6 +7,12 @@
 
     <metadata_license>MIT</metadata_license>
     <project_license>MIT</project_license>
+    <url type="homepage">https://github.com/oskarsh/Yin-Yang</url>
+    <content_rating type="oars-1.1" />
+
+    <developer id="sh.oskar">
+        <name>Lorenz Hoffmann</name>
+    </developer>
 
     <recommends>
         <display_length compare="ge">600</display_length>
