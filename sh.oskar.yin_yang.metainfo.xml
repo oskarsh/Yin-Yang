@@ -27,7 +27,7 @@
         </p>
     </description>
 
-    <launchable type="desktop-id">Yin-Yang.desktop</launchable>
+    <launchable type="desktop-id">yin_yang.desktop</launchable>
     <screenshots>
         <screenshot type="default">
             <image>https://raw.githubusercontent.com/oskarsh/Yin-Yang/master/.github/images/header.png</image>
