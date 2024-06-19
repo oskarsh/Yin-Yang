@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>sh.oskarsh.yin_yang</id>
+
+    <name>Yin &amp; Yang</name>
+    <summary>Automatically switch between light and dark themes</summary>
+
+    <metadata_license>MIT</metadata_license>
+    <project_license>MIT</project_license>
+
+    <recommends>
+        <display_length compare="ge">600</display_length>
+    </recommends>
+
+    <description>
+        <p>
+            Yin &amp; Yang allows you to automatically switch between light and dark themes in various
+            desktop environments and apps. The change can happen at certain times defined by you,
+            or even at sunset and sunrise times of your current location.
+            If you prefer, you can also manually trigger a theme switch through an icon in the taskbar.
+        </p>
+    </description>
+
+    <launchable type="desktop-id">Yin-Yang.desktop</launchable>
+    <screenshots>
+        <screenshot type="default">
+            <image>.github/images/header.png</image>
+        </screenshot>
+        <screenshot>
+            <image>.github/images/settings.png</image>
+        </screenshot>
+    </screenshots>
+</component>
