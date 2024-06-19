@@ -17,27 +17,36 @@ jobs:
         os: [ubuntu-22.04]
     runs-on: ${{matrix.os}}
     steps:
+      # Checkout repo and set up python
       - uses: actions/checkout@v4
       - name: Install Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{matrix.python-version}}
+      # Install and configure poetry
       - name: Install Poetry
         uses: abatilo/actions-poetry@v2
       - name: Set up local virtual environment
         run: |
           poetry config virtualenvs.create true --local
           poetry config virtualenvs.in-project true --local
+      # Load cached venv if it exists
       - name: Cache packages
+        id: cached-poetry-dependencies
         uses: actions/cache@v4
         with:
           # This path is specific to ubuntu
           path: ./.venv
           key: venv-${{ hashFiles('poetry.lock') }}
-      - name: Install dependencies
+      # Install dependencies of cache does not exist
+      - name: Install system dependencies
         run: |
           sudo apt install qt6-base-dev libsystemd-dev gcc
-          poetry install
+      - name: Install Poetry dependencies
+        # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: |
+          poetry install --sync --no-interaction
+      # Build and test Yin-Yang
       - name: Compile ui, translations and resources
         run: poetry run ./scripts/build_ui.sh
       - name: Lint with flake8

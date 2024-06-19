@@ -1,0 +1,25 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Yin-Yang",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "module": "yin_yang",
+      "justMyCode": true
+    },
+    {
+      "name": "Debug Poetry Generator",
+      "type": "debugpy",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "program": "flatpak-poetry-generator.py",
+      "justMyCode": true,
+      "args": ["poetry.lock"]
+    }
+  ]
+}

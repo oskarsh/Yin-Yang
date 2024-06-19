@@ -7,7 +7,9 @@ repository = "https://github.com/oskarsh/Yin-Yang"
 
 license = "MIT"
 readme = "README.md"
-packages = [{include = "yin_yang"}]
+packages = [
+  { include = "yin_yang" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.10,<3.13"
@@ -23,7 +25,27 @@ requests = "2.31.0"
 [tool.poetry.group.DEV.dependencies]
 flake8 = "^7.0.0"
 pytest = "^8.1.1"
+pyyaml = "^6.0.1"
+toml = "^0.10.2"
+setuptools = "^69.5.1"
+wheel = "^0.43.0"
+cython = "<3.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+yin-yang = "yin_yang:__main__"
+
+[tool.pyright]
+include = ["yin_yang"]
+exclude = ["**/node_modules",
+  "**/__pycache__",
+  "build",
+  "pytest_cache",
+  ".flatpak-builder"
+]
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"

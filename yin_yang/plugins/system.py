@@ -1,24 +1,28 @@
 import json
 import logging
-import subprocess
-import pwd
 import os
+import pwd
 from configparser import ConfigParser
 from pathlib import Path
 
 from PySide6.QtCore import QLocale
 from PySide6.QtDBus import QDBusMessage, QDBusVariant
 
+from yin_yang import helpers
+
 from ..meta import Desktop
-from ._plugin import PluginDesktopDependent, PluginCommandline, themes_from_theme_directories, DBusPlugin
+from ._plugin import (
+    DBusPlugin,
+    PluginCommandline,
+    PluginDesktopDependent,
+    themes_from_theme_directories,
+)
 
 logger = logging.getLogger(__name__)
 
 
 def test_gnome_availability(command) -> bool:
-    return PluginCommandline.check_command(
-        [command[0], 'get', command[2], command[3]]
-    )
+    return PluginCommandline.check_command([command[0], 'get', command[2], command[3]])
 
 
 class System(PluginDesktopDependent):
@@ -46,7 +50,15 @@ class _Gnome(PluginCommandline):
     # TODO allow using the default themes, not only user themes
 
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.gnome.shell.extensions.user-theme', 'name', '{theme}'])
+        super().__init__(
+            [
+                'gsettings',
+                'set',
+                'org.gnome.shell.extensions.user-theme',
+                'name',
+                '{theme}',
+            ]
+        )
 
     @property
     def available(self) -> bool:
@@ -57,7 +69,15 @@ class _Budgie(PluginCommandline):
     name = 'System'
 
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'com.solus-project.budgie-panel', 'dark-theme', '{theme}'])
+        super().__init__(
+            [
+                'gsettings',
+                'set',
+                'com.solus-project.budgie-panel',
+                'dark-theme',
+                '{theme}',
+            ]
+        )
         self.theme_light = 'light'
         self.theme_dark = 'dark'
 
@@ -89,7 +109,7 @@ class _Budgie(PluginCommandline):
 
 
 def get_readable_kde_theme_name(file) -> str:
-    """Searches for the long_name in the file and maps it to the found short name"""
+    '''Searches for the long_name in the file and maps it to the found short name'''
 
     for line in file:
         if 'Name=' in line:
@@ -108,9 +128,7 @@ def get_readable_kde_theme_name(file) -> str:
 def get_name_key(meta):
     locale = filter(
         lambda name: name in meta['KPlugin'],
-        [f'Name[{QLocale().name()}]',
-         f'Name[{QLocale().language()}]',
-         'Name']
+        [f'Name[{QLocale().name()}]', f'Name[{QLocale().language()}]', 'Name'],
     )
     return next(locale)
 
@@ -131,11 +149,13 @@ class _Kde(PluginCommandline):
 
         # aliases for path to use later on
         user = pwd.getpwuid(os.getuid())[0]
-        path = "/home/" + user + "/.local/share/plasma/look-and-feel/"
+        path = '/home/' + user + '/.local/share/plasma/look-and-feel/'
 
         # asks the system what themes are available
         # noinspection SpellCheckingInspection
-        long_names = subprocess.check_output(["lookandfeeltool", "-l"], universal_newlines=True)
+        long_names = helpers.check_output(
+            ['lookandfeeltool', '-l'], universal_newlines=True
+        )
         long_names = long_names.splitlines()
         long_names.sort()
 
@@ -144,14 +164,20 @@ class _Kde(PluginCommandline):
             # trying to get the Desktop file
             try:
                 # json in newer versions
-                with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.json', 'r') as file:
+                with open(
+                    f'{helpers.get_usr()}share/plasma/look-and-feel/{long_name}/metadata.json',
+                    'r',
+                ) as file:
                     meta = json.load(file)
                     key = get_name_key(meta)
                     self.translations[long_name] = meta['KPlugin'][key]
             except OSError:
                 try:
                     # load the name from the metadata.desktop file
-                    with open(f'/usr/share/plasma/look-and-feel/{long_name}/metadata.desktop', 'r') as file:
+                    with open(
+                        f'{helpers.get_usr()}share/plasma/look-and-feel/{long_name}/metadata.desktop',
+                        'r',
+                    ) as file:
                         self.translations[long_name] = get_readable_kde_theme_name(file)
                 except OSError:
                     # check the next path if the themes exist there
@@ -159,7 +185,9 @@ class _Kde(PluginCommandline):
                         # load the name from the metadata.desktop file
                         with open(f'{path}{long_name}/metadata.desktop', 'r') as file:
                             # search for the name
-                            self.translations[long_name] = get_readable_kde_theme_name(file)
+                            self.translations[long_name] = get_readable_kde_theme_name(
+                                file
+                            )
                     except OSError:
                         # if no file exist lets just use the long name
                         self.translations[long_name] = long_name
@@ -168,10 +196,15 @@ class _Kde(PluginCommandline):
 
 
 class _Mate(PluginCommandline):
-    theme_directories = [Path('/usr/share/themes'), Path.home() / '.themes']
+    theme_directories = [
+        Path(helpers.get_usr() + 'share/themes'),
+        Path.home() / '.themes',
+    ]
 
     def __init__(self):
-        super().__init__(['dconf', 'write', '/org/mate/marco/general/theme', '\'{theme}\''])
+        super().__init__(
+            ['dconf', 'write', '/org/mate/marco/general/theme', '"{theme}"']
+        )
         self.theme_light = 'Yaru'
         self.theme_dark = 'Yaru-dark'
 
@@ -205,7 +238,9 @@ class _Mate(PluginCommandline):
 
 class _Cinnamon(PluginCommandline):
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.cinnamon.theme', 'name', '\"{theme}\"'])
+        super().__init__(
+            ['gsettings', 'set', 'org.cinnamon.theme', 'name', '"{theme}"']
+        )
         self.theme_light = 'Mint-X-Teal'
         self.theme_dark = 'Mint-Y-Dark-Brown'
 
@@ -217,10 +252,7 @@ class _Cinnamon(PluginCommandline):
 class _Xfce(DBusPlugin):
     def create_message(self, theme: str) -> QDBusMessage:
         message = QDBusMessage.createMethodCall(
-            'org.xfce.Xfconf',
-            '/org/xfce/Xfconf',
-            'org.xfce.Xfconf',
-            'SetProperty'
+            'org.xfce.Xfconf', '/org/xfce/Xfconf', 'org.xfce.Xfconf', 'SetProperty'
         )
         theme_variant = QDBusVariant()
         theme_variant.setVariant(theme)

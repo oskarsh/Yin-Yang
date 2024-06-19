@@ -1,13 +1,19 @@
 import logging
-import subprocess
-from os import scandir, path
+from os import path, scandir
 from pathlib import Path
 
 from PySide6.QtDBus import QDBusMessage
 
-from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin, themes_from_theme_directories
-from .system import test_gnome_availability
+from yin_yang import helpers
+
 from ..meta import Desktop
+from ._plugin import (
+    DBusPlugin,
+    PluginCommandline,
+    PluginDesktopDependent,
+    themes_from_theme_directories,
+)
+from .system import test_gnome_availability
 
 logger = logging.getLogger(__name__)
 
@@ -22,8 +28,10 @@ class Gtk(PluginDesktopDependent):
             case Desktop.GNOME:
                 super().__init__(_Gnome())
                 if not self.strategy.available:
-                    print('You need to install an extension for gnome to use it. \n'
-                          'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/')
+                    print(
+                        'You need to install an extension for gnome to use it. \n'
+                        'You can get it from here: https://extensions.gnome.org/extension/19/user-themes/'
+                    )
             case Desktop.MATE:
                 super().__init__(_Mate())
             case Desktop.XFCE:
@@ -45,20 +53,24 @@ class _Gnome(PluginCommandline):
     name = 'GTK'
 
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
+        super().__init__(
+            ['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}']
+        )
         self.theme_light = 'Default'
         self.theme_dark = 'Default'
 
     @property
     def available(self) -> bool:
         return test_gnome_availability(self.command)
-    
-    
+
+
 class _Budgie(PluginCommandline):
     name = 'GTK'
 
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}'])
+        super().__init__(
+            ['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', '{theme}']
+        )
         self.theme_light = 'Default'
         self.theme_dark = 'Default'
 
@@ -77,10 +89,7 @@ class _Kde(DBusPlugin):
 
     def create_message(self, theme: str) -> QDBusMessage:
         message = QDBusMessage.createMethodCall(
-            'org.kde.GtkConfig',
-            '/GtkConfig',
-            'org.kde.GtkConfig',
-            'setGtkTheme'
+            'org.kde.GtkConfig', '/GtkConfig', 'org.kde.GtkConfig', 'setGtkTheme'
         )
         message.setArguments([theme])
         return message
@@ -108,19 +117,23 @@ class _Kde(DBusPlugin):
             f.writelines(lines)
 
         # send signal to read new config
-        subprocess.run(['killall', '-HUP', 'xsettingsd'])
+        helpers.run(['killall', '-HUP', 'xsettingsd'])
 
 
 class _Xfce(PluginCommandline):
     def __init__(self):
-        super(_Xfce, self).__init__(['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName', '-s', '{theme}'])
+        super(_Xfce, self).__init__(
+            ['xfconf-query', '-c', 'xsettings', '-p', '/Net/ThemeName', '-s', '{theme}']
+        )
         self.theme_light = 'Adwaita'
         self.theme_dark = 'Adwaita-dark'
 
 
 class _Mate(PluginCommandline):
     def __init__(self):
-        super().__init__(['dconf', 'write', '/org/mate/desktop/interface/gtk-theme', '\'{theme}\''])
+        super().__init__(
+            ['dconf', 'write', '/org/mate/desktop/interface/gtk-theme', '"{theme}"']
+        )
         self.theme_light = 'Yaru'
         self.theme_dark = 'Yaru-dark'
 
@@ -131,7 +144,15 @@ class _Mate(PluginCommandline):
 
 class _Cinnamon(PluginCommandline):
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.interface', 'gtk-theme', '\"{theme}\"'])
+        super().__init__(
+            [
+                'gsettings',
+                'set',
+                'org.cinnamon.desktop.interface',
+                'gtk-theme',
+                '"{theme}"',
+            ]
+        )
         self.theme_light = 'Adwaita'
         self.theme_dark = 'Adwaita-dark'
 

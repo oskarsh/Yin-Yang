@@ -1,6 +1,6 @@
 from logging import Handler
 
-from PySide6.QtDBus import QDBusMessage, QDBusConnection
+from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
 
 def create_dbus_message(title: str, body: str):
@@ -8,7 +8,7 @@ def create_dbus_message(title: str, body: str):
         'org.freedesktop.portal.Desktop',
         '/org/freedesktop/portal/desktop',
         'org.freedesktop.portal.Notification',
-        'AddNotification'
+        'AddNotification',
     )
 
     notification = {
@@ -18,16 +18,14 @@ def create_dbus_message(title: str, body: str):
         'priority': 'low',
     }
 
-    message.setArguments([
-        'YingYang.ThemeChanged',
-        notification
-    ])
+    message.setArguments(['YingYang.ThemeChanged', notification])
 
     return message
 
 
 class NotificationHandler(Handler):
     """Shows logs as notifications"""
+
     def emit(self, record):
         connection = QDBusConnection.sessionBus()
         message = create_dbus_message(record.levelname, str(record.msg))

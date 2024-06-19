@@ -4,6 +4,7 @@ from pathlib import Path
 
 from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 from PySide6.QtDBus import QDBusMessage
+from yin_yang import helpers
 
 from ..meta import Desktop
 from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
@@ -139,7 +140,7 @@ class _Kde(DBusPlugin):
 class _Xfce(PluginCommandline):
     def __init__(self):
         # first, get all monitors
-        properties = str(subprocess.check_output(['xfconf-query', '-c', 'xfce4-desktop', '-l']))
+        properties = str(helpers.check_output(['xfconf-query', '-c', 'xfce4-desktop', '-l']))
         monitor = next(p for p in properties.split('\\n') if p.endswith('/workspace0/last-image'))
 
         super().__init__(['xfconf-query', '-c', 'xfce4-desktop', '-p', monitor, '-s', '{theme}'])

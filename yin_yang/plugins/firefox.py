@@ -1,6 +1,6 @@
 import json
-from configparser import ConfigParser
 import logging
+from configparser import ConfigParser
 from os.path import isdir
 from pathlib import Path
 

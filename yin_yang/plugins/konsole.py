@@ -10,18 +10,21 @@ from shutil import copyfile
 import psutil
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 
+from yin_yang import helpers
+
 from ._plugin import Plugin
 
 logger = logging.getLogger(__name__)
 
 
 class Konsole(Plugin):
-    """
+    '''
     Themes are profiles. To use a color scheme,
     create a new profile or edit one to use the desired color scheme.
     This is necessary to allow live theme changes.
-    """
-    global_path = Path('/usr/share/konsole')
+    '''
+
+    global_path = Path(helpers.get_usr() + 'share/konsole')
     config_path = Path.home() / '.config/konsolerc'
 
     @property
@@ -65,7 +68,8 @@ class Konsole(Plugin):
 
         # Get the process IDs of all running Konsole instances owned by the current user
         process_ids = [
-            proc.pid for proc in psutil.process_iter()
+            proc.pid
+            for proc in psutil.process_iter()
             if proc.name() == 'konsole' and proc.username() == os.getlogin()
         ]
 
@@ -82,7 +86,8 @@ class Konsole(Plugin):
         set_profile('org.kde.yakuake', profile, set_default_profile=True)
 
         process_ids = [
-            proc.pid for proc in psutil.process_iter()
+            proc.pid
+            for proc in psutil.process_iter()
             if proc.name() == 'dolphin' and proc.username() == os.getlogin()
         ]
 
@@ -90,8 +95,7 @@ class Konsole(Plugin):
         for proc_id in process_ids:
             logger.debug(f'Changing profile in dolphin session {proc_id}')
             set_profile(f'org.kde.dolphin-{proc_id}', profile)
-            set_profile(f'org.kde.dolphin-{proc_id}',
-                        profile, set_default_profile=True)
+            set_profile(f'org.kde.dolphin-{proc_id}', profile, set_default_profile=True)
 
         return True
 
@@ -104,11 +108,15 @@ class Konsole(Plugin):
         if not self.available:
             return {}
 
-        themes = dict(sorted([
-            (p.with_suffix('').name, p)
-            for p in chain(self.global_path.iterdir(), self.user_path.iterdir())
-            if p.is_file() and p.suffix == '.colorscheme'
-        ]))
+        themes = dict(
+            sorted(
+                [
+                    (p.with_suffix('').name, p)
+                    for p in chain(self.global_path.iterdir(), self.user_path.iterdir())
+                    if p.is_file() and p.suffix == '.colorscheme'
+                ]
+            )
+        )
 
         themes_dict = {}
         config_parser = ConfigParser()
@@ -131,7 +139,7 @@ class Konsole(Plugin):
         # cant use config parser because of weird file structure
         with self.config_path.open('r') as file:
             for line in file:
-                # Search for the pattern "DefaultProfile=*"
+                # Search for the pattern 'DefaultProfile=*'
                 match = re.search(r'DefaultProfile=(.*)', line)
 
                 # If a match is found, return the content of the wildcard '*'
@@ -151,14 +159,14 @@ class Konsole(Plugin):
 
         if value is None:
             # create a custom profile manually
-            file_content = """[Appearance]
+            file_content = '''[Appearance]
 ColorScheme=Breeze
 
 [General]
 Command=/bin/bash
 Name=Fish
 Parent=FALLBACK/
-"""
+'''
 
             with (self.user_path / 'Default.profile').open('w') as file:
                 file.writelines(file_content)
@@ -176,7 +184,7 @@ Parent=FALLBACK/
         with self.config_path.open('r') as file:
             lines = file.readlines()
             for i, line in enumerate(lines):
-                # Search for the pattern "DefaultProfile=*"
+                # Search for the pattern 'DefaultProfile=*'
                 match = re.search(r'DefaultProfile=(.*)', line)
 
                 # If a match is found, return the content of the wildcard '*'
@@ -215,7 +223,9 @@ Parent=FALLBACK/
             profile_config.write(file)
 
     def create_profiles(self):
-        logger.debug('Creating new profiles for live-switching between light and dark themes.')
+        logger.debug(
+            'Creating new profiles for live-switching between light and dark themes.'
+        )
         # copy default profile to create theme profiles
         light_profile = self.user_path / 'Light.profile'
         dark_profile = self.user_path / 'Dark.profile'
@@ -254,32 +264,28 @@ def set_profile(service: str, profile: str, set_default_profile: bool = False):
 
     # maybe it's possible with pyside6 dbus packages, but this was simpler and worked
     try:
-        sessions = subprocess.check_output(
-            f'qdbus {service} | grep "{path}"', shell=True)
+        sessions = helpers.check_output(f'qdbus {service} | grep "{path}"')
     except subprocess.CalledProcessError:
         try:
-            sessions = subprocess.check_output(
+            sessions = helpers.check_output(
                 f'qdbus org.kde.konsole | grep "{path}"', shell=True
             )
             logger.debug(f'Found org.kde.konsole, use that instead')
-            service = "org.kde.konsole"
+            service = 'org.kde.konsole'
         except subprocess.CalledProcessError:
             # happens when dolphins konsole is not opened
             logger.debug(
-                f'No Konsole sessions available in service {service}, skipping')
+                f'No Konsole sessions available in service {service}, skipping'
+            )
             return
     sessions = sessions.decode('utf-8').removesuffix('\n').split('\n')
 
     # loop: process sessions
     for session in sessions:
         logger.debug(
-            f'Changing {"default" if set_default_profile else ""} profile of session {session} to {profile}')
-        # set profile
-        message = QDBusMessage.createMethodCall(
-            service,
-            session,
-            interface,
-            method
+            f'Changing {"default" if set_default_profile else ""} profile of session {session} to {profile}'
         )
+        # set profile
+        message = QDBusMessage.createMethodCall(service, session, interface, method)
         message.setArguments([profile])
         connection.call(message)
