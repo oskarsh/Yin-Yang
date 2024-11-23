@@ -1,7 +1,7 @@
 import logging
 import os
 import re
-import subprocess
+from xml.etree import ElementTree as ET
 from configparser import ConfigParser
 from itertools import chain
 from pathlib import Path
@@ -74,7 +74,7 @@ class Konsole(Plugin):
             logger.debug(f'Changing profile in konsole session {proc_id}')
             set_profile(f'org.kde.konsole-{proc_id}', profile)
 
-        set_profile('org.kde.konsole', profile)  # konsole may don't have session dbus like above
+        # set_profile('org.kde.konsole', profile)  # konsole may don't have session dbus like above
         set_profile('org.kde.yakuake', profile)
 
         process_ids = [
@@ -237,22 +237,21 @@ Parent=FALLBACK/
 def set_profile(service: str, profile: str):
     # connect to the session bus
     connection = QDBusConnection.sessionBus()
+    path = '/Sessions'
 
-    # maybe it's possible with pyside6 dbus packages, but this was simpler and worked
-    try:
-        sessions = subprocess.check_output(f'qdbus {service} | grep "Sessions/"', shell=True)
-    except subprocess.CalledProcessError:
-        try:
-            sessions = subprocess.check_output(
-                f'qdbus org.kde.konsole | grep "Sessions/"', shell=True
-            )
-            logger.debug(f'Found org.kde.konsole, use that instead')
-            service = "org.kde.konsole"
-        except subprocess.CalledProcessError:
-            # happens when dolphins konsole is not opened
-            logger.debug(f'No Konsole sessions available in service {service}, skipping')
-            return
-    sessions = sessions.decode('utf-8').removesuffix('\n').split('\n')
+    # better to get DBus service and session with proper DBus introspection
+    query = QDBusMessage.createMethodCall(
+        service,
+        path,
+        'org.freedesktop.DBus.Introspectable',
+        'Introspect'
+        )
+    response = connection.call(query)
+    if response.type() == QDBusMessage.MessageType.ErrorMessage:
+        logger.error(f'Error while introspecting {service}: {response.errorMessage()}')
+        return
+    root = ET.fromstring(response.arguments()[0])
+    sessions = [f"{path}/{child.attrib['name']}" for child in root.findall('node')]
 
     # loop: process sessions
     for session in sessions:
