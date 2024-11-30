@@ -136,6 +136,9 @@ class Konsole(Plugin):
     @property
     def default_profile(self):
         value = None
+        # Ensure directory exists
+        Path(self.user_path).mkdir(parents=True, exist_ok=True)
+
         # cant use config parser because of weird file structure
         with self.config_path.open('r') as file:
             for line in file:

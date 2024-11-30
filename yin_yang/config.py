@@ -223,7 +223,7 @@ class ConfigManager(dict):
 
         # check if config needs an update
         # if the default values are set, the version number is below 0
-        if config_loaded['version'] < self.defaults['version']:
+        if float(config_loaded['version']) < self.defaults['version']:
             try:
                 config_loaded = update_config(config_loaded, self.defaults)
             except Exception as e:
