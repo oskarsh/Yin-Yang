@@ -6,7 +6,7 @@ set -euo pipefail
 
 # check, if sudo
 if test ${EUID} -ne 0; then
-    echo enter password in order to install Yin & Yang correctly
+    echo "enter password in order to install Yin & Yang correctly"
     exec sudo su -c "${0} ${HOME}"
     exit 0
 fi
