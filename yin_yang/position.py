@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 import requests
 from PySide6.QtCore import QObject, Slot
@@ -87,7 +88,7 @@ def get_ipinfo_position() -> QGeoCoordinate:
         raise TypeError("Failed to get location from ipinfo.io")
 
     loc_response = response.text.removesuffix("\n").split(",")
-    loc: [float] = [float(coordinate) for coordinate in loc_response]
+    loc: List[float] = [float(coordinate) for coordinate in loc_response]
     assert len(loc) == 2, "The returned location should have exactly 2 values."
     coordinate = QGeoCoordinate(loc[0], loc[1])
 
