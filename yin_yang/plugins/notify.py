@@ -1,6 +1,6 @@
 from PySide6.QtDBus import QDBusMessage
 
-from ..NotificationHandler import create_dbus_message
+from ..notification_handler import create_dbus_message
 from ._plugin import DBusPlugin
 
 

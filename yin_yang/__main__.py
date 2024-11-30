@@ -12,7 +12,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 from systemd import journal
 
-from yin_yang.NotificationHandler import NotificationHandler
+from yin_yang.notification_handler import NotificationHandler
 from yin_yang import daemon_handler
 from yin_yang.meta import ConfigEvent
 from yin_yang import theme_switcher
