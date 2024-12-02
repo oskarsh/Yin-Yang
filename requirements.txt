@@ -1,6 +1,6 @@
 psutil==5.9.8
 PySide6==6.6.2
-PySide6-Addons==6.6.2
+PySide6-Addons==6.7.2
 suntime>=1.3.1
 systemd-python==235
 requests~=2.31.0
