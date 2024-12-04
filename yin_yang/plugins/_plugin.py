@@ -254,6 +254,8 @@ class ExternalPlugin(Plugin):
 
 
 class DBusPlugin(Plugin):
+    """A class for plugins that mainly switching theme via DBus"""
+    
     def __init__(self):
         super().__init__()
         self.connection = QDBusConnection.sessionBus()
@@ -273,6 +275,22 @@ class DBusPlugin(Plugin):
 
     def call(self, message) -> QDBusMessage:
         return self.connection.call(message)
+
+    def list_paths(self, service: str, path: str) -> List[str]:
+        """ Get all subpath under a given pth of service
+        :path: should start with / but without / on its end
+        """
+        
+        assert path.startswith('/') and not path.endswith('/'), "list_paths wrong, :path: should start with / but without / on its end"
+        msg = QDBusMessage.createMethodCall(service, path, "org.freedesktop.DBus.Introspectable", "Introspect")
+        reply = self.connection.call(msg)
+        if reply.errorName():
+            logger.debug(f"No subpath available under {service} {path}")
+            return []
+
+        xml = reply.arguments()[0]
+        sub_path_names = [line.split('"')[1] for line in xml.split("\n") if line.startswith("  <node name=")]
+        return [path + '/' + sub for sub in sub_path_names]
 
 
 class ConfigFilePlugin(Plugin):
