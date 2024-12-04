@@ -77,6 +77,13 @@ class Konsole(DBusPlugin):
         # everything is done in set_mode (above)
         pass
 
+    def create_message(self, theme: str) -> QDBusMessage:
+        message = QDBusMessage.createMethodCall(
+            'org.kde.konsole', 'Sessions/', 'org.kde.konsole.Session', 'setProfile'
+        )
+        message.setArguments([theme])
+        return message
+
     @property
     def available_themes(self) -> dict:
         if not self.available:
