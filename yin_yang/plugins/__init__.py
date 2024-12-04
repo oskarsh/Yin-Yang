@@ -9,7 +9,7 @@ from . import notify
 from yin_yang.plugins._plugin import Plugin, ExternalPlugin
 
 
-def get_plugins(desktop: Desktop) -> [Plugin]:
+def get_plugins(desktop: Desktop) -> list[Plugin]:
     return [
         system.System(desktop),
         colors.Colors(desktop),
