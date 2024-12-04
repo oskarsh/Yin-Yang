@@ -148,7 +148,7 @@ ColorScheme=Breeze
 
 [General]
 Command=/bin/bash
-Name=Fish
+Name=YinYang
 Parent=FALLBACK/
 '''
 
