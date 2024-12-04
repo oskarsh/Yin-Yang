@@ -633,4 +633,4 @@ test = ["pytest (>=6.0.0)", "setuptools (>=65)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10,<3.14"
-content-hash = "599f7a6f52d569c0506a3fc6e9a313275275056f9c58d7300917ae5996094dda"
+content-hash = "3a5ac543e532e04f17aba1214dc8988a29b4589963b554853449c501ccd88933"
