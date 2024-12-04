@@ -13,6 +13,7 @@
     "--talk-name=org.kde.GtkConfig",
     "--talk-name=org.kde.yakuake",
     "--talk-name=org.freedesktop.Flatpak",
+    "--talk-name=org.kde.StatusNotifierWatcher",
     "--share=ipc",
     "--device=dri",
     "--filesystem=host:rw",
