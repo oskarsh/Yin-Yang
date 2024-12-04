@@ -97,7 +97,7 @@ else:
         logger.debug(f'Using language {lang}')
 
         # system translations
-        path = QLibraryInfo.path(QLibraryInfo.TranslationsPath)
+        path = QLibraryInfo.path(QLibraryInfo.LibraryPath.TranslationsPath)
         translator = QTranslator(app)
         if translator.load(QLocale.system(), 'qtbase', '_', path):
             app.installTranslator(translator)
