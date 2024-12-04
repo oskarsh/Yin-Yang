@@ -95,9 +95,9 @@ class _Kde(DBusPlugin):
         return message
 
     def set_theme(self, theme: str):
-        response = self.call(self.create_message(theme))
-
-        if response.type() != QDBusMessage.MessageType.ErrorMessage:
+        if self.connection.interface().isServiceRegistered('org.kde.GtkConfig').value():
+            logger.debug("Detected kde-gtk-config, use it")
+            self.call(self.create_message(theme))
             return
 
         logger.warning('kde-gtk-config not available, trying xsettingsd')
@@ -119,6 +119,10 @@ class _Kde(DBusPlugin):
         # send signal to read new config
         helpers.run(['killall', '-HUP', 'xsettingsd'])
 
+        # change dconf db. since dconf sending data as GVariant, use gsettings instead
+        helpers.run(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', f'{theme}'])
+        color_scheme = 'prefer-dark' if theme == self.theme_dark else 'prefer-light'
+        helpers.run(['gsettings', 'set', 'org.gnome.desktop.interface', 'color-scheme', f'{color_scheme}'])
 
 class _Xfce(PluginCommandline):
     def __init__(self):
