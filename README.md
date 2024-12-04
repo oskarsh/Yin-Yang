@@ -41,8 +41,8 @@ You might also want to take a look at our [**discussions page**](https://github.
 ### Flatpak
 
 ```bash
-mkdir "build"
-mkdir "dist"
+# follow the development setup
+poetry build
 # see https://github.com/flatpak/flatpak-builder/issues/237 if you have issues with rofiles
 flatpak-builder --install --user build sh.oskar.yin_yang.json --force-clean
 ```
