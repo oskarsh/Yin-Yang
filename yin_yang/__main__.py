@@ -113,7 +113,7 @@ else:
             raise FileNotFoundError('Error while loading application translations!')
 
     except Exception as e:
-        logger.error(str(e))
+        logger.warning(str(e))
         print('Error while loading translation. Using default language.')
 
     # show systray icon
