@@ -1,2 +1,8 @@
 [flake8]
-exclude = resources_rc.py,.venv,main_window.py
+exclude = 
+  resources_rc.py,
+  .venv,
+  main_window.py
+  build,
+  dist
+max-line-length = 90

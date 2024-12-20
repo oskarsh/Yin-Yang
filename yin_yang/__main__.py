@@ -12,7 +12,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 from systemd import journal
 
-from yin_yang.NotificationHandler import NotificationHandler
+from yin_yang.notification_handler import NotificationHandler
 from yin_yang import daemon_handler
 from yin_yang.meta import ConfigEvent
 from yin_yang import theme_switcher
@@ -97,7 +97,7 @@ else:
         logger.debug(f'Using language {lang}')
 
         # system translations
-        path = QLibraryInfo.path(QLibraryInfo.TranslationsPath)
+        path = QLibraryInfo.path(QLibraryInfo.LibraryPath.TranslationsPath)
         translator = QTranslator(app)
         if translator.load(QLocale.system(), 'qtbase', '_', path):
             app.installTranslator(translator)
@@ -113,8 +113,8 @@ else:
             raise FileNotFoundError('Error while loading application translations!')
 
     except Exception as e:
-        logger.error(str(e))
-        print('Error while loading translation. Using default language.')
+        logger.warning(str(e))
+        print('The app has not been translated to your language yet. Using default language.')
 
     # show systray icon
     if QSystemTrayIcon.isSystemTrayAvailable():

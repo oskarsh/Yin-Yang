@@ -1,6 +1,8 @@
 from os import walk
 from pathlib import Path
 
+from yin_yang import helpers
+
 from ._plugin import PluginCommandline
 
 
@@ -24,7 +26,7 @@ class Kvantum(PluginCommandline):
         if not self.available:
             return {}
 
-        paths = [Path('/usr/share/Kvantum'), Path.home() / '.config/Kvantum']
+        paths = [Path(helpers.get_usr() + 'share/Kvantum'), Path.home() / '.config/Kvantum']
         themes = list()
         for path in paths:
             themes = themes + self.get_kvantum_theme_from_dir(path)

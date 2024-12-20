@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# This file allows external extensions to communicate with yin-yang.
+# This file allows external extensions to communicate with yin_yang.
 # It's based on https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Native_messaging,
 # as it was originally used for the firefox plugin only
 
