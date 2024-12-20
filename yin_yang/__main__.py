@@ -114,7 +114,7 @@ else:
 
     except Exception as e:
         logger.warning(str(e))
-        print('Error while loading translation. Using default language.')
+        print('The app has not been translated to your language yet. Using default language.')
 
     # show systray icon
     if QSystemTrayIcon.isSystemTrayAvailable():
