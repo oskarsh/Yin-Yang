@@ -1,26 +1,35 @@
-[tool.poetry]
+[project]
 name = "yin_yang"
 version = "3.3.0"
+license = "MIT"
 description = "Auto Nightmode for KDE, Gnome, Budgie, VSCode, Atom and more."
-authors = ["Oskar Schachtschneider"]
+authors = [
+  { name = "Oskar Schachtschneider" }
+]
+readme = "README.md"
+requires-python = ">=3.10, <3.14"
+dependencies = [
+  "psutil==6.1.0",
+  "PySide6-Essentials==6.8.1",
+  "shiboken6==6.8.1",
+  "PySide6-Addons==6.8.1",
+  "suntime~=1.3.2",
+  "systemd-python==235",
+  "requests==2.32.3",
+  "python-dateutil~=2.9.0.post0"
+]
+
+[project.urls]
 repository = "https://github.com/oskarsh/Yin-Yang"
 
-license = "MIT"
-readme = "README.md"
+[project.scripts]
+yin_yang = "yin_yang:__main__"
+
+[tool.poetry]
+requires-poetry = ">=2.0"
 packages = [
   { include = "yin_yang" }
 ]
-
-[tool.poetry.dependencies]
-python = "^3.10,<3.14"
-psutil = "6.1.0"
-PySide6-Essentials = "6.8.1"
-shiboken6 = "6.8.1"
-PySide6-Addons = "6.8.1"
-suntime = "^1.3.2"
-systemd-python = "235"
-requests = "2.32.3"
-python-dateutil = "^2.9.0.post0"
 
 [tool.poetry.group.DEV.dependencies]
 flake8 = "^7.0.0"
@@ -34,9 +43,6 @@ cython = "<3.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-yin_yang = "yin_yang:__main__"
 
 [tool.pyright]
 include = ["yin_yang"]
