@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.12"]
-        os: [ubuntu-22.04]
+        os: [ubuntu-24.04]
     runs-on: ${{matrix.os}}
     steps:
       # Checkout repo and set up python
@@ -38,7 +38,8 @@ jobs:
       # Install dependencies of cache does not exist
       - name: Install system dependencies
         run: |
-          sudo apt install qt6-base-dev libsystemd-dev gcc
+          sudo apt update
+          sudo apt install -y qt6-base-dev libsystemd-dev gcc
       - name: Install Poetry dependencies
         # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: |
@@ -57,10 +58,10 @@ jobs:
 
   flatpak:
     name: "Build flatpak file"
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: build
     container:
-      image: bilelmoussaoui/flatpak-github-actions:kde-5.15-23.08
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.8
       options: --privileged
     strategy:
       matrix:
