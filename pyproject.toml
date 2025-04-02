@@ -41,6 +41,9 @@ toml = "^0.10.2"
 setuptools = "^69.5.1"
 wheel = "^0.43.0"
 cython = "<3.0"
+# necessary to compile ui files
+PySide6-Essentials="^6.8.1"
+PySide6-Addons="^6.8.1"
 
 [build-system]
 requires = ["poetry-core"]

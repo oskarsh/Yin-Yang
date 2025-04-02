@@ -3,8 +3,6 @@
 name: Python CI
 
 on:
-  push:
-    branches: [master, beta]
   pull_request:
     branches: [master, beta]
 
@@ -46,7 +44,7 @@ jobs:
       - name: Install Poetry dependencies
         # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
         run: |
-          poetry install --sync --no-interaction
+          poetry sync --no-interaction
       # Build and test Yin-Yang
       - name: Compile ui, translations and resources
         run: poetry run ./scripts/build_ui.sh
