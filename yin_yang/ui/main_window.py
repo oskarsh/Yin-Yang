@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.6.1
+## Created by: Qt User Interface Compiler version 6.8.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -28,7 +28,7 @@ class Ui_main_window(object):
         if not main_window.objectName():
             main_window.setObjectName(u"main_window")
         main_window.resize(550, 800)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.MinimumExpanding)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.MinimumExpanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(main_window.sizePolicy().hasHeightForWidth())
@@ -36,11 +36,11 @@ class Ui_main_window(object):
         main_window.setMinimumSize(QSize(400, 600))
         main_window.setWindowTitle(u"Yin & Yang")
         icon = QIcon()
-        iconThemeName = u"yin_yang"
+        iconThemeName = u"sh.oskar.yin_yang"
         if QIcon.hasThemeIcon(iconThemeName):
             icon = QIcon.fromTheme(iconThemeName)
         else:
-            icon.addFile(u":/icons/logo", QSize(), QIcon.Normal, QIcon.Off)
+            icon.addFile(u":/icons/icon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
 
         main_window.setWindowIcon(icon)
         main_window.setLocale(QLocale(QLocale.English, QLocale.UnitedKingdom))
@@ -73,8 +73,8 @@ class Ui_main_window(object):
         self.schedule_settings_layout.setObjectName(u"schedule_settings_layout")
         self.line_top = QFrame(self.schedule_settings)
         self.line_top.setObjectName(u"line_top")
-        self.line_top.setFrameShape(QFrame.HLine)
-        self.line_top.setFrameShadow(QFrame.Sunken)
+        self.line_top.setFrameShape(QFrame.Shape.HLine)
+        self.line_top.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.schedule_settings_layout.addWidget(self.line_top)
 
@@ -86,7 +86,7 @@ class Ui_main_window(object):
 
         self.time = QFrame(self.schedule_settings)
         self.time.setObjectName(u"time")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.time.sizePolicy().hasHeightForWidth())
@@ -95,17 +95,17 @@ class Ui_main_window(object):
         self.time_layout.setSpacing(6)
         self.time_layout.setContentsMargins(11, 11, 11, 11)
         self.time_layout.setObjectName(u"time_layout")
-        self.time_layout.setLabelAlignment(Qt.AlignCenter)
+        self.time_layout.setLabelAlignment(Qt.AlignmentFlag.AlignCenter)
         self.time_layout.setContentsMargins(37, -1, -1, -1)
         self.label_light = QLabel(self.time)
         self.label_light.setObjectName(u"label_light")
-        self.label_light.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_light.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.time_layout.setWidget(0, QFormLayout.LabelRole, self.label_light)
 
         self.inp_time_light = QTimeEdit(self.time)
         self.inp_time_light.setObjectName(u"inp_time_light")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.inp_time_light.sizePolicy().hasHeightForWidth())
@@ -118,7 +118,7 @@ class Ui_main_window(object):
 
         self.label_dark = QLabel(self.time)
         self.label_dark.setObjectName(u"label_dark")
-        self.label_dark.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_dark.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.time_layout.setWidget(1, QFormLayout.LabelRole, self.label_dark)
 
@@ -154,13 +154,13 @@ class Ui_main_window(object):
         self.formLayout.setObjectName(u"formLayout")
         self.label_longitude = QLabel(self.location_input)
         self.label_longitude.setObjectName(u"label_longitude")
-        self.label_longitude.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_longitude.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_longitude)
 
         self.inp_longitude = QDoubleSpinBox(self.location_input)
         self.inp_longitude.setObjectName(u"inp_longitude")
-        sizePolicy3 = QSizePolicy(QSizePolicy.Minimum, QSizePolicy.Fixed)
+        sizePolicy3 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
         sizePolicy3.setHorizontalStretch(0)
         sizePolicy3.setVerticalStretch(0)
         sizePolicy3.setHeightForWidth(self.inp_longitude.sizePolicy().hasHeightForWidth())
@@ -174,7 +174,7 @@ class Ui_main_window(object):
 
         self.label_latitude = QLabel(self.location_input)
         self.label_latitude.setObjectName(u"label_latitude")
-        self.label_latitude.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.label_latitude.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
         self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label_latitude)
 
@@ -202,8 +202,8 @@ class Ui_main_window(object):
 
         self.line_bottom = QFrame(self.schedule_settings)
         self.line_bottom.setObjectName(u"line_bottom")
-        self.line_bottom.setFrameShape(QFrame.HLine)
-        self.line_bottom.setFrameShadow(QFrame.Sunken)
+        self.line_bottom.setFrameShape(QFrame.Shape.HLine)
+        self.line_bottom.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.schedule_settings_layout.addWidget(self.line_bottom)
 
@@ -257,7 +257,7 @@ class Ui_main_window(object):
 
         self.settings_layout.addWidget(self.label_active)
 
-        self.space_vertical = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.space_vertical = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.settings_layout.addItem(self.space_vertical)
 
@@ -270,11 +270,11 @@ class Ui_main_window(object):
         self.plugins_layout.setObjectName(u"plugins_layout")
         self.plugins_scroll = QScrollArea(self.plugins)
         self.plugins_scroll.setObjectName(u"plugins_scroll")
-        self.plugins_scroll.setFrameShape(QFrame.NoFrame)
+        self.plugins_scroll.setFrameShape(QFrame.Shape.NoFrame)
         self.plugins_scroll.setWidgetResizable(True)
         self.plugins_scroll_content = QWidget()
         self.plugins_scroll_content.setObjectName(u"plugins_scroll_content")
-        self.plugins_scroll_content.setGeometry(QRect(0, 0, 501, 86))
+        self.plugins_scroll_content.setGeometry(QRect(0, 0, 525, 657))
         self.plugins_scroll_content_layout = QVBoxLayout(self.plugins_scroll_content)
         self.plugins_scroll_content_layout.setSpacing(6)
         self.plugins_scroll_content_layout.setContentsMargins(11, 11, 11, 11)
@@ -292,7 +292,7 @@ class Ui_main_window(object):
         self.comboBox = QComboBox(self.samplePluginGroupBox)
         self.comboBox.setObjectName(u"comboBox")
         self.comboBox.setCurrentText(u"")
-        self.comboBox.setSizeAdjustPolicy(QComboBox.AdjustToContentsOnFirstShow)
+        self.comboBox.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
         self.comboBox.setPlaceholderText(u"firefox-compact-light@mozilla.org")
 
         self.horizontalLayout_2.addWidget(self.comboBox)
@@ -300,7 +300,7 @@ class Ui_main_window(object):
         self.comboBox_2 = QComboBox(self.samplePluginGroupBox)
         self.comboBox_2.setObjectName(u"comboBox_2")
         self.comboBox_2.setCurrentText(u"")
-        self.comboBox_2.setSizeAdjustPolicy(QComboBox.AdjustToContentsOnFirstShow)
+        self.comboBox_2.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
         self.comboBox_2.setPlaceholderText(u"firefox-compact-dark@mozilla.org")
 
         self.horizontalLayout_2.addWidget(self.comboBox_2)
@@ -321,7 +321,7 @@ class Ui_main_window(object):
 
         self.btn_box = QDialogButtonBox(self.central_widget)
         self.btn_box.setObjectName(u"btn_box")
-        self.btn_box.setStandardButtons(QDialogButtonBox.Apply|QDialogButtonBox.Cancel|QDialogButtonBox.RestoreDefaults)
+        self.btn_box.setStandardButtons(QDialogButtonBox.StandardButton.Apply|QDialogButtonBox.StandardButton.Cancel|QDialogButtonBox.StandardButton.RestoreDefaults)
 
         self.central_widget_layout.addWidget(self.btn_box)
 
