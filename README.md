@@ -1,4 +1,4 @@
-# ![Yin & Yang logo](resources/logo.svg) Yin-Yang
+# ![Yin & Yang logo](resources/icon.svg) Yin-Yang
 
 ![](https://img.shields.io/github/v/release/oskarsh/yin-yang)
 ![](https://img.shields.io/github/v/release/oskarsh/yin-yang?include_prereleases)

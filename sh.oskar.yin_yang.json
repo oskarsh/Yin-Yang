@@ -5,7 +5,7 @@
   "sdk": "org.kde.Sdk",
   "base": "io.qt.PySide.BaseApp",
   "base-version": "6.8",
-  "command": "runner.sh",
+  "command": "yin_yang",
   "build-options":{
     "env": [
       "BASEAPP_REMOVE_WEBENGINE=1",
@@ -37,7 +37,7 @@
       "buildsystem": "simple",
       "build-commands": [
         "find dist -name 'yin_yang-*-py3-none-any.whl' -exec pip install --no-deps --no-build-isolation --prefix=/app {} \\;",
-        "install -D scripts/runner.sh /app/bin/runner.sh"
+        "install -D scripts/runner.sh /app/bin/yin_yang.sh"
       ],
       "sources": [
         {
@@ -50,20 +50,19 @@
       "name": "yin_yang-metadata",
       "buildsystem": "simple",
       "build-commands": [
-        "install -Dm644 yin_yang.desktop /app/share/applications/sh.oskar.yin_yang.desktop",
-        "sed -i 's|Path=/opt/yin_yang||' /app/share/applications/sh.oskar.yin_yang.desktop",
-        "sed -i 's|Icon=yin_yang|Icon=sh.oskar.yin_yang|' /app/share/applications/sh.oskar.yin_yang.desktop",
-        "sed -i 's|Exec=yin_yang|Exec=runner.sh|' /app/share/applications/sh.oskar.yin_yang.desktop",
-        "install -Dm664 logo.svg /app/share/icons/hicolor/256x256/apps/sh.oskar.yin_yang.svg"
+        "install -Dm664 icon.svg /app/share/icons/hicolor/scalable/apps/sh.oskar.yin_yang.svg",
+        "install -Dm664 sh.oskar.yin_yang.metainfo.xml /app/share/metainfo/sh.oskar.yin_yang.metainfo.xml",
+        "appstreamcli make-desktop-file sh.oskar.yin_yang.metainfo.xml yin_yang.desktop",
+        "install -Dm644 yin_yang.desktop /app/share/applications/sh.oskar.yin_yang.desktop"
       ],
       "sources": [
         {
           "type": "file",
-          "path": "./resources/yin_yang.desktop"
+          "path": "./resources/icon.svg"
         },
         {
           "type": "file",
-          "path": "./resources/logo.svg"
+          "path": "./resources/sh.oskar.yin_yang.metainfo.xml"
         }
       ]
     }

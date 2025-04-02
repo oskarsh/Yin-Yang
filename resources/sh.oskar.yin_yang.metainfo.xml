@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component type="desktop-application">
     <id>sh.oskar.yin_yang</id>
-
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>MIT</project_license>
+    <content_rating type="oars-1.1" />
+    
     <name>Yin &amp; Yang</name>
     <summary>Automatically switch between light and dark themes</summary>
-
-    <metadata_license>MIT</metadata_license>
-    <project_license>MIT</project_license>
-
-    <developer id="sh.oskar">
-        <name>Lorenz Hoffmann</name>
-    </developer>
-
-    <recommends>
-        <display_length compare="ge">600</display_length>
-    </recommends>
-
+    <icon type="stock">sh.oskar.yin_yang</icon>
     <description>
         <p>
             Yin &amp; Yang allows you to automatically switch between light and dark themes in various
@@ -25,7 +17,28 @@
         </p>
     </description>
 
-    <launchable type="desktop-id">yin_yang.desktop</launchable>
+    <developer id="@l0drex@dresden.network">
+        <name>Lorenz Hoffmann</name>
+    </developer>
+
+    <categories>
+        <category>Utility</category>
+        <category>System</category>
+        <category>Settings</category>
+    </categories>
+    <keywords>
+        <keyword>night</keyword>
+        <keyword>day</keyword>
+        <keyword>dark</keyword>
+        <keyword>light</keyword>
+        <keyword>color</keyword>
+        <keyword>theme</keyword>
+    </keywords>
+
+    <url type="homepage">https://github.com/oskarsh/Yin-Yang</url>
+    <url type="bugtracker">https://github.com/oskarsh/Yin-Yang/issues</url>
+    <url type="donation">https://www.patreon.com/L0drex</url>
+
     <screenshots>
         <screenshot type="default">
             <image>https://raw.githubusercontent.com/oskarsh/Yin-Yang/master/.github/images/header.png</image>
@@ -39,14 +52,23 @@
         <color type="primary" schema_preference="light">#e0e0e0</color>
         <color type="primary" schema_preference="dark">#0c0c0c</color>
     </branding>
+    
+    <recommends>
+        <display_length compare="ge">600</display_length>
+    </recommends>
 
-    <content_rating type="oars-1.1" />
+    <launchable type="desktop-id">sh.oskar.yin_yang.desktop</launchable>
 
-    <url type="homepage">https://github.com/oskarsh/Yin-Yang</url>
-    <url type="bugtracker">https://github.com/oskarsh/Yin-Yang/issues</url>
-    <url type="donation">https://www.patreon.com/L0drex</url>
-
+    <provides>
+        <python3>yin_yang</python3>
+        <binary>yin_yang</binary>
+    </provides>
+    
     <translation type="qt">yin_yang</translation>
+    <translation type="qt" source_locale="de_DE">yin_yang</translation>
+    <translation type="qt" source_locale="nl_NL">yin_yang</translation>
+    <translation type="qt" source_locale="zh_CN">yin_yang</translation>
+    <translation type="qt" source_locale="zh_TW">yin_yang</translation>
 
     <releases>
         <release version="v3.4.0" date="2024-03-17">
