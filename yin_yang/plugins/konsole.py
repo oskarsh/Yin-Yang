@@ -239,11 +239,11 @@ Parent=FALLBACK/
 
     def set_profile(self, service: str, profile: str, set_default_profile: bool = False):
         if set_default_profile:
-            path = 'Sessions/'
+            path = '/Sessions'
             interface = 'org.kde.konsole.Session'
             method = 'setProfile'
         else:
-            path = 'Windows/'
+            path = '/Windows'
             interface = 'org.kde.konsole.Window'
             method = 'setDefaultProfile'
 
