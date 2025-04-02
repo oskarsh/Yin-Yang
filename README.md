@@ -54,25 +54,27 @@ Yin-Yang can be downloaded from AUR as [yin-yang](https://aur.archlinux.org/pack
 ### Source
 
 Yin-Yang depends on `python-systemd` and `pyside6` from pypi. `python-systemd` requires you have installed the systemd-headers from your package manager. You also need python development headers (e.g. `python3-devel`) and the poetry build system for python.
+Preferably install `PySide6-Essentials` and `PySide6-Addons` from your system package manager as well.
+If they are not available there, uncomment the dependencies in `pyproject.toml`.
 
 For CentOS, RHEL, and Fedora:
 
 ```bash
-sudo dnf install gcc systemd-devel python3-devel libnotify poetry
+sudo dnf install gcc systemd-devel python3-devel libnotify poetry python3-pyside6
 ```
 
 For OpenSUSE:
 
 ```bash
 sudo zypper refresh
-sudo zypper install gcc systemd-devel libnotify python311-poetry
+sudo zypper install gcc systemd-devel libnotify python311-poetry python3-PySide6
 ```
 
 For Debian, Ubuntu, etc.
 
 ```bash
 sudo apt update
-sudo apt install libsystemd-dev gcc pkg-config python3-dev libnotify-bin python3-poetry
+sudo apt install libsystemd-dev gcc pkg-config python3-dev libnotify-bin python3-poetry python3-qtpy-pyside6
 ```
 
 Then you can install Yin-Yang in a python virtual environment:

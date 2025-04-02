@@ -2,7 +2,7 @@
     "name": "poetry-deps",
     "buildsystem": "simple",
     "build-commands": [
-        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} certifi charset-normalizer colorama cython exceptiongroup flake8 idna iniconfig mccabe packaging pluggy psutil pycodestyle pyflakes pyside6-addons pyside6-essentials pytest python-dateutil pyyaml requests setuptools shiboken6 six suntime systemd-python toml tomli urllib3 wheel"
+        "pip3 install --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} certifi charset-normalizer colorama cython exceptiongroup flake8 idna iniconfig mccabe packaging pluggy psutil pycodestyle pyflakes pytest python-dateutil pyyaml requests setuptools shiboken6 six suntime systemd-python toml tomli urllib3 wheel"
     ],
     "sources": [
         {
@@ -74,16 +74,6 @@
             "type": "file",
             "url": "https://files.pythonhosted.org/packages/d4/d7/f1b7db88d8e4417c5d47adad627a93547f44bdc9028372dbd2313f34a855/pyflakes-3.2.0-py2.py3-none-any.whl",
             "sha256": "84b5be138a2dfbb40689ca07e2152deb896a65c3a3e24c251c5c62489568074a"
-        },
-        {
-            "type": "file",
-            "url": "https://files.pythonhosted.org/packages/e4/f6/f3071f51e39e9fbe186aafc1c8d8a0b2a4bd9eb393fee702b73ed3eef5ae/PySide6_Addons-6.8.1-cp39-abi3-manylinux_2_28_x86_64.whl",
-            "sha256": "f80cc03c1ac54132c6f800aa461dced64acd7d1646898db164ccb56fe3c23dd4"
-        },
-        {
-            "type": "file",
-            "url": "https://files.pythonhosted.org/packages/b1/cc/5af1e0c0306cd75864fba49934977d0a96bec4b293b2244f6f80460c2ff5/PySide6_Essentials-6.8.1-cp39-abi3-manylinux_2_28_x86_64.whl",
-            "sha256": "2f600b149e65b57acd6a444edb17615adc42cc2491548ae443ccb574036d86b1"
         },
         {
             "type": "file",

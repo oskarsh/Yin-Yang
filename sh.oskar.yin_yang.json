@@ -3,7 +3,18 @@
   "runtime": "org.kde.Platform",
   "runtime-version": "6.8",
   "sdk": "org.kde.Sdk",
+  "base": "io.qt.PySide.BaseApp",
+  "base-version": "6.8",
   "command": "runner.sh",
+  "build-options":{
+    "env": [
+      "BASEAPP_REMOVE_WEBENGINE=1",
+      "BASEAPP_DISABLE_NUMPY=1"
+    ]
+  },
+  "cleanup-commands": [
+    "/app/cleanup-BaseApp.sh"
+  ],
   "finish-args": [
     "--share=network",
     "--socket=x11",
