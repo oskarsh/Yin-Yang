@@ -1,14 +1,13 @@
 import logging
-import subprocess
 from pathlib import Path
 
-from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 from PySide6.QtDBus import QDBusMessage
-from yin_yang import helpers
+from PySide6.QtWidgets import QDialogButtonBox, QVBoxLayout, QWidget, QLineEdit
 
-from ..meta import Desktop
+from yin_yang import helpers
 from ._plugin import PluginDesktopDependent, PluginCommandline, DBusPlugin
 from .system import test_gnome_availability
+from ..meta import Desktop
 
 logger = logging.getLogger(__name__)
 

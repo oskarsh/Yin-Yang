@@ -9,7 +9,7 @@ The application is running in a Flatpak or not.
 
 """Base Flatpak Arguments
 
-These are the base arguments we use to execute commands when running in 
+These are the base arguments we use to execute commands when running in
 a flatpak environment.
 """
 base_flatpak_args = ['flatpak-spawn', '--host']

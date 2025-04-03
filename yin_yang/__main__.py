@@ -1,24 +1,23 @@
 #!/bin/env python3
 
-import sys
 import logging
+import sys
 from argparse import ArgumentParser
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
-from threading import Timer
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale, QObject
+from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 from systemd import journal
 
-from yin_yang.helpers import is_flatpak
-from yin_yang.notification_handler import NotificationHandler
 from yin_yang import daemon_handler
-from yin_yang.meta import ConfigEvent
 from yin_yang import theme_switcher
 from yin_yang.config import config, Modes
+from yin_yang.helpers import is_flatpak
+from yin_yang.meta import ConfigEvent
+from yin_yang.notification_handler import NotificationHandler
 from yin_yang.repeat_timer import RepeatTimer
 from yin_yang.ui import main_window_connector
 

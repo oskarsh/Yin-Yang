@@ -255,7 +255,7 @@ class ExternalPlugin(Plugin):
 
 class DBusPlugin(Plugin):
     """A class for plugins that mainly switching theme via DBus"""
-    
+
     def __init__(self):
         super().__init__()
         self.connection = QDBusConnection.sessionBus()
@@ -280,8 +280,9 @@ class DBusPlugin(Plugin):
         """ Get all subpath under a given pth of service
         :path: should start with / but without / on its end
         """
-        
-        assert path.startswith('/') and not path.endswith('/'), "list_paths wrong, :path: should start with / but without / on its end"
+
+        assert path.startswith('/') and not path.endswith('/'), \
+            "list_paths wrong, :path: should start with / but without / on its end"
         msg = QDBusMessage.createMethodCall(service, path, "org.freedesktop.DBus.Introspectable", "Introspect")
         reply = self.connection.call(msg)
         if reply.errorName():
@@ -314,7 +315,7 @@ class ConfigFilePlugin(Plugin):
                 case FileFormat.JSON.value:
                     try:
                         return json.load(file)
-                    except json.decoder.JSONDecodeError as e:
+                    except json.decoder.JSONDecodeError:
                         return self.default_config
                 case FileFormat.CONFIG.value:
                     config = ConfigParser()
@@ -384,6 +385,7 @@ def flatpak_user(app_id: str) -> Path:
 
 def snap_path(app: str) -> Path:
     return Path(f'/var/lib/snapd/snap/{app}/current')
+
 
 def themes_from_theme_directories(type: str) -> List[Path]:
     theme_directories = [

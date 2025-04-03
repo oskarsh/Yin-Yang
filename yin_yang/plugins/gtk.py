@@ -1,12 +1,9 @@
 import logging
-from os import path, scandir
 from pathlib import Path
 
 from PySide6.QtDBus import QDBusMessage
 
 from yin_yang import helpers
-
-from ..meta import Desktop
 from ._plugin import (
     DBusPlugin,
     PluginCommandline,
@@ -14,6 +11,7 @@ from ._plugin import (
     themes_from_theme_directories,
 )
 from .system import test_gnome_availability
+from ..meta import Desktop
 
 logger = logging.getLogger(__name__)
 
@@ -123,6 +121,7 @@ class _Kde(DBusPlugin):
         helpers.run(['gsettings', 'set', 'org.gnome.desktop.interface', 'gtk-theme', f'{theme}'])
         color_scheme = 'prefer-dark' if theme == self.theme_dark else 'prefer-light'
         helpers.run(['gsettings', 'set', 'org.gnome.desktop.interface', 'color-scheme', f'{color_scheme}'])
+
 
 class _Xfce(PluginCommandline):
     def __init__(self):

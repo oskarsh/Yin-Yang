@@ -210,7 +210,7 @@ class ConfigManager(dict):
         if old_file.is_file():
             shutil.copyfile(old_file, config_path)
             os.remove(old_path)
-        
+
         # check if conf exists
         if config_path.is_file():
             if self._last_save_time == config_path.stat().st_mtime:

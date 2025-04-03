@@ -236,7 +236,6 @@ Parent=FALLBACK/
         with open(dark_profile, 'w') as file:
             profile_config.write(file)
 
-
     def set_profile(self, service: str, profile: str, set_default_profile: bool = False):
         if set_default_profile:
             path = '/Sessions'
