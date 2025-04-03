@@ -6,3 +6,4 @@ exclude =
   build,
   dist
 max-line-length = 127
+max-complexity = 10

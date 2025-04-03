@@ -38,31 +38,33 @@ def get_pypi_source(name: str, version: str, hashes: list) -> tuple:
     with urllib.request.urlopen(url) as response:
         body = json.loads(response.read().decode("utf-8"))
         for release, source_list in body["releases"].items():
-            if release == version:
-                for source in source_list:
+            if release != version:
+                continue
+
+            for source in source_list:
+                if (
+                    name == "pyside6-addons"
+                    or name == "pyside6-essentials"
+                    or name == "shiboken6"
+                ):
                     if (
-                        name == "pyside6-addons"
-                        or name == "pyside6-essentials"
-                        or name == "shiboken6"
-                    ):
-                        if (
-                            source["filename"].endswith("x86_64.whl")
-                            and "manylinux" in source["filename"]
-                        ):
-                            return source["url"], source["digests"]["sha256"]
-                    if (
-                        source["packagetype"] == "bdist_wheel"
-                        and "py3" in source["python_version"]
-                        and source["digests"]["sha256"] in hashes
+                        source["filename"].endswith("x86_64.whl")
+                        and "manylinux" in source["filename"]
                     ):
                         return source["url"], source["digests"]["sha256"]
-                for source in source_list:
-                    if (
-                        source["packagetype"] == "sdist"
-                        and "source" in source["python_version"]
-                        and source["digests"]["sha256"] in hashes
-                    ):
-                        return source["url"], source["digests"]["sha256"]
+                if (
+                    source["packagetype"] == "bdist_wheel"
+                    and "py3" in source["python_version"]
+                    and source["digests"]["sha256"] in hashes
+                ):
+                    return source["url"], source["digests"]["sha256"]
+            for source in source_list:
+                if (
+                    source["packagetype"] == "sdist"
+                    and "source" in source["python_version"]
+                    and source["digests"]["sha256"] in hashes
+                ):
+                    return source["url"], source["digests"]["sha256"]
         else:
             raise Exception("Failed to extract url and hash from {}".format(url))
 
@@ -80,47 +82,65 @@ def get_module_sources(parsed_lockfile: dict, include_devel: bool = True) -> lis
     sources = []
     hash_re = re.compile(r"(sha1|sha224|sha384|sha256|sha512|md5):([a-f0-9]+)")
     for section, packages in parsed_lockfile.items():
-        if section == "package":
-            for package in packages:
-                if "category" not in package or (
-                    (
-                        package.get("category") == "dev"
-                        and include_devel
-                        and not package.get("optional")
-                    )
-                    or (
-                        package.get("category") == "main"
-                        and not package.get("optional")
-                    )
-                ):
-                    hashes = []
-                    # Check for old metadata format (poetry version < 1.0.0b2)
-                    if "hashes" in parsed_lockfile["metadata"]:
-                        hashes = parsed_lockfile["metadata"]["hashes"][package["name"]]
-                    # metadata format 1.1
-                    elif "files" in parsed_lockfile["metadata"]:
-                        for package_name in parsed_lockfile["metadata"]["files"]:
-                            if package_name == package["name"]:
-                                package_files = parsed_lockfile["metadata"]["files"][
-                                    package["name"]
-                                ]
-                                num_files = len(package_files)
-                                for num in range(num_files):
-                                    match = hash_re.search(package_files[num]["hash"])
-                                    if match:
-                                        hashes.append(match.group(2))
-                    # metadata format 2.0
-                    else:
-                        for file in package["files"]:
-                            match = hash_re.search(file["hash"])
-                            if match:
-                                hashes.append(match.group(2))
-                    url, hash = get_pypi_source(
-                        package["name"], package["version"], hashes
-                    )
-                    source = {"type": "file", "url": url, "sha256": hash}
-                    sources.append(source)
+        if section != "package":
+            continue
+
+        for package in packages:
+            if "category" in package and (
+                    package.get("category") != "dev" or not include_devel or package.get("optional")) and (
+                    package.get("category") != "main" or package.get("optional")):
+                continue
+
+            hashes = []
+            # Check for old metadata format (poetry version < 1.0.0b2)
+            if "hashes" in parsed_lockfile["metadata"]:
+                hashes = parsed_lockfile["metadata"]["hashes"][package["name"]]
+            # metadata format 1.1
+            elif "files" in parsed_lockfile["metadata"]:
+                hashes.append(get_sources_11(package, parsed_lockfile, hash_re))
+            # metadata format 2.0
+            else:
+                hashes.append(get_sources_13(package, hash_re))
+
+            url, hash = get_pypi_source(
+                package["name"], package["version"], hashes
+            )
+            source = {"type": "file", "url": url, "sha256": hash}
+            sources.append(source)
     return sources
+
+
+def get_sources_11(package, parsed_lockfile, hash_re) -> list:
+    hashes = []
+    for package_name in parsed_lockfile["metadata"]["files"]:
+        if package_name != package["name"]:
+            continue
+
+        package_files = parsed_lockfile["metadata"]["files"][
+            package["name"]
+        ]
+        num_files = len(package_files)
+        for num in range(num_files):
+            match = hash_re.search(package_files[num]["hash"])
+            if not match:
+                continue
+
+            hashes.append(match.group(2))
+
+    return hashes
+
+
+def get_sources_13(package, hash_re) -> list:
+    hashes = []
+
+    for file in package["files"]:
+        match = hash_re.search(file["hash"])
+        if not match:
+            continue
+
+        hashes.append(match.group(2))
+
+    return hashes
 
 
 def get_dep_names(parsed_lockfile: dict, include_devel: bool = True) -> list:
@@ -135,20 +155,17 @@ def get_dep_names(parsed_lockfile: dict, include_devel: bool = True) -> list:
     """
     dep_names = []
     for section, packages in parsed_lockfile.items():
-        if section == "package":
-            for package in packages:
-                if "category" not in package or (
-                    (
-                        package.get("category") == "dev"
-                        and include_devel
-                        and not package.get("optional")
-                    )
-                    or (
-                        package.get("category") == "main"
-                        and not package.get("optional")
-                    )
-                ):
-                    dep_names.append(package["name"])
+        if section != "package":
+            continue
+
+        for package in packages:
+            if "category" in package and (
+                    package.get("category") != "dev" or not include_devel or package.get("optional")) and (
+                    package.get("category") != "main" or package.get("optional")):
+                continue
+
+            dep_names.append(package["name"])
+
     return dep_names
 
 
