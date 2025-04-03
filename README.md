@@ -89,7 +89,7 @@ cd Yin-Yang
 ./scripts/install.sh
 ```
 
-For development, skip the install and instead build python using Poetry. A virtual environment will be created for you:
+For development, skip the installation and instead build python using Poetry. A virtual environment will be created for you:
 
 ```bash
 # Load into virtual environment
@@ -98,6 +98,11 @@ poetry env use python
 poetry sync
 # Load Yin-Yang
 poetry run python -m yin_yang
+```
+
+Make sure to run `flake8` on your files to avoid errors from the ci in PRs:
+```bash
+poetry run flake8
 ```
 
 ### Uninstall
