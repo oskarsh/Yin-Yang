@@ -1,0 +1,70 @@
+{
+  "id": "sh.oskar.yin_yang",
+  "runtime": "org.kde.Platform",
+  "runtime-version": "6.8",
+  "sdk": "org.kde.Sdk",
+  "base": "io.qt.PySide.BaseApp",
+  "base-version": "6.8",
+  "command": "yin_yang",
+  "build-options":{
+    "env": [
+      "BASEAPP_REMOVE_WEBENGINE=1",
+      "BASEAPP_DISABLE_NUMPY=1"
+    ]
+  },
+  "cleanup-commands": [
+    "/app/cleanup-BaseApp.sh"
+  ],
+  "finish-args": [
+    "--share=network",
+    "--socket=x11",
+    "--socket=wayland",
+    "--talk-name=org.xfce.Xfconf",
+    "--talk-name=org.kde.plasmashell",
+    "--talk-name=org.kde.GtkConfig",
+    "--talk-name=org.kde.yakuake",
+    "--talk-name=org.freedesktop.Flatpak",
+    "--talk-name=org.kde.StatusNotifierWatcher",
+    "--share=ipc",
+    "--device=dri",
+    "--filesystem=host:rw",
+    "--filesystem=~/.mozilla:rw"
+  ],
+  "modules": [
+    "generated-poetry-sources.json",
+    {
+      "name": "yin_yang",
+      "buildsystem": "simple",
+      "build-commands": [
+        "find dist -name 'yin_yang-*-py3-none-any.whl' -exec pip install --no-deps --no-build-isolation --prefix=/app {} \\;",
+        "install -D scripts/runner.sh /app/bin/yin_yang.sh"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "."
+        }
+      ]
+    },
+    {
+      "name": "yin_yang-metadata",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -Dm664 icon.svg /app/share/icons/hicolor/scalable/apps/sh.oskar.yin_yang.svg",
+        "install -Dm664 sh.oskar.yin_yang.metainfo.xml /app/share/metainfo/sh.oskar.yin_yang.metainfo.xml",
+        "appstreamcli make-desktop-file sh.oskar.yin_yang.metainfo.xml yin_yang.desktop",
+        "install -Dm644 yin_yang.desktop /app/share/applications/sh.oskar.yin_yang.desktop"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "path": "./resources/icon.svg"
+        },
+        {
+          "type": "file",
+          "path": "./resources/sh.oskar.yin_yang.metainfo.xml"
+        }
+      ]
+    }
+  ]
+}

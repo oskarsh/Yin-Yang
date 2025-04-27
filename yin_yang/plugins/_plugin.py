@@ -1,16 +1,16 @@
-import copy
 import json
 import logging
 import subprocess
 from abc import ABC, abstractmethod
 from configparser import ConfigParser
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 
 from PySide6.QtDBus import QDBusConnection, QDBusMessage
 from PySide6.QtGui import QColor, QRgba64
 from PySide6.QtWidgets import QGroupBox, QHBoxLayout, QLineEdit, QComboBox
 
+from yin_yang import helpers
 from ..meta import UnsupportedDesktopError, FileFormat
 
 logger = logging.getLogger(__name__)
@@ -139,7 +139,7 @@ class PluginCommandline(Plugin):
 
         # insert theme in command and run it
         command = self.insert_theme(theme)
-        subprocess.check_call(command)
+        helpers.check_call(command)
 
     def insert_theme(self, theme: str) -> list:
         command = self.command.copy()
@@ -153,7 +153,7 @@ class PluginCommandline(Plugin):
     def check_command(command) -> bool:
         # Returns true if command execution succeeds
         try:
-            subprocess.check_call(command, stdout=subprocess.DEVNULL)
+            helpers.check_call(command, stdout=subprocess.DEVNULL)
             return True
         except FileNotFoundError:
             # if no such command is available, the plugin is not available
@@ -254,10 +254,11 @@ class ExternalPlugin(Plugin):
 
 
 class DBusPlugin(Plugin):
-    def __init__(self, base_message: QDBusMessage):
+    """A class for plugins that mainly switching theme via DBus"""
+
+    def __init__(self):
         super().__init__()
         self.connection = QDBusConnection.sessionBus()
-        self.base_message = base_message
 
     def set_theme(self, theme: str):
         if not (self.available and self.enabled):
@@ -268,13 +269,29 @@ class DBusPlugin(Plugin):
 
         self.call(self.create_message(theme))
 
+    @abstractmethod
     def create_message(self, theme: str) -> QDBusMessage:
-        message = copy.copy(self.base_message)
-        message.setArguments([theme])
-        return message
+        raise NotImplementedError(f'Plugin {self.name} did not implement create_message()')
 
     def call(self, message) -> QDBusMessage:
         return self.connection.call(message)
+
+    def list_paths(self, service: str, path: str) -> List[str]:
+        """ Get all subpath under a given pth of service
+        :path: should start with / but without / on its end
+        """
+
+        assert path.startswith('/') and not path.endswith('/'), \
+            "list_paths wrong, :path: should start with / but without / on its end"
+        msg = QDBusMessage.createMethodCall(service, path, "org.freedesktop.DBus.Introspectable", "Introspect")
+        reply = self.connection.call(msg)
+        if reply.errorName():
+            logger.debug(f"No subpath available under {service} {path}")
+            return []
+
+        xml = reply.arguments()[0]
+        sub_path_names = [line.split('"')[1] for line in xml.split("\n") if line.startswith("  <node name=")]
+        return [path + '/' + sub for sub in sub_path_names]
 
 
 class ConfigFilePlugin(Plugin):
@@ -298,7 +315,7 @@ class ConfigFilePlugin(Plugin):
                 case FileFormat.JSON.value:
                     try:
                         return json.load(file)
-                    except json.decoder.JSONDecodeError as e:
+                    except json.decoder.JSONDecodeError:
                         return self.default_config
                 case FileFormat.CONFIG.value:
                     config = ConfigParser()
@@ -368,3 +385,21 @@ def flatpak_user(app_id: str) -> Path:
 
 def snap_path(app: str) -> Path:
     return Path(f'/var/lib/snapd/snap/{app}/current')
+
+
+def themes_from_theme_directories(type: str) -> List[Path]:
+    theme_directories = [
+        Path('/usr/share/themes'),
+        Path('/usr/local/share/themes'),
+        Path.home() / '.themes',
+        Path.home() / '.local/share/themes',
+    ]
+
+    themes = []
+    for directory in theme_directories:
+        if not directory.is_dir():
+            continue
+
+        themes.extend(d.name for d in directory.iterdir() if d.is_dir() and (d / type).is_dir())
+
+    return themes

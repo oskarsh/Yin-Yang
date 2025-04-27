@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import pathlib
+import shutil
 from abc import ABC, abstractmethod
 from datetime import time
 from dateutil import tz
@@ -14,14 +15,16 @@ from suntime import Sun, SunTimeException
 from .position import get_current_location
 from .meta import Modes, Desktop, PluginKey, ConfigEvent
 from .plugins import get_plugins
+from PySide6.QtCore import QStandardPaths
 
 logger = logging.getLogger(__name__)
 
 # aliases for path to use later on
-home = str(pathlib.Path.home())
-config_path = home + '/.config/yin_yang/yin_yang.json'
+config_path = pathlib.Path(QStandardPaths.writableLocation(QStandardPaths.ConfigLocation))
 if __debug__:
-    config_path = config_path.replace('.json', '_dev.json')
+    config_path = config_path / 'yin_yang.json'
+else:
+    config_path = config_path / 'yin_yang_dev.json'
 
 
 def update_config(config_old: dict, defaults: dict):
@@ -199,14 +202,18 @@ class ConfigManager(dict):
     def load(self) -> None:
         """Load config from file"""
 
-        # generate path for yin-yang if there is none this will be skipped
-        pathlib.Path(home + '/.config/yin_yang').mkdir(parents=True, exist_ok=True)
-
         config_loaded = {}
 
+        # change old config to new path
+        old_path = pathlib.Path.home()
+        old_file = old_path / 'yin_yang/config.json'
+        if old_file.is_file():
+            shutil.copyfile(old_file, config_path)
+            os.remove(old_path)
+
         # check if conf exists
-        if os.path.isfile(config_path):
-            if self._last_save_time == os.stat(config_path).st_mtime:
+        if config_path.is_file():
+            if self._last_save_time == config_path.stat().st_mtime:
                 logger.debug('Loaded config file is up-to-date, skipping load')
                 return
 
@@ -214,7 +221,7 @@ class ConfigManager(dict):
             logger.debug('Loading config file')
             with open(config_path, 'r') as config_file:
                 config_loaded = json.load(config_file)
-                self._last_save_time = os.stat(config_path).st_mtime
+                self._last_save_time = config_path.stat().st_mtime
 
         if config_loaded is None or config_loaded == {}:
             # use default values if something went wrong
@@ -253,7 +260,7 @@ class ConfigManager(dict):
             with open(config_path, 'w') as conf_file:
                 json.dump(self, conf_file, indent=4)
             # update time
-            self._last_save_time = os.stat(config_path).st_mtime
+            self._last_save_time = config_path.stat().st_mtime
             self._changed = False
             if ConfigEvent.SAVE in self._listeners:
                 for listener in self._listeners[ConfigEvent.SAVE]:
@@ -360,7 +367,7 @@ class ConfigManager(dict):
         process_number = 0
         for process in process_iter():
             try:
-                if 'yin-yang' in process.name():
+                if 'yin_yang' in process.name():
                     process_number += 1
             except NoSuchProcess:
                 pass

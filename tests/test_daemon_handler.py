@@ -1,11 +1,12 @@
-import pathlib
+from pathlib import Path
+import re
 import shutil
 import subprocess
 import unittest
 from datetime import time
 from os.path import isfile
 
-from yin_yang import daemon_handler
+from yin_yang import daemon_handler, helpers
 from yin_yang.config import config
 from yin_yang.meta import Modes, ConfigEvent
 
@@ -26,9 +27,17 @@ class DaemonTest(unittest.TestCase):
     def setUpClass(cls) -> None:
         super().setUpClass()
         if not isfile(daemon_handler.TIMER_PATH):
-            pathlib.Path(daemon_handler.SYSTEMD_PATH).mkdir(parents=True, exist_ok=True)
+            Path(daemon_handler.SYSTEMD_PATH).mkdir(parents=True, exist_ok=True)
             shutil.copyfile('./resources/yin_yang.timer', daemon_handler.TIMER_PATH)
             shutil.copyfile('./resources/yin_yang.service', daemon_handler.SERVICE_PATH)
+        # If we're in a flatpak, the service file needs to be updated
+        if (helpers.is_flatpak()):
+            with open(daemon_handler.SERVICE_PATH, 'r') as service:
+                lines = service.readlines()
+            with open(daemon_handler.SERVICE_PATH, 'w') as service:
+                flatpak_exec = f'ExecStart={str(Path.home())}/.local/share/flatpak/exports/bin/sh.oskar.yin_yang --systemd'
+                for line in lines:
+                    service.write(re.sub('ExecStart=/usr/bin/yin_yang --systemd', flatpak_exec, line))
         shutil.copyfile(daemon_handler.TIMER_PATH, daemon_handler.TIMER_PATH.with_suffix('.timer_backup'))
 
     @classmethod

@@ -1,2 +1,9 @@
 [flake8]
-exclude = resources_rc.py,.venv,main_window.py
+exclude = 
+  yin_yang/ui/resources_rc.py,
+  yin_yang/ui/main_window.py,
+  .venv,
+  build,
+  dist
+max-line-length = 127
+max-complexity = 10

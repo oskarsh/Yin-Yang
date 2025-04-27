@@ -1,6 +1,6 @@
 import json
-from configparser import ConfigParser
 import logging
+from configparser import ConfigParser
 from os.path import isdir
 from pathlib import Path
 
@@ -44,7 +44,7 @@ class Firefox(ExternalPlugin):
                     for addon in content['addons']:
                         if addon['type'] == 'theme':
                             themes[addon['id']] = addon['defaultLocale']['name']
-            except FileNotFoundError as _:
+            except FileNotFoundError:
                 logger.warning(f'Firefox profile has no extensions installed: {path}')
                 continue
 

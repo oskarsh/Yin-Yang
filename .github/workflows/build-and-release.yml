@@ -1,0 +1,81 @@
+name: Build and Release Yin-Yang
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: "Build application as Whl"
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12"]
+        os: [ubuntu-24.04]
+    runs-on: ${{matrix.os}}
+    steps:
+      # Checkout repo and set up python
+      - uses: actions/checkout@v4
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{matrix.python-version}}
+      # Install and configure poetry
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+      - name: Set up local virtual environment
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry config virtualenvs.in-project true --local
+      # Load cached venv if it exists
+      - name: Cache packages
+        id: cached-poetry-dependencies
+        uses: actions/cache@v4
+        with:
+          # This path is specific to ubuntu
+          path: ./.venv
+          key: venv-${{ hashFiles('poetry.lock') }}
+      # Install dependencies of cache does not exist
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y qt6-base-dev libsystemd-dev gcc
+      - name: Install Poetry dependencies
+        # if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: |
+          poetry sync --no-interaction
+      # Compile and build Yin-Yang
+      - name: Compile ui, translations and resources
+        run: poetry run ./scripts/build_ui.sh
+      - name: Build Whl for release
+        run: poetry build -f wheel -n -o .
+      # Upload build artifacts for later use
+      - name: Upload yin_yang whl for flatpak build
+        uses: actions/upload-artifact@v4
+        with:
+          name: yin_yang-${{ github.sha }}-py3-none-any.whl
+          path: '*.whl'
+
+  flatpak:
+    name: "Build flatpak file"
+    runs-on: ubuntu-24.04
+    needs: build
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.8
+      options: --privileged
+    strategy:
+      matrix:
+        arch: [x86_64]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Download build from last step
+      uses: actions/download-artifact@v4
+      with:
+        path: dist/
+        name: yin_yang-${{ github.sha }}-py3-none-any.whl
+    - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+      with:
+        bundle: yin_yang.flatpak
+        manifest-path: sh.oskar.yin_yang.json
+        cache-key: flatpak-builder-${{ github.sha }}
+        arch: x86_64

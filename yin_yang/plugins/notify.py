@@ -1,9 +1,14 @@
-from ._plugin import PluginCommandline
+from PySide6.QtDBus import QDBusMessage
+
+from ..notification_handler import create_dbus_message
+from ._plugin import DBusPlugin
 
 
-class Notification(PluginCommandline):
+class Notification(DBusPlugin):
     def __init__(self):
-        super().__init__(['notify-send', 'Theme changed', 'Set the theme to {theme}',
-                          '-a', 'Yin & Yang', '-u', 'low', '--icon', 'yin_yang'])
+        super().__init__()
         self.theme_light = 'Day'
         self.theme_dark = 'Night'
+
+    def create_message(self, theme: str) -> QDBusMessage:
+        return create_dbus_message('Theme changed', f'Set the theme to {theme}')

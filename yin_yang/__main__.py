@@ -1,25 +1,33 @@
 #!/bin/env python3
 
-import sys
 import logging
+import sys
 from argparse import ArgumentParser
 from logging.handlers import RotatingFileHandler
 from pathlib import Path
 
 from PySide6 import QtWidgets
-from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale, QObject
+from PySide6.QtCore import QTranslator, QLibraryInfo, QLocale
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QSystemTrayIcon, QMenu
 from systemd import journal
 
-from yin_yang.NotificationHandler import NotificationHandler
 from yin_yang import daemon_handler
-from yin_yang.meta import ConfigEvent
 from yin_yang import theme_switcher
 from yin_yang.config import config, Modes
+from yin_yang.helpers import is_flatpak
+from yin_yang.meta import ConfigEvent
+from yin_yang.notification_handler import NotificationHandler
+from yin_yang.repeat_timer import RepeatTimer
 from yin_yang.ui import main_window_connector
 
 logger = logging.getLogger()
+timer = RepeatTimer(45, theme_switcher.set_desired_theme)
+
+if is_flatpak():
+    timer.daemon = True
+    timer.name = "Yin-Yang Timer"
+    timer.start()
 
 
 def setup_logger(use_systemd_journal: bool):
@@ -97,7 +105,7 @@ else:
         logger.debug(f'Using language {lang}')
 
         # system translations
-        path = QLibraryInfo.path(QLibraryInfo.TranslationsPath)
+        path = QLibraryInfo.path(QLibraryInfo.LibraryPath.TranslationsPath)
         translator = QTranslator(app)
         if translator.load(QLocale.system(), 'qtbase', '_', path):
             app.installTranslator(translator)
@@ -113,8 +121,8 @@ else:
             raise FileNotFoundError('Error while loading application translations!')
 
     except Exception as e:
-        logger.error(str(e))
-        print('Error while loading translation. Using default language.')
+        logger.warning(str(e))
+        print('The app has not been translated to your language yet. Using default language.')
 
     # show systray icon
     if QSystemTrayIcon.isSystemTrayAvailable():

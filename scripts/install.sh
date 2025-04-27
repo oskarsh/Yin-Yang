@@ -14,11 +14,13 @@ echo "Uninstalling old version, if it exists"
 ./scripts/uninstall.sh
 
 echo "Installing dependencies …"
-# create virtual environment
-python3 -m venv /opt/yin-yang/.venv
-source /opt/yin-yang/.venv/bin/activate
-/opt/yin-yang/.venv/bin/pip3 install --upgrade setuptools pip wheel
-/opt/yin-yang/.venv/bin/pip3 install -r requirements.txt
+# Tell Poetry not to use a keyring
+export PYTHON_KEYRING_BACKEND=keyring.backends.null.Keyring
+# create virtual environment and install packages
+poetry env use python
+poetry install --sync
+poetry build
+pip install ./dist/yin_yang-*-py3-none-any.whl
 
 echo "Installing yin yang"
 #check if /opt/ directory exists else create
@@ -26,8 +28,8 @@ if [ ! -d /opt/ ]; then
     mkdir -p /opt/
 fi
 #check if /opt/ directory exists else create
-if [ ! -d /opt/yin-yang/ ]; then
-    mkdir -p /opt/yin-yang/
+if [ ! -d /opt/yin_yang/ ]; then
+    mkdir -p /opt/yin_yang/
 fi
 # check directories for extension
 if [ ! -d /usr/lib/mozilla ]; then
@@ -40,15 +42,15 @@ if [ ! -d "$USER_HOME/.local/share/applications/" ]; then
     mkdir -p "$USER_HOME/.local/share/applications/"
 fi
 # copy files TODO this copies a bunch of unnecessary files
-cp -r ./* /opt/yin-yang/
+cp -r ./* /opt/yin_yang/
 # copy manifest for firefox extension
 cp ./resources/yin_yang.json /usr/lib/mozilla/native-messaging-hosts/
 # copy terminal executive
-cp ./resources/yin-yang /usr/bin/
+cp ./resources/yin_yang /usr/bin/
 # copy .desktop file
-cp ./resources/Yin-Yang.desktop "$USER_HOME/.local/share/applications/Yin-Yang.desktop"
+appstreamcli make-desktop-file "$USER_HOME/.local/share/applications/yin_yang.desktop"
 # copy icon
-cp ./resources/logo.svg /usr/share/icons/hicolor/scalable/apps/yin_yang.svg
+cp ./resources/icon.svg /usr/share/icons/hicolor/scalable/apps/sh.oskar.yin_yang.svg
 # systemd unit files will be installed by the app
 
 cat << "EOF"
@@ -62,7 +64,7 @@ cat << "EOF"
                                        |___/
 EOF
 echo ""
-echo "Yin-Yang brings Auto Night mode for Linux"
+echo "Yin & Yang brings Auto Night mode for Linux"
 echo ""
 cat << "EOF"
        _..oo8"""Y8b.._
@@ -83,5 +85,5 @@ EOF
 echo ""
 echo ""
 echo "checkout https://github.com/daehruoydeef/Yin-Yang for help"
-echo "Yin-Yang is now installed"
+echo "Yin & Yang is now installed"
 echo "Please make sure you have systemd and python-systemd installed on your system via your package manager!"

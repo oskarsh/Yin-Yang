@@ -1,6 +1,6 @@
-import subprocess
-
 from PySide6.QtWidgets import QLineEdit
+
+from yin_yang import helpers
 
 from ._plugin import PluginCommandline
 
@@ -24,7 +24,7 @@ class Custom(PluginCommandline):
 
     def set_theme(self, theme: str):
         if not theme:
-            raise ValueError(f'Theme \"{theme}\" is invalid')
+            raise ValueError(f'Theme "{theme}" is invalid')
 
         if not (self.available and self.enabled):
             return
@@ -32,4 +32,4 @@ class Custom(PluginCommandline):
         # insert theme in command and run it
         command = self.insert_theme(theme)
         # set shell=True to avoid having to separate between arguments
-        subprocess.check_call(command, shell=True)
+        helpers.check_call(command, shell=True)

@@ -1,7 +1,7 @@
 {
   "name": "yin_yang",
   "description": "Yin-Yang on your pc.",
-  "path": "/opt/yin-yang/communicate.py",
+  "path": "/opt/yin_yang/communicate.py",
   "type": "stdio",
   "allowed_extensions": [ "firefox-extension@yin-yang.org" ]
 } 

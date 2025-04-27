@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>sh.oskar.yin_yang</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>MIT</project_license>
+    <content_rating type="oars-1.1" />
+    
+    <name>Yin &amp; Yang</name>
+    <summary>Automatically switch between light and dark themes</summary>
+    <icon type="stock">sh.oskar.yin_yang</icon>
+    <description>
+        <p>
+            Yin &amp; Yang allows you to automatically switch between light and dark themes in various
+            desktop environments and apps. The change can happen at certain times defined by you,
+            or even at sunset and sunrise times of your current location.
+            If you prefer, you can also manually trigger a theme switch through an icon in the taskbar.
+        </p>
+    </description>
+
+    <developer id="@l0drex@dresden.network">
+        <name>Lorenz Hoffmann</name>
+    </developer>
+
+    <categories>
+        <category>Utility</category>
+        <category>System</category>
+        <category>Settings</category>
+    </categories>
+    <keywords>
+        <keyword>night</keyword>
+        <keyword>day</keyword>
+        <keyword>dark</keyword>
+        <keyword>light</keyword>
+        <keyword>color</keyword>
+        <keyword>theme</keyword>
+    </keywords>
+
+    <url type="homepage">https://github.com/oskarsh/Yin-Yang</url>
+    <url type="bugtracker">https://github.com/oskarsh/Yin-Yang/issues</url>
+    <url type="donation">https://www.patreon.com/L0drex</url>
+
+    <screenshots>
+        <screenshot type="default">
+            <image>https://raw.githubusercontent.com/oskarsh/Yin-Yang/master/.github/images/header.png</image>
+        </screenshot>
+        <screenshot>
+            <image>https://raw.githubusercontent.com/oskarsh/Yin-Yang/master/.github/images/settings.png</image>
+        </screenshot>
+    </screenshots>
+
+    <branding>
+        <color type="primary" schema_preference="light">#e0e0e0</color>
+        <color type="primary" schema_preference="dark">#0c0c0c</color>
+    </branding>
+    
+    <recommends>
+        <display_length compare="ge">600</display_length>
+    </recommends>
+
+    <launchable type="desktop-id">sh.oskar.yin_yang.desktop</launchable>
+
+    <provides>
+        <python3>yin_yang</python3>
+        <binary>yin_yang</binary>
+    </provides>
+    
+    <translation type="qt">yin_yang</translation>
+    <translation type="qt" source_locale="de_DE">yin_yang</translation>
+    <translation type="qt" source_locale="nl_NL">yin_yang</translation>
+    <translation type="qt" source_locale="zh_CN">yin_yang</translation>
+    <translation type="qt" source_locale="zh_TW">yin_yang</translation>
+
+    <releases>
+        <release version="v3.4.0" date="2024-03-17">
+            <url type="details">https://github.com/oskarsh/Yin-Yang/releases/tag/v3.4</url>
+            <description>
+                <ul>
+                    <li>Added support for Budgie</li>
+                    <li>Improved support for VS Code and derivatives</li>
+                    <li>Improved support for Gtk on KDE and Wallpaper on Gnome</li>
+                    <li>Removed support for Atom, Gedit and Brave</li>
+                    <li>Removed the option to make a sound on theme change</li>
+                    <li>Added taiwanese translations</li>
+                    <li>Added a command line option to start only the tray icon</li>
+                </ul>
+            </description>
+        </release>
+        <release version="v3.3.0" date="2023-11-10">
+            <url type="details">https://github.com/oskarsh/Yin-Yang/releases/tag/v3.3</url>
+            <description>
+                <ul>
+                    <li>Added support for Okular, Mate, Cinnamon</li>
+                    <li>Added a system tray icon and buttons in the UI to change the theme manually</li>
+                </ul>
+            </description>
+        </release>
+        <release version="v3.2.4" date="2023-05-12">
+            <url type="details">https://github.com/oskarsh/Yin-Yang/releases/tag/v3.2.4</url>
+            <description>
+                <ul>
+                    <li>Improved Konsole plugin, so it can change its theme without a restart</li>
+                </ul>
+            </description>
+        </release>
+        <release version="v3.2.0" date="2022-11-02">
+            <url type="details">https://github.com/oskarsh/Yin-Yang/releases/tag/v3.2.0</url>
+            <description>
+                <ul>
+                    <li>Added support for Brave, Only Office, Gedit, Konsole and custom scripts</li>
+                    <li>Improved support for XFCE and Kvantum</li>
+                    <li>Changing only the KDE color scheme is now possible</li>
+                </ul>
+            </description>
+        </release>
+        <release version="v3.1.0" date="2022-10-12">
+            <url type="details">https://github.com/oskarsh/Yin-Yang/releases/tag/v3.1.0</url>
+            <description>
+                <ul>
+                    <li>Systemd is used for scheduling</li>
+                    <li>User is now correctly warned about unsaved changed when closing the app.</li>
+                    <li>VS Code plugin no longer crashes the app</li>
+                </ul>
+            </description>
+        </release>
+        <release version="v3.0.0" date="2022-09-22">
+            <url type="details">https://github.com/oskarsh/Yin-Yang/releases/tag/v3.0.0</url>
+            <description>
+                <ul>
+                    <li>Option to follow the sun position is now accessible from the UI</li>
+                    <li>Translations are now possible</li>
+                    <li>Notifications can optionally be shown when the theme changes</li>
+                    <li>Logo looks a bit cleaner and is now themeable</li>
+                </ul>
+            </description>
+        </release>
+        <release version="v1.0.0" date="2019-04-14">
+            <url type="details">https://github.com/oskarsh/Yin-Yang/releases/tag/v1.0-beta</url>
+            <description>
+                <ul>
+                    <li>Added support for Gnome, Budgie</li>
+                    <li>Scheduler should work more reliably</li>
+                    <li>KDE is now more reliably recognized</li>
+                </ul>
+            </description>
+        </release>
+    </releases>
+</component>

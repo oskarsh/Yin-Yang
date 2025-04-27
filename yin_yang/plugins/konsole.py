@@ -1,28 +1,30 @@
 import logging
 import os
 import re
-import subprocess
 from configparser import ConfigParser
 from itertools import chain
 from pathlib import Path
 from shutil import copyfile
 
-import psutil
-from PySide6.QtDBus import QDBusConnection, QDBusMessage
+from PySide6.QtDBus import QDBusMessage
 
-from ._plugin import Plugin
+from yin_yang import helpers
+from ._plugin import DBusPlugin
 
 logger = logging.getLogger(__name__)
 
 
-class Konsole(Plugin):
-    """
+class Konsole(DBusPlugin):
+    '''
     Themes are profiles. To use a color scheme,
     create a new profile or edit one to use the desired color scheme.
     This is necessary to allow live theme changes.
-    """
-    global_path = Path('/usr/share/konsole')
+    '''
+
+    global_path = Path(helpers.get_usr() + 'share/konsole')
     config_path = Path.home() / '.config/konsolerc'
+    # apps using konsole
+    apps_have_konsole = ["org.kde.konsole", "org.kde.yakuake", "org.kde.dolphin", "org.kde.kate"]
 
     @property
     def user_path(self) -> Path:
@@ -61,31 +63,13 @@ class Konsole(Plugin):
         # update default profile, if application is started afterward
         self.default_profile = profile + '.profile'
 
-        # Set Konsole profile for all sessions
-
-        # Get the process IDs of all running Konsole instances owned by the current user
-        process_ids = [
-            proc.pid for proc in psutil.process_iter()
-            if proc.name() == 'konsole' and proc.username() == os.getlogin()
-        ]
-
-        # loop: console processes
-        for proc_id in process_ids:
-            logger.debug(f'Changing profile in konsole session {proc_id}')
-            set_profile(f'org.kde.konsole-{proc_id}', profile)
-
-        set_profile('org.kde.konsole', profile)  # konsole may don't have session dbus like above
-        set_profile('org.kde.yakuake', profile)
-
-        process_ids = [
-            proc.pid for proc in psutil.process_iter()
-            if proc.name() == 'dolphin' and proc.username() == os.getlogin()
-        ]
-
-        # loop: dolphin processes
-        for proc_id in process_ids:
-            logger.debug(f'Changing profile in dolphin session {proc_id}')
-            set_profile(f'org.kde.dolphin-{proc_id}', profile)
+        # Find available konsole sessions, including dolphin, yakuake, kate, etc
+        services = [str(n) for n in self.connection.interface().registeredServiceNames().value()
+                    if n.split('-')[0] in self.apps_have_konsole]
+        for service in services:
+            logger.debug(f'Changing profile in konsole session {service}')
+            self.set_profile(service, profile=profile)
+            self.set_profile(service, profile, set_default_profile=True)
 
         return True
 
@@ -93,16 +77,27 @@ class Konsole(Plugin):
         # everything is done in set_mode (above)
         pass
 
+    def create_message(self, theme: str) -> QDBusMessage:
+        message = QDBusMessage.createMethodCall(
+            'org.kde.konsole', 'Sessions/', 'org.kde.konsole.Session', 'setProfile'
+        )
+        message.setArguments([theme])
+        return message
+
     @property
     def available_themes(self) -> dict:
         if not self.available:
             return {}
 
-        themes = dict(sorted([
-            (p.with_suffix('').name, p)
-            for p in chain(self.global_path.iterdir(), self.user_path.iterdir())
-            if p.is_file() and p.suffix == '.colorscheme'
-        ]))
+        themes = dict(
+            sorted(
+                [
+                    (p.with_suffix('').name, p)
+                    for p in chain(self.global_path.iterdir(), self.user_path.iterdir())
+                    if p.is_file() and p.suffix == '.colorscheme'
+                ]
+            )
+        )
 
         themes_dict = {}
         config_parser = ConfigParser()
@@ -128,7 +123,7 @@ class Konsole(Plugin):
         # cant use config parser because of weird file structure
         with self.config_path.open('r') as file:
             for line in file:
-                # Search for the pattern "DefaultProfile=*"
+                # Search for the pattern 'DefaultProfile=*'
                 match = re.search(r'DefaultProfile=(.*)', line)
 
                 # If a match is found, return the content of the wildcard '*'
@@ -148,14 +143,14 @@ class Konsole(Plugin):
 
         if value is None:
             # create a custom profile manually
-            file_content = """[Appearance]
+            file_content = '''[Appearance]
 ColorScheme=Breeze
 
 [General]
 Command=/bin/bash
-Name=Fish
+Name=YinYang
 Parent=FALLBACK/
-"""
+'''
 
             with (self.user_path / 'Default.profile').open('w') as file:
                 file.writelines(file_content)
@@ -170,10 +165,11 @@ Parent=FALLBACK/
     def default_profile(self, value: str):
         assert value.endswith('.profile')
 
+        match: re.Match[str] | None = None
         with self.config_path.open('r') as file:
             lines = file.readlines()
             for i, line in enumerate(lines):
-                # Search for the pattern "DefaultProfile=*"
+                # Search for the pattern 'DefaultProfile=*'
                 match = re.search(r'DefaultProfile=(.*)', line)
 
                 # If a match is found, return the content of the wildcard '*'
@@ -181,10 +177,12 @@ Parent=FALLBACK/
                     logger.debug(f'Changing default profile to {value}')
                     lines[i] = f'DefaultProfile={value}\n'
                     break
-                else:
-                    logger.debug('No default profile found')
-        with self.config_path.open('w') as file:
-            file.writelines(lines)
+
+        if match is None:
+            logger.error(f'No DefaultProfile field found in {self.config_path}')
+        else:
+            with self.config_path.open('w') as file:
+                file.writelines(lines)
 
     def update_profile(self, dark: bool, theme: str):
         if not self.available or theme == '':
@@ -212,7 +210,9 @@ Parent=FALLBACK/
             profile_config.write(file)
 
     def create_profiles(self):
-        logger.debug('Creating new profiles for live-switching between light and dark themes.')
+        logger.debug(
+            'Creating new profiles for live-switching between light and dark themes.'
+        )
         # copy default profile to create theme profiles
         light_profile = self.user_path / 'Light.profile'
         dark_profile = self.user_path / 'Dark.profile'
@@ -236,36 +236,23 @@ Parent=FALLBACK/
         with open(dark_profile, 'w') as file:
             profile_config.write(file)
 
+    def set_profile(self, service: str, profile: str, set_default_profile: bool = False):
+        if set_default_profile:
+            path = '/Sessions'
+            interface = 'org.kde.konsole.Session'
+            method = 'setProfile'
+        else:
+            path = '/Windows'
+            interface = 'org.kde.konsole.Window'
+            method = 'setDefaultProfile'
 
-def set_profile(service: str, profile: str):
-    # connect to the session bus
-    connection = QDBusConnection.sessionBus()
+        sessions = self.list_paths(service, path)
 
-    # maybe it's possible with pyside6 dbus packages, but this was simpler and worked
-    try:
-        sessions = subprocess.check_output(f'qdbus {service} | grep "Sessions/"', shell=True)
-    except subprocess.CalledProcessError:
-        try:
-            sessions = subprocess.check_output(
-                f'qdbus org.kde.konsole | grep "Sessions/"', shell=True
+        for session in sessions:
+            logger.debug(
+                f'Changing {"default" if set_default_profile else ""} profile of session {session} to {profile}'
             )
-            logger.debug(f'Found org.kde.konsole, use that instead')
-            service = "org.kde.konsole"
-        except subprocess.CalledProcessError:
-            # happens when dolphins konsole is not opened
-            logger.debug(f'No Konsole sessions available in service {service}, skipping')
-            return
-    sessions = sessions.decode('utf-8').removesuffix('\n').split('\n')
-
-    # loop: process sessions
-    for session in sessions:
-        logger.debug(f'Changing profile of session {session} to {profile}')
-        # set profile
-        message = QDBusMessage.createMethodCall(
-            service,
-            session,
-            'org.kde.konsole.Session',
-            'setProfile'
-        )
-        message.setArguments([profile])
-        connection.call(message)
+            # set profile
+            message = QDBusMessage.createMethodCall(service, session, interface, method)
+            message.setArguments([profile])
+            self.connection.call(message)
