@@ -123,3 +123,7 @@ class _Kde(PluginCommandline):
                 themes.append((icon_theme_folder.name, theme_name))
 
         return dict(themes)
+
+    @property
+    def available(self) -> dict:
+        return path.isfile("/usr/lib/plasma-changeicons")
