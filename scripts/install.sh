@@ -6,7 +6,7 @@ USER_HOME=${1-${HOME}}
 
 if test ${EUID} -ne 0; then
     echo enter password in order to install Yin-Yang correctly
-    exec sudo su -c "${0} ${USER_HOME}"
+    exec sudo su -c "\"${0}\" \"${USER_HOME}\""
     exit 0
 fi
 
