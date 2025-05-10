@@ -112,7 +112,7 @@ class Konsole(DBusPlugin):
 
     @property
     def available(self) -> bool:
-        return self.global_path.is_dir()
+        return self.global_path.is_dir() or self.user_path.is_dir()
 
     @property
     def default_profile(self):
