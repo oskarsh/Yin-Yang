@@ -87,19 +87,19 @@
 <context>
     <name>systray</name>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="138"/>
+        <location filename="../../yin_yang/__main__.py" line="140"/>
         <source>Open Yin Yang</source>
         <comment>Context menu action in the systray</comment>
         <translation>Yin Yang öffnen</translation>
     </message>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="141"/>
+        <location filename="../../yin_yang/__main__.py" line="143"/>
         <source>Toggle theme</source>
         <comment>Context menu action in the systray</comment>
         <translation type="unfinished">Farbschema wechseln</translation>
     </message>
     <message>
-        <location filename="../../yin_yang/__main__.py" line="144"/>
+        <location filename="../../yin_yang/__main__.py" line="146"/>
         <source>Quit</source>
         <comment>Context menu action in the systray</comment>
         <translation>Beenden</translation>

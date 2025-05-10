@@ -97,7 +97,10 @@ else:
     config.add_event_listener(ConfigEvent.CHANGE, daemon_handler.watcher)
     app = QtWidgets.QApplication(sys.argv)
     # fixes icon on wayland
-    app.setDesktopFileName('Yin-Yang')
+    app.setDesktopFileName('sh.oskar.yin_yang')
+    # fixes icon on x11
+    app.setApplicationName('Yin & Yang')
+    app.setApplicationDisplayName('Yin & Yang')
 
     # load translation
     try:
@@ -128,7 +131,7 @@ else:
     if QSystemTrayIcon.isSystemTrayAvailable():
         app.setQuitOnLastWindowClosed(False)
 
-        icon = QSystemTrayIcon(QIcon(u':icons/logo'), app)
+        icon = QSystemTrayIcon(QIcon(u':/icons/icon'), app)
         icon.activated.connect(systray_icon_clicked)
         icon.setToolTip('Yin & Yang')
 

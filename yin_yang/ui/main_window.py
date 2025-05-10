@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.8.1
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -101,7 +101,7 @@ class Ui_main_window(object):
         self.label_light.setObjectName(u"label_light")
         self.label_light.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.time_layout.setWidget(0, QFormLayout.LabelRole, self.label_light)
+        self.time_layout.setWidget(0, QFormLayout.ItemRole.LabelRole, self.label_light)
 
         self.inp_time_light = QTimeEdit(self.time)
         self.inp_time_light.setObjectName(u"inp_time_light")
@@ -114,13 +114,13 @@ class Ui_main_window(object):
         self.inp_time_light.setDisplayFormat(u"HH:mm")
         self.inp_time_light.setTime(QTime(8, 0, 0))
 
-        self.time_layout.setWidget(0, QFormLayout.FieldRole, self.inp_time_light)
+        self.time_layout.setWidget(0, QFormLayout.ItemRole.FieldRole, self.inp_time_light)
 
         self.label_dark = QLabel(self.time)
         self.label_dark.setObjectName(u"label_dark")
         self.label_dark.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.time_layout.setWidget(1, QFormLayout.LabelRole, self.label_dark)
+        self.time_layout.setWidget(1, QFormLayout.ItemRole.LabelRole, self.label_dark)
 
         self.inp_time_dark = QTimeEdit(self.time)
         self.inp_time_dark.setObjectName(u"inp_time_dark")
@@ -130,7 +130,7 @@ class Ui_main_window(object):
         self.inp_time_dark.setDisplayFormat(u"HH:mm")
         self.inp_time_dark.setTime(QTime(20, 0, 0))
 
-        self.time_layout.setWidget(1, QFormLayout.FieldRole, self.inp_time_dark)
+        self.time_layout.setWidget(1, QFormLayout.ItemRole.FieldRole, self.inp_time_dark)
 
 
         self.schedule_settings_layout.addWidget(self.time)
@@ -156,7 +156,7 @@ class Ui_main_window(object):
         self.label_longitude.setObjectName(u"label_longitude")
         self.label_longitude.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.formLayout.setWidget(1, QFormLayout.LabelRole, self.label_longitude)
+        self.formLayout.setWidget(1, QFormLayout.ItemRole.LabelRole, self.label_longitude)
 
         self.inp_longitude = QDoubleSpinBox(self.location_input)
         self.inp_longitude.setObjectName(u"inp_longitude")
@@ -170,13 +170,13 @@ class Ui_main_window(object):
         self.inp_longitude.setMinimum(-180.000000000000000)
         self.inp_longitude.setMaximum(180.000000000000000)
 
-        self.formLayout.setWidget(1, QFormLayout.FieldRole, self.inp_longitude)
+        self.formLayout.setWidget(1, QFormLayout.ItemRole.FieldRole, self.inp_longitude)
 
         self.label_latitude = QLabel(self.location_input)
         self.label_latitude.setObjectName(u"label_latitude")
         self.label_latitude.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.formLayout.setWidget(0, QFormLayout.LabelRole, self.label_latitude)
+        self.formLayout.setWidget(0, QFormLayout.ItemRole.LabelRole, self.label_latitude)
 
         self.inp_latitude = QDoubleSpinBox(self.location_input)
         self.inp_latitude.setObjectName(u"inp_latitude")
@@ -187,7 +187,7 @@ class Ui_main_window(object):
         self.inp_latitude.setMinimum(-90.000000000000000)
         self.inp_latitude.setMaximum(90.000000000000000)
 
-        self.formLayout.setWidget(0, QFormLayout.FieldRole, self.inp_latitude)
+        self.formLayout.setWidget(0, QFormLayout.ItemRole.FieldRole, self.inp_latitude)
 
 
         self.verticalLayout.addWidget(self.location_input)
@@ -240,13 +240,13 @@ class Ui_main_window(object):
         self.bootOffsetLabel = QLabel(self.settings)
         self.bootOffsetLabel.setObjectName(u"bootOffsetLabel")
 
-        self.bootOffsetSettings.setWidget(0, QFormLayout.LabelRole, self.bootOffsetLabel)
+        self.bootOffsetSettings.setWidget(0, QFormLayout.ItemRole.LabelRole, self.bootOffsetLabel)
 
         self.bootOffset = QSpinBox(self.settings)
         self.bootOffset.setObjectName(u"bootOffset")
         self.bootOffset.setValue(10)
 
-        self.bootOffsetSettings.setWidget(0, QFormLayout.FieldRole, self.bootOffset)
+        self.bootOffsetSettings.setWidget(0, QFormLayout.ItemRole.FieldRole, self.bootOffset)
 
 
         self.settings_layout.addLayout(self.bootOffsetSettings)
