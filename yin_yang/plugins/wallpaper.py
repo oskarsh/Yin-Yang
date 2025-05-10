@@ -147,7 +147,7 @@ class _Xfce(PluginCommandline):
 
 class _Cinnamon(PluginCommandline):
     def __init__(self):
-        super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.background', 'picture-uri', 'file://\"{theme}\"'])
+        super().__init__(['gsettings', 'set', 'org.cinnamon.desktop.background', 'picture-uri', '\"file://{theme}\"'])
 
     @property
     def available(self) -> bool:
