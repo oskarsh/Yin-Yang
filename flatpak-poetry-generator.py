@@ -18,6 +18,7 @@ import sys
 import urllib.parse
 import urllib.request
 from collections import OrderedDict
+import itertools
 
 import toml
 
@@ -102,8 +103,11 @@ def get_module_sources(parsed_lockfile: dict, include_devel: bool = True) -> lis
             else:
                 hashes.append(get_sources_13(package, hash_re))
 
+            # make the list flat
+            hashes_flat = list(itertools.chain.from_iterable(hashes))
+
             url, hash = get_pypi_source(
-                package["name"], package["version"], hashes
+                package["name"], package["version"], hashes_flat
             )
             source = {"type": "file", "url": url, "sha256": hash}
             sources.append(source)
