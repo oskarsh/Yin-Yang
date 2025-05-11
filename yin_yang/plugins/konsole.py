@@ -88,12 +88,15 @@ class Konsole(DBusPlugin):
     def available_themes(self) -> dict:
         if not self.available:
             return {}
+        
+        global_files = self.global_path.iterdir() if self.global_path.is_dir() else []
+        user_files = self.user_path.iterdir() if self.user_path.is_dir() else []
 
         themes = dict(
             sorted(
                 [
                     (p.with_suffix('').name, p)
-                    for p in chain(self.global_path.iterdir(), self.user_path.iterdir())
+                    for p in chain(global_files, user_files)
                     if p.is_file() and p.suffix == '.colorscheme'
                 ]
             )
