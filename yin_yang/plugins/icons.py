@@ -120,7 +120,10 @@ class _Kde(PluginCommandline):
                 theme_parser.read(icon_theme_folder.path + "/index.theme")
                 theme_name = theme_parser["Icon Theme"]["Name"]
 
-                themes.append((icon_theme_folder.name, theme_name))
+                # this will exclude any icon themes that aren't icons, such as cursors
+                # https://specifications.freedesktop.org/icon-theme-spec/latest/#id-1.5.4.1
+                if any("Size" in theme_parser[s] for s in theme_parser.sections()):
+                    themes.append((icon_theme_folder.name, theme_name))
 
         return dict(themes)
 
