@@ -2,6 +2,7 @@ import logging
 import os
 import re
 from configparser import ConfigParser
+from doctest import debug
 from itertools import chain
 from pathlib import Path
 from shutil import copyfile
@@ -109,8 +110,26 @@ class Konsole(DBusPlugin):
             config_parser.read(theme_path)
             theme_name = config_parser['General']['Description']
             themes_dict[theme] = theme_name
+            
+        if themes_dict == {}:
+            # sync with https://invent.kde.org/utilities/konsole/-/blob/master/data/color-schemes/BlackOnWhite.colorscheme
+            # these are included in the binary
+            return {
+                'BlackOnLightYellow': 'Black on Light Yellow',
+                'BlackOnRandomLight': 'Black on Random Light',
+                'BlackOnWhite': 'Black on White',
+                'BlueOnBlack': 'Blue on Black',
+                'Breeze': 'Breeze',
+                'Campbell': 'Campbell',
+                'DarkPastels': 'Dark Pastels',
+                'GreenOnBlack': 'Green on Black',
+                'Linux': 'Linux Colors',
+                'RedOnBlack': 'Red on Black',
+                'Solarized': 'Solarized',
+                'SolarizedLight': 'Solarized Light',
+                'WhiteOnBlack': 'White on Black'
+            }
 
-        assert themes_dict != {}, 'No themes found!'
         return themes_dict
 
     @property
