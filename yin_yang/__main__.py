@@ -127,6 +127,9 @@ else:
         logger.warning(str(e))
         print('The app has not been translated to your language yet. Using default language.')
 
+    # Create the window object before setting up system tray
+    window = main_window_connector.MainWindow()
+
     # show systray icon
     if QSystemTrayIcon.isSystemTrayAvailable():
         app.setQuitOnLastWindowClosed(False)
@@ -151,9 +154,8 @@ else:
     else:
         logger.debug('System tray is unsupported')
 
-    if arguments.minimized:
-        sys.exit(app.exec())
-    else:
-        window = main_window_connector.MainWindow()
+    # Show the window only if not started minimized
+    if not arguments.minimized:
         window.show()
-        sys.exit(app.exec())
+    
+    sys.exit(app.exec())
