@@ -48,7 +48,7 @@ cp ./resources/yin_yang.json /usr/lib/mozilla/native-messaging-hosts/
 # copy terminal executive
 cp ./resources/yin_yang /usr/bin/
 # copy .desktop file
-appstreamcli make-desktop-file "$USER_HOME/.local/share/applications/yin_yang.desktop"
+appstreamcli make-desktop-file resources/sh.oskar.yin_yang.metainfo.xml "$USER_HOME/.local/share/applications/yin_yang.desktop"
 # copy icon
 cp ./resources/icon.svg /usr/share/icons/hicolor/scalable/apps/sh.oskar.yin_yang.svg
 # systemd unit files will be installed by the app
