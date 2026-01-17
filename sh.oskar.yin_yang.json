@@ -52,17 +52,16 @@
       "build-commands": [
         "install -Dm664 icon.svg /app/share/icons/hicolor/scalable/apps/sh.oskar.yin_yang.svg",
         "install -Dm664 sh.oskar.yin_yang.metainfo.xml /app/share/metainfo/sh.oskar.yin_yang.metainfo.xml",
+        "install -Dm664 yin_yang.timer /app/resources/yin_yang.timer",
+        "install -Dm664 yin_yang.service /app/resources/yin_yang.service",
+        "install -Dm664 sh.oskar.yin_yang.metainfo.xml /app/share/metainfo/sh.oskar.yin_yang.metainfo.xml",
         "appstreamcli make-desktop-file sh.oskar.yin_yang.metainfo.xml yin_yang.desktop",
         "install -Dm644 yin_yang.desktop /app/share/applications/sh.oskar.yin_yang.desktop"
       ],
       "sources": [
         {
-          "type": "file",
-          "path": "./resources/icon.svg"
-        },
-        {
-          "type": "file",
-          "path": "./resources/sh.oskar.yin_yang.metainfo.xml"
+          "type": "dir",
+          "path": "./resources"
         }
       ]
     }
