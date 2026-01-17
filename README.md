@@ -105,6 +105,20 @@ Make sure to run `flake8` on your files to avoid errors from the ci in PRs:
 poetry run flake8
 ```
 
+### Post installation
+
+Have a look here in case you're having trouble: https://github.com/oskarsh/Yin-Yang/wiki/Troubleshooting
+
+#### Konsole
+
+```
+#create a directory here if there isn't one
+sudo mkdir /usr/share/konsole
+```
+
+Remember to create a fresh new profile and set it as the default one, then close and reopen Konsole. Opening a new window isn't enough, **you will need to terminate any running processes** before plugin setup can be finalised.
+
+
 ### Uninstall
 
 Run `scripts/uninstall.sh` from a terminal and fill out the password.
