@@ -95,22 +95,22 @@ class _Kde(DBusPlugin):
         self._theme_dark = None
 
     @property
-    def theme_light(self) -> str:
+    def theme_light(self) -> str | None:
         return self._theme_light
 
     @theme_light.setter
     def theme_light(self, value: str):
-        check_theme(value)
-        self._theme_light = value
+        if check_theme(value):
+            self._theme_light = value
 
     @property
-    def theme_dark(self) -> str:
+    def theme_dark(self) -> str | None:
         return self._theme_dark
 
     @theme_dark.setter
     def theme_dark(self, value: str):
-        check_theme(value)
-        self._theme_dark = value
+        if check_theme(value):
+            self._theme_dark = value
 
     @property
     def available(self) -> bool:
