@@ -10,33 +10,29 @@ from .config import ConfigWatcher, config
 from .meta import ConfigEvent, Modes
 
 logger = logging.getLogger(__name__)
-SYSTEMD_PATH = Path.home() / '.local/share/systemd/user'
+_LOCAL_SHARE = Path('~/.local/share').expanduser()
+SYSTEMD_PATH = _LOCAL_SHARE / 'systemd' / 'user'
 TIMER_PATH = SYSTEMD_PATH / 'yin_yang.timer'
 SERVICE_PATH = SYSTEMD_PATH / 'yin_yang.service'
 
 
 def create_files():
     logger.debug('Creating systemd files')
+    app_root = Path('/app') if (is_flatpak := helpers.is_flatpak()) else Path.cwd()
     if not SYSTEMD_PATH.is_dir():
         SYSTEMD_PATH.mkdir(parents=True, exist_ok=True)
     if not TIMER_PATH.is_file():
-        shutil.copy('./resources/yin_yang.timer', TIMER_PATH)
+        shutil.copy(app_root / 'resources' / 'yin_yang.timer', TIMER_PATH)
     if not SERVICE_PATH.is_file():
-        shutil.copy('./resources/yin_yang.service', SERVICE_PATH)
-    if helpers.is_flatpak():
-        with open(SERVICE_PATH, 'r') as service:
-            lines = service.readlines()
-        with open(SERVICE_PATH, 'w') as service:
-            for line in lines:
-                service.write(
-                    re.sub(
-                        'ExecStart=/usr/bin/yin_yang --systemd',
-                        'ExecStart='
-                        + str(Path.home())
-                        + '/.local/share/flatpak/exports/bin/sh.oskar.yin_yang --systemd',
-                        line,
-                    )
-                )
+        shutil.copy(app_root / 'resources' / 'yin_yang.service', SERVICE_PATH)
+    if is_flatpak:
+        exe_path = _LOCAL_SHARE / 'flatpak' / 'exports' / 'bin' / 'sh.oskar.yin_yang'
+        new_exec_start = f'ExecStart={exe_path} --systemd'
+        fixed_lines = [
+            re.sub('ExecStart=/usr/bin/yin_yang --systemd', new_exec_start, line)
+            for line in SERVICE_PATH.read_text().splitlines()
+        ]
+        SERVICE_PATH.write_text('\n'.join(fixed_lines))
 
 
 def run_command(command, **kwargs):

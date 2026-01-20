@@ -4,6 +4,15 @@
 
 set -euo pipefail
 
+flatpak_uninstall() {
+    if command -v flatpak > /dev/null ; then
+        flatpak uninstall "$1" --noninteractive --delete-data sh.oskar.yin_yang \
+        || echo Already uninstalled from flatpak "$1"
+    fi
+}
+
+flatpak_uninstall --user
+
 # check, if sudo
 if test ${EUID} -ne 0; then
     echo "enter password in order to install Yin & Yang correctly"
@@ -26,6 +35,8 @@ rm -f /usr/lib/mozilla/native-messaging-hosts/yin_yang.json
 echo "Removing systemd units"
 rm -f "$HOME/.local/share/systemd/user/yin_yang.timer"
 rm -f "$HOME/.local/share/systemd/user/yin_yang.service"
+
+flatpak_uninstall --system
 
 echo "Yin & Yang uninstalled succesfully"
 echo have a nice day ...
