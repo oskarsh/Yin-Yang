@@ -7,7 +7,7 @@ authors = [
   { name = "Oskar Schachtschneider" }
 ]
 readme = "README.md"
-requires-python = ">=3.10, <3.14"
+requires-python = ">=3.10, <3.15"
 dependencies = [
   # PySide is already included in the Flatpak base app. 
   # If building from source, preferably install these from your system package manager.
@@ -18,7 +18,8 @@ dependencies = [
   "suntime~=1.3.2",
   "systemd-python==235",
   "requests==2.32.3",
-  "python-dateutil~=2.9.0.post0"
+  "python-dateutil~=2.9.0.post0",
+  "pyside6 (>=6.10.0,<7.0.0)"
 ]
 
 [project.urls]
