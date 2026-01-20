@@ -52,8 +52,8 @@ class Plugin(ABC):
         if not self.enabled:
             return False
 
-        theme = self.theme_dark if dark else self.theme_light
-        self.set_theme(theme)
+        if (theme := self.theme_dark if dark else self.theme_light):
+            self.set_theme(theme)
         return True
 
     @abstractmethod
