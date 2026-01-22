@@ -107,6 +107,10 @@ poetry run flake8
 
 Have a look here in case you're having trouble: https://github.com/oskarsh/Yin-Yang/wiki/Troubleshooting
 
+#### emacs
+
+- once [auto-dark-emacs](https://github.com/LionyxML/auto-dark-emacs) package is set up, no further configuration will be needed, as it gets triggered when there is a system theme switch, which is what Yin-Yang does anyway
+
 ### Uninstall
 
 Run `scripts/uninstall.sh` from a terminal and fill out the password.
