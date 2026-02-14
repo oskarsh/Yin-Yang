@@ -239,17 +239,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.load_times()
 
     def select_wallpaper(self, dark: bool):
-        message_light = self.tr('Open light wallpaper')
-        message_dark = self.tr('Open dark wallpaper')
         file_name, _ = QFileDialog.getOpenFileName(
-            self, message_dark if dark else message_light,
+            self, self.tr(f'Open {"dark" if dark else "light"} wallpaper'),
             QStandardPaths.standardLocations(QStandardPaths.PicturesLocation)[0],
             'Images (*.png *.jpg *.jpeg *.JPG *.JPEG)')
 
-        group_wallpaper = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'groupWallpaper')
-        inputs_wallpaper = group_wallpaper.findChildren(QtWidgets.QLineEdit)
-        i = 1 if dark else 0
-        inputs_wallpaper[i].setText(file_name)
+        if file_name:
+            group_wallpaper = self.ui.plugins_scroll_content.findChild(QtWidgets.QGroupBox, 'groupWallpaper')
+            inputs_wallpaper = group_wallpaper.findChildren(QtWidgets.QLineEdit)
+            inputs_wallpaper[1 if dark else 0].setText(file_name)
 
     def select_color(self, dark: bool, initial_color: QColor):
         selected_color = QColorDialog.getColor(initial_color)
