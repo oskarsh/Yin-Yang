@@ -269,7 +269,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 plugin.enabled = False
                 self.load_plugins()
                 return False
-        
+
         return True
 
     def save_config_to_file(self, button) -> bool:
@@ -294,7 +294,7 @@ class MainWindow(QtWidgets.QMainWindow):
             case _:
                 button = QDialogButtonBox.standardButton(self.ui.btn_box, button)
                 return self.save_config_to_file(button)
-        
+
         return True
 
     def should_close(self) -> bool:

@@ -3,6 +3,7 @@ exclude =
   yin_yang/ui/resources_rc.py,
   yin_yang/ui/main_window.py,
   .venv,
+  .env,
   build,
   dist
 max-line-length = 127

@@ -1,12 +1,12 @@
 {
   "id": "sh.oskar.yin_yang",
   "runtime": "org.kde.Platform",
-  "runtime-version": "6.8",
+  "runtime-version": "6.9",
   "sdk": "org.kde.Sdk",
   "base": "io.qt.PySide.BaseApp",
-  "base-version": "6.8",
+  "base-version": "6.9",
   "command": "yin_yang",
-  "build-options":{
+  "build-options": {
     "env": [
       "BASEAPP_REMOVE_WEBENGINE=1",
       "BASEAPP_DISABLE_NUMPY=1"

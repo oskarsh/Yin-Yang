@@ -2,7 +2,6 @@ import logging
 import os
 import re
 from configparser import ConfigParser
-from doctest import debug
 from itertools import chain
 from pathlib import Path
 from shutil import copyfile
@@ -89,7 +88,7 @@ class Konsole(DBusPlugin):
     def available_themes(self) -> dict:
         if not self.available:
             return {}
-        
+
         global_files = self.global_path.iterdir() if self.global_path.is_dir() else []
         user_files = self.user_path.iterdir() if self.user_path.is_dir() else []
 
@@ -110,7 +109,7 @@ class Konsole(DBusPlugin):
             config_parser.read(theme_path)
             theme_name = config_parser['General']['Description']
             themes_dict[theme] = theme_name
-            
+
         if themes_dict == {}:
             # sync with https://invent.kde.org/utilities/konsole/-/blob/master/data/color-schemes/BlackOnWhite.colorscheme
             # these are included in the binary

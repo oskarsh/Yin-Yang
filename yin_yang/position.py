@@ -61,7 +61,6 @@ def get_current_location() -> QGeoCoordinate:
 def get_qt_position() -> QGeoCoordinate:
     """Get the position via QT service"""
     # Fetch the last known position
-    global position_handler
     pos: QGeoPositionInfo = position_handler.lastKnownPosition()
 
     coordinate = pos.coordinate()

@@ -157,5 +157,5 @@ else:
     # Show the window only if not started minimized
     if not arguments.minimized:
         window.show()
-    
+
     sys.exit(app.exec())
