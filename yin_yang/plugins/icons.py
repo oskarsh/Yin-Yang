@@ -16,6 +16,8 @@ class Icons(PluginDesktopDependent):
                 super().__init__(_Mate())
             case Desktop.CINNAMON:
                 super().__init__(_Cinnamon())
+            case Desktop.GNOME:
+                super().__init__(_Gnome())
             case Desktop.BUDGIE:
                 super().__init__(_Budgie())
             case Desktop.KDE:
@@ -35,6 +37,23 @@ class _Mate(PluginCommandline):
     @property
     def available(self):
         return self.check_command(['dconf', 'help'])
+class _Gnome(PluginCommandline):
+    def __init__(self):
+        super().__init__(
+            [
+                "gsettings",
+                "set",
+                "org.gnome.desktop.interface",
+                "icon-theme",
+                '"{theme}"',
+            ]
+        )
+        self.theme_light = "Default"
+        self.theme_dark = "Default"
+
+    @property
+    def available(self) -> bool:
+        return test_gnome_availability(self.command)
 
 
 class _Cinnamon(PluginCommandline):
